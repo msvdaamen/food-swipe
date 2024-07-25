@@ -1,0 +1,18 @@
+:root {
+  --ion-toolbar-background: transparent;
+  --ion-toolbar-border-color: transparent;
+}
+
+.header-md {
+  box-shadow: none;
+}
+
+//@media (prefers-color-scheme: dark) {
+//  body {
+//    --ion-toolbar-background: #121212;
+//  }
+//
+//  .ios body {
+//    --ion-toolbar-background: #000000;
+//  }
+//}

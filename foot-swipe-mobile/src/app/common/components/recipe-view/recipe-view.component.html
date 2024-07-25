@@ -1,0 +1,74 @@
+<ion-header translucent="true" class="header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button
+        shape="round"
+        class="modal-back"
+        color="primary"
+        (click)="close()"
+        ><ion-icon name="arrow-back-outline"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+@if(recipe(); as recipe) {
+  <ion-content [fullscreen]="true">
+    <div class="image">
+      <img src="/assets/images/food-plate.png" alt="test" />
+    </div>
+    <div class="content p-4">
+      <div class="heading">
+        <div class="title">
+          <h2>{{ recipe.name }}</h2>
+          <span class="cals">{{ recipe.calories }}cal</span>
+        </div>
+        <div class="like">
+          <ion-button
+            shape="round"
+            fill="clear"
+            color="danger"
+            (click)="toggleLike(1, false)">
+            <ion-icon
+              slot="icon-only"
+              [name]="false ? 'heart' : 'heart-outline'"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      <div class="ingredients">
+        <h3>Ingredients</h3>
+        <div class="people-amount">
+          <ion-button size="small" color="primary" (click)="decrementPeople()">
+            <ion-icon name="remove-outline"></ion-icon>
+          </ion-button>
+          <div class="amount-counter">{{ peopleCounter() }}</div>
+          <ion-button size="small" color="primary" (click)="incrementPeople()">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="ingredients-list">
+          @for (
+            ingredient of recipe.ingredients;
+            track ingredient.id
+          ) {
+            <ion-checkbox></ion-checkbox>
+            <span class="amount"
+              >{{ ingredient.amount * ingredientAmount() }}
+              {{ ingredient.measurement }}</span
+            >
+            <span class="type">{{ ingredient.name }}</span>
+          }
+        </div>
+      </div>
+      <div class="info">
+        @for (
+          step of recipe.steps;
+          track step;
+          let i = $index
+        ) {
+          <div class="step">{{ step.stepNumber }}</div>
+          <div class="text">{{ step.description }}</div>
+        }
+      </div>
+    </div>
+  </ion-content>
+}
