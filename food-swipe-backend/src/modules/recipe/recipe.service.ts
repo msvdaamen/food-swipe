@@ -9,7 +9,7 @@ import { measurements } from "./schema/measurement.schema";
 import { recipeStep, type RecipeStep } from "./schema/recipe-step.schema";
 import type { RecipeSerialized } from "./models/recipe.model";
 import { storageService, type StorageService } from "../../providers/storage/storage.service";
-import { files, type File as FileModel } from "../../providers/storage/file.schema";
+import { files, type FileObj as FileModel } from "../../providers/storage/file.schema";
 
 export type FullRecipe = Recipe & {
     ingredients: (Ingredient & {measurement: string | null, abbreviation: string | null, amount: number})[],
