@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@ionic/angular/css/core.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '@angular/cdk/overlay-prebuilt.css';
+
+:root {
+    --ion-background-color: theme('colors.gray.200');
+    // --tw-bg-opacity: 1;
+    // --background: rgb(18 18 18 / var(--tw-bg-opacity))   
+
+    @media (prefers-color-scheme: dark) {
+        --ion-text-color: white;
+        --ion-background-color: theme('colors.dark.900');
+    }
+}

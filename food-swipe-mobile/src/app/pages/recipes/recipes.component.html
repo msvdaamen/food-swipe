@@ -1,0 +1,40 @@
+<!-- <ion-header> -->
+<app-header />
+<!-- </ion-header> -->
+
+<ion-content>
+  <div class="flex flex-col gap-4 px-4 pb-4">
+    @for (recipe of recipes(); track recipe.id) {
+      <div
+        class="card mr-1 flex min-h-10 flex-col rounded bg-white dark:bg-opacity-10"
+      >
+        <div class="cover flex rounded">
+          <img
+            alt="A bowl of pasta with a fork"
+            class="rounded-t"
+            [src]="recipe.coverImageUrl"
+          />
+        </div>
+        <div class="body rounded-t p-3">
+          <div class="title">{{ recipe.title }}</div>
+          <div class="text-xs text-gray-400 dark:text-gray-300">
+            {{ recipe.calories }}cal
+          </div>
+          <div class="mt-2 flex justify-between">
+            <app-button size="small" routerLink="/recipes/{{ recipe.id }}">
+              <fa-icon [icon]="faEye" /> VIEW
+            </app-button>
+            <span
+              class="flex items-center justify-center text-gray-400 dark:text-gray-300"
+            >
+              <fa-icon [icon]="faClock" /> {{ recipe.prepTime }} mins
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+    <ion-infinite-scroll [disabled]="!cursor()" (ionInfinite)="loadMore()"
+      ><ion-infinite-scroll-content></ion-infinite-scroll-content
+    ></ion-infinite-scroll>
+  </div>
+</ion-content>

@@ -31,7 +31,7 @@ export class RecipeService extends DbService {
         }
         const result = await this.database.select({id: recipes.id}).from(recipes).where(...[gt(recipes.id, cursor)]).limit(limit).execute();
         const cursorResult = result.length === limit ? result[result.length - 1].id : null;
-        const recipeModels = await this.getMany(result.map(row => row.id));
+        const recipeModels = result.length ? await this.getMany(result.map(row => row.id)) : [];
         return {
             data: recipeModels,
             cursor: cursorResult

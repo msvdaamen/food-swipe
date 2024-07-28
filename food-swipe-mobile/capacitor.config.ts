@@ -1,10 +1,9 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.app',
-  appName: 'capacitor-solid-template',
-  webDir: 'dist',
-  bundledWebRuntime: false,
+  appId: 'com.msvdaamen.foodswipe',
+  appName: 'food-swipe-mobile',
+  webDir: 'dist'
 };
 
 export default config;

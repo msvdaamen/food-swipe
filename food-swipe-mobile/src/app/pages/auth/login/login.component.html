@@ -1,0 +1,44 @@
+<div
+  class="background flex min-h-screen flex-1 items-center justify-center bg-gray-50 dark:bg-dark-900 dark:text-white"
+>
+  <div class="w-500 p-5">
+    <h1 class="mb-3 text-center text-4xl">Food swipe</h1>
+
+    <h2 class="mb-10 text-center text-2xl">Sign in to your account</h2>
+    <div class="rounded-xl bg-dark-900 p-10 shadow dark:bg-opacity-90">
+      <form [formGroup]="form" (ngSubmit)="login()">
+        <div class="mb-4">
+          <app-form-input
+            formControlName="email"
+            type="email"
+            placeholder="example@gmail.com"
+          >
+            Email
+          </app-form-input>
+        </div>
+
+        <div class="mb-4">
+          <app-form-input
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+          >
+            Password
+          </app-form-input>
+
+          <div class="mt-3 flex justify-end">
+            <a routerLink="/auth/forgot-password"> Forgot password? </a>
+          </div>
+        </div>
+
+        <app-button size="full" [disabled]="form.invalid"> Sign in </app-button>
+      </form>
+    </div>
+
+    <div class="mt-10 text-center">
+      <span class="text-gray-500"> Don't have an account? </span>
+
+      <a routerLink="/auth/register"> Sign up </a>
+    </div>
+  </div>
+</div>

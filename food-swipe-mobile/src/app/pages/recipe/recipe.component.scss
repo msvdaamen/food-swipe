@@ -1,0 +1,70 @@
+.people-amount {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    width: 100px;
+  
+    ion-button {
+      margin: 0;
+    }
+  
+    ion-button:first-child::part(native) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  
+    ion-button:last-child::part(native) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  
+    .amount-counter {
+      width: 30px;
+      text-align: center;
+      border-left: 0;
+      border-right: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1px;
+    }
+  }
+  .ingredients-list {
+    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: 25px max-content auto;
+    align-items: center;
+    grid-row-gap: 0.5rem;
+  
+    .type {
+      margin-left: 8px;
+    }
+  }
+  .info {
+    display: grid;
+    margin-top: 0.5rem;
+    grid-template-columns: 60px 1fr;
+    grid-auto-rows: max-content;
+    align-items: center;
+    grid-row-gap: 0.5rem;
+  
+    .step {
+      border: 2px solid var(--ion-text-color, #000);
+      border-radius: 50%;
+      color: var(--ion-text-color, #000);
+      font-size: 22px;
+      font-weight: 700;
+      height: 40px;
+      line-height: 36px;
+      margin-right: 24px;
+      min-width: 40px;
+      text-align: center;
+    }
+  
+    .text {
+      padding: 0.25rem;
+    }
+  }
+  

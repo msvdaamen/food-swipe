@@ -25,7 +25,14 @@ app.post('/sign-up', async (c) => {
 
 app.get('/me', authMiddleware, async (c) => {
     const user = c.get('user');
-    return c.json(user);
+    return c.json({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        createdAt: user.createdAt
+    });
 });
 
 

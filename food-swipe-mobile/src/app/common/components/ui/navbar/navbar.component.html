@@ -1,0 +1,29 @@
+<div
+  class="navbar flex h-full w-full items-center bg-gray-100 px-3 shadow dark:bg-white dark:bg-opacity-5"
+>
+  <div class="cursor-pointer select-none text-2xl dark:text-white" favorite="/">
+    T
+  </div>
+  <div></div>
+
+  <button
+    class="aspect-square cursor-pointer overflow-hidden rounded-full bg-white dark:bg-dark-900"
+    [appMenuTrigger]="menu"
+  >
+    <img [src]="profileImage$ | async" alt="profile image" />
+  </button>
+
+  <ng-template #menu>
+    <div appMenu>
+      <button favorite="/settings" appMenuItem>Settings</button>
+      <button appMenuItem favorite="/profile">Profile</button>
+      <button
+        appMenuItem
+        class="!bg-red-500 text-white hover:!bg-red-600 dark:!bg-red-700 dark:hover:!bg-red-600"
+        (click)="logout()"
+      >
+        Sign out
+      </button>
+    </div>
+  </ng-template>
+</div>

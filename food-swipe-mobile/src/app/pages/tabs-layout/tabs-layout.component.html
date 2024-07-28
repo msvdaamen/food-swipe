@@ -1,0 +1,56 @@
+<!-- <div class="tabs-container">
+  <app-header />
+  <ion-content>
+    class="overflow-auto p-2" cdkScrollable>
+    <ion-router-outlet />
+  </ion-content>
+  <div
+    class="grid grid-flow-col items-center gap-1 rounded-t-xl dark:bg-white dark:bg-opacity-5"
+  >
+    <a
+      class="flex justify-center"
+      routerLink="/favorite"
+      routerLinkActive="text-primary"
+    >
+      <fa-icon [icon]="faHeart" size="xl" />
+    </a>
+    <a
+      class="flex justify-center"
+      routerLink="/recipes"
+      routerLinkActive="text-primary-600"
+    >
+      <fa-icon [icon]="faMagnifyingGlass" size="xl" />
+    </a>
+    <a class="flex justify-center">
+      <fa-icon [icon]="faPerson" size="xl" />
+    </a>
+  </div>
+</div> -->
+
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button class="flex justify-center" tab="liked">
+      <fa-icon [icon]="faHeart" size="xl" />
+    </ion-tab-button>
+    <ion-tab-button class="flex justify-center" tab="recipes">
+      <fa-icon [icon]="faMagnifyingGlass" size="xl" />
+    </ion-tab-button>
+    <ion-tab-button class="flex justify-center" tab="account">
+      <fa-icon [icon]="faPerson" size="xl" />
+    </ion-tab-button>
+    <!-- <ion-tab-button tab="liked" (click)="setActiveTab('bookmark')">
+      <ion-icon [name]="getIcon('bookmark')"></ion-icon>
+      <ion-label>Liked</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="recipes" (click)="setActiveTab('search')">
+      <ion-icon [name]="getIcon('search')"></ion-icon>
+      <ion-label>Search</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="account" (click)="setActiveTab('person')">
+      <ion-icon [name]="getIcon('person')"></ion-icon>
+      <ion-label>Account</ion-label>
+    </ion-tab-button> -->
+  </ion-tab-bar>
+</ion-tabs>

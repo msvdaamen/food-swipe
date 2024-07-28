@@ -1,0 +1,43 @@
+.primary {
+  @apply bg-primary-600;
+
+  &:hover:not([disabled]) {
+    @apply bg-primary-700;
+  }
+  &:active:not([disabled]) {
+    @apply bg-primary-700;
+  }
+  &:disabled {
+    @apply opacity-50;
+  }
+}
+.secondary {
+  @apply bg-secondary-600;
+
+  &:hover:not([disabled]) {
+    @apply bg-secondary-700;
+  }
+  &:active:not([disabled]) {
+    @apply bg-secondary-700;
+  }
+  &:disabled {
+    @apply opacity-50;
+  }
+}
+
+.default {
+  @apply bg-gray-200 text-black;
+
+  &:hover {
+    @apply bg-gray-300;
+  }
+  &:active {
+    @apply bg-gray-300;
+  }
+  &:disabled {
+    @apply bg-gray-100;
+  }
+}
+.btn-small {
+  @apply text-sm py-1 px-3;
+}

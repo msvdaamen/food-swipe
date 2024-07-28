@@ -1,0 +1,16 @@
+<button
+  [class.primary]="color === 'primary'"
+  [class.secondary]="color === 'secondary'"
+  [class.default]="color === 'default'"
+  [class.w-full]="size === 'full'"
+  [class.btn-small]="size === 'small'"
+  class="select-none rounded px-3 py-2 text-white outline-none transition-colors"
+  [disabled]="disabled"
+>
+  @if (icon) {
+    <fa-icon [icon]="icon" />&nbsp;
+  }
+  @if (!isMobile() || (mobileText && isMobile())) {
+    <ng-content />
+  }
+</button>
