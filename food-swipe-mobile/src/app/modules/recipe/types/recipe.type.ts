@@ -6,6 +6,7 @@ export type Recipe = {
   servings: number;
   calories: number;
   coverImageUrl: string;
+  liked: boolean;
   createdAt: Date;
   updatedAt: Date;
   ingredients: RecipeIngredient[];

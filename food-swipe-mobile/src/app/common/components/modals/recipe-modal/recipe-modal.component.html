@@ -1,0 +1,63 @@
+<!--<app-header [closeModal]="true" />-->
+<ion-content>
+  <div
+    #dismissHeader
+    class="fixed h-10 w-full border-y-dark-800 transition-colors duration-300"
+    (click)="dismiss()"
+  >
+    <span class="absolute left-2 top-2"
+      ><fa-icon [icon]="faArrowLeft" size="lg"
+    /></span>
+  </div>
+  <div #coverImage class="image">
+    <img [src]="recipe().coverImageUrl" alt="test" />
+  </div>
+  <div class="p-4">
+    <div class="flex">
+      <div class="title grow">
+        <h2>{{ recipe().title }}</h2>
+        <span class="cals text-gray-400">{{ recipe().calories }}cal</span>
+      </div>
+      <div class="like">
+        <app-button color="transparent" (click)="toggleLike()">
+          <fa-icon
+            class="text-red-500"
+            [icon]="liked() ? faHeart : faHeartOutline"
+            size="xl"
+          ></fa-icon>
+        </app-button>
+      </div>
+    </div>
+    <div>
+      {{ recipe().description }}
+    </div>
+    <div class="ingredients">
+      <h3>Ingredients</h3>
+      <div class="people-amount">
+        <app-button size="small" (click)="decrementPeople()">
+          <fa-icon [icon]="faMinus" />
+        </app-button>
+        <div class="amount-counter">{{ peopleCounter() }}</div>
+        <app-button size="small" (click)="incrementPeople()">
+          <fa-icon [icon]="faAdd" />
+        </app-button>
+      </div>
+      <div class="ingredients-list">
+        @for (ingredient of recipe().ingredients; track ingredient.id) {
+          <app-form-checkbox></app-form-checkbox>
+          <span class="amount"
+            >{{ ingredient.amount * ingredientAmount() }}
+            {{ ingredient.measurement }}</span
+          >
+          <span class="type">{{ ingredient.name }}</span>
+        }
+      </div>
+    </div>
+    <div class="info">
+      @for (step of recipe().steps; track step; let i = $index) {
+        <div class="step">{{ step.stepNumber }}</div>
+        <div class="text">{{ step.description }}</div>
+      }
+    </div>
+  </div>
+</ion-content>

@@ -17,6 +17,9 @@ export const allRecipesDtoSchema = z.object({
         }
         return parsed;
     }, z.number().lt(100).default(10)),
+    liked: z.preprocess((val) => {
+        return val !== undefined;
+    }, z.boolean())
 });
 
 export type AllRecipesDto = z.infer<typeof allRecipesDtoSchema>;

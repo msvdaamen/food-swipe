@@ -17,7 +17,7 @@ import {
 import { RecipeModalComponent } from '../../common/components/modals/recipe-modal/recipe-modal.component';
 
 @Component({
-  selector: 'app-recipes',
+  selector: 'app-liked-recipes',
   standalone: true,
   imports: [
     ButtonComponent,
@@ -31,10 +31,10 @@ import { RecipeModalComponent } from '../../common/components/modals/recipe-moda
     IonHeader,
     IonToolbar,
   ],
-  templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss',
+  templateUrl: './liked-recipes.component.html',
+  styleUrl: './liked-recipes.component.scss',
 })
-export default class RecipesComponent {
+export default class LikedRecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly modalController = inject(ModalController);
 
@@ -43,13 +43,13 @@ export default class RecipesComponent {
   faEye = faEye;
   faClock = faClock;
 
-  recipes = this.recipeRepository.recipes;
-  cursor = this.recipeRepository.cursor;
+  recipes = this.recipeRepository.likedRecipes;
+  cursor = this.recipeRepository.cursorLikedRecipes;
 
   isLoading = false;
 
   constructor() {
-    this.recipeRepository.loadAll({ limit: 10 });
+    this.recipeRepository.loadLikedRecipes({ limit: 10 });
 
     effect(
       () => {
@@ -66,7 +66,7 @@ export default class RecipesComponent {
   loadMore() {
     const cursor = this.cursor();
     if (cursor) {
-      this.recipeRepository.loadAll({ limit: 5, cursor });
+      this.recipeRepository.loadLikedRecipes({ limit: 5, cursor });
       this.isLoading = true;
     } else {
       this.infiniteScroll()?.complete();

@@ -1,4 +1,9 @@
 <header class="flex items-center px-4 py-2">
+  @if (backButton() || closeModal()) {
+    <a class="mr-1" (click)="temp()"
+      ><fa-icon [icon]="faArrowLeft" size="lg"
+    /></a>
+  }
   <div class="aspect-square w-8 overflow-hidden rounded-full">
     <img alt="Silhouette of a person's head" src="/images/avatar.svg" />
   </div>

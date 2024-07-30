@@ -1,9 +1,7 @@
-import {DIALOG_DATA, DialogRef} from "@angular/cdk/dialog";
-import {inject} from "@angular/core";
-
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { inject } from '@angular/core';
 
 export class DialogComponent<R = unknown, D = unknown> {
-
   protected readonly dialogRef = inject<DialogRef<R>>(DialogRef);
   protected readonly data = inject<D>(DIALOG_DATA);
 
@@ -27,5 +25,4 @@ export class DialogComponent<R = unknown, D = unknown> {
   public close(data?: R): void {
     this.dialogRef.close(data);
   }
-
 }

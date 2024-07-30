@@ -1,75 +1,142 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './types/recipe.type';
-import { addEntities } from '../../common/state/add-entities';
-import { addEntity } from '../../common/state/add-entitiy';
+import { patchState, signalStore, type, withState } from '@ngrx/signals';
+import {
+  addEntities,
+  addEntity,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
+
+type State = {
+  isLoading: boolean;
+  hasLoaded: boolean;
+  cursor: number | null;
+  likedRecipeIds: number[];
+  cursorLikedRecipes: number | null;
+  hasLoadedLikedRecipes: boolean;
+};
+
+const initialState: State = {
+  isLoading: false,
+  hasLoaded: false,
+  cursor: null,
+  likedRecipeIds: [],
+  cursorLikedRecipes: null,
+  hasLoadedLikedRecipes: false,
+};
 
 @Injectable({ providedIn: 'root' })
-export class RecipeRepository {
+export class RecipeRepository extends signalStore(
+  { protectedState: false },
+  withState(initialState),
+  withEntities<Recipe>(),
+) {
   private readonly service = inject(RecipeService);
 
-  public readonly entities = signal(new Map<number, Recipe>());
-  public readonly ids = signal<number[]>([]);
-  public readonly cursor = signal<number | null>(null);
-  public readonly isLoading = signal(false);
-  public readonly hasLoaded = signal(false);
-
-  recipes = computed(() => {
+  recipes = this.entities;
+  likedRecipes = computed(() => {
+    const ids = this.likedRecipeIds();
     const recipes: Recipe[] = [];
-    for (const id of this.ids()) {
-      const recipe = this.entities().get(id);
-      if (recipe) {
-        recipes.push(recipe);
-      }
+    for (const id of ids) {
+      recipes.push(this.entityMap()[id]);
     }
     return recipes;
   });
 
   getRecipe(id: number) {
     return computed(() => {
-      return this.entities().get(id);
+      return this.entityMap()[id];
     });
   }
 
-  findAll({ limit, cursor }: { limit: number; cursor?: number | null }) {
+  loadAll({ limit, cursor }: { limit: number; cursor?: number | null }) {
     if (this.hasLoaded() && !cursor) {
       return;
     }
-    this.isLoading.set(true);
-    this.service.allCursor(limit, cursor).subscribe({
+    patchState(this, { isLoading: true });
+    this.service.all(limit, cursor).subscribe({
       next: (response) => {
-        this.cursor.set(response.cursor);
-        this.hasLoaded.set(true);
-        console.time();
-        const { ids, entities } = addEntities(
-          this.ids(),
-          this.entities(),
-          response.data,
-        );
-        console.timeEnd();
-        this.ids.set(ids);
-        this.entities.set(entities);
+        patchState(this, addEntities(response.data), {
+          cursor: response.cursor,
+          hasLoaded: true,
+        });
       },
       error: console.error,
-      complete: () => this.isLoading.set(false),
+      complete: () => patchState(this, { isLoading: false }),
     });
   }
 
-  findOne(id: number) {
-    this.isLoading.set(true);
+  loadOne(id: number) {
+    patchState(this, { isLoading: true });
     this.service.get(id).subscribe({
       next: (recipe) => {
-        const { ids, entities } = addEntity(
-          this.ids(),
-          this.entities(),
-          recipe,
-        );
-        console.log(ids, entities);
-        this.ids.set(ids);
-        this.entities.set(entities);
+        patchState(this, addEntity(recipe));
       },
       error: console.error,
-      complete: () => this.isLoading.set(false),
+      complete: () => patchState(this, { isLoading: false }),
+    });
+  }
+
+  loadLikedRecipes({
+    limit,
+    cursor,
+  }: {
+    limit: number;
+    cursor?: number | null;
+  }) {
+    if (this.hasLoadedLikedRecipes() && !cursor) {
+      return;
+    }
+    patchState(this, { isLoading: true });
+    this.service.all(limit, cursor, { liked: true }).subscribe({
+      next: (response) => {
+        patchState(this, addEntities(response.data), {
+          hasLoadedLikedRecipes: true,
+          cursorLikedRecipes: response.cursor,
+          likedRecipeIds: [
+            ...this.likedRecipeIds(),
+            ...response.data.map((recipe) => recipe.id),
+          ],
+        });
+      },
+      error: console.error,
+      complete: () => patchState(this, { isLoading: false }),
+    });
+  }
+
+  like(id: number, like: boolean) {
+    const oldLike = this.entityMap()[id].liked;
+    patchState(
+      this,
+      { isLoading: true },
+      updateEntity({ id, changes: { liked: like } }),
+    );
+    this.service.like(id, like).subscribe({
+      next: (recipe) => {
+        patchState(this, updateEntity({ id, changes: recipe }));
+        if (like) {
+          const newLikedIds = [...this.likedRecipeIds(), recipe.id];
+          newLikedIds.sort((a, b) => a - b);
+          patchState(this, {
+            likedRecipeIds: newLikedIds,
+          });
+        } else {
+          const newLikedIds = this.likedRecipeIds().filter(
+            (id) => id !== recipe.id,
+          );
+          console.log(newLikedIds);
+          patchState(this, {
+            likedRecipeIds: newLikedIds,
+          });
+        }
+      },
+      error: (err) => {
+        patchState(this, updateEntity({ id, changes: { liked: oldLike } }));
+        console.error(err);
+      },
+      complete: () => patchState(this, { isLoading: false }),
     });
   }
 }

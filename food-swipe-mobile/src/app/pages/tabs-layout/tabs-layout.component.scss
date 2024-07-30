@@ -16,6 +16,7 @@ ion-tab-button {
     --color: black;
     --color-focused: theme('colors.primary.600');
     --color-selected: theme('colors.primary.600');
+  font-size: 1rem;
 
     @media (prefers-color-scheme: dark) {
         --color: white;

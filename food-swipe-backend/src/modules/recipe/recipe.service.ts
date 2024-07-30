@@ -1,4 +1,4 @@
-import { eq, gt, inArray } from "drizzle-orm";
+import {and, eq, gt, inArray} from "drizzle-orm";
 import { DbService } from "../../common/db.service";
 import { recipes, type NewRecipe, type Recipe } from "./schema/recipe.schema";
 import type { CursorPagination } from "../../common/types/cursor-pagination";
@@ -10,11 +10,7 @@ import { recipeStep, type RecipeStep } from "./schema/recipe-step.schema";
 import type { RecipeSerialized } from "./models/recipe.model";
 import { storageService, type StorageService } from "../../providers/storage/storage.service";
 import { files, type FileObj as FileModel } from "../../providers/storage/file.schema";
-
-export type FullRecipe = Recipe & {
-    ingredients: (Ingredient & {measurement: string | null, abbreviation: string | null, amount: number})[],
-    steps: RecipeStep[]
-};
+import {userLikedRecipes} from "./schema/user-liked-recipe.schema.ts";
 
 export class RecipeService extends DbService {
 
@@ -25,31 +21,43 @@ export class RecipeService extends DbService {
     }
 
 
-    async allCursor(limit: number, cursor?: number): Promise<CursorPagination<RecipeSerialized>> {
+    async allCursor(userId: number, limit: number, cursor?: number, liked?: boolean): Promise<CursorPagination<RecipeSerialized>> {
         if (!cursor) {
             cursor = 0;
         }
-        const result = await this.database.select({id: recipes.id}).from(recipes).where(...[gt(recipes.id, cursor)]).limit(limit).execute();
+        const builder = this.database.select({id: recipes.id}).from(recipes).where(
+            and(gt(recipes.id, cursor), eq(recipes.isPublished, true))
+        ).limit(limit).$dynamic();
+        if (liked) {
+            builder.innerJoin(userLikedRecipes, and(eq(recipes.id, userLikedRecipes.recipeId), eq(userLikedRecipes.userId, userId)));
+        }
+        const result = await builder.execute();
         const cursorResult = result.length === limit ? result[result.length - 1].id : null;
-        const recipeModels = result.length ? await this.getMany(result.map(row => row.id)) : [];
+        const recipeModels = result.length ? await this.getMany(userId, result.map(row => row.id)) : [];
         return {
             data: recipeModels,
             cursor: cursorResult
         }
     }
 
-    async get(id: number): Promise<RecipeSerialized> {
-        const [recipe] = await this.getMany([id]);
+    async get(userId: number, id: number): Promise<RecipeSerialized> {
+        const [{id: recipeId}] = await this.database.select({id: recipes.id}).from(recipes).where(
+            and(eq(recipes.id, id), eq(recipes.isPublished, true))
+        ).execute();
+        if (!recipeId) throw new NotFoundError();
+        const [recipe] = await this.getMany(userId, [recipeId]);
     
         return recipe;
     }
 
-    async getMany(ids: number[]): Promise<RecipeSerialized[]> {
+    async getMany(userId: number, ids: number[]): Promise<RecipeSerialized[]> {
         const recipeRows = await this.database.select({
             recipe: recipes,
-            coverImage: files
+            coverImage: files,
+            liked: userLikedRecipes
         }).from(recipes)
         .innerJoin(files, eq(recipes.coverImageId, files.id))
+        .leftJoin(userLikedRecipes, and(eq(recipes.id, userLikedRecipes.recipeId), eq(userLikedRecipes.userId, userId)))
         .where(inArray(recipes.id, ids))
         .execute();
 
@@ -74,7 +82,7 @@ export class RecipeService extends DbService {
 
         const recipeMap = new Map<number, RecipeSerialized>();
         for (const recipeRow of recipeRows) {
-            recipeMap.set(recipeRow.recipe.id, this.serializeRecipe(recipeRow.recipe, recipeRow.coverImage, [], []));
+            recipeMap.set(recipeRow.recipe.id, this.serializeRecipe(recipeRow.recipe, recipeRow.coverImage, [], [], !!recipeRow.liked));
         }
 
         for (const ingredients of ingredientRows) {
@@ -101,10 +109,19 @@ export class RecipeService extends DbService {
             await transaction.update(recipes).set({coverImageId: file.id}).where(eq(recipes.id, recipe.id)).execute();
             return recipe;
         });
-        return this.get(recipe.id);
+        return this.get(userId, recipe.id);
     }
 
-    serializeRecipe(recipe: Recipe, coverImage: FileModel, ingredients: Ingredient[], steps: RecipeStep[]): RecipeSerialized {
+    async like(userId: number, recipeId: number, like: boolean) {
+        if (!like) {
+            await this.database.delete(userLikedRecipes).where(and(eq(userLikedRecipes.userId, userId), eq(userLikedRecipes.recipeId, recipeId))).execute();
+            return this.get(userId, recipeId);
+        }
+        await this.database.insert(userLikedRecipes).values({userId, recipeId}).onConflictDoNothing().execute();
+        return this.get(userId, recipeId);
+    }
+
+    serializeRecipe(recipe: Recipe, coverImage: FileModel, ingredients: Ingredient[], steps: RecipeStep[], liked: boolean): RecipeSerialized {
         const coverImageUrl = this.storageService.getPublicUrl(coverImage.filename)
         return {
             id: recipe.id,
@@ -115,6 +132,7 @@ export class RecipeService extends DbService {
             calories: recipe.calories,
             isPublished: recipe.isPublished,
             coverImageUrl,
+            liked,
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
             ingredients,

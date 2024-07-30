@@ -13,6 +13,8 @@ export default class CreateRecipesTable extends Migration {
             table.integer('calories').nullable();
             table.boolean('is_published').default(false);
             table.timestamps();
+
+            table.index('is_published');
         });
     }
 

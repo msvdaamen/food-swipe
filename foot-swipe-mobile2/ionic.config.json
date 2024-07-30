@@ -1,7 +1,0 @@
-{
-  "name": "foot-swipe-mobile",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}

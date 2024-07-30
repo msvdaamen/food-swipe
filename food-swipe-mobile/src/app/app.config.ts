@@ -17,9 +17,9 @@ import {
   IonicRouteStrategy,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+// import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
-defineCustomElements(window);
+// defineCustomElements(window);
 
 export const appConfig: ApplicationConfig = {
   providers: [
