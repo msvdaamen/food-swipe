@@ -8,8 +8,9 @@
 
 :root {
     --ion-background-color: theme('colors.gray.200');
+
     // --tw-bg-opacity: 1;
-    // --background: rgb(18 18 18 / var(--tw-bg-opacity))   
+    // --background: rgb(18 18 18 / var(--tw-bg-opacity))
 
     @media (prefers-color-scheme: dark) {
         --ion-text-color: white;

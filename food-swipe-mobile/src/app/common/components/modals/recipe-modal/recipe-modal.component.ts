@@ -87,9 +87,9 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
           return;
         }
         if (!entry.isIntersecting) {
-          dismissHeader.classList.add('bg-dark-900', 'border-b');
+          dismissHeader.classList.add('header-visible');
         } else {
-          dismissHeader.classList.remove('bg-dark-900', 'border-b');
+          dismissHeader.classList.remove('header-visible');
         }
       },
       { rootMargin: '-40px 0px 0px 0px' },

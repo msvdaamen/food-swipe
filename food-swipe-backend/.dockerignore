@@ -1,0 +1,9 @@
+.idea
+/data
+/migrations
+/node_modules
+/storage
+.env
+docker-compose.yaml
+migrationjs.conf.json
+README.md

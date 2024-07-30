@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "food-swipe-mobile": {
+    "app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/food-swipe-mobile",
+            "outputPath": "www",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "food-swipe-mobile:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "buildTarget": "food-swipe-mobile:build:development"
+              "buildTarget": "app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -106,30 +106,6 @@
               "src/**/*.ts",
               "src/**/*.html"
             ]
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "food-swipe-mobile:ionic-cordova-build",
-            "devServerTarget": "food-swipe-mobile:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "food-swipe-mobile:ionic-cordova-build:production",
-              "devServerTarget": "food-swipe-mobile:serve:production"
-            }
-          }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "food-swipe-mobile:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "food-swipe-mobile:build:production"
-            }
           }
         }
       }

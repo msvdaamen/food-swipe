@@ -53,3 +53,8 @@
     padding: 0.25rem;
   }
 }
+
+
+.header-visible {
+  @apply bg-white dark:bg-dark-900 border-b text-black dark:text-white #{!important};
+}
