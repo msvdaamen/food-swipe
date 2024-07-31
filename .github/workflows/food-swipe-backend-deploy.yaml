@@ -18,8 +18,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           debug: true
-          source: src/*
-          target: /var/www/food-swipe/
+          source: "src/app.ts"
+          target: /
 
   deploy:
     needs: prepare-deploy
