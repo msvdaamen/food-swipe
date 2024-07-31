@@ -1,0 +1,22 @@
+name: Deploy food-swipe-backend to vps
+
+on:
+  push:
+    branches:
+      - feat/add-docker-to-workflow-for-food-swipe-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /var/www/food-swipe
+            export CR_PAT=YOUR_TOKEN
+            echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+            docker pull ghcr.io/msvdaamen/food-swipe-backend:latest
