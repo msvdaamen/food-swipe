@@ -18,4 +18,5 @@ jobs:
           script: |
             cd /var/www/food-swipe
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/msvdaamen/food-swipe-backend:latest
+            touch test.txt
+            docker pull ghcr.io/msvdaamen/food-swipe-backend:sha256-c6f51d514071ac63fba59104a791bc3b7d84060f5c4cba86ded0f65c95810bd3
