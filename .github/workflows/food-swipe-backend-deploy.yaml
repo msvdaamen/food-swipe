@@ -9,6 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          overwrite: true
+          source: "docker-compose.prod.yaml"
+          target: /var/www/food-swipe
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
@@ -18,5 +29,5 @@ jobs:
           script: |
             cd /var/www/food-swipe
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo touch test.txt
-            sudo docker pull ghcr.io/msvdaamen/food-swipe-backend:latest
+
+#            sudo docker compose -f docker-compose.prod.yaml up -d

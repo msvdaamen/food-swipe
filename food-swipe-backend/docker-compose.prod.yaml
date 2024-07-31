@@ -2,9 +2,10 @@ version: '3'
 
 services:
   food-swipe-backend:
-    image: ghcr.io/msvda/food-swipe-backend:latest
+    image: ghcr.io/msvdaamen/food-swipe-backend:latest
     container_name: food-swipe-backend
     restart: always
+    env_file: ".env"
     ports:
       - "127.0.0.1:3000:3000"
     deploy:
