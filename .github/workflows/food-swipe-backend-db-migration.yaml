@@ -3,7 +3,11 @@ name: Migrate database
 on:
   push:
     branches:
-      - main
+      - main\
+
+defaults:
+  run:
+    working-directory: ./food-swipe-backend
 
 jobs:
   migrate:
