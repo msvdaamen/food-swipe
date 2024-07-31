@@ -3,7 +3,7 @@ name: Migrate database
 on:
   push:
     branches:
-      - main\
+      - main
 
 defaults:
   run:
