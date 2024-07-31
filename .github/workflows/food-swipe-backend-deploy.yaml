@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           overwrite: true
           source: "docker-compose.prod.yaml"
-          target: /var/www/food-swipe
+          target: /var/www/food-swipe/
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
