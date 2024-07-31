@@ -17,6 +17,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          debug: true
           source: "./docker-compose.prod.yaml"
           target: /var/www/food-swipe/
 
