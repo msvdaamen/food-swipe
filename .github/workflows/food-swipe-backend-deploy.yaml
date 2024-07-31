@@ -6,7 +6,8 @@ on:
       - feat/add-docker-workflow-for-food-swipe-backend
 
 jobs:
-  deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,9 +18,13 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           overwrite: true
-          source: "./docker-compose.prod.yaml"
-          target: "/var/www/food-swipe/"
+          source: "docker-compose.prod.yaml"
+          target: /var/www/food-swipe/
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
