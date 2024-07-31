@@ -17,8 +17,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           overwrite: true
-          source: "docker-compose.prod.yaml"
-          target: /var/www/food-swipe/
+          source: "./docker-compose.prod.yaml"
+          target: "/var/www/food-swipe/"
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
