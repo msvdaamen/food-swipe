@@ -3,7 +3,7 @@ name: Deploy food-swipe-backend to vps
 on:
   push:
     branches:
-      - feat/add-docker-to-workflow-for-food-swipe-backend
+      - feat/add-docker-workflow-for-food-swipe-backend
 
 jobs:
   deploy:
