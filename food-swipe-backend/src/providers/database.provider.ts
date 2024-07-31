@@ -1,14 +1,9 @@
 import postgres from "postgres";
-import { drizzle } from 'drizzle-orm/postgres-js';
+import {drizzle} from 'drizzle-orm/postgres-js';
+import {databaseConfig} from "../config/database.config.ts";
 
 
-const queryClient = postgres({
-    host: 'localhost',
-    port: 5432,
-    database: 'food-swipe',
-    username: 'postgres',
-    password: 'example'
-});
+const queryClient = postgres(databaseConfig.url);
 
 
 export type DatabaseProvider = ReturnType<typeof drizzle>;
