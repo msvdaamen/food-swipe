@@ -19,7 +19,6 @@ jobs:
           script: |
             cd /var/www/food-swipe
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker compose -f docker-compose.yaml up -d
             sudo docker compose pull
             sudo docker compose -f docker-compose.yaml up --force-recreate --build -d
             sudo docker image prune -f
