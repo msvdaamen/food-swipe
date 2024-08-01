@@ -18,7 +18,6 @@ const limiter = rateLimiter({
         const info = getConnInfo(c);
         const cfConnectingIp = c.req.header()['cf-connecting-ip'];
         const realIp = c.req.header()['x-forwarded-for'];
-        console.log(cfConnectingIp || realIp || info.remote.address);
         return cfConnectingIp || realIp || info.remote.address as string;
     } // Method to generate custom identifiers for clients.
     // store: ... , // Redis, MemoryStore, etc. See below.
