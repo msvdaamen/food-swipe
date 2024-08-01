@@ -20,11 +20,11 @@ export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
         return c.json({}, 401);
     }
     try {
-        const {sub, scopes} = await jwtService.verify(accessToken) as JwtPayload & {scopes: string[] | undefined};
+        const {sub, scopes} = await jwtService.verify(accessToken) as JwtPayload & {scopes: ('user' | 'admin')[] | undefined};
         if (!sub || !scopes) {
             return c.json({}, 401);
         }
-        const scopesSet = new Set(scopes);
+        const scopesSet = new Set<'user' | 'admin'>(scopes);
         const user = await userService.findById(Number(sub));
         if (!user) {
             return c.json({}, 401);

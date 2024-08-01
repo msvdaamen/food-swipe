@@ -5,6 +5,7 @@ import {
   faHeart,
   faMagnifyingGlass,
   faPerson,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonComponent } from '../../common/components/ui/button/button.component';
 import { HeaderComponent } from '../../common/components/header/header.component';
@@ -40,4 +41,5 @@ export default class TabsLayoutComponent {
   faMagnifyingGlass = faMagnifyingGlass;
   faHeart = faHeart;
   faPerson = faPerson;
+  protected readonly faPlus = faPlus;
 }

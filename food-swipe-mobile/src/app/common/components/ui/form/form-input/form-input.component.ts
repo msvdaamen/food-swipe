@@ -1,6 +1,8 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  input,
   Input,
   ViewChild,
 } from '@angular/core';
@@ -15,7 +17,7 @@ import {
 import { FaIconComponent, IconName } from '@fortawesome/angular-fontawesome';
 import { RegisterOnToucheFn } from '../../../../types/form.types';
 
-type InputType = 'number' | 'text' | 'email' | 'password';
+type InputType = 'number' | 'text' | 'email' | 'password' | 'file';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +42,7 @@ export class FormInputComponent implements ControlValueAccessor {
   @Input() placeholder = '';
   @Input() iconSuffix: IconName | null = null;
   @Input() disabled = false;
+  forceDark = input(false, { transform: booleanAttribute });
 
   // *** ControlValueAccessor Methods
   setDisabledState(isDisabled: boolean): void {

@@ -1,13 +1,17 @@
-<!--<app-header [closeModal]="true" />-->
 <ion-content>
   <div
     #dismissHeader
-    class="fixed h-10 w-full border-y-dark-800 text-white transition-colors duration-300"
+    class="fixed z-10 h-12 w-full border-y-dark-800 text-white transition-colors duration-300"
     (click)="dismiss()"
   >
-    <span class="absolute left-2 top-2"
+    <app-button
+      type="icon"
+      size="small"
+      rounded
+      color="transparent"
+      class="absolute left-2 top-2"
       ><fa-icon [icon]="faArrowLeft" size="lg"
-    /></span>
+    /></app-button>
   </div>
   <div #coverImage class="image">
     <img [src]="recipe().coverImageUrl" alt="test" />
@@ -19,7 +23,12 @@
         <span class="cals text-gray-400">{{ recipe().calories }}cal</span>
       </div>
       <div class="like">
-        <app-button color="transparent" (click)="toggleLike()">
+        <app-button
+          type="icon"
+          rounded
+          color="transparent"
+          (click)="toggleLike()"
+        >
           <fa-icon
             class="text-red-500"
             [icon]="liked() ? faHeart : faHeartOutline"

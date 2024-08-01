@@ -102,14 +102,13 @@ export class RecipeService extends DbService {
         return recipeRows.map(row => recipeMap.get(row.recipe.id)!);
     }
 
-    async create(userId: number, payload: NewRecipe, coverImage: File): Promise<RecipeSerialized> {
-        const recipe = await this.database.transaction(async (transaction) => {
+    async create(userId: number, payload: NewRecipe, coverImage: File): Promise<void> {
+        await this.database.transaction(async (transaction) => {
             const recipe = await transaction.insert(recipes).values(payload).returning().execute().then((result) => result[0]);
             const file = await this.storageService.upload(userId, coverImage, true);
             await transaction.update(recipes).set({coverImageId: file.id}).where(eq(recipes.id, recipe.id)).execute();
             return recipe;
         });
-        return this.get(userId, recipe.id);
     }
 
     async like(userId: number, recipeId: number, like: boolean) {

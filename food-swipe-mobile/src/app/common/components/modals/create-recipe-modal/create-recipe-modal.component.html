@@ -1,0 +1,38 @@
+<ion-content>
+  <div #dismissHeader class="flex w-full items-center py-2">
+    <app-button
+      type="icon"
+      size="small"
+      rounded
+      color="transparent"
+      class="ml-2"
+      (click)="dismiss()"
+    >
+      <fa-icon [icon]="faArrowLeft" size="lg"
+    /></app-button>
+    <span class="flex grow px-3 text-2xl font-medium">Upload recipe</span>
+  </div>
+  <div class="w-full p-4">
+    <app-form-input placeholder="title" [(ngModel)]="title"
+      >Title</app-form-input
+    >
+
+    <div class="mt-4">
+      <app-button size="full" color="primary" rounded (click)="uploadImage()">
+        {{ image() ? "Change" : "Upload" }} image
+      </app-button>
+    </div>
+    @if (image()) {
+      <div class="mt-4">
+        <img [src]="image()?.webPath" />
+      </div>
+    }
+    @if (image()) {
+      <div class="mt-4 flex justify-end">
+        <app-button color="primary" rounded (click)="createRecipe()">
+          Upload recipe
+        </app-button>
+      </div>
+    }
+  </div>
+</ion-content>

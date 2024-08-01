@@ -35,4 +35,11 @@
       ><ion-infinite-scroll-content></ion-infinite-scroll-content
     ></ion-infinite-scroll>
   </div>
+  @if (isAdmin()) {
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <app-button rounded size="large" type="icon" (click)="createRecipe()">
+        <fa-icon [icon]="faPlus" size="xl" />
+      </app-button>
+    </ion-fab>
+  }
 </ion-content>
