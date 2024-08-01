@@ -97,10 +97,10 @@ export default class RecipesComponent {
     });
     modal.present();
 
-    const { role } = await modal.onWillDismiss();
+    const { data, role } = await modal.onWillDismiss();
     if (role === 'confirm') {
       const toast = await this.toastController.create({
-        message: 'Recipe uploaded',
+        message: data ? 'Recipe uploaded' : 'Error uploading recipe',
         duration: 3000,
         position: 'bottom',
         positionAnchor: 'tab-bar',

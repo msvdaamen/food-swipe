@@ -1,6 +1,7 @@
 import { UTApi } from "uploadthing/server";
 import type { Storage } from "./storage";
 import type { BunFile } from "bun";
+import {v4 as uuid} from "uuid";
 
 export const utapi = new UTApi({
     apiKey: process.env.UPLOADTHING_SECRET
@@ -12,6 +13,8 @@ export class UploadThingStorage implements Storage {
     });
 
     async upload(file: File, isPublic: boolean): Promise<string> {
+        // @ts-ignore
+        file.name = uuid() + '.' + file.name.split('.').pop();
         const response = await this.utapi.uploadFiles(file);
         if (response.error) {
             throw response.error;

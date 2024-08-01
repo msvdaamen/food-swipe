@@ -1,7 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './types/recipe.type';
-import { patchState, signalStore, type, withState } from '@ngrx/signals';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 import {
   addEntities,
   addEntity,
@@ -17,6 +17,7 @@ type State = {
   likedRecipeIds: number[];
   cursorLikedRecipes: number | null;
   hasLoadedLikedRecipes: boolean;
+  createRecipeError: string | null;
 };
 
 const initialState: State = {
@@ -26,6 +27,7 @@ const initialState: State = {
   likedRecipeIds: [],
   cursorLikedRecipes: null,
   hasLoadedLikedRecipes: false,
+  createRecipeError: null,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -64,7 +66,10 @@ export class RecipeRepository extends signalStore(
           hasLoaded: true,
         });
       },
-      error: console.error,
+      error: (err) => {
+        patchState(this, { isLoading: false });
+        console.error(err);
+      },
       complete: () => patchState(this, { isLoading: false }),
     });
   }
@@ -75,7 +80,10 @@ export class RecipeRepository extends signalStore(
       next: (recipe) => {
         patchState(this, addEntity(recipe));
       },
-      error: console.error,
+      error: (err) => {
+        patchState(this, { isLoading: false });
+        console.error(err);
+      },
       complete: () => patchState(this, { isLoading: false }),
     });
   }
@@ -102,7 +110,10 @@ export class RecipeRepository extends signalStore(
           ],
         });
       },
-      error: console.error,
+      error: (err) => {
+        patchState(this, { isLoading: false });
+        console.error(err);
+      },
       complete: () => patchState(this, { isLoading: false }),
     });
   }
@@ -134,7 +145,9 @@ export class RecipeRepository extends signalStore(
         }
       },
       error: (err) => {
-        patchState(this, updateEntity({ id, changes: { liked: oldLike } }));
+        patchState(this, updateEntity({ id, changes: { liked: oldLike } }), {
+          isLoading: false,
+        });
         console.error(err);
       },
       complete: () => patchState(this, { isLoading: false }),
@@ -142,9 +155,11 @@ export class RecipeRepository extends signalStore(
   }
 
   createRecipe(payload: CreateRecipeRequest) {
-    patchState(this, { isLoading: true });
+    patchState(this, { isLoading: true, createRecipeError: null });
     this.service.createRecipe(payload).subscribe({
       complete: () => patchState(this, { isLoading: false }),
+      error: (err) =>
+        patchState(this, { createRecipeError: err.message, isLoading: false }),
     });
   }
 }

@@ -29,8 +29,18 @@
     }
     @if (image()) {
       <div class="mt-4 flex justify-end">
-        <app-button color="primary" rounded (click)="createRecipe()">
-          Upload recipe
+        <app-button
+          color="primary"
+          rounded
+          [disabled]="isLoading()"
+          (click)="createRecipe()"
+        >
+          @if (!isLoading()) {
+            Upload recipe
+          } @else {
+            <fa-icon [icon]="faSpinner" animation="spin" size="lg"></fa-icon>
+            Uploading
+          }
         </app-button>
       </div>
     }
