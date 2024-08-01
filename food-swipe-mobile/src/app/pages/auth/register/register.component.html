@@ -6,13 +6,16 @@
 
     <h2 class="mb-10 text-center text-2xl">Sign up for a account</h2>
 
-    <div class="rounded-xl bg-dark-900 p-10 shadow dark:bg-opacity-90">
+    <div
+      class="rounded-xl p-10 shadow backdrop-blur-xl dark:bg-dark-900 dark:bg-opacity-50"
+    >
       <form [formGroup]="form" (ngSubmit)="register()">
         <div class="mb-4">
           <app-form-input
             formControlName="email"
             type="email"
             placeholder="exaple@gmail.com"
+            forceDark
           >
             Email
           </app-form-input>
@@ -23,6 +26,7 @@
             formControlName="username"
             type="text"
             placeholder="example"
+            forceDark
           >
             Username
           </app-form-input>
@@ -30,13 +34,19 @@
 
         <div class="mb-4 flex gap-5">
           <div>
-            <app-form-input formControlName="firstName" placeholder="first"
+            <app-form-input
+              formControlName="firstName"
+              placeholder="first"
+              forceDark
               >First name</app-form-input
             >
           </div>
 
           <div>
-            <app-form-input formControlName="lastName" placeholder="last"
+            <app-form-input
+              formControlName="lastName"
+              placeholder="last"
+              forceDark
               >Last name</app-form-input
             >
           </div>
@@ -47,6 +57,7 @@
             formControlName="password"
             type="password"
             placeholder="Password"
+            forceDark
           >
             Password
           </app-form-input>
@@ -57,6 +68,7 @@
             formControlName="passwordConfirmation"
             type="password"
             placeholder="Password confirmation"
+            forceDark
           >
             Password confirmation
           </app-form-input>

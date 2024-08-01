@@ -1,12 +1,12 @@
 .primary {
   @apply bg-primary-600;
 
-  &:hover:not([disabled]) {
-    @apply bg-primary-700;
-  }
-  &:active:not([disabled]) {
-    @apply bg-primary-700;
-  }
+  //&:hover:not([disabled]) {
+  //  @apply bg-primary-700;
+  //}
+  //&:active:not([disabled]) {
+  //  @apply bg-primary-700;
+  //}
   &:disabled {
     @apply opacity-50;
   }
@@ -38,6 +38,21 @@
     @apply bg-gray-100;
   }
 }
-.btn-small {
+.btn-small:not(.icon-only) {
   @apply text-sm py-1 px-3;
+}
+.icon-only {
+  @apply flex items-center justify-center;
+  width: 40px;
+  height: 40px;
+}
+
+.icon-only.btn-large {
+  width: 50px;
+  height: 50px;
+}
+
+.icon-only.btn-small {
+  width: 30px;
+  height: 30px;
 }

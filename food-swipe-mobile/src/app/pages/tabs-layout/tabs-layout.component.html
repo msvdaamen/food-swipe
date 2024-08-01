@@ -28,7 +28,11 @@
 </div> -->
 
 <ion-tabs>
-  <ion-tab-bar slot="bottom" class="border-t border-white border-opacity-5">
+  <ion-tab-bar
+    id="tab-bar"
+    slot="bottom"
+    class="border-t border-white border-opacity-5"
+  >
     <ion-tab-button class="flex justify-center" tab="liked">
       <fa-icon [icon]="faHeart" size="xl" />
     </ion-tab-button>
@@ -38,19 +42,5 @@
     <ion-tab-button class="flex justify-center" tab="account">
       <fa-icon [icon]="faPerson" size="xl" />
     </ion-tab-button>
-    <!-- <ion-tab-button tab="liked" (click)="setActiveTab('bookmark')">
-      <ion-icon [name]="getIcon('bookmark')"></ion-icon>
-      <ion-label>Liked</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="recipes" (click)="setActiveTab('search')">
-      <ion-icon [name]="getIcon('search')"></ion-icon>
-      <ion-label>Search</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="account" (click)="setActiveTab('person')">
-      <ion-icon [name]="getIcon('person')"></ion-icon>
-      <ion-label>Account</ion-label>
-    </ion-tab-button> -->
   </ion-tab-bar>
 </ion-tabs>

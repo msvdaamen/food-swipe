@@ -3,6 +3,7 @@ import { Params } from '@angular/router';
 import { Recipe } from './types/recipe.type';
 import { Service } from '../../common/service';
 import { CursorPagination } from '../../common/types/cursor-pagination';
+import { CreateRecipeRequest } from './requests/create-recipe.request';
 
 type Filter = {
   liked?: boolean;
@@ -31,5 +32,12 @@ export class RecipeService extends Service {
 
   like(id: number, like: boolean) {
     return this.http.post<Recipe>(`${this.api}/recipes/${id}/like`, { like });
+  }
+
+  createRecipe(request: CreateRecipeRequest) {
+    const formData = new FormData();
+    formData.append('title', request.title);
+    formData.append('file', request.file);
+    return this.http.post(`${this.api}/recipes`, formData);
   }
 }

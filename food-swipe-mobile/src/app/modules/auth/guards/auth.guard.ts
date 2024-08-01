@@ -5,12 +5,12 @@ import { catchError, map, of } from 'rxjs';
 import { AuthRepository } from '../auth.repository';
 
 export const AuthGuard: CanActivateFn = () => {
+  const repository = inject(AuthRepository);
   const router = inject(Router);
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = repository.getAccessToken();
   if (!accessToken) {
     return router.parseUrl('/auth/login');
   }
-  const repository = inject(AuthRepository);
   const service = inject(AuthService);
   const user = repository.user();
   if (user) {
@@ -19,6 +19,7 @@ export const AuthGuard: CanActivateFn = () => {
   return service.me().pipe(
     map((me) => {
       repository.user.set(me);
+      repository.setScopes(accessToken);
       return true;
     }),
     catchError(() => {

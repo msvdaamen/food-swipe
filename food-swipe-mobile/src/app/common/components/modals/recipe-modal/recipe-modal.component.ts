@@ -91,7 +91,7 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
           dismissHeader.classList.remove('header-visible');
         }
       },
-      { rootMargin: '-40px 0px 0px 0px' },
+      { rootMargin: '-48px 0px 0px 0px' },
     );
     requestAnimationFrame(() => {
       observer.observe(coverImage);

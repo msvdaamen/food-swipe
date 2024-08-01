@@ -36,7 +36,6 @@ app.post('/:id/like', async (c) => {
     try {
         const {id: recipeId} = await recipeService.get(user.id, id);
         const recipe = await recipeService.like(user.id, recipeId, like);
-        console.log(recipe);
         return c.json(recipe);
     } catch (e) {
         if (e instanceof NotFoundError) {
@@ -48,9 +47,12 @@ app.post('/:id/like', async (c) => {
 
 app.post('/', async (c) => {
     const user = c.get('user');
+    if (!user.scopes.has('user')) {
+        return c.json({ message: 'Unauthorized' }, 401);
+    }
     const payload = createRecipeDtoSchema.parse(await c.req.parseBody());
-    const recipe = await recipeService.create(user.id, {title: payload.title}, payload.file);
-    return c.json(recipe);
+    await recipeService.create(user.id, {title: payload.title}, payload.file);
+    return c.json({});
 }); 
 
 export const registerRecipeController = (instance: Hono) => {

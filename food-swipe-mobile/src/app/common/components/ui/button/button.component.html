@@ -1,17 +1,29 @@
 <button
-  [class.primary]="color === 'primary'"
-  [class.secondary]="color === 'secondary'"
-  [class.default]="color === 'default'"
-  [class.bg-transparent]="color === 'transparent'"
-  [class.w-full]="size === 'full'"
-  [class.btn-small]="size === 'small'"
-  class="select-none rounded px-3 py-2 text-white outline-none transition-colors"
-  [disabled]="disabled"
+  [class]="{
+    primary: color() === 'primary',
+    secondary: color() === 'secondary',
+    default: color() === 'default',
+    'bg-transparent': color() === 'transparent',
+    'w-full': size() === 'full',
+    'btn-small': size() === 'small',
+    'btn-large': size() === 'large',
+    'rounded-full': rounded(),
+    'px-3': type() !== 'icon',
+    'py-2': type() !== 'icon',
+    'icon-only': type() === 'icon',
+    'text-white': color() !== 'transparent',
+  }"
+  class="ion-activatable icon-only relative select-none overflow-hidden rounded px-3 py-2 text-white outline-none transition-colors"
+  [disabled]="disabled()"
 >
-  @if (icon) {
-    <fa-icon [icon]="icon" />&nbsp;
+  @if (icon()) {
+    <fa-icon [icon]="icon()!" />
   }
-  @if (!isMobile() || (mobileText && isMobile())) {
+  @if (!isMobile() || (mobileText() && isMobile())) {
     <ng-content />
   }
+  <ion-ripple-effect
+    [class.text-gray-500]="type() === 'icon' && color() === 'transparent'"
+    [class.dark:text-inherit]="type() === 'icon' && color() === 'transparent'"
+  ></ion-ripple-effect>
 </button>

@@ -8,6 +8,7 @@ import {
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
+import { CreateRecipeRequest } from './requests/create-recipe.request';
 
 type State = {
   isLoading: boolean;
@@ -136,6 +137,13 @@ export class RecipeRepository extends signalStore(
         patchState(this, updateEntity({ id, changes: { liked: oldLike } }));
         console.error(err);
       },
+      complete: () => patchState(this, { isLoading: false }),
+    });
+  }
+
+  createRecipe(payload: CreateRecipeRequest) {
+    patchState(this, { isLoading: true });
+    this.service.createRecipe(payload).subscribe({
       complete: () => patchState(this, { isLoading: false }),
     });
   }

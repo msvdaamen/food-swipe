@@ -16,7 +16,6 @@ export class UploadThingStorage implements Storage {
         if (response.error) {
             throw response.error;
         } 
-        console.log(response.data);
         return response.data.key;
     }
     get(file: string, isPublic: boolean): Promise<BunFile> {
