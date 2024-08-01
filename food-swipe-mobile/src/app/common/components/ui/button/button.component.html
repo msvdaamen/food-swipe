@@ -22,8 +22,10 @@
   @if (!isMobile() || (mobileText() && isMobile())) {
     <ng-content />
   }
-  <ion-ripple-effect
-    [class.text-gray-500]="type() === 'icon' && color() === 'transparent'"
-    [class.dark:text-inherit]="type() === 'icon' && color() === 'transparent'"
-  ></ion-ripple-effect>
+  @if (!disabled()) {
+    <ion-ripple-effect
+      [class.text-gray-500]="type() === 'icon' && color() === 'transparent'"
+      [class.dark:text-inherit]="type() === 'icon' && color() === 'transparent'"
+    ></ion-ripple-effect>
+  }
 </button>

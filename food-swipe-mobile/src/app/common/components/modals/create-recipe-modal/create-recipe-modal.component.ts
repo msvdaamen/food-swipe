@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { IonContent, ModalController } from '@ionic/angular/standalone';
 import { RecipeRepository } from '../../../../modules/recipe/recipe.repository';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormInputComponent } from '../../ui/form/form-input/form-input.component';
@@ -29,16 +29,23 @@ export class CreateRecipeModalComponent {
   image = signal<Photo | null>(null);
 
   faArrowLeft = faArrowLeft;
-  isLoading = false;
+  isLoading = signal(false);
 
   constructor() {
-    effect(() => {
-      const isLoading = this.recipeRepository.isLoading();
-      if (this.isLoading && !isLoading) {
-        this.isLoading = true;
-        this.modalController.dismiss(null, 'confirm');
-      }
-    });
+    effect(
+      () => {
+        const isLoading = this.recipeRepository.isLoading();
+        console.log(this.recipeRepository.createRecipeError());
+        if (this.isLoading() && !isLoading) {
+          this.isLoading.set(false);
+          this.modalController.dismiss(
+            !this.recipeRepository.createRecipeError(),
+            'confirm',
+          );
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   async uploadImage() {
@@ -64,10 +71,12 @@ export class CreateRecipeModalComponent {
       title,
       file: blob,
     });
-    this.isLoading = true;
+    this.isLoading.set(true);
   }
 
   dismiss() {
     this.modalController.dismiss(null, 'dismiss');
   }
+
+  protected readonly faSpinner = faSpinner;
 }
