@@ -16,8 +16,9 @@ const limiter = rateLimiter({
     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     keyGenerator: (c) => {
         const info = getConnInfo(c);
-        console.log(info.remote.address);
-        return info.remote.address as string;
+        const realIp = c.req.header()['x-forwarded-for'];
+        console.log(realIp || info.remote.address);
+        return realIp || info.remote.address as string;
     } // Method to generate custom identifiers for clients.
     // store: ... , // Redis, MemoryStore, etc. See below.
 });
