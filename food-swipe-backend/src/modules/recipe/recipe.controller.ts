@@ -5,6 +5,7 @@ import { recipeService } from "./recipe.service";
 import { NotFoundError } from "../../common/errors/not-found.error";
 import { createRecipeDtoSchema } from "./dto/create-recipe.dto";
 import {likeRecipeDtoSchema} from "./dto/like-recipe.dto.ts";
+import { bodyLimit } from 'hono/body-limit'
 
 const app = authRouter.createApp();
 
@@ -45,7 +46,14 @@ app.post('/:id/like', async (c) => {
     }
 });
 
-app.post('/', async (c) => {
+app.post('/',
+        bodyLimit({
+        maxSize: 20000 * 1024, // 20mb
+        onError: (c) => {
+            return c.text('overflow :(', 413)
+        },
+    }),
+    async (c) => {
     const user = c.get('user');
     if (!user.scopes.has('user')) {
         return c.json({ message: 'Unauthorized' }, 401);
