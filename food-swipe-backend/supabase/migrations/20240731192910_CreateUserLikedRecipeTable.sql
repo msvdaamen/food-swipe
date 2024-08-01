@@ -5,3 +5,4 @@ create table user_liked_recipe (
 );
 
 create index user_liked_recipe_recipe_id_idx on user_liked_recipe (recipe_id);
+create index user_liked_recipe_user_id_idx on user_liked_recipe (user_id);

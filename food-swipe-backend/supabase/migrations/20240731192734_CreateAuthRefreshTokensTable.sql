@@ -5,3 +5,4 @@ create table auth_refresh_tokens (
 );
 
 create index refresh_tokens_expires_at_idx on auth_refresh_tokens (expires_at);
+create index refresh_tokens_user_id_idx on auth_refresh_tokens (user_id);
