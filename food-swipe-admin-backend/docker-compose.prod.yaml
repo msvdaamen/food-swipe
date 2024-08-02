@@ -3,7 +3,7 @@ version: '3'
 services:
   food-swipe-backend:
     image: ghcr.io/msvdaamen/food-swipe-admin-backend:latest
-    container_name: food-swipe-backend
+    container_name: food-swipe-admin-backend
     restart: always
     env_file: ".env"
     ports:
