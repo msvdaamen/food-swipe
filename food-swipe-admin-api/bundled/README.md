@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "food-swipe-admin-api" generated at 2024-08-02T07:45:27.311Z.

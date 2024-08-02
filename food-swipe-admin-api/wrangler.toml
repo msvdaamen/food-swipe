@@ -1,6 +1,7 @@
 name = "food-swipe-admin-api"
 compatibility_date = "2024-08-02"
 main = "src/app.ts"
+minify = true
 
 # [vars]
 # MY_VAR = "my-variable"
