@@ -2,7 +2,7 @@ name: Deploy food-swipe-admin-backend to vps
 
 on:
   workflow_run:
-    workflows: ["Create and publish a Docker image"]
+    workflows: ["Create and publish a Docker image for food-swipe-admin-backend"]
     types: [completed]
 
 
