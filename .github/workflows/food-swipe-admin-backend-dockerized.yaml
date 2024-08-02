@@ -1,4 +1,4 @@
-name: Create and publish a Docker image for food-swipe-backend
+name: Create and publish a Docker image for food-swipe-admin-backend
 
 # Configures this workflow to run every time a change is pushed to the branch called `main`.
 on:
@@ -45,15 +45,15 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: ./food-swipe-backend
+          context: ./food-swipe-admin-backend
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/food-swipe-backend:latest
+          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/food-swipe-admin-backend:latest
           labels: ${{ steps.meta.outputs.labels }}
       
       # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)." 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ github.repository_owner }}/food-swipe-backend
+          subject-name: ghcr.io/${{ github.repository_owner }}/food-swipe-admin-backend
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
