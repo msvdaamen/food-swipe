@@ -1,0 +1,14 @@
+{
+  "name": "food-swipe-admin-api",
+  "scripts": {
+    "dev": "wrangler dev src/app.ts",
+    "deploy": "wrangler deploy --minify src/app.ts"
+  },
+  "dependencies": {
+    "hono": "^4.5.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "wrangler": "^3.57.2"
+  }
+}
