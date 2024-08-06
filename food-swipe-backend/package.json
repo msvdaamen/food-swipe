@@ -3,9 +3,7 @@
   "module": "./src/app.ts",
   "type": "module",
   "scripts": {
-    "start": "bun --watch run ./src/app.ts",
-    "migrate": "migrationjs migrate",
-    "rollback": "migrationjs rollback"
+    "start": "bun --watch run ./src/app.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

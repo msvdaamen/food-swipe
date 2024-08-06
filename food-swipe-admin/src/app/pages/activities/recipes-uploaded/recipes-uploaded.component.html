@@ -1,0 +1,26 @@
+<div class="heading">
+  <h1 class="text-2xl font-medium">Uploaded recipes</h1>
+  <span class="text-gray-500">Recipes that are uploaded from the app</span>
+</div>
+<div class="table-container">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Created by</th>
+        <th>Created at</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i; let i = $index) {
+        <tr>
+          <td>Spicy Chicken</td>
+          <td>Kimmie</td>
+          <td class="text-nowrap">2024-01-01 12:12:12</td>
+          <td></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

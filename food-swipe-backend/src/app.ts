@@ -8,11 +8,8 @@ import { secureHeaders } from 'hono/secure-headers'
 
 const app = new Hono();
 
-
 app.use(secureHeaders())
 app.use(cors());
-
-
 
 const limiter = rateLimiter({
     windowMs: 60 * 1000, // 15 minutes

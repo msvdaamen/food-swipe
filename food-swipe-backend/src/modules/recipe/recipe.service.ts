@@ -103,7 +103,7 @@ export class RecipeService extends DbService {
     }
 
     async create(userId: number, payload: NewRecipe, coverImage: File): Promise<void> {
-        await this.database.transaction(async (transaction) => {
+        await this.transaction(async (transaction) => {
             const recipe = await transaction.insert(recipes).values(payload).returning().execute().then((result) => result[0]);
             const file = await this.storageService.upload(userId, coverImage, true);
             await transaction.update(recipes).set({coverImageId: file.id}).where(eq(recipes.id, recipe.id)).execute();

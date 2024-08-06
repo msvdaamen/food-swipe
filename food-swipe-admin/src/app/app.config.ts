@@ -1,8 +1,19 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  ApplicationConfig,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
+import { AuthInterceptor } from './modules/auth/interceptors/auth.interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [
+    provideExperimentalZonelessChangeDetection(),
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
+    provideAnimationsAsync(),
+  ],
 };
