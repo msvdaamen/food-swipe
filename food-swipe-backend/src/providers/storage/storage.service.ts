@@ -18,7 +18,7 @@ export class StorageService extends DbService {
 
   async upload(userId: number, file: File, isPublic: boolean): Promise<FileModel> {
     try {
-      const result = await this.database.transaction(async(transaction) => {
+      const result = await this.transaction(async(transaction) => {
         const filename = await this.storage.upload(file, isPublic);
         const [createdFile] = await transaction.insert(files).values({
           userId,
@@ -55,7 +55,7 @@ export class StorageService extends DbService {
   }
 
   async delete(filename: string): Promise<void> {
-    await this.database.transaction(async(transaction) => {
+    await this.transaction(async(transaction) => {
       const [file] = await transaction.delete(files).where(eq(files.filename, filename)).returning();
       if (!file) {
         throw new FileNotFoundException();

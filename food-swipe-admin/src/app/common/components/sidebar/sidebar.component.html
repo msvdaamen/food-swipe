@@ -1,0 +1,6 @@
+<div class="flex h-dvh flex-col gap-2 p-4">
+  <div class="mb-8 ml-2 text-lg font-medium">FoodSwipe Admin</div>
+  @for (item of sidebarItems; let i = $index; track i) {
+    <app-sidebar-item [item]="item" />
+  }
+</div>

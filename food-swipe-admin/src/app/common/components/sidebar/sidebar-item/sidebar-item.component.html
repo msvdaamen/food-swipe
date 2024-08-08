@@ -1,0 +1,42 @@
+<div class="flex w-full flex-col">
+  <div
+    class="flex w-full cursor-pointer select-none rounded-lg px-2.5 py-1.5 transition-colors hover:bg-gray-200"
+    (click)="toggleMenu()"
+    [routerLink]="item().link ?? null"
+    routerLinkActive="bg-gray-200 active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    @if (item().icon) {
+      <span class="icon mr-2 transition-colors"
+        ><fa-icon [icon]="item().icon!"
+      /></span>
+    }
+    <span class="title grow">{{ item().title }}</span>
+    @if (item().items) {
+      <span><fa-icon [icon]="open() ? faMinus : faPlus" /></span>
+    }
+  </div>
+  @if (item().items && open()) {
+    <div class="mt-1 flex flex-col overflow-hidden" @menuAnimation>
+      @for (item of item().items; track i; let i = $index; let last = $last) {
+        <div class="flex">
+          <div class="relative flex justify-center" style="width: 26px">
+            <div
+              [class]="{
+                'h-full': !last,
+                'h-1/2': last,
+              }"
+              class="absolute left-1/2 top-0 border-r border-gray-400"
+            ></div>
+            <div
+              class="absolute top-1/2 w-1/2 translate-x-1/2 border-b border-gray-400"
+            ></div>
+          </div>
+          <div class="mb-1 w-full">
+            <app-sidebar-item [item]="item" />
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

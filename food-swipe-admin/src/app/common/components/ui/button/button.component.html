@@ -1,0 +1,25 @@
+<button
+  [class]="{
+    primary: color() === 'primary',
+    secondary: color() === 'secondary',
+    default: color() === 'default',
+    'bg-transparent': color() === 'transparent',
+    'w-full': size() === 'full',
+    'btn-small': size() === 'small',
+    'btn-large': size() === 'large',
+    'rounded-full': rounded(),
+    'px-3': type() !== 'icon',
+    'py-2': type() !== 'icon',
+    'icon-only': type() === 'icon',
+    'text-white': color() !== 'transparent',
+  }"
+  class="ion-activatable icon-only relative select-none overflow-hidden rounded px-3 py-2 text-white outline-none transition-colors"
+  [disabled]="disabled()"
+>
+  @if (icon()) {
+    <fa-icon [icon]="icon()!" />
+  }
+  @if (!isMobile() || (mobileText() && isMobile())) {
+    <ng-content />
+  }
+</button>

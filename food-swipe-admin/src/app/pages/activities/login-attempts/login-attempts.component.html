@@ -1,0 +1,61 @@
+<div class="heading">
+  <h1 class="text-2xl font-medium">Login attempts</h1>
+  <span class="text-gray-500">Login attempts from the app</span>
+</div>
+<div class="stats mb-8 grid grid-cols-3 gap-10">
+  <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
+    <span>Total users</span>
+    <div class="fap-2 flex items-center">
+      <span class="grow text-2xl font-medium">100</span>
+      <div
+        class="rounded-full border border-green-600 bg-white px-3 py-1.5 text-green-600"
+      >
+        <fa-icon [icon]="faArrowUp" /> 20%
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
+    <span>Daily active users</span>
+    <div class="fap-2 flex items-center">
+      <span class="grow text-2xl font-medium">100</span>
+      <div
+        class="rounded-full border border-green-600 bg-white px-4 py-1.5 text-green-600"
+      >
+        <fa-icon [icon]="faArrowUp" /> 20%
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
+    <span>New users</span>
+    <div class="fap-2 flex items-center">
+      <span class="grow text-2xl font-medium">100</span>
+      <div
+        class="rounded-full border border-green-600 bg-white px-3 py-1.5 text-green-600"
+      >
+        <fa-icon [icon]="faArrowUp" /> 20%
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-container">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i; let i = $index) {
+        <tr>
+          <td>example&#64;outlook.com</td>
+          <td>examplessasss</td>
+          <td>John Doee</td>
+          <td class="text-nowrap">2024-01-01 12:12:12</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
