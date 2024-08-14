@@ -10,5 +10,5 @@ export const files = pgTable('files', {
   updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
-export type FileObj = typeof files.$inferSelect;
+export type FileEntity = typeof files.$inferSelect;
 export type NewFileObj = typeof files.$inferInsert;

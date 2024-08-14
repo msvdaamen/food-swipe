@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
   faBook,
+  faList,
   faPencil,
   faPerson,
   IconDefinition,
@@ -30,6 +31,11 @@ export class SidebarComponent {
         { title: 'Logins', icon: faPerson, link: '/activities/logins' },
         { title: 'Recipes', icon: faBook, link: '/activities/recipes' },
       ],
+    },
+    {
+      title: 'Recipes',
+      icon: faList,
+      items: [{ title: 'Recipes', icon: faBook, link: '/recipes' }],
     },
   ];
 }

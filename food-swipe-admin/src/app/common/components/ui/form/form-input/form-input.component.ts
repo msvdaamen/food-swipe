@@ -14,8 +14,9 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { FaIconComponent, IconName } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RegisterOnToucheFn } from '../../../../types/form.types';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 type InputType = 'number' | 'text' | 'email' | 'password' | 'file';
 
@@ -40,9 +41,8 @@ export class FormInputComponent implements ControlValueAccessor {
 
   @Input() type: InputType = 'text';
   @Input() placeholder = '';
-  @Input() iconSuffix: IconName | null = null;
+  @Input() iconSuffix: IconDefinition | null = null;
   @Input() disabled = false;
-  forceDark = input(false, { transform: booleanAttribute });
 
   // *** ControlValueAccessor Methods
   setDisabledState(isDisabled: boolean): void {

@@ -1,4 +1,4 @@
-import { type FileObj as FileModel, files } from './file.schema';
+import { type FileEntity as FileModel, files } from './file.schema';
 import { FileUploadException } from './file-upload.exception';
 import { eq } from 'drizzle-orm';
 import { FileNotFoundException } from './file-not-found.exception';

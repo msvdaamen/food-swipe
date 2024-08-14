@@ -1,0 +1,35 @@
+@if (recipe(); as recipe) {
+  <div class="flex">
+    <div class="w-1/3">
+      <img [src]="recipe.coverImageUrl" alt="" />
+    </div>
+    <div class="w-2/3 p-8 pt-0">
+      <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
+      <p class="text-gray-600">{{ recipe.description }}</p>
+    </div>
+  </div>
+
+  <div class="p-8">
+    <h2 class="text-2xl font-bold">Ingredients</h2>
+    <div class="table-container">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody cdkDropList class="example-list">
+          <tr cdkDrag class="example-box">
+            <td>asd</td>
+            <td>asd</td>
+          </tr>
+          <tr cdkDrag class="example-box">
+            <td>asd fas fasf sf</td>
+            <td>asdf asdf asdf asdf</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
