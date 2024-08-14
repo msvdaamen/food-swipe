@@ -12,6 +12,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'activities/logins',
+      },
+      {
         path: 'activities',
         children: [
           {
@@ -39,6 +44,10 @@ export const routes: Routes = [
         path: 'ingredients',
         loadComponent: () =>
           import('./pages/ingredients/ingredients.component'),
+      },
+      {
+        path: 'recipes',
+        loadChildren: () => import('./pages/recipes/routes'),
       },
     ],
   },

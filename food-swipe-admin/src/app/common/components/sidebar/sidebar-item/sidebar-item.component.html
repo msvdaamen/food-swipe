@@ -4,7 +4,7 @@
     (click)="toggleMenu()"
     [routerLink]="item().link ?? null"
     routerLinkActive="bg-gray-200 active"
-    [routerLinkActiveOptions]="{ exact: true }"
+    [routerLinkActiveOptions]="{ exact: false }"
   >
     @if (item().icon) {
       <span class="icon mr-2 transition-colors"

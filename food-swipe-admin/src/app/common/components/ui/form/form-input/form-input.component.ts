@@ -43,7 +43,6 @@ export class FormInputComponent implements ControlValueAccessor {
   @Input() placeholder = '';
   @Input() iconSuffix: IconDefinition | null = null;
   @Input() disabled = false;
-  forceDark = input(false, { transform: booleanAttribute });
 
   // *** ControlValueAccessor Methods
   setDisabledState(isDisabled: boolean): void {
