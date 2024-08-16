@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/lambda/test2/index.ts"],
+  "sourcesContent": ["\r\n\r\nexport const handler = async (event: any = {}): Promise<any> => {\r\n  return {\r\n    statusCode: 200,\r\n    body: JSON.stringify({\r\n      message: 'Hello from test2!'\r\n    }, null, 2),\r\n  };\r\n}"],
+  "mappings": "AAEO,IAAMA,EAAU,MAAOC,EAAa,CAAC,KACnC,CACL,WAAY,IACZ,KAAM,KAAK,UAAU,CACnB,QAAS,mBACX,EAAG,KAAM,CAAC,CACZ",
+  "names": ["handler", "event"]
+}
