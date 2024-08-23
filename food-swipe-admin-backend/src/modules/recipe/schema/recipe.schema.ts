@@ -1,7 +1,7 @@
 import { pgTable, serial, varchar, integer, timestamp, boolean, bigint } from "drizzle-orm/pg-core";
 import { files } from "../../../providers/storage/file.schema";
 
-export const recipes = pgTable('recipes', {
+export const recipesSchema = pgTable('recipes', {
     id: serial('id').primaryKey(),
     title: varchar('title').notNull(),
     description: varchar('description'),
@@ -14,5 +14,5 @@ export const recipes = pgTable('recipes', {
     updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
-export type Recipe = typeof recipes.$inferSelect;
-export type NewRecipe = typeof recipes.$inferInsert;
+export type RecipeEntity = typeof recipesSchema.$inferSelect;
+export type NewRecipeEntity = typeof recipesSchema.$inferInsert;

@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
            password varchar(255)  not null,
            first_name varchar(255) not null,
            last_name varchar(255) not null,
-           is_admin boolean default false,
+           is_admin boolean default false not null,
            created_at timestamp with time zone default now(),
            updated_at timestamp with time zone default now()
         )

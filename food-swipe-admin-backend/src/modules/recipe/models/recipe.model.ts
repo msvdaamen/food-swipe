@@ -1,5 +1,5 @@
-import type { Ingredient } from "../schema/ingredient.schema";
-import type { RecipeStep } from "../schema/recipe-step.schema";
+import type { IngredientEntity } from "../schema/ingredient.schema";
+import type { RecipeStepEntity } from "../schema/recipe-step.schema";
 
 export type RecipeSerialized = {
     id: number,
@@ -13,6 +13,6 @@ export type RecipeSerialized = {
     liked: boolean,
     createdAt: Date,
     updatedAt: Date
-    ingredients: Ingredient[],
-    steps: RecipeStep[]
+    ingredients: IngredientEntity[],
+    steps: RecipeStepEntity[]
 };
