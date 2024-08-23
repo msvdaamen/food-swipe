@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: food-swipe
     volumes:
       - ./data/db:/var/lib/postgresql/data

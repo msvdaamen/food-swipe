@@ -1,14 +1,14 @@
 import {integer, pgTable, primaryKey} from "drizzle-orm/pg-core";
-import {users} from "../../user/schema/user.schema.ts";
-import {recipes} from "./recipe.schema.ts";
+import {usersSchema} from "../../user/schema/user.schema.ts";
+import {recipesSchema} from "./recipe.schema.ts";
 
-export const userLikedRecipes = pgTable('user_liked_recipe', {
+export const userLikedRecipesSchema = pgTable('user_liked_recipe', {
     userId: integer('user_id').notNull(),
     recipeId: integer('recipe_id').notNull()
 }, () => ({
-    primaryKey: primaryKey({columns: [ users.id, recipes.id ]})
+    primaryKey: primaryKey({columns: [ usersSchema.id, recipesSchema.id ]})
 }));
 
 
-export type UserLikedRecipe = typeof userLikedRecipes.$inferSelect;
-export type NewUserLikedRecipe = typeof userLikedRecipes.$inferInsert;
+export type UserLikedRecipeEntity = typeof userLikedRecipesSchema.$inferSelect;
+export type NewUserLikedRecipeEntity = typeof userLikedRecipesSchema.$inferInsert;

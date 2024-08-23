@@ -1,7 +1,6 @@
 import { boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
-
-export const users = pgTable('users', {
+export const usersSchema = pgTable('users', {
     id: serial('id').primaryKey(),
     email: varchar('email', {length: 255}).unique().notNull(),
     username: varchar('username', {length: 255}).unique().notNull(),
@@ -13,5 +12,5 @@ export const users = pgTable('users', {
     updatedAt: timestamp('updated_at').defaultNow().notNull()
 });
 
-export type User = typeof users.$inferSelect; // return type when queried
-export type NewUser = typeof users.$inferInsert; // insert type
+export type UserEntity = typeof usersSchema.$inferSelect; // return type when queried
+export type NewUserEntity = typeof usersSchema.$inferInsert; // insert type

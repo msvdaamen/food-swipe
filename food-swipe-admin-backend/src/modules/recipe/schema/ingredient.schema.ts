@@ -1,11 +1,11 @@
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { measurements } from "./measurement.schema";
+import { measurementsSchema } from "./measurement.schema";
 
 
-export const ingredients = pgTable('ingredients', {
+export const ingredientsSchema = pgTable('ingredients', {
     id: serial('id').primaryKey(),
     name: varchar('name').notNull()
 });
 
-export type Ingredient = typeof ingredients.$inferSelect;
-export type NewIngredient = typeof ingredients.$inferInsert;
+export type IngredientEntity = typeof ingredientsSchema.$inferSelect;
+export type NewIngredientEntity = typeof ingredientsSchema.$inferInsert;

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { defineConfig } from 'kysely-ctl'
 import {PostgresJSDialect} from 'kysely-postgres-js'
 import postgres from 'postgres'

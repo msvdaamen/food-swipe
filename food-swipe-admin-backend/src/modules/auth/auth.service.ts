@@ -1,14 +1,14 @@
 import { addMonths } from "date-fns";
-import { authRefreshTokens } from "./schema/auth-refresh-token.schema";
-import { eq } from "drizzle-orm";
+import { authRefreshTokenSchema } from "./schema/auth-refresh-token.schema";
 import type { SignInDto } from "./dto/sign-in.dto";
 import { jwtService, type JwtService } from "../../providers/jwt.service";
 import type { SignInResponse } from "./responses/sign-in.response";
 import type { RefreshTokenResponse } from "./responses/refresh-token.response";
-import { users, type User } from "../user/schema/user.schema";
 import { userService, type UserService } from "../user/user.service";
 import { DbService } from "../../common/db.service";
 import {v4 as uuid} from 'uuid';
+import {usersSchema} from "../user/schema/user.schema.ts";
+import {eq} from "drizzle-orm";
 
 export class AuthService extends DbService  {
     constructor(
@@ -29,8 +29,8 @@ export class AuthService extends DbService  {
           throw new Error('Invalid password');
         }
         const [accessToken, refreshToken] = await Promise.all([
-          this.createAccessToken(existingUser),
-          this.createRefreshToken(existingUser)
+          this.createAccessToken(existingUser.id, existingUser.email),
+          this.createRefreshToken(existingUser.id)
         ]);
         return {
           user: {
@@ -51,22 +51,24 @@ export class AuthService extends DbService  {
         if (!refreshTokenId) {
           throw new Error('Invalid refresh token');
         }
+
         const [result] = await this.database
           .select({
-            user: users,
-            token: authRefreshTokens
+            expiresAt: authRefreshTokenSchema.expiresAt,
+            userId: usersSchema.id,
+            email: usersSchema.email
           })
-          .from(authRefreshTokens)
-          .innerJoin(users, eq(authRefreshTokens.userId, users.id))
-          .where(eq(authRefreshTokens.id, refreshTokenId))
+          .from(authRefreshTokenSchema)
+          .innerJoin(usersSchema, eq(authRefreshTokenSchema.userId, usersSchema.id))
+          .where(eq(authRefreshTokenSchema.id, refreshTokenId))
           .limit(1);
-        if (!result || result.token.expiresAt < new Date()) {
+        if (!result || result.expiresAt < new Date()) {
           throw new Error('Invalid refresh token');
         }
-        await this.database.delete(authRefreshTokens).where(eq(authRefreshTokens.id, refreshTokenId));
+        await this.database.delete(authRefreshTokenSchema).where(eq(authRefreshTokenSchema.id, refreshTokenId));
         const [accessToken, newRefreshToken] = await Promise.all([
-          this.createAccessToken(result.user),
-          this.createRefreshToken(result.user)
+          this.createAccessToken(result.userId, result.email),
+          this.createRefreshToken(result.userId)
         ]);
         return {
           accessToken,
@@ -76,22 +78,22 @@ export class AuthService extends DbService  {
     
     
       async signOut(userId: number): Promise<void> {
-        await this.database.delete(authRefreshTokens).where(eq(authRefreshTokens.userId, userId));
+        await this.database.delete(authRefreshTokenSchema).where(eq(authRefreshTokenSchema.userId, userId));
       }
     
-      private async createAccessToken(user: User): Promise<string> {
+      private async createAccessToken(userId: number, email: string): Promise<string> {
         const tokenPayload = {
-          sub: user.id,
-          email: user.email
+          sub: userId,
+          email
         };
         return await this.jwtService.sign(tokenPayload, '10m');
       }
     
-      private async createRefreshToken(user: User): Promise<string> {
-        const [token] = await this.database.insert(authRefreshTokens)
+      private async createRefreshToken(userId: number): Promise<string> {
+        const [token] = await this.database.insert(authRefreshTokenSchema)
           .values({
             id: uuid(),
-            userId: user.id,
+            userId,
             expiresAt: addMonths(new Date(), 1)
           })
           .returning();
