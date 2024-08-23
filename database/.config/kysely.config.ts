@@ -9,7 +9,7 @@ export default defineConfig({
 
 	}),
 	migrations: {
-		migrationTableName: 'schema-migrations'
+		migrationTableName: 'migrations'
 	},
 	//   plugins: [],
 	//   seeds: {
