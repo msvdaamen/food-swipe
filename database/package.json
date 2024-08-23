@@ -1,0 +1,20 @@
+{
+  "name": "database",
+  "type": "module",
+  "scripts": {
+    "make:migration": "bunx kysely migrate:make ",
+    "migrate": "bun kysely migrate:latest",
+    "rollback": "bun kysely migrate:rollback --all"
+  },
+  "dependencies": {
+    "kysely": "^0.27.4",
+    "kysely-postgres-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "kysely-ctl": "^0.9.0",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

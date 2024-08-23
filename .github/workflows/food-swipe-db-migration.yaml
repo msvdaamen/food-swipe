@@ -7,7 +7,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./food-swipe-backend
+    working-directory: ./database
 
 jobs:
   migrate:
@@ -19,9 +19,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: supabase/setup-cli@v1
-        with:
-          version: latest
-
-      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
-      - run: supabase db push
+#      - uses: supabase/setup-cli@v1
+#        with:
+#          version: latest
+#
+#      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
+#      - run: supabase db push
