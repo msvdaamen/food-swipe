@@ -11,8 +11,18 @@ app.get('/', async (c) => {
 });
 
 app.get('/:id', async (c) => {
-    const recipe = await recipeService.getById(c.req.param('id'));
+    const recipe = await recipeService.getById(Number(c.req.param('id')));
     return c.json(formatRecipe(recipe));
+});
+
+app.get('/:id/steps', async (c) => {
+    const steps = await recipeService.getSteps(Number(c.req.param('id')));
+    return c.json(steps);
+});
+
+app.get('/:id/ingredients', async (c) => {
+    const ingredients = await recipeService.getIngredients(Number(c.req.param('id')));
+    return c.json(ingredients);
 });
 
 
