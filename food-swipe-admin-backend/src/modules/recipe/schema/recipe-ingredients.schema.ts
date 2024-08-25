@@ -13,3 +13,6 @@ export const recipeIngredientsSchema = pgTable('recipe_ingredients', {
 }, () => ({
     primaryKey: primaryKey({columns: [recipesSchema.id, ingredientsSchema.id]})
 }));
+
+export type RecipeIngredientEntity = typeof recipeIngredientsSchema.$inferSelect;
+export type NewRecipeIngredientEntity = typeof recipeIngredientsSchema.$inferInsert;

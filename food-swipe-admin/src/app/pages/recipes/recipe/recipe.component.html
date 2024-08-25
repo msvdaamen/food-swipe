@@ -9,27 +9,73 @@
     </div>
   </div>
 
-  <div class="p-8">
-    <h2 class="text-2xl font-bold">Ingredients</h2>
+  <div class="mt-8">
+    <div class="mb-1 flex gap-2">
+      <h2 class="grow text-2xl font-bold">Ingredients</h2>
+      <app-button size="small">Add ingredient</app-button>
+    </div>
     <div class="table-container">
-      <table class="table w-full">
-        <thead>
-          <tr>
-            <th>Ingredient</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody cdkDropList class="example-list">
-          <tr cdkDrag class="example-box">
-            <td>asd</td>
-            <td>asd</td>
-          </tr>
-          <tr cdkDrag class="example-box">
-            <td>asd fas fasf sf</td>
-            <td>asdf asdf asdf asdf</td>
-          </tr>
-        </tbody>
-      </table>
+      <div
+        class="ingredients"
+        cdkDropList
+        (cdkDropListDropped)="ingredientsDrop($event)"
+      >
+        <div class="t-row ingredient">
+          <div class="name">Ingredient</div>
+          <div class="amount min-w-20 flex-shrink">Amount</div>
+          <div class="min-w-28 flex-shrink"></div>
+        </div>
+        @for (ingredient of ingredients(); track ingredient) {
+          <div class="t-row flex items-center" cdkDrag>
+            <div class="name">{{ ingredient.ingredientId }}</div>
+            <div class="amount min-w-20 flex-shrink">
+              {{ ingredient.amount }}{{ ingredient.measurement }}
+            </div>
+            <div class="flex min-w-28 flex-shrink gap-1">
+              <app-button type="icon" size="small"
+                ><fa-icon [icon]="faPencil"
+              /></app-button>
+              <app-button type="icon" size="small" color="danger"
+                ><fa-icon [icon]="faTrash"
+              /></app-button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 flex gap-2">
+      <h2 class="grow text-2xl font-bold">Steps</h2>
+      <app-button size="small">Add Step</app-button>
+    </div>
+    <div class="table-container">
+      <div
+        class="ingredients"
+        cdkDropList
+        (cdkDropListDropped)="stepsDrop($event)"
+      >
+        <div class="t-row ingredient">
+          <div class="step min-w-20 flex-shrink">Step</div>
+          <div class="description">Description</div>
+          <div class="min-w-28 flex-shrink"></div>
+        </div>
+        @for (step of steps(); track step.id) {
+          <div class="t-row flex items-center" cdkDrag>
+            <div class="step min-w-20 flex-shrink">{{ step.stepNumber }}</div>
+            <div class="description">{{ step.description }}</div>
+            <div class="flex min-w-28 flex-shrink gap-1">
+              <app-button type="icon" size="small"
+                ><fa-icon [icon]="faPencil"
+              /></app-button>
+              <app-button type="icon" size="small" color="danger"
+                ><fa-icon [icon]="faTrash"
+              /></app-button>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 }

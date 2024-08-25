@@ -12,6 +12,4 @@ export type RecipeModel = {
     coverImageUrl: string | null,
     createdAt: Date,
     updatedAt: Date
-    ingredients: IngredientEntity[],
-    steps: RecipeStepEntity[]
 };

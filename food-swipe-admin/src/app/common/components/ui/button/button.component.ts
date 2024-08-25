@@ -11,7 +11,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
-type Color = 'primary' | 'secondary' | 'default' | 'transparent';
+type Color = 'primary' | 'secondary' | 'default' | 'transparent' | 'danger';
 type Size = 'auto' | 'small' | 'medium' | 'large' | 'full' | 'icon';
 type Type = 'normal' | 'icon';
 

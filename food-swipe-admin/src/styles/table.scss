@@ -22,3 +22,23 @@
 .table-container {
   @apply overflow-x-auto border rounded-md;
 }
+
+.t-row {
+  display: flex;
+
+  div:not(.flex-shrink) {
+    flex: 1;
+  }
+
+  div {
+    @apply px-4 py-2;
+  }
+
+  &:first-child {
+    @apply text-left text-xs font-semibold;
+  }
+
+  &:not(:first-child) {
+    @apply border-t hover:bg-gray-100;
+  }
+}
