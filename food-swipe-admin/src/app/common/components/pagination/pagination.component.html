@@ -1,0 +1,29 @@
+<div class="flex w-full justify-end">
+  <button
+    class="rounded-l border border-r-0 px-3 py-2 transition-colors enabled:cursor-pointer enabled:hover:bg-gray-100 disabled:text-gray-400"
+    [disabled]="previousDisabled()"
+    (click)="previousPage()"
+  >
+    <fa-icon [icon]="faChevronLeft" />
+  </button>
+  @for (pageNumber of pageNumbers(); track pageNumber) {
+    <button
+      class="border border-r-0 px-3 py-2 transition-colors enabled:cursor-pointer enabled:hover:bg-gray-100 disabled:text-gray-400"
+      [ngClass]="
+        pageNumber === currentPage()
+          ? ['bg-primary-600', 'text-white', 'enabled:hover:bg-primary-600']
+          : []
+      "
+      (click)="setPage(pageNumber)"
+    >
+      {{ pageNumber }}
+    </button>
+  }
+  <button
+    class="rounded-r border px-3 py-2 transition-colors enabled:cursor-pointer enabled:hover:bg-gray-100 disabled:text-gray-400"
+    [disabled]="nextDisabled()"
+    (click)="nextPage()"
+  >
+    <fa-icon [icon]="faChevronRight" />
+  </button>
+</div>

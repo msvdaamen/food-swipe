@@ -7,6 +7,7 @@ import {registerAuthController} from "./modules/auth/auth.controller.ts";
 import {registerRecipeController} from "./modules/recipe/recipe.controller.ts";
 import {registerUserController} from "./modules/user/user.controller.ts";
 import {registerMeasurementsController} from "./modules/measurement/measurement.controller.ts";
+import {registerIngredientController} from "./modules/ingredient/ingredient.controller.ts";
 
 const app = new Hono();
 
@@ -35,6 +36,7 @@ registerAuthController(app);
 registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
+registerIngredientController(app);
 
 export default {
     port: process.env.APP_PORT || 3000,

@@ -4,6 +4,7 @@ import {
   addEntity,
   removeEntity,
   setEntities,
+  setEntity,
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
@@ -50,7 +51,7 @@ export class MeasurementStore extends signalStore(
     patchState(this, { isLoading: true });
     this.measurementService.create(measurement).subscribe({
       next: (createdMeasurement) => {
-        patchState(this, setEntities([createdMeasurement]));
+        patchState(this, setEntity(createdMeasurement));
       },
       complete: () => patchState(this, { isLoading: false }),
     });

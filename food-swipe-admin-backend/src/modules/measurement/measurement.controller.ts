@@ -1,9 +1,10 @@
 import {Hono} from "hono";
 import {measurementService} from "./measurement.service.ts";
 import {createMeasurementDto} from "./dto/create-measurement.dto.ts";
+import {authRouter} from "../auth/auth.controller.ts";
 
 
-const app = new Hono();
+const app = authRouter.createApp();
 
 app.get('/', async (c) => {
     const measurements = await measurementService.all();

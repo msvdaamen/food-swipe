@@ -1,6 +1,6 @@
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 import { recipesSchema } from "./recipe.schema";
-import { ingredientsSchema } from "./ingredient.schema";
+import { ingredientsSchema } from "../../ingredient/schema/ingredient.schema.ts";
 import { measurementsSchema } from "../../measurement/schema/measurement.schema.ts";
 
 
