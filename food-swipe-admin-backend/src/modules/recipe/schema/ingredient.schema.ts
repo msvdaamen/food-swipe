@@ -1,5 +1,5 @@
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { measurementsSchema } from "./measurement.schema";
+import { measurementsSchema } from "../../measurement/schema/measurement.schema.ts";
 
 
 export const ingredientsSchema = pgTable('ingredients', {

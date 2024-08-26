@@ -1,0 +1,49 @@
+<div class="mb-4 w-64">
+  <app-form-input
+    placeholder="Search"
+    [iconSuffix]="faMagnifyingGlass"
+    [(ngModel)]="search"
+  />
+</div>
+
+<div class="mb-1 flex justify-end">
+  <app-button size="small" (click)="openCreateMeasurementDialog()"
+    >Add Measurement</app-button
+  >
+</div>
+<div class="table-container">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th class="w-1/2">Name</th>
+        <th class="w-1/2">Abbreviation</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (measurement of measurements(); track measurement.id) {
+        <tr>
+          <td>{{ measurement.name }}</td>
+          <td>{{ measurement.abbreviation }}</td>
+          <td>
+            <div class="flex gap-1">
+              <app-button
+                type="icon"
+                size="small"
+                (click)="openUpdateMeasurementDialog(measurement.id)"
+                ><fa-icon [icon]="faPencil"
+              /></app-button>
+              <app-button
+                type="icon"
+                size="small"
+                color="danger"
+                (click)="delete(measurement.id)"
+                ><fa-icon [icon]="faTrash"
+              /></app-button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

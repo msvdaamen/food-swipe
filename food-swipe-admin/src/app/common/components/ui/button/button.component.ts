@@ -11,9 +11,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
-type Color = 'primary' | 'secondary' | 'default' | 'transparent';
-type Size = 'auto' | 'small' | 'medium' | 'large' | 'full' | 'icon';
-type Type = 'normal' | 'icon';
+type Color = 'primary' | 'secondary' | 'default' | 'transparent' | 'danger';
+type Size = 'default' | 'small' | 'medium' | 'large' | 'icon';
+type Type = 'normal' | 'icon' | 'full';
 
 @Component({
   selector: 'app-button',
@@ -27,7 +27,7 @@ export class ButtonComponent {
   private readonly breakPointObserver = inject(BreakpointObserver);
 
   color = input<Color>('primary');
-  size = input<Size>('auto');
+  size = input<Size>('default');
   mobileText = input(true);
   icon = input<IconName | null>(null);
   disabled = input(false);

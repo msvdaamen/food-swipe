@@ -30,6 +30,11 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'measurements',
+        loadComponent: () =>
+          import('./pages/measurements/measurements.component'),
+      },
     ],
   },
 ];

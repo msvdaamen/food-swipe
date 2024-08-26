@@ -6,6 +6,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import {registerAuthController} from "./modules/auth/auth.controller.ts";
 import {registerRecipeController} from "./modules/recipe/recipe.controller.ts";
 import {registerUserController} from "./modules/user/user.controller.ts";
+import {registerMeasurementsController} from "./modules/measurement/measurement.controller.ts";
 
 const app = new Hono();
 
@@ -33,6 +34,7 @@ app.get('/', (c) => c.text('Hello Bun!'))
 registerAuthController(app);
 registerUserController(app);
 registerRecipeController(app);
+registerMeasurementsController(app);
 
 export default {
     port: process.env.APP_PORT || 3000,
