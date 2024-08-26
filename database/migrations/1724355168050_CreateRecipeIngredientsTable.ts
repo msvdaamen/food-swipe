@@ -3,9 +3,9 @@ import {type Kysely, sql} from 'kysely'
 export async function up(db: Kysely<any>): Promise<void> {
 	await sql`
         create table recipe_ingredients (
-            recipe_id bigint references recipes(id) on delete cascade,
-            ingredient_id bigint references ingredients(id) on delete cascade,
-            measurement_id bigint references measurements(id) on delete cascade,
+            recipe_id integer references recipes(id) on delete cascade,
+            ingredient_id integer references ingredients(id) on delete cascade,
+            measurement_id smallint references measurements(id) on delete cascade,
             amount integer not null,
             primary key (recipe_id, ingredient_id)
         )

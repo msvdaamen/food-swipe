@@ -31,5 +31,10 @@ export class SidebarComponent {
         { title: 'Recipes', icon: faBook, link: '/activities/recipes' },
       ],
     },
+    {
+      title: 'Recipes',
+      icon: faBook,
+      items: [{ title: 'Measurements', icon: faBook, link: '/measurements' }],
+    },
   ];
 }
