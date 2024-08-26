@@ -1,6 +1,6 @@
 import {DbService} from "../../common/db.service.ts";
 import {type IngredientEntity, ingredientsSchema} from "./schema/ingredient.schema.ts";
-import {and, asc, count, desc, eq, gt, lte, sql} from "drizzle-orm";
+import {and, asc, count, desc, eq, gt, ilike, like, lte, sql} from "drizzle-orm";
 import type {CreateIngredientDto} from "./dto/update-ingredient.dto.ts";
 import {PgColumn} from "drizzle-orm/pg-core";
 import type {PaginatedData} from "../../common/types/paginated-data.ts";
@@ -12,7 +12,7 @@ export class IngredientService extends DbService {
     async all(payload: GetIngredientsDto): Promise<PaginatedData<IngredientEntity>> {
         const wheres = [];
         if (payload.search) {
-            wheres.push(eq(ingredientsSchema.name, payload.search));
+            wheres.push(ilike(ingredientsSchema.name, `%${payload.search}%`));
         }
 
         const sortColumn = this.getSortColumn(payload.sort);

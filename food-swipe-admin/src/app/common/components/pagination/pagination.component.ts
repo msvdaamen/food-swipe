@@ -24,8 +24,24 @@ export class PaginationComponent {
   pageNumbers = computed<number[]>(() => {
     const pages: number[] = [];
 
-    const left = this.currentPage() - 2 < 1 ? 1 : this.currentPage() - 2;
-    const right = this.currentPage() + 2 > 5 ? 5 : this.currentPage() + 2;
+    const left = (() => {
+      if (this.currentPage() - 2 <= 0) {
+        return 1;
+      }
+      if (this.currentPage() + 2 > this.totalPages()) {
+        return this.totalPages() - 4;
+      }
+      return this.currentPage() - 2;
+    })();
+    const right = (() => {
+      if (this.currentPage() + 2 >= this.totalPages()) {
+        return this.totalPages();
+      }
+      if (this.currentPage() - 2 <= 0) {
+        return 5;
+      }
+      return this.currentPage() + 2;
+    })();
 
     for (let i = left; i <= right; i++) {
       pages.push(i);

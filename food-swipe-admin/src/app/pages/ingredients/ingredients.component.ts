@@ -39,7 +39,7 @@ export default class IngredientsComponent {
   sort = signal('name');
   order = signal<'asc' | 'desc'>('desc');
   page = signal(1);
-  perPage = signal(1);
+  perPage = signal(10);
   totalPages = computed(() => {
     const pagination = this.ingredientRepository.pagination();
     if (!pagination) {
