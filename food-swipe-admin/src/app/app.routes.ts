@@ -35,6 +35,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/measurements/measurements.component'),
       },
+      {
+        path: 'ingredients',
+        loadComponent: () =>
+          import('./pages/ingredients/ingredients.component'),
+      },
     ],
   },
 ];

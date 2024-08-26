@@ -1,4 +1,4 @@
-import type { IngredientEntity } from "../schema/ingredient.schema";
+import type { IngredientEntity } from "../../ingredient/schema/ingredient.schema.ts";
 import type { RecipeStepEntity } from "../schema/recipe-step.schema";
 
 export type RecipeSerialized = {
