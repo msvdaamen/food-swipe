@@ -48,7 +48,9 @@
   <div class="mt-8">
     <div class="mb-1 flex gap-2">
       <h2 class="grow text-2xl font-bold">Steps</h2>
-      <app-button size="small">Add Step</app-button>
+      <app-button size="small" (click)="openManageStepDialog(recipe.id)"
+        >Add Step</app-button
+      >
     </div>
     <div class="table-container">
       <div
@@ -66,10 +68,17 @@
             <div class="step min-w-20 flex-shrink">{{ step.stepNumber }}</div>
             <div class="description">{{ step.description }}</div>
             <div class="flex min-w-28 flex-shrink gap-1">
-              <app-button type="icon" size="small"
+              <app-button
+                type="icon"
+                size="small"
+                (click)="openManageStepDialog(recipe.id, step.id)"
                 ><fa-icon [icon]="faPencil"
               /></app-button>
-              <app-button type="icon" size="small" color="danger"
+              <app-button
+                type="icon"
+                size="small"
+                color="danger"
+                (click)="deleteStep(step.id)"
                 ><fa-icon [icon]="faTrash"
               /></app-button>
             </div>

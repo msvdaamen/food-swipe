@@ -5,6 +5,8 @@ import type {RecipeModel} from "./models/recipe.model.ts";
 import {createRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import {createRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
 import {updateRecipeDto} from "./dto/update-recipe.dto.ts";
+import {updateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
+import {reorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 
 const app = authRouter.createApp();
 
@@ -33,7 +35,32 @@ app.get('/:id/steps', async (c) => {
 app.post(':id/steps', async (c) => {
     const id = Number(c.req.param('id'));
     const payload = createRecipeStepDto.parse(await c.req.json());
-})
+    const step = await recipeService.createStep(id, payload);
+    return c.json(step);
+});
+
+app.put('/:id/steps/:stepId', async (c) => {
+    const id = Number(c.req.param('id'));
+    const stepId = Number(c.req.param('stepId'));
+    const payload = updateRecipeStepDto.parse(await c.req.json());
+    const step = await recipeService.updateStep(id, stepId, payload);
+    return c.json(step);
+});
+
+app.delete('/:id/steps/:stepId', async (c) => {
+    const id = Number(c.req.param('id'));
+    const stepId = Number(c.req.param('stepId'));
+    await recipeService.deleteStep(id, stepId);
+    return c.json({}, 204);
+});
+
+app.put('/:id/steps/:stepId/reorder', async (c) => {
+    const id = Number(c.req.param('id'));
+    const stepId = Number(c.req.param('stepId'));
+    const payload = reorderRecipeStepDto.parse(await c.req.json());
+    const steps = await recipeService.reorderSteps(id, stepId, payload);
+    return c.json(steps);
+});
 
 app.get('/:id/ingredients', async (c) => {
     const ingredients = await recipeService.getIngredients(Number(c.req.param('id')));
@@ -42,6 +69,8 @@ app.get('/:id/ingredients', async (c) => {
 app.post(':id/ingredients', async (c) => {
     const id = Number(c.req.param('id'));
     const payload = createRecipeIngredientDto.parse(await c.req.json());
+    const ingredient = await recipeService.createIngredient(id, payload);
+    return c.json(ingredient);
 })
 
 const formatRecipe = (recipe: RecipeModel) => {

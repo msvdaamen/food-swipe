@@ -1,9 +1,9 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { inject } from '@angular/core';
 
-export class DialogComponent<R = unknown> {
-  protected readonly dialogRef = inject<DialogRef<R>>(DialogRef);
-  protected readonly data = inject(DIALOG_DATA);
+export class DialogComponent<D = unknown> {
+  protected readonly dialogRef = inject(DialogRef);
+  protected readonly data = inject<D>(DIALOG_DATA);
 
   /**
    * Closes the dialog without passing a result.
@@ -15,7 +15,7 @@ export class DialogComponent<R = unknown> {
   /**
    * Closes the dialog, passing a result.
    */
-  public close(data?: R): void {
+  public close<T>(data?: T): void {
     this.dialogRef.close(data);
   }
 }

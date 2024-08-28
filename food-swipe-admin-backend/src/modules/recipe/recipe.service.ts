@@ -3,7 +3,7 @@ import { storageService, type StorageService } from "../../providers/storage/sto
 import {recipesSchema} from "./schema/recipe.schema.ts";
 import type {RecipeModel} from "./models/recipe.model.ts";
 import {files} from "../../providers/storage/file.schema.ts";
-import {and, eq, gte, sql} from "drizzle-orm";
+import {and, asc, eq, gt, gte, lt, lte, sql} from "drizzle-orm";
 import {recipeStepSchema} from "./schema/recipe-step.schema.ts";
 import {recipeIngredientsSchema} from "./schema/recipe-ingredients.schema.ts";
 import type {RecipeStepModel} from "./models/recipe-step.model.ts";
@@ -13,6 +13,8 @@ import {measurementsSchema} from "./../measurement/schema/measurement.schema.ts"
 import type {UpdateRecipeDto} from "./dto/update-recipe.dto.ts";
 import type {CreateRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import type {CreateRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
+import type {UpdateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
+import type {ReorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 
 export class RecipeService extends DbService {
 
@@ -59,12 +61,12 @@ export class RecipeService extends DbService {
     }
 
     async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
-        const steps = await this.database.select().from(recipeStepSchema).where(eq(recipeStepSchema.recipeId, recipeId)).execute();
+        const steps = await this.database.select().from(recipeStepSchema).where(eq(recipeStepSchema.recipeId, recipeId)).orderBy(asc(recipeStepSchema.stepNumber)).execute();
         return steps;
     }
 
-    async createSteps(recipeId: number, payload: CreateRecipeStepDto) {
-        await this.transaction(async () => {
+    async createStep(recipeId: number, payload: CreateRecipeStepDto): Promise<RecipeStepModel> {
+        return await this.transaction(async () => {
             await this.database.update(recipeStepSchema)
                 .set({stepNumber: sql`${recipeStepSchema.stepNumber} + 1`})
                 .where(and(
@@ -85,6 +87,77 @@ export class RecipeService extends DbService {
         });
     }
 
+    async updateStep(recipeId: number, stepId: number, payload: UpdateRecipeStepDto): Promise<RecipeStepModel> {
+        const [step] = await this.database.update(recipeStepSchema)
+        .set(payload)
+        .where(and(
+            eq(recipeStepSchema.id, stepId),
+            eq(recipeStepSchema.recipeId, recipeId)
+        ))
+        .returning();
+        return step;
+    }
+
+    async deleteStep(recipeId: number, stepId: number) {
+        await this.transaction(async () => {
+            const [step] = await this.database.delete(recipeStepSchema).where(and(
+                eq(recipeStepSchema.id, stepId),
+                eq(recipeStepSchema.recipeId, recipeId),
+            ))
+            .returning()
+            .execute();
+            await this.database.update(recipeStepSchema)
+                .set({stepNumber: sql`${recipeStepSchema.stepNumber} - 1`})
+                .where(and(
+                    eq(recipeStepSchema.recipeId, recipeId),
+                    gt(recipeStepSchema.stepNumber, step.stepNumber)
+                ))
+                .execute();
+        });
+    }
+
+    async reorderSteps(recipeId: number, stepId: number, {orderTo, orderFrom}: ReorderRecipeStepDto) {
+        if (orderTo === orderFrom) {
+            return this.getSteps(recipeId);
+        }
+        await this.transaction(async () => {
+            const [step] = await this.database.select().from(recipeStepSchema).where(and(
+                eq(recipeStepSchema.id, stepId),
+                eq(recipeStepSchema.recipeId, recipeId)
+            )).execute();
+            if (!step) {
+                throw new Error('Step not found');
+            }
+            if (orderTo < orderFrom) {
+                await this.database.update(recipeStepSchema)
+                    .set({stepNumber: sql`${recipeStepSchema.stepNumber} + 1`})
+                    .where(and(
+                        eq(recipeStepSchema.recipeId, recipeId),
+                        gte(recipeStepSchema.stepNumber, orderTo),
+                        lt(recipeStepSchema.stepNumber, orderFrom)
+                    ))
+                    .execute();
+            } else {
+                await this.database.update(recipeStepSchema)
+                    .set({stepNumber: sql`${recipeStepSchema.stepNumber} - 1`})
+                    .where(and(
+                        eq(recipeStepSchema.recipeId, recipeId),
+                        gt(recipeStepSchema.stepNumber, orderFrom),
+                        lte(recipeStepSchema.stepNumber, orderTo)
+                    ))
+                    .execute();
+            }
+            await this.database.update(recipeStepSchema)
+                .set({stepNumber: orderTo})
+                .where(and(
+                    eq(recipeStepSchema.id, stepId),
+                    eq(recipeStepSchema.recipeId, recipeId)
+                ))
+                .execute();
+        });
+        return this.getSteps(recipeId);
+    }
+
     async getIngredients(recipeId: number): Promise<RecipeIngredientModel[]> {
         const ingredients = await this.database.select({
             recipeIngredient: recipeIngredientsSchema,
@@ -103,16 +176,30 @@ export class RecipeService extends DbService {
         return models;
     }
 
-    async createIngredient(recipeId: number, payload: CreateRecipeIngredientDto) {
-        const [recipe] = await this.database.insert(recipeIngredientsSchema)
+    async createIngredient(recipeId: number, payload: CreateRecipeIngredientDto): Promise<RecipeIngredientModel> {
+        const [{ingredientId}] = await this.database.insert(recipeIngredientsSchema)
             .values({
                 recipeId,
                 ...payload
             })
-            .returning()
-            .execute();
-
-        return recipe;
+            .returning({ingredientId: recipeIngredientsSchema.ingredientId});
+        const [recipeIngredient] = await this.database.select({
+            recipeIngredient: recipeIngredientsSchema,
+            ingredient: ingredientsSchema,
+            measurement: measurementsSchema
+        }).from(recipeIngredientsSchema)
+        .innerJoin(ingredientsSchema, eq(ingredientsSchema.id, recipeIngredientsSchema.ingredientId))
+        .leftJoin(measurementsSchema, eq(measurementsSchema.id, recipeIngredientsSchema.measurementId))
+        .where(and(
+            eq(recipeIngredientsSchema.recipeId, recipeId),
+            eq(recipeIngredientsSchema.ingredientId, ingredientId)
+        ))
+        .execute();
+        return {
+            ...recipeIngredient.recipeIngredient,
+            ingredient: recipeIngredient.ingredient.name,
+            measurement: recipeIngredient.measurement?.name ?? null
+        };
     }
 
 

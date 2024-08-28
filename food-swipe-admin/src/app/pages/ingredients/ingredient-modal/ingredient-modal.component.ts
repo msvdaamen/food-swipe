@@ -22,12 +22,12 @@ import { DialogComponent } from '../../../common/components/dialog.component';
   templateUrl: './ingredient-modal.component.html',
   styleUrl: './ingredient-modal.component.scss',
 })
-export class IngredientModalComponent extends DialogComponent {
+export class IngredientModalComponent extends DialogComponent<{ id?: number }> {
   private readonly ingredientRepository = inject(IngredientRepository);
   private readonly fb = inject(NonNullableFormBuilder);
 
   ingredient = computed(() => {
-    const id = this.data?.id as number | undefined;
+    const id = this.data?.id;
     if (!id) {
       return null;
     }

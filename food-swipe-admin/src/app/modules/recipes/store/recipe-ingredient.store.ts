@@ -1,12 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import {
+  addEntity,
   SelectEntityId,
   setEntities,
   withEntities,
 } from '@ngrx/signals/entities';
 import { RecipeService } from '../recipe.service';
 import { RecipeIngredient } from '../types/recipe-ingredient.type';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { CreateRecipeIngredientRequest } from '@modules/recipes/requests/create-recipe-ingredient.request';
+import { pipe, switchMap } from 'rxjs';
+import { tapResponse } from '@ngrx/operators';
 
 type State = {
   isLoading: boolean;
@@ -44,4 +49,21 @@ export class RecipeIngredientStore extends signalStore(
       },
     });
   }
+
+  createIngredients = rxMethod<{
+    recipeId: number;
+    payload: CreateRecipeIngredientRequest;
+  }>(
+    pipe(
+      switchMap(({ recipeId, payload }) =>
+        this.recipeService.createIngredient(recipeId, payload).pipe(
+          tapResponse({
+            next: (ingredient) =>
+              patchState(this, addEntity(ingredient, { selectId })),
+            error: (err) => console.error(err),
+          }),
+        ),
+      ),
+    ),
+  );
 }
