@@ -49,11 +49,11 @@ export class FormInputComponent implements ControlValueAccessor {
     this.dva?.setDisabledState(isDisabled);
   }
 
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.dva?.writeValue(value);
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: never): void {
     this.dva?.registerOnChange(fn);
   }
 

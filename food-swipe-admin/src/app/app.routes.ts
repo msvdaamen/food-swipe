@@ -36,6 +36,16 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'measurements',
+        loadComponent: () =>
+          import('./pages/measurements/measurements.component'),
+      },
+      {
+        path: 'ingredients',
+        loadComponent: () =>
+          import('./pages/ingredients/ingredients.component'),
+      },
+      {
         path: 'recipes',
         loadChildren: () => import('./pages/recipes/routes'),
       },

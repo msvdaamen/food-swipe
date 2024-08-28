@@ -6,6 +6,10 @@ import { secureHeaders } from 'hono/secure-headers'
 import {registerAuthController} from "./modules/auth/auth.controller.ts";
 import {registerRecipeController} from "./modules/recipe/recipe.controller.ts";
 import {registerUserController} from "./modules/user/user.controller.ts";
+import {registerMeasurementsController} from "./modules/measurement/measurement.controller.ts";
+import {registerIngredientController} from "./modules/ingredient/ingredient.controller.ts";
+import {ZodError} from "zod";
+import {FormatZodErrors} from "./common/format-zod-errors.ts";
 
 const app = new Hono();
 
@@ -27,12 +31,23 @@ const limiter = rateLimiter({
 
 app.use(limiter);
 
+app.onError((err, c) => {
+    if (err instanceof ZodError) {
+        const errors = FormatZodErrors(err);
+        return c.json({error: 'validation_error', message: errors}, 400);
+    }
+
+    return c.json({error: 'Internal Server Error'}, 500);
+})
+
 app.get('/', (c) => c.text('Hello Bun!'))
 
 
 registerAuthController(app);
 registerUserController(app);
 registerRecipeController(app);
+registerMeasurementsController(app);
+registerIngredientController(app);
 
 export default {
     port: process.env.APP_PORT || 3000,
