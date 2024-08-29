@@ -2,8 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import {
   addEntity,
+  removeEntity,
   SelectEntityId,
+  setAllEntities,
   setEntities,
+  setEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { RecipeService } from '../recipe.service';
@@ -12,6 +15,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { CreateRecipeIngredientRequest } from '@modules/recipes/requests/create-recipe-ingredient.request';
 import { pipe, switchMap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { UpdateRecipeIngredientRequest } from '@modules/recipes/requests/update-recipe-ingredient.request';
 
 type State = {
   isLoading: boolean;
@@ -41,7 +45,7 @@ export class RecipeIngredientStore extends signalStore(
         patchState(
           this,
           { hasLoaded: true, isLoading: false },
-          setEntities(ingredients, { selectId }),
+          setAllEntities(ingredients, { selectId }),
         );
       },
       error: () => {
@@ -60,6 +64,39 @@ export class RecipeIngredientStore extends signalStore(
           tapResponse({
             next: (ingredient) =>
               patchState(this, addEntity(ingredient, { selectId })),
+            error: (err) => console.error(err),
+          }),
+        ),
+      ),
+    ),
+  );
+
+  updateIngredient = rxMethod<{
+    recipeId: number;
+    ingredientId: number;
+    payload: UpdateRecipeIngredientRequest;
+  }>(
+    pipe(
+      switchMap(({ recipeId, ingredientId, payload }) =>
+        this.recipeService
+          .updateIngredient(recipeId, ingredientId, payload)
+          .pipe(
+            tapResponse({
+              next: (ingredient) =>
+                patchState(this, setEntity(ingredient, { selectId })),
+              error: (err) => console.error(err),
+            }),
+          ),
+      ),
+    ),
+  );
+
+  deleteIngredient = rxMethod<{ recipeId: number; ingredientId: number }>(
+    pipe(
+      switchMap(({ recipeId, ingredientId }) =>
+        this.recipeService.deleteIngredient(recipeId, ingredientId).pipe(
+          tapResponse({
+            next: () => patchState(this, removeEntity(ingredientId)),
             error: (err) => console.error(err),
           }),
         ),

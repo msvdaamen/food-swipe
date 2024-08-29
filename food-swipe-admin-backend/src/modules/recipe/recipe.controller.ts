@@ -7,6 +7,7 @@ import {createRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
 import {updateRecipeDto} from "./dto/update-recipe.dto.ts";
 import {updateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
 import {reorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
+import {updateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
 
 const app = authRouter.createApp();
 
@@ -66,12 +67,28 @@ app.get('/:id/ingredients', async (c) => {
     const ingredients = await recipeService.getIngredients(Number(c.req.param('id')));
     return c.json(ingredients);
 });
+
 app.post(':id/ingredients', async (c) => {
     const id = Number(c.req.param('id'));
     const payload = createRecipeIngredientDto.parse(await c.req.json());
     const ingredient = await recipeService.createIngredient(id, payload);
     return c.json(ingredient);
-})
+});
+
+app.put('/:id/ingredients/:ingredientId', async (c) => {
+    const id = Number(c.req.param('id'));
+    const ingredientId = Number(c.req.param('ingredientId'));
+    const payload = updateRecipeIngredientDto.parse(await c.req.json());
+    const ingredient = await recipeService.updateIngredient(id, ingredientId, payload);
+    return c.json(ingredient);
+});
+
+app.delete('/:id/ingredients/:ingredientId', async (c) => {
+    const id = Number(c.req.param('id'));
+    const ingredientId = Number(c.req.param('ingredientId'));
+    await recipeService.deleteIngredient(id, ingredientId);
+    return c.json({}, 204);
+});
 
 const formatRecipe = (recipe: RecipeModel) => {
     return {

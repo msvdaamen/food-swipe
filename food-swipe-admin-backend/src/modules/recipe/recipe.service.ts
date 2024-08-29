@@ -15,6 +15,7 @@ import type {CreateRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import type {CreateRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
 import type {UpdateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
 import type {ReorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
+import type {UpdateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
 
 export class RecipeService extends DbService {
 
@@ -176,25 +177,19 @@ export class RecipeService extends DbService {
         return models;
     }
 
-    async createIngredient(recipeId: number, payload: CreateRecipeIngredientDto): Promise<RecipeIngredientModel> {
-        const [{ingredientId}] = await this.database.insert(recipeIngredientsSchema)
-            .values({
-                recipeId,
-                ...payload
-            })
-            .returning({ingredientId: recipeIngredientsSchema.ingredientId});
+    async getIngredient(recipeId: number, ingredientId: number): Promise<RecipeIngredientModel> {
         const [recipeIngredient] = await this.database.select({
             recipeIngredient: recipeIngredientsSchema,
             ingredient: ingredientsSchema,
             measurement: measurementsSchema
         }).from(recipeIngredientsSchema)
-        .innerJoin(ingredientsSchema, eq(ingredientsSchema.id, recipeIngredientsSchema.ingredientId))
-        .leftJoin(measurementsSchema, eq(measurementsSchema.id, recipeIngredientsSchema.measurementId))
-        .where(and(
-            eq(recipeIngredientsSchema.recipeId, recipeId),
-            eq(recipeIngredientsSchema.ingredientId, ingredientId)
-        ))
-        .execute();
+            .innerJoin(ingredientsSchema, eq(ingredientsSchema.id, recipeIngredientsSchema.ingredientId))
+            .leftJoin(measurementsSchema, eq(measurementsSchema.id, recipeIngredientsSchema.measurementId))
+            .where(and(
+                eq(recipeIngredientsSchema.recipeId, recipeId),
+                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+            ))
+            .execute();
         return {
             ...recipeIngredient.recipeIngredient,
             ingredient: recipeIngredient.ingredient.name,
@@ -202,7 +197,36 @@ export class RecipeService extends DbService {
         };
     }
 
+    async createIngredient(recipeId: number, payload: CreateRecipeIngredientDto): Promise<RecipeIngredientModel> {
+        const [{ingredientId}] = await this.database.insert(recipeIngredientsSchema)
+            .values({
+                recipeId,
+                ...payload
+            })
+            .returning({ingredientId: recipeIngredientsSchema.ingredientId});
+        return await this.getIngredient(recipeId, ingredientId);
+    }
 
+    async updateIngredient(recipeId: number, ingredientId: number, payload: UpdateRecipeIngredientDto): Promise<RecipeIngredientModel> {
+        const [{ingredientId: updatedIngredientId}] = await this.database.update(recipeIngredientsSchema)
+            .set(payload)
+            .where(and(
+                eq(recipeIngredientsSchema.recipeId, recipeId),
+                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+            ))
+            .returning({ingredientId: recipeIngredientsSchema.ingredientId})
+            .execute();
+        return await this.getIngredient(recipeId, updatedIngredientId);
+    }
+
+    async deleteIngredient(recipeId: number, ingredientId: number) {
+        await this.database.delete(recipeIngredientsSchema)
+            .where(and(
+                eq(recipeIngredientsSchema.recipeId, recipeId),
+                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+            ))
+            .execute();
+    }
 }
 
 export const recipeService = new RecipeService(storageService);

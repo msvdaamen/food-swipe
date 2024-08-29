@@ -67,4 +67,20 @@ export class RecipeRepository {
   createIngredient(recipeId: number, payload: CreateRecipeIngredientRequest) {
     this.recipeIngredientStore.createIngredients({ recipeId, payload });
   }
+
+  updateIngredient(
+    recipeId: number,
+    ingredientId: number,
+    payload: CreateRecipeIngredientRequest,
+  ) {
+    this.recipeIngredientStore.updateIngredient({
+      recipeId,
+      ingredientId,
+      payload,
+    });
+  }
+
+  deleteIngredient(recipeId: number, ingredientId: number) {
+    this.recipeIngredientStore.deleteIngredient({ recipeId, ingredientId });
+  }
 }

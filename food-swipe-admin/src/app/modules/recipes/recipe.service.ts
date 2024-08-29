@@ -7,6 +7,7 @@ import { CreateRecipeStepRequest } from '@modules/recipes/requests/create-recipe
 import { CreateRecipeIngredientRequest } from '@modules/recipes/requests/create-recipe-ingredient.request';
 import { UpdateRecipeStepRequest } from '@modules/recipes/requests/update-recipe-step.request';
 import { ReorderRecipeStepsRequest } from '@modules/recipes/requests/reorder-recipe-steps.request';
+import { UpdateRecipeIngredientRequest } from "@modules/recipes/requests/update-recipe-ingredient.request";
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService extends Service {
@@ -57,6 +58,23 @@ export class RecipeService extends Service {
     return this.http.post<RecipeIngredient>(
       `${this.api}/recipes/${id}/ingredients`,
       payload,
+    );
+  }
+
+  updateIngredient(
+    id: number,
+    ingredientId: number,
+    payload: UpdateRecipeIngredientRequest,
+  ) {
+    return this.http.put<RecipeIngredient>(
+      `${this.api}/recipes/${id}/ingredients/${ingredientId}`,
+      payload,
+    );
+  }
+
+  deleteIngredient(id: number, ingredientId: number) {
+    return this.http.delete<void>(
+      `${this.api}/recipes/${id}/ingredients/${ingredientId}`,
     );
   }
 }
