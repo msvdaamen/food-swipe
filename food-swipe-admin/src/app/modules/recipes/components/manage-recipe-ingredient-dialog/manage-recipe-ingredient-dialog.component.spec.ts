@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageIngredientDialogComponent } from './manage-ingredient-dialog.component';
+import { ManageRecipeIngredientDialogComponent } from './manage-recipe-ingredient-dialog.component';
 
 describe('CreateRecipeIngredientDialogComponent', () => {
-  let component: ManageIngredientDialogComponent;
-  let fixture: ComponentFixture<ManageIngredientDialogComponent>;
+  let component: ManageRecipeIngredientDialogComponent;
+  let fixture: ComponentFixture<ManageRecipeIngredientDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManageIngredientDialogComponent],
+      imports: [ManageRecipeIngredientDialogComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ManageIngredientDialogComponent);
+    fixture = TestBed.createComponent(ManageRecipeIngredientDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

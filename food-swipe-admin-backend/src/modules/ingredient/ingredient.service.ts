@@ -40,7 +40,7 @@ export class IngredientService extends DbService {
         await this.database.delete(ingredientsSchema).where(eq(ingredientsSchema.id, id)).execute();
     }
 
-    private getSortColumn(column: string) {
+    private getSortColumn(column?: string) {
         switch (column) {
             case 'name':
                 return ingredientsSchema.name;
@@ -49,7 +49,7 @@ export class IngredientService extends DbService {
         }
     }
 
-    private getSortFunction(sort: PgColumn, order: 'asc' | 'desc') {
+    private getSortFunction(sort: PgColumn, order?: 'asc' | 'desc') {
         return order === 'asc' ? asc(sort) : desc(sort);
     }
 }

@@ -1,17 +1,13 @@
 import { Component, computed, effect, inject, input } from '@angular/core';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
 import { JsonPipe } from '@angular/common';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ManageRecipeStepDialogComponent } from '@modules/recipes/components/manage-recipe-step-dialog/manage-recipe-step-dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
+import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/components/manage-recipe-ingredient-dialog/manage-recipe-ingredient-dialog.component';
 
 @Component({
   selector: 'app-recipe',
@@ -44,10 +40,10 @@ export default class RecipeComponent {
     );
   }
 
-  ingredientsDrop(event: CdkDragDrop<number[]>) {
-    const ingredients = [...this.ingredients()];
-    moveItemInArray(ingredients, event.previousIndex, event.currentIndex);
-    // this.ingredients.set(ingredients);
+  openManageIngredientDialog(recipeId: number, ingredientId?: number) {
+    this.dialog.open(ManageRecipeIngredientDialogComponent, {
+      data: { recipeId, ingredientId },
+    });
   }
 
   stepsDrop(event: CdkDragDrop<number[]>) {
@@ -57,8 +53,6 @@ export default class RecipeComponent {
       orderFrom: event.previousIndex + 1,
       orderTo: event.currentIndex + 1,
     });
-    // moveItemInArray(steps, event.previousIndex, event.currentIndex);
-    // this.steps.set(steps);
   }
 
   openManageStepDialog(recipeId: number, stepId?: number) {

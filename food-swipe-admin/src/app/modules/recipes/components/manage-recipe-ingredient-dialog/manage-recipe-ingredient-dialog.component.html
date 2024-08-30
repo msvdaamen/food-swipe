@@ -1,0 +1,17 @@
+<div class="dialog">
+  <div class="head"><h2>Add ingredient</h2></div>
+  <div class="body">
+    <app-form-search-select
+      [data]="ingredients()"
+      [displayFn]="displayFn"
+      [valueFn]="valueFn"
+      [searchFn]="searchFn"
+      (searchChanged)="searchChanged($event)"
+      [(ngModel)]="temp"
+    />
+  </div>
+  <div class="footer">
+    <app-button color="default" (click)="dismiss()">Close</app-button>
+    <app-button (click)="submit()">Submit</app-button>
+  </div>
+</div>
