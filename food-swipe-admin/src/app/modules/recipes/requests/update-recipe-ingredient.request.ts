@@ -1,5 +1,5 @@
 export type UpdateRecipeIngredientRequest = {
   ingredientId?: number;
   amount?: number;
-  measurementId?: number;
+  measurementId?: number | null;
 };

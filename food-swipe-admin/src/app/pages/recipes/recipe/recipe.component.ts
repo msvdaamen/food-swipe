@@ -1,4 +1,11 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  numberAttribute,
+} from '@angular/core';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
 import { JsonPipe } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -8,11 +15,23 @@ import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ManageRecipeStepDialogComponent } from '@modules/recipes/components/manage-recipe-step-dialog/manage-recipe-step-dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/components/manage-recipe-ingredient-dialog/manage-recipe-ingredient-dialog.component';
+import { FormInputComponent } from '../../../common/components/ui/form/form-input/form-input.component';
+import { FormsModule } from '@angular/forms';
+import { FormTextareaComponent } from '../../../common/components/ui/form/form-textarea/form-textarea.component';
 
 @Component({
   selector: 'app-recipe',
   standalone: true,
-  imports: [JsonPipe, CdkDropList, CdkDrag, ButtonComponent, FaIconComponent],
+  imports: [
+    JsonPipe,
+    CdkDropList,
+    CdkDrag,
+    ButtonComponent,
+    FaIconComponent,
+    FormInputComponent,
+    FormsModule,
+    FormTextareaComponent,
+  ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
 })
@@ -23,8 +42,10 @@ export default class RecipeComponent {
   ingredients = this.recipeRepository.ingredients;
   steps = this.recipeRepository.steps;
 
-  id = input.required<number>();
+  id = input.required<number, string>({ transform: numberAttribute });
   recipe = computed(() => this.recipeRepository.getRecipe(this.id())());
+  title = computed(() => this.recipe().title);
+  description = computed(() => this.recipe().description);
 
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
@@ -38,6 +59,30 @@ export default class RecipeComponent {
       },
       { allowSignalWrites: true },
     );
+  }
+
+  updateTitle(event: Event) {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+    const title = target.value;
+    if (!title?.trim()) {
+      return;
+    }
+    this.recipeRepository.updateRecipe(this.id(), { title });
+  }
+
+  updateDescription(event: FocusEvent) {
+    const target = event.target;
+    if (!(target instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    const description = target.value;
+    if (!description?.trim()) {
+      return;
+    }
+    this.recipeRepository.updateRecipe(this.id(), { description });
   }
 
   openManageIngredientDialog(recipeId: number, ingredientId?: number) {
@@ -63,5 +108,9 @@ export default class RecipeComponent {
 
   deleteStep(stepId: number) {
     this.recipeRepository.deleteStep(this.id(), stepId);
+  }
+
+  deleteIngredient(ingredientId: number) {
+    this.recipeRepository.deleteIngredient(this.id(), ingredientId);
   }
 }

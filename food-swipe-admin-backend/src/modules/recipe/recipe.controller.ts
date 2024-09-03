@@ -13,19 +13,19 @@ const app = authRouter.createApp();
 
 app.get('/', async (c) => {
     const recipes = await recipeService.getAll();
-    return c.json(recipes.map(formatRecipe));
+    return c.json(recipes);
 });
 
 app.get('/:id', async (c) => {
     const recipe = await recipeService.getById(Number(c.req.param('id')));
-    return c.json(formatRecipe(recipe));
+    return c.json(recipe);
 });
 
 app.put('/:id', async (c) => {
     const id = Number(c.req.param('id'));
     const payload = updateRecipeDto.parse(await c.req.json());
     const recipe = await recipeService.update(id, payload);
-    return c.json(formatRecipe(recipe));
+    return c.json(recipe);
 });
 
 app.get('/:id/steps', async (c) => {
@@ -89,17 +89,6 @@ app.delete('/:id/ingredients/:ingredientId', async (c) => {
     await recipeService.deleteIngredient(id, ingredientId);
     return c.json({}, 204);
 });
-
-const formatRecipe = (recipe: RecipeModel) => {
-    return {
-        id: recipe.id,
-        title: recipe.title,
-        description: recipe.description,
-        coverImageUrl: recipe.coverImageUrl,
-        prepTime: recipe.prepTime,
-        servings: recipe.servings,
-    }
-}
 
 
 export const registerRecipeController = (instance: Hono) => {

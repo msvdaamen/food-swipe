@@ -1,8 +1,15 @@
 import { patchState, signalStore, withState } from '@ngrx/signals';
-import { setEntities, setEntity, withEntities } from '@ngrx/signals/entities';
+import {
+  setAllEntities,
+  setEntities,
+  setEntity,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { Recipe } from '../types/recipe.type';
 import { inject, Injectable } from '@angular/core';
 import { RecipeService } from '../recipe.service';
+import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
 
 type State = {
   isLoading: boolean;
@@ -23,13 +30,13 @@ export class RecipeStore extends signalStore(
   private readonly recipeService = inject(RecipeService);
 
   loadAll() {
-    patchState(this, { isLoading: true });
+    patchState(this, { isLoading: true, hasLoaded: false });
     this.recipeService.getAll().subscribe({
       next: (recipes) => {
         patchState(
           this,
           { hasLoaded: true, isLoading: false },
-          setEntities(recipes),
+          setAllEntities(recipes),
         );
       },
       error: () => {
@@ -39,7 +46,7 @@ export class RecipeStore extends signalStore(
   }
 
   loadOne(id: number) {
-    patchState(this, { isLoading: true });
+    patchState(this, { isLoading: true, hasLoaded: false });
     this.recipeService.getById(id).subscribe({
       next: (recipe) => {
         patchState(
@@ -50,6 +57,31 @@ export class RecipeStore extends signalStore(
       },
       error: () => {
         patchState(this, { hasLoaded: true, isLoading: false });
+      },
+    });
+  }
+
+  update(id: number, payload: UpdateRecipeRequest) {
+    const oldRecipe = { ...this.entityMap()[id] };
+    patchState(
+      this,
+      { isLoading: true },
+      updateEntity({ id, changes: payload }),
+    );
+    this.recipeService.updateRecipe(id, payload).subscribe({
+      next: (recipe) => {
+        patchState(
+          this,
+          { isLoading: false },
+          updateEntity({ id, changes: recipe }),
+        );
+      },
+      error: () => {
+        patchState(
+          this,
+          { isLoading: false },
+          updateEntity({ id, changes: oldRecipe }),
+        );
       },
     });
   }

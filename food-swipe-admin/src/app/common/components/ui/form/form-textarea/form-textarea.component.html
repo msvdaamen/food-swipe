@@ -1,10 +1,18 @@
 <label>
   <p><ng-content /></p>
-  <div>
+  <div
+    class="invalid:border-danger-600 flex w-full rounded border px-1.5 py-1 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
+  >
     <textarea
-      ngDefaultControl
-      [placeholder]="placeholder"
-      class="invalid:border-danger-600 flex w-full rounded border border-gray-300 px-1.5 py-1 outline-0 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
+      [(ngModel)]="value"
+      [placeholder]="placeholder()"
+      [cdkTextareaAutosize]="autoSize()"
+      [cdkAutosizeMinRows]="minRows()"
+      [cdkAutosizeMaxRows]="maxRows()"
+      [rows]="rows()"
+      class="w-full outline-0"
+      (blur)="blur.emit($event)"
+      (focus)="focus.emit($event)"
     ></textarea>
   </div>
 </label>

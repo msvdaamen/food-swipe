@@ -30,6 +30,7 @@ export class RecipeService extends DbService {
             .select({recipe: recipesSchema, coverImage: files})
             .from(recipesSchema)
             .innerJoin(files, eq(files.id, recipesSchema.coverImageId))
+            .orderBy(asc(recipesSchema.title))
             .execute();
 
         return results.map((result) => ({

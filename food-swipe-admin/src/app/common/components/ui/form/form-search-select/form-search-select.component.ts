@@ -1,8 +1,11 @@
 import {
+  afterNextRender,
   AfterViewInit,
   Component,
   computed,
   ElementRef,
+  inject,
+  Injector,
   input,
   signal,
   viewChild,
@@ -45,6 +48,8 @@ export type FormSearchSelectSearchFn<T> = (data: T[], search: string) => T[];
 export class FormSearchSelectComponent
   implements ControlValueAccessor, AfterViewInit
 {
+  private readonly injector = inject(Injector);
+
   triggerRef = viewChild<ElementRef<HTMLDivElement>>('trigger');
   searchInputRef =
     viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
@@ -53,8 +58,6 @@ export class FormSearchSelectComponent
   _data = input.required<any[]>({ alias: 'data' });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayFn = input.required<FormSearchSelectDisplayFn<any>>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valueFn = input.required<FormSearchSelectValueFn<any>>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchFn = input.required<FormSearchSelectSearchFn<any>>();
 
@@ -66,10 +69,11 @@ export class FormSearchSelectComponent
     this.searchSubject.pipe(debounceTime(200)),
   );
 
+  private _value = signal<FormTypes | null>(null);
   disabled = signal(false);
   isOpen = signal(false);
 
-  search = toSignal(this.searchSubject.pipe(debounceTime(200)));
+  search = signal('');
   data = computed(() => {
     const search = this.search();
     const data = this._data();
@@ -78,8 +82,18 @@ export class FormSearchSelectComponent
     }
     return this.searchFn()(data, search);
   });
+  displayValue = computed(() => {
+    const isOpen = this.isOpen();
+    if (isOpen) {
+      return this.search();
+    }
+    const value = this._value();
+    if (!value) {
+      return '';
+    }
+    return this.displayFn()(value);
+  });
 
-  private _value: FormTypes | null = null;
   positions: ConnectedPosition[] = [
     {
       originX: 'start',
@@ -115,12 +129,18 @@ export class FormSearchSelectComponent
       (event) => {
         if (event.target instanceof HTMLInputElement) {
           this.searchSubject.next(event.target.value);
+          this.search.set(event.target.value);
         }
       },
     );
   }
 
+  searchBlur() {
+    this.searchSubject.next('');
+  }
+
   open() {
+    this.search.set('');
     const width =
       this.triggerRef()!.nativeElement.getBoundingClientRect().width;
     this.overlayWidth.set(width);
@@ -133,17 +153,19 @@ export class FormSearchSelectComponent
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected setValue(value: any) {
+    this.searchInputRef().nativeElement.value = this.displayFn()(value);
     this.value = value;
+    this.close();
   }
 
   set value(value: FormTypes) {
-    this._value = value;
+    this._value.set(value);
     this.onChange(value);
     this.onTouched();
   }
 
   get value(): FormTypes | null {
-    return this._value;
+    return this._value();
   }
 
   // *** ControlValueAccessor Methods
@@ -152,7 +174,7 @@ export class FormSearchSelectComponent
   }
 
   writeValue(value: FormTypes | null): void {
-    this._value = value;
+    this._value.set(value);
   }
 
   onChange: RegisterOnChangeFn<FormTypes> = () => {};

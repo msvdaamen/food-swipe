@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import {
   addEntity,
+  removeAllEntities,
   removeEntity,
   SelectEntityId,
   setAllEntities,
@@ -39,7 +40,7 @@ export class RecipeIngredientStore extends signalStore(
   private readonly recipeService = inject(RecipeService);
 
   loadAll(recipeId: number) {
-    patchState(this, { isLoading: true });
+    patchState(this, { isLoading: true }, removeAllEntities());
     this.recipeService.getIngredients(recipeId).subscribe({
       next: (ingredients) => {
         patchState(
@@ -83,7 +84,11 @@ export class RecipeIngredientStore extends signalStore(
           .pipe(
             tapResponse({
               next: (ingredient) =>
-                patchState(this, setEntity(ingredient, { selectId })),
+                patchState(
+                  this,
+                  removeEntity(ingredientId),
+                  setEntity(ingredient, { selectId }),
+                ),
               error: (err) => console.error(err),
             }),
           ),

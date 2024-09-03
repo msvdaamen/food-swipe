@@ -1,17 +1,39 @@
 <div class="dialog">
   <div class="head"><h2>Add ingredient</h2></div>
   <div class="body">
-    <app-form-search-select
-      [data]="ingredients()"
-      [displayFn]="displayFn"
-      [valueFn]="valueFn"
-      [searchFn]="searchFn"
-      (searchChanged)="searchChanged($event)"
-      [(ngModel)]="temp"
-    />
+    <form [formGroup]="form">
+      <div>
+        <app-form-search-select
+          [data]="ingredients()"
+          [displayFn]="displayFn"
+          [searchFn]="searchFn"
+          placeholder="Select ingredient"
+          (searchChanged)="searchChanged($event)"
+          formControlName="ingredient"
+          >Ingredient</app-form-search-select
+        >
+      </div>
+      <div class="mt-1">
+        <app-form-input
+          placeholder="Amount"
+          formControlName="amount"
+          type="number"
+          >Amount</app-form-input
+        >
+      </div>
+      <div class="mt-1">
+        <label for="measurement">Measurement</label>
+        <select formControlName="measurementId" class="select" id="measurement">
+          <option [ngValue]="null">No measurement</option>
+          @for (measurement of measurements(); track measurement.id) {
+            <option [ngValue]="measurement.id">{{ measurement.name }}</option>
+          }
+        </select>
+      </div>
+    </form>
   </div>
   <div class="footer">
     <app-button color="default" (click)="dismiss()">Close</app-button>
-    <app-button (click)="submit()">Submit</app-button>
+    <app-button [disabled]="form.invalid" (click)="submit()">Submit</app-button>
   </div>
 </div>

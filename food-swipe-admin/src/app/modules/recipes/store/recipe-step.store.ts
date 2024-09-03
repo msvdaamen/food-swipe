@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import {
+  removeAllEntities,
   removeEntity,
   setAllEntities,
   setEntity,
@@ -37,7 +38,7 @@ export class RecipeStepStore extends signalStore(
   private readonly recipeService = inject(RecipeService);
 
   loadAll(recipeId: number) {
-    patchState(this, { isLoading: true });
+    patchState(this, { isLoading: true }, removeAllEntities());
     this.recipeService.getSteps(recipeId).subscribe({
       next: (steps) => {
         patchState(

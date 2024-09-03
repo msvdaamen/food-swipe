@@ -4,8 +4,19 @@
       <img [src]="recipe.coverImageUrl" alt="" />
     </div>
     <div class="w-2/3 p-8 pt-0">
-      <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
-      <p class="text-gray-600">{{ recipe.description }}</p>
+      <h1 class="font-bold">
+        <app-form-input [value]="title()" (blur)="updateTitle($event)"
+          ><span class="font-normal">Title</span></app-form-input
+        >
+      </h1>
+      <p class="mt-1 text-gray-600">
+        <app-form-textarea
+          autoSize
+          [(ngModel)]="recipe.description"
+          (blur)="updateDescription($event)"
+          >Description</app-form-textarea
+        >
+      </p>
     </div>
   </div>
 
@@ -25,15 +36,24 @@
         </div>
         @for (ingredient of ingredients(); track ingredient) {
           <div class="t-row flex items-center">
-            <div class="name">{{ ingredient.ingredientId }}</div>
+            <div class="name">{{ ingredient.ingredient }}</div>
             <div class="amount min-w-20 flex-shrink">
               {{ ingredient.amount }}{{ ingredient.measurement }}
             </div>
             <div class="flex min-w-28 flex-shrink gap-1">
-              <app-button type="icon" size="small"
+              <app-button
+                type="icon"
+                size="small"
+                (click)="
+                  openManageIngredientDialog(recipe.id, ingredient.ingredientId)
+                "
                 ><fa-icon [icon]="faPencil"
               /></app-button>
-              <app-button type="icon" size="small" color="danger"
+              <app-button
+                type="icon"
+                size="small"
+                color="danger"
+                (click)="deleteIngredient(ingredient.ingredientId)"
                 ><fa-icon [icon]="faTrash"
               /></app-button>
             </div>

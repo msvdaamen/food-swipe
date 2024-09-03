@@ -5,6 +5,8 @@ import { RecipeIngredientStore } from './store/recipe-ingredient.store';
 import { CreateRecipeStepRequest } from '@modules/recipes/requests/create-recipe-step.request';
 import { CreateRecipeIngredientRequest } from '@modules/recipes/requests/create-recipe-ingredient.request';
 import { ReorderRecipeStepsRequest } from '@modules/recipes/requests/reorder-recipe-steps.request';
+import { UpdateRecipeIngredientRequest } from '@modules/recipes/requests/update-recipe-ingredient.request';
+import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeRepository {
@@ -16,11 +18,27 @@ export class RecipeRepository {
   steps = this.recipeStepStore.entities;
   stepEntities = this.recipeStepStore.entityMap;
   ingredients = this.recipeIngredientStore.entities;
+  ingredientEntities = this.recipeIngredientStore.entityMap;
 
   getRecipe(id: number) {
     return computed(() => {
       const entities = this.recipeStore.entityMap();
       return entities[id];
+    });
+  }
+
+  getStep(recipeId: number, stepId: number) {
+    return computed(() => {
+      const entities = this.recipeStepStore.entityMap();
+      return entities[stepId];
+    });
+  }
+
+  getIngredient(recipeId: number, ingredientId: number) {
+    return computed(() => {
+      const entities = this.recipeIngredientStore.entityMap();
+      console.log(entities);
+      return entities[ingredientId];
     });
   }
 
@@ -30,6 +48,10 @@ export class RecipeRepository {
 
   loadRecipe(id: number) {
     this.recipeStore.loadOne(id);
+  }
+
+  updateRecipe(id: number, payload: UpdateRecipeRequest) {
+    this.recipeStore.update(id, payload);
   }
 
   loadSteps(recipeId: number) {
@@ -71,7 +93,7 @@ export class RecipeRepository {
   updateIngredient(
     recipeId: number,
     ingredientId: number,
-    payload: CreateRecipeIngredientRequest,
+    payload: UpdateRecipeIngredientRequest,
   ) {
     this.recipeIngredientStore.updateIngredient({
       recipeId,
