@@ -1,23 +1,31 @@
 import type { Hono } from "hono";
 import { authRouter } from "../auth/auth.controller";
 import { recipeService } from "./recipe.service";
-import type {RecipeModel} from "./models/recipe.model.ts";
 import {createRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import {createRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
 import {updateRecipeDto} from "./dto/update-recipe.dto.ts";
 import {updateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
 import {reorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 import {updateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
+import {loadRecipesDto} from "./dto/load-recipes.dto.ts";
+import {createRecipeDto} from "./dto/create-recipe.dto.ts";
 
 const app = authRouter.createApp();
 
 app.get('/', async (c) => {
-    const recipes = await recipeService.getAll();
+    const filters = loadRecipesDto.parse(c.req.query());
+    const recipes = await recipeService.getAll(filters);
     return c.json(recipes);
 });
 
 app.get('/:id', async (c) => {
     const recipe = await recipeService.getById(Number(c.req.param('id')));
+    return c.json(recipe);
+});
+
+app.post('/', async (c) => {
+    const payload = createRecipeDto.parse(await c.req.json());
+    const recipe = await recipeService.create(payload);
     return c.json(recipe);
 });
 

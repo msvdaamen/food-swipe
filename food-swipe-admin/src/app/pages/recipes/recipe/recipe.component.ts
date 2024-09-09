@@ -18,6 +18,8 @@ import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/componen
 import { FormInputComponent } from '../../../common/components/ui/form/form-input/form-input.component';
 import { FormsModule } from '@angular/forms';
 import { FormTextareaComponent } from '../../../common/components/ui/form/form-textarea/form-textarea.component';
+import { Recipe } from '@modules/recipes/types/recipe.type';
+import { FormCheckboxComponent } from '../../../common/components/ui/form/form-checkbox/form-checkbox.component';
 
 @Component({
   selector: 'app-recipe',
@@ -31,6 +33,7 @@ import { FormTextareaComponent } from '../../../common/components/ui/form/form-t
     FormInputComponent,
     FormsModule,
     FormTextareaComponent,
+    FormCheckboxComponent,
   ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
@@ -61,28 +64,29 @@ export default class RecipeComponent {
     );
   }
 
-  updateTitle(event: Event) {
+  updateRecipe(prop: keyof Recipe, event: Event) {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement)) {
+    if (
+      !(target instanceof HTMLInputElement) &&
+      !(target instanceof HTMLTextAreaElement)
+    ) {
       return;
     }
     const title = target.value;
     if (!title?.trim()) {
       return;
     }
-    this.recipeRepository.updateRecipe(this.id(), { title });
+    this.recipeRepository.updateRecipe(this.id(), { [prop]: title });
   }
 
-  updateDescription(event: FocusEvent) {
+  updateIsPublished(event: Event) {
     const target = event.target;
-    if (!(target instanceof HTMLTextAreaElement)) {
+    if (!(target instanceof HTMLInputElement)) {
       return;
     }
-    const description = target.value;
-    if (!description?.trim()) {
-      return;
-    }
-    this.recipeRepository.updateRecipe(this.id(), { description });
+    this.recipeRepository.updateRecipe(this.id(), {
+      isPublished: target.checked,
+    });
   }
 
   openManageIngredientDialog(recipeId: number, ingredientId?: number) {

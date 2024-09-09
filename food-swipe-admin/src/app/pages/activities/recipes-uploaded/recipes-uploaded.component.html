@@ -13,11 +13,14 @@
       </tr>
     </thead>
     <tbody>
-      @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i; let i = $index) {
-        <tr>
-          <td>Spicy Chicken</td>
-          <td>Kimmie</td>
-          <td class="text-nowrap">2024-01-01 12:12:12</td>
+      @for (recipe of recipes(); track recipe.id) {
+        <tr
+          routerLink="/activities/recipes/{{ recipe.id }}"
+          class="cursor-pointer"
+        >
+          <td>{{ recipe.title }}</td>
+          <td>UNKNOWN</td>
+          <td class="text-nowrap">{{ recipe.createdAt | date }}</td>
           <td></td>
         </tr>
       }

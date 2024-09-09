@@ -33,6 +33,11 @@ export const routes: Routes = [
                 './pages/activities/recipes-uploaded/recipes-uploaded.component'
               ),
           },
+          {
+            path: 'recipes/:id',
+            loadComponent: () =>
+              import('./pages/recipes/recipe/recipe.component'),
+          },
         ],
       },
       {

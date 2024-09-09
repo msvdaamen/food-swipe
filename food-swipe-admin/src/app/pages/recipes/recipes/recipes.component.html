@@ -1,9 +1,14 @@
-<div class="mb-4 w-64">
-  <app-form-input
-    placeholder="Search"
-    [iconSuffix]="faMagnifyingGlass"
-    [(ngModel)]="search"
-  />
+<div class="mb-4 flex justify-between">
+  <div class="w-64">
+    <app-form-input
+      placeholder="Search"
+      [iconSuffix]="faMagnifyingGlass"
+      [(ngModel)]="search"
+    />
+  </div>
+  <div>
+    <app-button (click)="openCreateRecipeDialog()">Create</app-button>
+  </div>
 </div>
 
 <div class="content gap-4">

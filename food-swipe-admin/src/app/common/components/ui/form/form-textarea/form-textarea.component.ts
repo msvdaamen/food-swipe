@@ -3,16 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
-  Input,
   OnInit,
   output,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
-  DefaultValueAccessor,
   FormsModule,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
@@ -70,8 +67,8 @@ export class FormTextareaComponent implements ControlValueAccessor, OnInit {
     return this._value;
   }
 
-  onChange!: (_: any) => void;
-  onTouched!: () => void;
+  onChange = (_: any) => {};
+  onTouched = () => {};
 
   // *** ControlValueAccessor Methods
   setDisabledState(isDisabled: boolean): void {
@@ -88,10 +85,5 @@ export class FormTextareaComponent implements ControlValueAccessor, OnInit {
 
   registerOnTouched(fn: RegisterOnToucheFn): void {
     this.onTouched = fn;
-  }
-
-  test($event: FocusEvent) {
-    this.blur.emit($event);
-    console.log($event);
   }
 }

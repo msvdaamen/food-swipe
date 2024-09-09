@@ -1,22 +1,57 @@
 @if (recipe(); as recipe) {
   <div class="flex">
     <div class="w-1/3">
-      <img [src]="recipe.coverImageUrl" alt="" />
+      <div>
+        <img [src]="recipe.coverImageUrl" alt="" />
+      </div>
+      <div class="mt-4 flex gap-2">
+        <div>
+          <app-form-input
+            type="number"
+            [value]="recipe.calories.toString()"
+            (blur)="updateRecipe('calories', $event)"
+            >Cals</app-form-input
+          >
+        </div>
+        <div>
+          <app-form-input
+            type="number"
+            [value]="recipe.prepTime.toString()"
+            (blur)="updateRecipe('prepTime', $event)"
+            >Time</app-form-input
+          >
+        </div>
+        <div>
+          <app-form-input
+            type="number"
+            [value]="recipe.servings.toString()"
+            (blur)="updateRecipe('servings', $event)"
+            >serv</app-form-input
+          >
+        </div>
+      </div>
     </div>
     <div class="w-2/3 p-8 pt-0">
       <h1 class="font-bold">
-        <app-form-input [value]="title()" (blur)="updateTitle($event)"
+        <app-form-input [value]="title()" (blur)="updateRecipe('title', $event)"
           ><span class="font-normal">Title</span></app-form-input
         >
       </h1>
       <p class="mt-1 text-gray-600">
         <app-form-textarea
           autoSize
-          [(ngModel)]="recipe.description"
-          (blur)="updateDescription($event)"
+          [value]="recipe.description"
+          (blur)="updateRecipe('description', $event)"
           >Description</app-form-textarea
         >
       </p>
+      <div>
+        <app-form-checkbox
+          [value]="recipe.isPublished"
+          (change)="updateIsPublished($event)"
+          >Is publish</app-form-checkbox
+        >
+      </div>
     </div>
   </div>
 

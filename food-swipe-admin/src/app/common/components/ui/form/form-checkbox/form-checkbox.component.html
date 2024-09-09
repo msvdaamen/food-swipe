@@ -1,11 +1,9 @@
-<div>
-  <label class="flex items-center dark:text-white">
-    <input
-      [(ngModel)]="value"
-      [disabled]="disabled"
-      class="h-4 w-4 appearance-none rounded border border-gray-300 transition-colors checked:bg-primary-600 dark:border-dark-800"
-      type="checkbox"
-    />
-    <span class="ml-1"><ng-content /></span>
-  </label>
-</div>
+<label class="inline-flex cursor-pointer items-center">
+  <input
+    [(ngModel)]="value"
+    [disabled]="disabled"
+    class="h-5 w-5 appearance-none rounded border border-gray-300 transition-colors checked:bg-primary-600"
+    type="checkbox"
+  />
+  <span class="ml-1"><ng-content /></span>
+</label>

@@ -9,15 +9,23 @@ import { UpdateRecipeStepRequest } from '@modules/recipes/requests/update-recipe
 import { ReorderRecipeStepsRequest } from '@modules/recipes/requests/reorder-recipe-steps.request';
 import { UpdateRecipeIngredientRequest } from '@modules/recipes/requests/update-recipe-ingredient.request';
 import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
+import { LoadRecipesRequest } from '@modules/recipes/requests/load-recipes.request';
+import { HttpParams } from '@angular/common/http';
+import { CreateRecipeRequest } from '@modules/recipes/requests/create-recipe.request';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService extends Service {
-  getAll() {
-    return this.http.get<Recipe[]>(`${this.api}/recipes`);
+  getAll(payload: LoadRecipesRequest = {}) {
+    const params = new HttpParams({ fromObject: payload });
+    return this.http.get<Recipe[]>(`${this.api}/recipes`, { params });
   }
 
   getById(id: number) {
     return this.http.get<Recipe>(`${this.api}/recipes/${id}`);
+  }
+
+  createRecipe(payload: CreateRecipeRequest) {
+    return this.http.post<Recipe>(`${this.api}/recipes`, payload);
   }
 
   updateRecipe(id: number, payload: UpdateRecipeRequest) {

@@ -7,6 +7,8 @@ import { CreateRecipeIngredientRequest } from '@modules/recipes/requests/create-
 import { ReorderRecipeStepsRequest } from '@modules/recipes/requests/reorder-recipe-steps.request';
 import { UpdateRecipeIngredientRequest } from '@modules/recipes/requests/update-recipe-ingredient.request';
 import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
+import { LoadRecipesRequest } from '@modules/recipes/requests/load-recipes.request';
+import { CreateRecipeRequest } from '@modules/recipes/requests/create-recipe.request';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeRepository {
@@ -19,6 +21,8 @@ export class RecipeRepository {
   stepEntities = this.recipeStepStore.entityMap;
   ingredients = this.recipeIngredientStore.entities;
   ingredientEntities = this.recipeIngredientStore.entityMap;
+
+  isLoading = this.recipeStore.isLoading;
 
   getRecipe(id: number) {
     return computed(() => {
@@ -42,12 +46,16 @@ export class RecipeRepository {
     });
   }
 
-  loadRecipes() {
-    this.recipeStore.loadAll();
+  loadRecipes(payload: LoadRecipesRequest = {}) {
+    this.recipeStore.loadAll(payload);
   }
 
   loadRecipe(id: number) {
     this.recipeStore.loadOne(id);
+  }
+
+  createRecipe(payload: CreateRecipeRequest) {
+    this.recipeStore.create(payload);
   }
 
   updateRecipe(id: number, payload: UpdateRecipeRequest) {

@@ -4,16 +4,20 @@ import { FormInputComponent } from '../../../common/components/ui/form/form-inpu
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ButtonComponent } from '../../../common/components/ui/button/button.component';
+import { Dialog } from '@angular/cdk/dialog';
+import { CreateRecipeDialogComponent } from '@modules/recipes/components/create-recipe-dialog/create-recipe-dialog.component';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [FormInputComponent, FormsModule, RouterLink],
+  imports: [FormInputComponent, FormsModule, RouterLink, ButtonComponent],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.scss',
 })
 export default class RecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);
+  private readonly dialog = inject(Dialog);
 
   search = signal('');
 
@@ -28,9 +32,13 @@ export default class RecipesComponent {
     );
   });
 
+  protected readonly faMagnifyingGlass = faMagnifyingGlass;
+
   constructor() {
     this.recipeRepository.loadRecipes();
   }
 
-  protected readonly faMagnifyingGlass = faMagnifyingGlass;
+  openCreateRecipeDialog() {
+    this.dialog.open(CreateRecipeDialogComponent);
+  }
 }

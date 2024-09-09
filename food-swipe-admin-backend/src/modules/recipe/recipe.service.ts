@@ -16,6 +16,9 @@ import type {CreateRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto
 import type {UpdateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
 import type {ReorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 import type {UpdateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
+import type {LoadRecipesDto} from "./dto/load-recipes.dto.ts";
+import {usersSchema} from "../user/schema/user.schema.ts";
+import type {CreateRecipeDto} from "./dto/create-recipe.dto.ts";
 
 export class RecipeService extends DbService {
 
@@ -25,17 +28,18 @@ export class RecipeService extends DbService {
         super();
     }
 
-    async getAll(): Promise<RecipeModel[]> {
+    async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
         const results = await this.database
             .select({recipe: recipesSchema, coverImage: files})
             .from(recipesSchema)
-            .innerJoin(files, eq(files.id, recipesSchema.coverImageId))
+            .leftJoin(files, eq(files.id, recipesSchema.coverImageId))
+            .where(filters.isPublished !== undefined ? eq(recipesSchema.isPublished, filters.isPublished) : undefined)
             .orderBy(asc(recipesSchema.title))
             .execute();
 
         return results.map((result) => ({
             ...result.recipe,
-            coverImageUrl: this.storage.getPublicUrl(result.coverImage.filename)
+            coverImageUrl: result.coverImage ? this.storage.getPublicUrl(result.coverImage.filename) : null
         }));
     }
 
@@ -43,7 +47,7 @@ export class RecipeService extends DbService {
         const [result] = await this.database
             .select({recipe: recipesSchema, coverImage: files})
             .from(recipesSchema)
-            .innerJoin(files, eq(files.id, recipesSchema.coverImageId))
+            .leftJoin(files, eq(files.id, recipesSchema.coverImageId))
             .where(eq(recipesSchema.id, id))
             .execute();
 
@@ -53,8 +57,13 @@ export class RecipeService extends DbService {
 
         return {
             ...result.recipe,
-            coverImageUrl: this.storage.getPublicUrl(result.coverImage.filename)
+            coverImageUrl: result.coverImage ? this.storage.getPublicUrl(result.coverImage.filename) : null
         };
+    }
+
+    async create(payload: CreateRecipeDto): Promise<RecipeModel> {
+        const [{id}] = await this.database.insert(recipesSchema).values(payload).returning({id: recipesSchema.id}).execute();
+        return this.getById(id);
     }
 
     async update(recipeId: number, payload: UpdateRecipeDto): Promise<RecipeModel> {
