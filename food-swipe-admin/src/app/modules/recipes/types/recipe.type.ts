@@ -3,9 +3,9 @@ export type Recipe = {
   title: string;
   description: string;
   coverImageUrl: string;
-  prepTime: number;
-  calories: number;
-  servings: number;
+  prepTime: number | null;
+  calories: number | null;
+  servings: number | null;
   isPublished: boolean;
   createdAt: string;
 };

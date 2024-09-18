@@ -1,2 +1,0 @@
-insert into users (id, email, username, password, first_name, last_name, is_admin) values
-(DEFAULT, 'test@test.com', 'test', '$argon2id$v=19$m=65536,t=2,p=1$mEZGYeS7vzY/LPxnQerhedXoxP+JUJ004w10npUClcE$uWjIPPo31U/mWrPmlKNd4xaFilHuCJn/oXNzNAfKPHY', 'Test', 'Test', true)

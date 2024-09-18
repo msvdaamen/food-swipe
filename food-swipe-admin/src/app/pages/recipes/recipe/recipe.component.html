@@ -8,7 +8,7 @@
         <div>
           <app-form-input
             type="number"
-            [value]="recipe.calories.toString()"
+            [value]="recipe.calories?.toString() ?? ''"
             (blur)="updateRecipe('calories', $event)"
             >Cals</app-form-input
           >
@@ -16,7 +16,7 @@
         <div>
           <app-form-input
             type="number"
-            [value]="recipe.prepTime.toString()"
+            [value]="recipe.prepTime?.toString() ?? ''"
             (blur)="updateRecipe('prepTime', $event)"
             >Time</app-form-input
           >
@@ -24,7 +24,7 @@
         <div>
           <app-form-input
             type="number"
-            [value]="recipe.servings.toString()"
+            [value]="recipe.servings?.toString() ?? ''"
             (blur)="updateRecipe('servings', $event)"
             >serv</app-form-input
           >
