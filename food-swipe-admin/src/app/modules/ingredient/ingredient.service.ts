@@ -10,12 +10,7 @@ import { PaginatedData } from '../../common/types/paginated-data';
 @Injectable({ providedIn: 'root' })
 export class IngredientService extends Service {
   getAll(payload: GetIngredientsRequest) {
-    const params = new HttpParams()
-      .set('search', payload.search)
-      .set('sort', payload.sort)
-      .set('order', payload.order)
-      .set('amount', payload.amount.toString())
-      .set('page', payload.page.toString());
+    const params = new HttpParams({ fromObject: payload });
 
     return this.http.get<PaginatedData<Ingredient>>(`${this.api}/ingredients`, {
       params,

@@ -9,6 +9,5 @@ export const userLikedRecipesSchema = pgTable('user_liked_recipe', {
     primaryKey: primaryKey({columns: [ usersSchema.id, recipesSchema.id ]})
 }));
 
-
 export type UserLikedRecipeEntity = typeof userLikedRecipesSchema.$inferSelect;
 export type NewUserLikedRecipeEntity = typeof userLikedRecipesSchema.$inferInsert;

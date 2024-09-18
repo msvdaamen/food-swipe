@@ -8,9 +8,6 @@ const app = authRouter.createApp();
 
 app.get('/', async (c) => {
     const measurements = await measurementService.all();
-    measurements.forEach((measurement) => {
-        console.log(typeof measurement.id)
-    });
     return c.json(measurements);
 });
 

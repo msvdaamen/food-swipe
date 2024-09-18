@@ -24,6 +24,20 @@
     @apply opacity-50;
   }
 }
+.danger {
+  @apply bg-red-600;
+
+  &:hover:not([disabled]) {
+    @apply bg-red-700;
+  }
+  &:active:not([disabled]) {
+    @apply bg-red-700;
+  }
+  &:disabled {
+    @apply opacity-50;
+  }
+}
+
 
 .default {
   @apply bg-gray-200 text-black;

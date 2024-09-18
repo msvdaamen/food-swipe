@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
@@ -26,12 +31,20 @@ import {
     },
   ],
 })
-export class FormCheckboxComponent implements ControlValueAccessor {
+export class FormCheckboxComponent implements ControlValueAccessor, OnInit {
+  defaultValue = input(false, { alias: 'value' });
+
   _value = false;
   disabled = false;
 
-  onChange!: (_: any) => void;
-  onTouched!: () => void;
+  onChange = (_: any) => {};
+  onTouched = () => {};
+
+  ngOnInit() {
+    if (this.defaultValue()) {
+      this.writeValue(this.defaultValue());
+    }
+  }
 
   set value(v: boolean) {
     this._value = v;

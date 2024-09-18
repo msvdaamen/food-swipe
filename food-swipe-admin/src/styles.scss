@@ -1,8 +1,10 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import '@angular/cdk/overlay-prebuilt.css';
-
+@import '@angular/cdk/a11y-prebuilt.css';
+@import "@angular/cdk/text-field-prebuilt.css";
 @import "./styles/table.scss";
 @import "./styles/dialog.scss";
 
@@ -12,4 +14,9 @@ body {
 
 .heading {
   @apply mb-10;
+}
+
+
+.select {
+  @apply invalid:border-red-600 flex w-full rounded border border-gray-300 px-1.5 py-1 outline-0 transition-colors focus-within:border-primary-600 disabled:bg-gray-200;
 }

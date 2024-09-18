@@ -19,14 +19,12 @@
     "jsonwebtoken": "^9.0.2",
     "migrationjs": "^0.4.12",
     "postgres": "^3.4.4",
-    "supabase": "^1.187.10",
     "typescript": "^5.5.4",
     "uploadthing": "^6.13.2",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
   "trustedDependencies": [
-    "supabase",
     "esbuild",
     "@esbuild-kit"
   ]

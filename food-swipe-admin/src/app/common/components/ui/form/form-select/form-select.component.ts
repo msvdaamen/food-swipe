@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FormTypes, RegisterOnChangeFn, RegisterOnToucheFn } from "../../../../types/form.types";
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
+import {
+  FormTypes,
+  RegisterOnChangeFn,
+  RegisterOnToucheFn,
+} from '../../../../types/form.types';
 
 @Component({
   selector: 'app-form-select',
@@ -16,10 +24,9 @@ import { FormTypes, RegisterOnChangeFn, RegisterOnToucheFn } from "../../../../t
       useExisting: FormSelectComponent,
       multi: true,
     },
-  ]
+  ],
 })
 export class FormSelectComponent implements ControlValueAccessor {
-
   private _value: FormTypes | null = null;
 
   disabled = signal<boolean>(false);
@@ -43,14 +50,13 @@ export class FormSelectComponent implements ControlValueAccessor {
     this._value = value;
   }
 
-  onChange: RegisterOnChangeFn<FormTypes> = () => {}
+  onChange: RegisterOnChangeFn<FormTypes> = () => {};
   registerOnChange(fn: RegisterOnChangeFn<FormTypes>): void {
     this.onChange = fn;
   }
 
-  onTouched: RegisterOnToucheFn = () => {}
+  onTouched: RegisterOnToucheFn = () => {};
   registerOnTouched(fn: RegisterOnToucheFn): void {
     this.onTouched = fn;
   }
-
 }

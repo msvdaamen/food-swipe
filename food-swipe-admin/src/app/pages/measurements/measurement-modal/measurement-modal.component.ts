@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MeasurementRepository } from '../../../modules/measurement/measurement.repository';
+import { MeasurementRepository } from '@modules/measurement/measurement.repository';
 
 @Component({
   selector: 'app-measurement-modal',
@@ -16,12 +16,14 @@ import { MeasurementRepository } from '../../../modules/measurement/measurement.
   templateUrl: './measurement-modal.component.html',
   styleUrl: './measurement-modal.component.scss',
 })
-export class MeasurementModalComponent extends DialogComponent {
+export class MeasurementModalComponent extends DialogComponent<{
+  id?: number;
+}> {
   private readonly measurementRepository = inject(MeasurementRepository);
   private readonly fb = inject(NonNullableFormBuilder);
 
   measurement = computed(() => {
-    const id = this.data?.id as number | undefined;
+    const id = this.data?.id;
     if (!id) {
       return null;
     }

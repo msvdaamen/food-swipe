@@ -1,0 +1,39 @@
+<div class="mb-4 flex justify-between">
+  <div class="w-64">
+    <app-form-input
+      placeholder="Search"
+      [iconSuffix]="faMagnifyingGlass"
+      [(ngModel)]="search"
+    />
+  </div>
+  <div>
+    <app-button (click)="openCreateRecipeDialog()">Create</app-button>
+  </div>
+</div>
+
+<div class="content gap-4">
+  @for (recipe of recipes(); track i; let i = $index) {
+    <div
+      class="cursor-pointer rounded border transition-transform hover:scale-105 hover:shadow"
+      routerLink="/recipes/{{ recipe.id }}"
+    >
+      <div>
+        <img
+          [src]="recipe.coverImageUrl"
+          width="5120"
+          height="1440"
+          alt="Recipe Image"
+          class="rounded-t"
+        />
+      </div>
+      <div class="p-2">
+        <h3 class="font-bold">{{ recipe.title }}</h3>
+        <div class="description">
+          <p class="line-clamp-2">
+            {{ recipe.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+</div>
