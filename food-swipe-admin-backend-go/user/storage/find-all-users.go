@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (s Storage) FindAllUsers() (*[]User, error) {
+func (s *Storage) FindAllUsers() (*[]User, error) {
 	sql := fmt.Sprintf("select %s from users", strings.Join(userFields, ","))
 	rows, err := s.db.Query(context.Background(), sql)
 	if err != nil {

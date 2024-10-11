@@ -9,7 +9,7 @@ func (s Service) GetAllUsers() (*[]User, error) {
 	}
 	userModels := make([]User, len(*users))
 	for i, user := range *users {
-		userModels[i] = *storageUserToUser(&user)
+		userModels[i] = storageUserToUser(user)
 	}
 
 	return &userModels, nil

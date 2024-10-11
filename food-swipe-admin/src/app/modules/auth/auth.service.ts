@@ -8,11 +8,11 @@ import { AuthResponse } from './responses/auth.response';
 @Injectable({ providedIn: 'root' })
 export class AuthService extends Service {
   singIn(payload: SignInRequest) {
-    return this.http.post<AuthResponse>(`${this.api}/auth/sign-in`, payload);
+    return this.http.post<AuthResponse>(`${this.api2}/auth/sign-in`, payload);
   }
 
   me() {
-    return this.http.get<AuthUser>(`${this.api}/auth/me`);
+    return this.http.get<AuthUser>(`${this.api2}/auth/me`);
   }
 
   private _refreshRequest: Observable<{
@@ -27,7 +27,7 @@ export class AuthService extends Service {
       .post<{
         accessToken: string;
         refreshToken: string;
-      }>(`${this.api}/auth/refresh-token`, { refreshToken })
+      }>(`${this.api2}/auth/refresh-token`, { refreshToken })
       .pipe(share());
     this._refreshRequest.subscribe({
       complete: () => {

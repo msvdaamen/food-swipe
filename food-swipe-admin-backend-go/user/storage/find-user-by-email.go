@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (s Storage) FindUserByEmail(email string) (*User, error) {
+func (s *Storage) FindUserByEmail(email string) (*User, error) {
 	sql := fmt.Sprintf("SELECT %s FROM Users WHERE email = $1", strings.Join(userFields, ","))
 	row := s.db.QueryRow(context.Background(), sql, email)
 	user, err := scanIntoUser(row)

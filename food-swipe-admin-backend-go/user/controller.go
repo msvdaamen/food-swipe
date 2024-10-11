@@ -2,13 +2,14 @@ package user
 
 import (
 	"fmt"
+	"food-swipe.app/user/service"
 	"github.com/gofiber/fiber/v2"
 	"strconv"
 )
 
-func RegisterController(router fiber.Router, s *Services) {
+func RegisterController(router fiber.Router, userService *service.Service) {
 	router.Get("/", func(context *fiber.Ctx) error {
-		users, err := s.UserService.GetAllUsers()
+		users, err := userService.GetAllUsers()
 		if err != nil {
 			fmt.Print(err)
 			context.Status(fiber.StatusNotFound)
@@ -22,7 +23,7 @@ func RegisterController(router fiber.Router, s *Services) {
 		if err != nil {
 			return fmt.Errorf("invalid user id is not a number %s", userIdStr)
 		}
-		user, err := s.UserService.GetUserById(int32(userId))
+		user, err := userService.GetUserById(int32(userId))
 		if err != nil {
 			context.Status(fiber.StatusNotFound)
 			return nil

@@ -5,22 +5,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type App struct {
-	Http     *fiber.App
-	Services *Services
-}
+func Init(app fiber.Router, authMiddleware fiber.Handler, userService *service.Service) {
 
-type Services struct {
-	UserService *service.Service
-}
-
-func Init(app *fiber.App, userService *service.Service) {
-
-	services := &Services{
-		userService,
-	}
-
-	app.Route("/users", func(router fiber.Router) {
-		RegisterController(router, services)
-	})
+	userRoute := app.Group("/users", authMiddleware)
+	RegisterController(userRoute, userService)
 }

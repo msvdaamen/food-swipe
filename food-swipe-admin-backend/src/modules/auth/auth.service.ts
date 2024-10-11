@@ -76,7 +76,6 @@ export class AuthService extends DbService  {
         };
       }
     
-    
       async signOut(userId: number): Promise<void> {
         await this.database.delete(authRefreshTokenSchema).where(eq(authRefreshTokenSchema.userId, userId));
       }

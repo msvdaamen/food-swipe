@@ -3,32 +3,77 @@ package main
 import (
 	"context"
 	"fmt"
+	"food-swipe.app/auth"
+	"food-swipe.app/auth/middleware"
+	AuthService "food-swipe.app/auth/service"
+	"food-swipe.app/common/jwt"
 	"food-swipe.app/user"
-	"food-swipe.app/user/service"
+	UserService "food-swipe.app/user/service"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	dbPool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Printf("Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
-	defer dbpool.Close()
+	defer dbPool.Close()
 
-	userService := service.NewService(dbpool)
+	validate := validator.New(validator.WithRequiredStructEnabled())
+	jwtService := jwt.NewJwt("gsudykfhgbvzmaysgioufamuwhfldkcjnfstalwuvnfwegfyiuakjvapioweuropnvcifpasuhfkuhvsf")
+	userService := UserService.NewService(dbPool)
+	authService := AuthService.NewService(dbPool, userService, jwtService)
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		// Global custom error handler
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Status(fiber.StatusBadRequest).JSON(ErrorResponse{
+				Error: err.Error(),
+			})
+		},
+	})
 
-	user.Init(app, userService)
+	app.Use(helmet.New())
+	app.Use(cors.New())
+	//app.Use(compress.New())
+	app.Use(limiter.New(limiter.Config{
+		Max: 60,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			cfConnectingIp := c.Get("cf-connecting-ip")
+			if cfConnectingIp != "" {
+				return cfConnectingIp
+			}
+			realIp := c.Get("x-forwarded-for")
+			if realIp != "" {
+				return realIp
+			}
+			return c.IP()
+		},
+	}))
+
+	authMiddleware := middleware.CreateAuthMiddleware(jwtService, userService)
+
+	api := app.Group("/v1")
+
+	user.Init(api, authMiddleware, userService)
+	auth.Init(api, authMiddleware, validate, authService)
 
 	port := "3000"
 	if portEnv, exists := os.LookupEnv("APP_PORT"); exists {

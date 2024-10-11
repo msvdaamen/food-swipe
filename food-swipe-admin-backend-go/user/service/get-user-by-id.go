@@ -10,5 +10,6 @@ func (s Service) GetUserById(userId int32) (*User, error) {
 		return nil, fmt.Errorf("error finding user by id: %b, %v", userId, err)
 	}
 
-	return storageUserToUser(user), nil
+	serviceUser := storageUserToUser(*user)
+	return &serviceUser, nil
 }
