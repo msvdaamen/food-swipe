@@ -58,8 +58,9 @@ func (s *Service) SignIn(payload dto.SignInDto) (*SignInResponse, error) {
 	}
 	refreshToken, err := s.createRefreshToken(user.Id)
 	if err != nil {
-		return nil, fmt.Errorf("error creating refresh token for user: %d, %w", user.Id, err)
+		return nil, fmt.Errorf("error creating access token for user: %d, %w", user.Id, err)
 	}
+
 	return &SignInResponse{
 		User:         UserToAuthUser(*user),
 		AccessToken:  *accessToken,

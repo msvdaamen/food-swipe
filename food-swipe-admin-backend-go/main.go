@@ -72,8 +72,8 @@ func main() {
 
 	api := app.Group("/v1")
 
-	user.Init(api, authMiddleware, userService)
 	auth.Init(api, authMiddleware, validate, authService)
+	user.Init(api, authMiddleware, userService)
 
 	port := "3000"
 	if portEnv, exists := os.LookupEnv("APP_PORT"); exists {
