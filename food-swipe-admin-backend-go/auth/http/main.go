@@ -2,7 +2,6 @@ package http
 
 import (
 	authService "food-swipe.app/auth/service"
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,7 +17,7 @@ func (s *controller) handle(router fiber.Router) {
 	router.Post("/sign-out", s.authMiddleware, s.singOut)
 }
 
-func RegisterService(router fiber.Router, authMiddleware fiber.Handler, validator *validator.Validate, service *authService.Service) {
+func RegisterService(router fiber.Router, authMiddleware fiber.Handler, service *authService.Service) {
 	controller := &controller{
 		service:        service,
 		authMiddleware: authMiddleware,

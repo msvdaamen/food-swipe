@@ -7,9 +7,10 @@ import (
 	"food-swipe.app/auth/middleware"
 	AuthService "food-swipe.app/auth/service"
 	"food-swipe.app/common/jwt"
+	"food-swipe.app/ingredient"
+	IngredientService "food-swipe.app/ingredient/service"
 	"food-swipe.app/user"
 	UserService "food-swipe.app/user/service"
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
@@ -36,10 +37,10 @@ func main() {
 	}
 	defer dbPool.Close()
 
-	validate := validator.New(validator.WithRequiredStructEnabled())
 	jwtService := jwt.NewJwt("gsudykfhgbvzmaysgioufamuwhfldkcjnfstalwuvnfwegfyiuakjvapioweuropnvcifpasuhfkuhvsf")
 	userService := UserService.NewService(dbPool)
 	authService := AuthService.NewService(dbPool, userService, jwtService)
+	ingredientService := IngredientService.NewService(dbPool)
 
 	app := fiber.New(fiber.Config{
 		// Global custom error handler
@@ -72,8 +73,9 @@ func main() {
 
 	api := app.Group("/v1")
 
-	auth.Init(api, authMiddleware, validate, authService)
+	auth.Init(api, authMiddleware, authService)
 	user.Init(api, authMiddleware, userService)
+	ingredient.Init(api, authMiddleware, ingredientService)
 
 	port := "3000"
 	if portEnv, exists := os.LookupEnv("APP_PORT"); exists {

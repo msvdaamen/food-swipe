@@ -12,9 +12,12 @@ export class IngredientService extends Service {
   getAll(payload: GetIngredientsRequest) {
     const params = new HttpParams({ fromObject: payload });
 
-    return this.http.get<PaginatedData<Ingredient>>(`${this.api}/ingredients`, {
-      params,
-    });
+    return this.http.get<PaginatedData<Ingredient>>(
+      `${this.api2}/ingredients`,
+      {
+        params,
+      },
+    );
   }
 
   getNext(cursor: string | null = null) {
@@ -28,14 +31,14 @@ export class IngredientService extends Service {
   }
 
   create(payload: CreateIngredientRequest) {
-    return this.http.post<Ingredient>(`${this.api}/ingredients`, payload);
+    return this.http.post<Ingredient>(`${this.api2}/ingredients`, payload);
   }
 
   update(id: number, payload: UpdateIngredientRequest) {
-    return this.http.put<Ingredient>(`${this.api}/ingredients/${id}`, payload);
+    return this.http.put<Ingredient>(`${this.api2}/ingredients/${id}`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.api}/ingredients/${id}`);
+    return this.http.delete(`${this.api2}/ingredients/${id}`);
   }
 }

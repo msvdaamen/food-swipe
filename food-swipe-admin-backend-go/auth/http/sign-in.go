@@ -14,7 +14,7 @@ func (s *controller) signIn(c *fiber.Ctx) error {
 	}
 	signInResponse, err := s.service.SignIn(*payload)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	return c.JSON(signInResponse)
 }
