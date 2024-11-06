@@ -71,6 +71,15 @@ export class RecipeService extends DbService {
         return this.getById(recipeId);
     }
 
+    async uploadImage(userId: number, recipeId: number, file: File): Promise<RecipeModel> {
+        const recipe = await this.getById(recipeId);
+        await this.transaction(async tx => {
+            const {id, filename} = await this.storage.upload(userId, file, true);
+            await this.database.update(recipesSchema).set({coverImageId: id}).where(eq(recipesSchema.id, recipeId)).execute();
+        });
+        return await this.getById(recipe.id);
+    }
+
     async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
         const steps = await this.database.select().from(recipeStepSchema).where(eq(recipeStepSchema.recipeId, recipeId)).orderBy(asc(recipeStepSchema.stepNumber)).execute();
         return steps;

@@ -1,8 +1,17 @@
 @if (recipe(); as recipe) {
   <div class="flex">
     <div class="w-1/3">
-      <div>
-        <img [src]="recipe.coverImageUrl" alt="" />
+      <div (click)="openFileUploader()">
+        @if (recipe.coverImageUrl) {
+          <div>
+            <img [src]="recipe.coverImageUrl" alt="" />
+          </div>
+        } @else {
+          <div class="w-full aspect-video bg-gray-100 flex justify-center items-center cursor-pointer">
+            <fa-icon size="10x" [icon]="faQuestion"/>
+          </div>
+        }
+        <input type="file" hidden #fileUploader (change)="uploadFile($event)">
       </div>
       <div class="mt-4 flex gap-2">
         <div>

@@ -1,17 +1,17 @@
 import {
   Component,
   computed,
-  effect,
+  effect, ElementRef,
   inject,
   input,
-  numberAttribute,
+  numberAttribute, viewChild,
 } from '@angular/core';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
 import { JsonPipe } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faPencil, faQuestion, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { ManageRecipeStepDialogComponent } from '@modules/recipes/components/manage-recipe-step-dialog/manage-recipe-step-dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/components/manage-recipe-ingredient-dialog/manage-recipe-ingredient-dialog.component';
@@ -40,6 +40,8 @@ import { FormCheckboxComponent } from '../../../common/components/ui/form/form-c
 export default class RecipeComponent {
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly dialog = inject(Dialog);
+
+  fileUploader = viewChild<ElementRef<HTMLInputElement>>('fileUploader');
 
   ingredients = this.recipeRepository.ingredients;
   steps = this.recipeRepository.steps;
@@ -116,4 +118,23 @@ export default class RecipeComponent {
   deleteIngredient(ingredientId: number) {
     this.recipeRepository.deleteIngredient(this.id(), ingredientId);
   }
+
+  openFileUploader() {
+    this.fileUploader()?.nativeElement.click();
+  }
+
+  uploadFile(event: Event) {
+    const target = event.target;
+    if (!target || !(target instanceof HTMLInputElement)) {
+      return;
+    }
+    const file = target.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.recipeRepository.uploadImage(this.id(), file);
+
+  }
+
+  protected readonly faQuestion = faQuestion;
 }

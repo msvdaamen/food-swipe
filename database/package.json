@@ -2,9 +2,9 @@
   "name": "database",
   "type": "module",
   "scripts": {
-    "make:migration": "npx kysely migrate:make ",
-    "migrate": "npx kysely migrate:latest",
-    "rollback": "npx kysely migrate:rollback --all"
+    "make:migration": "bunx kysely migrate:make ",
+    "migrate": "bunx kysely migrate:latest",
+    "rollback": "bunx kysely migrate:rollback --all"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

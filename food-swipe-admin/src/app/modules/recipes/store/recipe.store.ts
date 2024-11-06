@@ -119,4 +119,22 @@ export class RecipeStore extends signalStore(
       },
     });
   }
+
+  uploadImage = rxMethod<{ id: number; file: File }>(
+    pipe(
+      tap(() => patchState(this, { isLoading: true })),
+      switchMap(({ id, file }) =>
+        this.recipeService.uploadImage(id, file).pipe(
+          tapResponse({
+            next: (recipe) => {
+              patchState(this, { isLoading: false }, updateEntity({ id, changes: recipe }));
+            },
+            error: () => {
+              patchState(this, { isLoading: false });
+            },
+          }),
+        ),
+      ),
+    ),
+  );
 }
