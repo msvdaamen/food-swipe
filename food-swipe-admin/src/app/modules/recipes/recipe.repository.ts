@@ -62,6 +62,10 @@ export class RecipeRepository {
     this.recipeStore.update(id, payload);
   }
 
+  uploadImage(id: number, file: File) {
+    this.recipeStore.uploadImage({ id, file });
+  }
+
   loadSteps(recipeId: number) {
     this.recipeStepStore.loadAll(recipeId);
   }
