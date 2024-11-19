@@ -30,13 +30,14 @@ app.post('/', async (c) => {
 });
 
 app.post('/:id/image', async (c) => {
+    const userId = c.get('user').id;
     const id = Number(c.req.param('id'));
     const body = await c.req.parseBody()
     const file = body['file'];
     if (!file || !(file instanceof File)) {
         throw new Error('File is required');
     }
-    const recipe = await recipeService.uploadImage(id, file);
+    const recipe = await recipeService.uploadImage(userId, id, file);
     return c.json(recipe);
 });
 

@@ -52,13 +52,17 @@ export class StorageService extends DbService {
     return await this.storage.get(filename, false);
   }
 
-  async delete(filename: string): Promise<void> {
+  async delete(fileId: number): Promise<void> {
+    const oldFile = await this.getFile(fileId);
+    if (!oldFile) {
+      throw new FileNotFoundException();
+    }
     await this.transaction(async(transaction) => {
-      const [file] = await transaction.delete(files).where(eq(files.filename, filename)).returning();
+      const [file] = await transaction.delete(files).where(eq(files.id, oldFile.id)).returning();
       if (!file) {
         throw new FileNotFoundException();
       }
-      await this.storage.delete(filename, file.isPublic);
+      await this.storage.delete(oldFile.filename, file.isPublic);
     });
   }
 }
