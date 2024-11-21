@@ -6,12 +6,11 @@ import {FormCheckboxComponent} from "@common/components/ui/form/form-checkbox/fo
 import {FormRadioComponent} from "@common/components/ui/form/form-radio/form-radio.component";
 
 @Component({
-  selector: 'app-layout',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, FormCheckboxComponent, FormRadioComponent],
-  templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-layout',
+    imports: [CommonModule, RouterOutlet, NavbarComponent, FormCheckboxComponent, FormRadioComponent],
+    templateUrl: './layout.component.html',
+    styleUrls: ['./layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayoutComponent {
 

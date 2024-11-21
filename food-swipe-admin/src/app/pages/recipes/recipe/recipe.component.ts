@@ -22,21 +22,20 @@ import { Recipe } from '@modules/recipes/types/recipe.type';
 import { FormCheckboxComponent } from '../../../common/components/ui/form/form-checkbox/form-checkbox.component';
 
 @Component({
-  selector: 'app-recipe',
-  standalone: true,
-  imports: [
-    JsonPipe,
-    CdkDropList,
-    CdkDrag,
-    ButtonComponent,
-    FaIconComponent,
-    FormInputComponent,
-    FormsModule,
-    FormTextareaComponent,
-    FormCheckboxComponent,
-  ],
-  templateUrl: './recipe.component.html',
-  styleUrl: './recipe.component.scss',
+    selector: 'app-recipe',
+    imports: [
+        JsonPipe,
+        CdkDropList,
+        CdkDrag,
+        ButtonComponent,
+        FaIconComponent,
+        FormInputComponent,
+        FormsModule,
+        FormTextareaComponent,
+        FormCheckboxComponent,
+    ],
+    templateUrl: './recipe.component.html',
+    styleUrl: './recipe.component.scss'
 })
 export default class RecipeComponent {
   private readonly recipeRepository = inject(RecipeRepository);

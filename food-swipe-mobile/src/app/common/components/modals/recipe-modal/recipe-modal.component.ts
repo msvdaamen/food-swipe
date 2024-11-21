@@ -26,17 +26,16 @@ import { ButtonComponent } from '../../ui/button/button.component';
 import { RecipeRepository } from '../../../../modules/recipe/recipe.repository';
 
 @Component({
-  selector: 'app-recipe-modal',
-  standalone: true,
-  imports: [
-    IonContent,
-    HeaderComponent,
-    FormCheckboxComponent,
-    ButtonComponent,
-    FaIconComponent,
-  ],
-  templateUrl: './recipe-modal.component.html',
-  styleUrl: './recipe-modal.component.scss',
+    selector: 'app-recipe-modal',
+    imports: [
+        IonContent,
+        HeaderComponent,
+        FormCheckboxComponent,
+        ButtonComponent,
+        FaIconComponent,
+    ],
+    templateUrl: './recipe-modal.component.html',
+    styleUrl: './recipe-modal.component.scss'
 })
 export class RecipeModalComponent implements OnInit, ViewDidEnter {
   private readonly recipeRepository = inject(RecipeRepository);

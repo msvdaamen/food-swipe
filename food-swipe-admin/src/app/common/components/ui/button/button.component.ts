@@ -16,12 +16,11 @@ type Size = 'default' | 'small' | 'medium' | 'large' | 'icon';
 type Type = 'normal' | 'icon' | 'full';
 
 @Component({
-  selector: 'app-button',
-  standalone: true,
-  imports: [FaIconComponent],
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-button',
+    imports: [FaIconComponent],
+    templateUrl: './button.component.html',
+    styleUrls: ['./button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent {
   private readonly breakPointObserver = inject(BreakpointObserver);

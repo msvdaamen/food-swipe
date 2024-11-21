@@ -6,11 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
 
 @Component({
-  selector: 'app-create-recipe-dialog',
-  standalone: true,
-  imports: [ButtonComponent, FormInputComponent, FormsModule],
-  templateUrl: './create-recipe-dialog.component.html',
-  styleUrl: './create-recipe-dialog.component.scss',
+    selector: 'app-create-recipe-dialog',
+    imports: [ButtonComponent, FormInputComponent, FormsModule],
+    templateUrl: './create-recipe-dialog.component.html',
+    styleUrl: './create-recipe-dialog.component.scss'
 })
 export class CreateRecipeDialogComponent extends DialogComponent {
   private readonly recipeRepository = inject(RecipeRepository);

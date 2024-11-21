@@ -5,11 +5,10 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [SidebarComponent, RouterOutlet, FaIconComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+    selector: 'app-home',
+    imports: [SidebarComponent, RouterOutlet, FaIconComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export default class HomeComponent {
   protected readonly faChevronRight = faChevronRight;

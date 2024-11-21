@@ -10,11 +10,10 @@ import {
 import { MeasurementRepository } from '@modules/measurement/measurement.repository';
 
 @Component({
-  selector: 'app-measurement-modal',
-  standalone: true,
-  imports: [ButtonComponent, FormInputComponent, ReactiveFormsModule],
-  templateUrl: './measurement-modal.component.html',
-  styleUrl: './measurement-modal.component.scss',
+    selector: 'app-measurement-modal',
+    imports: [ButtonComponent, FormInputComponent, ReactiveFormsModule],
+    templateUrl: './measurement-modal.component.html',
+    styleUrl: './measurement-modal.component.scss'
 })
 export class MeasurementModalComponent extends DialogComponent<{
   id?: number;

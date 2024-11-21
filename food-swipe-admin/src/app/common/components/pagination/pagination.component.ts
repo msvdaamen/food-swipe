@@ -7,11 +7,10 @@ import {
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-pagination',
-  standalone: true,
-  imports: [FaIconComponent, NgClass],
-  templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.scss',
+    selector: 'app-pagination',
+    imports: [FaIconComponent, NgClass],
+    templateUrl: './pagination.component.html',
+    styleUrl: './pagination.component.scss'
 })
 export class PaginationComponent {
   protected readonly faChevronLeft = faChevronLeft;

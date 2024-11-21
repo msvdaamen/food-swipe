@@ -4,19 +4,18 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/f
 import { FormTypes, RegisterOnChangeFn, RegisterOnToucheFn } from "../../../../types/form.types";
 
 @Component({
-  selector: 'app-form-select',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './form-select.component.html',
-  styleUrl: './form-select.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormSelectComponent,
-      multi: true,
-    },
-  ]
+    selector: 'app-form-select',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './form-select.component.html',
+    styleUrl: './form-select.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormSelectComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormSelectComponent implements ControlValueAccessor {
 

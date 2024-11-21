@@ -4,19 +4,18 @@ import {ControlValueAccessor, DefaultValueAccessor, NG_VALUE_ACCESSOR, ReactiveF
 import {RegisterOnToucheFn} from "../../../../types/form.types";
 
 @Component({
-  selector: 'app-form-textarea',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './form-textarea.component.html',
-  styleUrl: './form-textarea.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormTextareaComponent,
-      multi: true,
-    },
-  ],
+    selector: 'app-form-textarea',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './form-textarea.component.html',
+    styleUrl: './form-textarea.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormTextareaComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormTextareaComponent implements ControlValueAccessor {
   @ViewChild(DefaultValueAccessor, { static: true })

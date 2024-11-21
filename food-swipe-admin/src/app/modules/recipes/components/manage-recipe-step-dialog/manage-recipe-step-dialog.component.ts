@@ -12,18 +12,17 @@ import { ButtonComponent } from '../../../../common/components/ui/button/button.
 import { DialogComponent } from '../../../../common/components/dialog.component';
 
 @Component({
-  selector: 'app-manage-recipe-step-dialog',
-  standalone: true,
-  imports: [
-    FormInputComponent,
-    FormTextareaComponent,
-    FormSelectComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    ButtonComponent,
-  ],
-  templateUrl: './manage-recipe-step-dialog.component.html',
-  styleUrl: './manage-recipe-step-dialog.component.scss',
+    selector: 'app-manage-recipe-step-dialog',
+    imports: [
+        FormInputComponent,
+        FormTextareaComponent,
+        FormSelectComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        ButtonComponent,
+    ],
+    templateUrl: './manage-recipe-step-dialog.component.html',
+    styleUrl: './manage-recipe-step-dialog.component.scss'
 })
 export class ManageRecipeStepDialogComponent extends DialogComponent<{
   recipeId: number;

@@ -19,11 +19,10 @@ export type SidebarItem = {
 };
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [SidebarItemComponent],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+    selector: 'app-sidebar',
+    imports: [SidebarItemComponent],
+    templateUrl: './sidebar.component.html',
+    styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
   sidebarItems: SidebarItem[] = [

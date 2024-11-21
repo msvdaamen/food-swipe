@@ -13,11 +13,10 @@ import { Dialog } from '@angular/cdk/dialog';
 import { MeasurementModalComponent } from './measurement-modal/measurement-modal.component';
 
 @Component({
-  selector: 'app-measurements',
-  standalone: true,
-  imports: [FormInputComponent, FormsModule, ButtonComponent, FaIconComponent],
-  templateUrl: './measurements.component.html',
-  styleUrl: './measurements.component.scss',
+    selector: 'app-measurements',
+    imports: [FormInputComponent, FormsModule, ButtonComponent, FaIconComponent],
+    templateUrl: './measurements.component.html',
+    styleUrl: './measurements.component.scss'
 })
 export default class MeasurementsComponent {
   private readonly measurementRepository = inject(MeasurementRepository);

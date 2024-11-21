@@ -4,11 +4,10 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-recipes-uploaded',
-  standalone: true,
-  imports: [DatePipe, RouterLink],
-  templateUrl: './recipes-uploaded.component.html',
-  styleUrl: './recipes-uploaded.component.scss',
+    selector: 'app-recipes-uploaded',
+    imports: [DatePipe, RouterLink],
+    templateUrl: './recipes-uploaded.component.html',
+    styleUrl: './recipes-uploaded.component.scss'
 })
 export default class RecipesUploadedComponent {
   private readonly recipeRepository = inject(RecipeRepository);

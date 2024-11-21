@@ -32,18 +32,17 @@ export type FormSearchSelectValueFn<T> = (value: T) => FormTypes;
 export type FormSearchSelectSearchFn<T> = (data: T[], search: string) => T[];
 
 @Component({
-  selector: 'app-form-search-select',
-  standalone: true,
-  imports: [FaIconComponent, ReactiveFormsModule, FormsModule, OverlayModule],
-  templateUrl: './form-search-select.component.html',
-  styleUrl: './form-search-select.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormSearchSelectComponent,
-      multi: true,
-    },
-  ],
+    selector: 'app-form-search-select',
+    imports: [FaIconComponent, ReactiveFormsModule, FormsModule, OverlayModule],
+    templateUrl: './form-search-select.component.html',
+    styleUrl: './form-search-select.component.scss',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormSearchSelectComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormSearchSelectComponent
   implements ControlValueAccessor, AfterViewInit

@@ -12,19 +12,18 @@ import {
 } from '../../../../types/form.types';
 
 @Component({
-  selector: 'app-form-checkbox',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './form-checkbox.component.html',
-  styleUrls: ['./form-checkbox.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormCheckboxComponent,
-      multi: true,
-    },
-  ],
+    selector: 'app-form-checkbox',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './form-checkbox.component.html',
+    styleUrls: ['./form-checkbox.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormCheckboxComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormCheckboxComponent implements ControlValueAccessor {
   _value = false;
