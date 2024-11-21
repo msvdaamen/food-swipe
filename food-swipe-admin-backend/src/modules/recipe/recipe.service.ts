@@ -9,7 +9,7 @@ import {recipeIngredientsSchema} from "./schema/recipe-ingredients.schema.ts";
 import type {RecipeStepModel} from "./models/recipe-step.model.ts";
 import type {RecipeIngredientModel} from "./models/recipe-ingredient.model.ts";
 import {ingredientsSchema} from "./../ingredient/schema/ingredient.schema.ts";
-import {measurementsSchema} from "./../measurement/schema/measurement.schema.ts";
+import {type MeasurementEntity, measurementsSchema} from "./../measurement/schema/measurement.schema.ts";
 import type {UpdateRecipeDto} from "./dto/update-recipe.dto.ts";
 import type {CreateRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import type {CreateRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
@@ -19,11 +19,16 @@ import type {UpdateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto
 import type {LoadRecipesDto} from "./dto/load-recipes.dto.ts";
 import {usersSchema} from "../user/schema/user.schema.ts";
 import type {CreateRecipeDto} from "./dto/create-recipe.dto.ts";
+import {fetchRecipeFromAh} from "./function/fetch-recipe-from-ah.ts";
+import {measurementService, type MeasurementService} from "../measurement/measurement.service.ts";
+import {ingredientService, type IngredientService} from "../ingredient/ingredient.service.ts";
 
 export class RecipeService extends DbService {
 
     constructor(
-        private readonly storage: StorageService
+        private readonly storage: StorageService,
+        private readonly measurementService: MeasurementService,
+        private readonly ingredientService: IngredientService
     ) {
         super();
     }
@@ -82,6 +87,10 @@ export class RecipeService extends DbService {
             await this.storage.delete(oldFile.id);
         }
         return await this.getById(recipe.id);
+    }
+
+    async delete(recipeId: number) {
+        await this.database.delete(recipesSchema).where(eq(recipesSchema.id, recipeId)).execute();
     }
 
     async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
@@ -250,6 +259,62 @@ export class RecipeService extends DbService {
             ))
             .execute();
     }
+
+    async importRecipe(url: string) {
+        // https://www.ah.nl/allerhande/recept/R-R1188160/mac-and-cheese-met-ham-en-prei
+        const idPart = url.split('/').find((part) => part.startsWith('R-R'));
+        if (!idPart) {
+            throw new Error('Invalid URL');
+        }
+        const id = parseInt(idPart.split('R-R')[1], 10);
+        const recipe = await fetchRecipeFromAh(id);
+        if (!recipe) {
+            throw new Error('Recipe not found');
+        }
+        const [exists] = await this.database.select().from(recipesSchema).where(eq(recipesSchema.title, recipe.title)).execute();
+        if (exists) {
+            throw new Error('Recipe already exists');
+        }
+        const imageResponse = await fetch(recipe.images[recipe.images.length - 1].url, {method: 'GET'});
+        const imageBuffer = await imageResponse.blob();
+        const imageFile = new File([imageBuffer], recipe.title);
+        const {id: imageId} = await this.storage.upload(1, imageFile, true);
+
+        const newRecipe = await this.create({
+            title: recipe.title,
+            description: recipe.description,
+            calories: recipe.nutritions.energy.value,
+            prepTime: recipe.cookTime,
+            servings: recipe.servings.number,
+            coverImageId: imageId,
+        });
+        for (let i = 0; i < recipe.preparation.steps.length; i++) {
+            const step = recipe.preparation.steps[i];
+            await this.createStep(newRecipe.id, {description: step, order: i + 1});
+        }
+        for (const ingredient of recipe.ingredients) {
+            let measurement: MeasurementEntity | null = null;
+            if (ingredient.quantityUnit.singular) {
+                measurement = await this.measurementService.findByAbbreviation(ingredient.quantityUnit.singular);
+                if (!measurement) {
+                    measurement = await this.measurementService.create({name: ingredient.quantityUnit.singular, abbreviation: ingredient.quantityUnit.singular});
+                }
+            }
+            let existingIngredient = await this.ingredientService.findByName(ingredient.name.singular);
+            if (!existingIngredient) {
+                existingIngredient = await this.ingredientService.create({name: ingredient.name.singular});
+            }
+            if (!existingIngredient) {
+                throw new Error('Failed to create ingredient');
+            }
+            await this.createIngredient(newRecipe.id, {
+                ingredientId: existingIngredient.id,
+                measurementId: measurement ? measurement.id : null,
+                amount: Math.round(ingredient.quantity),
+            });
+        }
+        return await this.getById(newRecipe.id);
+    }
 }
 
-export const recipeService = new RecipeService(storageService);
+export const recipeService = new RecipeService(storageService, measurementService, ingredientService);

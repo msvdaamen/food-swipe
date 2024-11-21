@@ -9,6 +9,7 @@ import {reorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 import {updateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
 import {loadRecipesDto} from "./dto/load-recipes.dto.ts";
 import {createRecipeDto} from "./dto/create-recipe.dto.ts";
+import {importRecipeDto} from "./dto/import-recipe.dto.ts";
 
 const app = authRouter.createApp();
 
@@ -46,6 +47,18 @@ app.put('/:id', async (c) => {
     const payload = updateRecipeDto.parse(await c.req.json());
     const recipe = await recipeService.update(id, payload);
     return c.json(recipe);
+});
+
+app.post('/import', async (c) => {
+    const body = importRecipeDto.parse(await c.req.json());
+    const recipe = await recipeService.importRecipe(body.url);
+    return c.json(recipe);
+});
+
+app.delete('/:id', async (c) => {
+    const id = Number(c.req.param('id'));
+    await recipeService.delete(id);
+    return c.json({}, 204);
 });
 
 app.get('/:id/steps', async (c) => {

@@ -14,6 +14,11 @@ export class MeasurementService extends DbService {
         return await this.database.select().from(measurementsSchema).execute();
     }
 
+    async findByAbbreviation(abbreviation: string): Promise<MeasurementEntity | null> {
+        const [measurement] = await this.database.select().from(measurementsSchema).where(eq(measurementsSchema.abbreviation, abbreviation)).execute();
+        return measurement || null
+    }
+
     async create(payload: CreateMeasurementDto): Promise<MeasurementEntity> {
         const [measurement] =  await this.database.insert(measurementsSchema).values(payload).returning().execute();
         return measurement;

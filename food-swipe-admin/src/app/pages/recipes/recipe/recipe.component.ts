@@ -1,17 +1,24 @@
 import {
   Component,
   computed,
-  effect, ElementRef,
+  effect,
+  ElementRef,
   inject,
   input,
-  numberAttribute, viewChild,
+  numberAttribute,
+  viewChild,
 } from '@angular/core';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
 import { JsonPipe } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {faPencil, faQuestion, faSpinner, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {
+  faPencil,
+  faQuestion,
+  faSpinner,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { ManageRecipeStepDialogComponent } from '@modules/recipes/components/manage-recipe-step-dialog/manage-recipe-step-dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/components/manage-recipe-ingredient-dialog/manage-recipe-ingredient-dialog.component';
@@ -20,27 +27,30 @@ import { FormsModule } from '@angular/forms';
 import { FormTextareaComponent } from '../../../common/components/ui/form/form-textarea/form-textarea.component';
 import { Recipe } from '@modules/recipes/types/recipe.type';
 import { FormCheckboxComponent } from '../../../common/components/ui/form/form-checkbox/form-checkbox.component';
+import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-recipe',
-    imports: [
-        CdkDropList,
-        CdkDrag,
-        ButtonComponent,
-        FaIconComponent,
-        FormInputComponent,
-        FormsModule,
-        FormTextareaComponent,
-        FormCheckboxComponent,
-    ],
-    templateUrl: './recipe.component.html',
-    styleUrl: './recipe.component.scss'
+  selector: 'app-recipe',
+  imports: [
+    CdkDropList,
+    CdkDrag,
+    ButtonComponent,
+    FaIconComponent,
+    FormInputComponent,
+    FormsModule,
+    FormTextareaComponent,
+    FormCheckboxComponent,
+  ],
+  templateUrl: './recipe.component.html',
+  styleUrl: './recipe.component.scss',
 })
 export default class RecipeComponent {
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly dialog = inject(Dialog);
+  private readonly router = inject(Router);
 
-  fileUploader = viewChild.required<ElementRef<HTMLInputElement>>('fileUploader');
+  fileUploader =
+    viewChild.required<ElementRef<HTMLInputElement>>('fileUploader');
 
   ingredients = this.recipeRepository.ingredients;
   steps = this.recipeRepository.steps;
@@ -51,6 +61,7 @@ export default class RecipeComponent {
   description = computed(() => this.recipe().description);
 
   isLoading = this.recipeRepository.isLoading;
+  isDeleting = false;
 
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
@@ -64,6 +75,13 @@ export default class RecipeComponent {
       },
       { allowSignalWrites: true },
     );
+
+    effect(() => {
+      const isLoading = this.isLoading();
+      if (this.isDeleting && !isLoading) {
+        this.router.navigate(['/recipes']);
+      }
+    });
   }
 
   updateRecipe(prop: keyof Recipe, event: Event) {
@@ -134,7 +152,11 @@ export default class RecipeComponent {
       return;
     }
     this.recipeRepository.uploadImage(this.id(), file);
+  }
 
+  deleteRecipe(recipeId: number) {
+    this.recipeRepository.deleteRecipe(recipeId);
+    this.isDeleting = true;
   }
 
   protected readonly faQuestion = faQuestion;

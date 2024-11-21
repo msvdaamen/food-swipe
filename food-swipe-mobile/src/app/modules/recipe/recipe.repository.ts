@@ -101,13 +101,15 @@ export class RecipeRepository extends signalStore(
     patchState(this, { isLoading: true });
     this.service.all(limit, cursor, { liked: true }).subscribe({
       next: (response) => {
+        const likedIds = [
+          ...this.likedRecipeIds(),
+          ...response.data.map((recipe) => recipe.id),
+        ];
+        likedIds.sort();
         patchState(this, addEntities(response.data), {
           hasLoadedLikedRecipes: true,
           cursorLikedRecipes: response.cursor,
-          likedRecipeIds: [
-            ...this.likedRecipeIds(),
-            ...response.data.map((recipe) => recipe.id),
-          ],
+          likedRecipeIds: [...new Set(likedIds)],
         });
       },
       error: (err) => {
