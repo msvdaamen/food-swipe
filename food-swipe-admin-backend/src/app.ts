@@ -17,8 +17,8 @@ app.use(secureHeaders())
 app.use(cors());
 
 const limiter = rateLimiter({
-    windowMs: 60 * 1000, // 15 minutes
-    limit: 60, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    windowMs: 60 * 1000, // 1 minutes
+    limit: 120, // Limit each IP to 100 requests per `window` (here, per 1 minutes).
     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     keyGenerator: (c) => {
         const info = getConnInfo(c);
