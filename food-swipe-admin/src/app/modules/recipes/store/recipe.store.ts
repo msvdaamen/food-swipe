@@ -6,7 +6,7 @@ import {
   withEntities,
 } from '@ngrx/signals/entities';
 import { Recipe } from '../types/recipe.type';
-import { computed, inject, Injectable } from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import { RecipeService } from '../recipe.service';
 import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
 import { LoadRecipesRequest } from '@modules/recipes/requests/load-recipes.request';
@@ -14,6 +14,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { CreateRecipeRequest } from '@modules/recipes/requests/create-recipe.request';
+import {rxResource} from "@angular/core/rxjs-interop";
 
 type State = {
   isLoading: boolean;
@@ -126,12 +127,8 @@ export class RecipeStore extends signalStore(
       switchMap(({ id, file }) =>
         this.recipeService.uploadImage(id, file).pipe(
           tapResponse({
-            next: (recipe) => {
-              patchState(this, { isLoading: false }, updateEntity({ id, changes: recipe }));
-            },
-            error: () => {
-              patchState(this, { isLoading: false });
-            },
+            next: (recipe) => patchState(this, { isLoading: false }, updateEntity({ id, changes: recipe })),
+            error: () => patchState(this, { isLoading: false }),
           }),
         ),
       ),

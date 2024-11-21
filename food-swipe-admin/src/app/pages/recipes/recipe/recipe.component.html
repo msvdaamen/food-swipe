@@ -2,8 +2,12 @@
   <div class="flex">
     <div class="w-1/3">
       <div (click)="openFileUploader()">
-        @if (recipe.coverImageUrl) {
-          <div>
+        @if (isLoading()) {
+          <div class="w-full aspect-video flex justify-center items-center cursor-pointer">
+            <fa-icon size="10x" [icon]="faSpinner" animation="spin"/>
+          </div>
+        } @else if (recipe.coverImageUrl) {
+          <div class="cursor-pointer">
             <img [src]="recipe.coverImageUrl" alt="" />
           </div>
         } @else {

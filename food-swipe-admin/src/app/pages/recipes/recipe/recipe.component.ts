@@ -11,7 +11,7 @@ import { JsonPipe } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {faPencil, faQuestion, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faPencil, faQuestion, faSpinner, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { ManageRecipeStepDialogComponent } from '@modules/recipes/components/manage-recipe-step-dialog/manage-recipe-step-dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { ManageRecipeIngredientDialogComponent } from '@modules/recipes/components/manage-recipe-ingredient-dialog/manage-recipe-ingredient-dialog.component';
@@ -24,7 +24,6 @@ import { FormCheckboxComponent } from '../../../common/components/ui/form/form-c
 @Component({
     selector: 'app-recipe',
     imports: [
-        JsonPipe,
         CdkDropList,
         CdkDrag,
         ButtonComponent,
@@ -41,7 +40,7 @@ export default class RecipeComponent {
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly dialog = inject(Dialog);
 
-  fileUploader = viewChild<ElementRef<HTMLInputElement>>('fileUploader');
+  fileUploader = viewChild.required<ElementRef<HTMLInputElement>>('fileUploader');
 
   ingredients = this.recipeRepository.ingredients;
   steps = this.recipeRepository.steps;
@@ -50,6 +49,8 @@ export default class RecipeComponent {
   recipe = computed(() => this.recipeRepository.getRecipe(this.id())());
   title = computed(() => this.recipe().title);
   description = computed(() => this.recipe().description);
+
+  isLoading = this.recipeRepository.isLoading;
 
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
@@ -120,7 +121,7 @@ export default class RecipeComponent {
   }
 
   openFileUploader() {
-    this.fileUploader()?.nativeElement.click();
+    this.fileUploader().nativeElement.click();
   }
 
   uploadFile(event: Event) {
@@ -137,4 +138,5 @@ export default class RecipeComponent {
   }
 
   protected readonly faQuestion = faQuestion;
+  protected readonly faSpinner = faSpinner;
 }
