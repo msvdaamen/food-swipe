@@ -22,18 +22,16 @@ import { FormSelectComponent } from '../../../../common/components/ui/form/form-
 import { MeasurementRepository } from '@modules/measurement/measurement.repository';
 
 @Component({
-    selector: 'app-manage-recipe-ingredient-dialog',
-    imports: [
-        ButtonComponent,
-        FormTextareaComponent,
-        ReactiveFormsModule,
-        FormSearchSelectComponent,
-        FormsModule,
-        FormInputComponent,
-        FormSelectComponent,
-    ],
-    templateUrl: './manage-recipe-ingredient-dialog.component.html',
-    styleUrl: './manage-recipe-ingredient-dialog.component.scss'
+  selector: 'app-manage-recipe-ingredient-dialog',
+  imports: [
+    ButtonComponent,
+    ReactiveFormsModule,
+    FormSearchSelectComponent,
+    FormsModule,
+    FormInputComponent,
+  ],
+  templateUrl: './manage-recipe-ingredient-dialog.component.html',
+  styleUrl: './manage-recipe-ingredient-dialog.component.scss',
 })
 export class ManageRecipeIngredientDialogComponent extends DialogComponent<{
   recipeId: number;

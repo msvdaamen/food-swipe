@@ -6,10 +6,10 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-home',
-    imports: [SidebarComponent, RouterOutlet, FaIconComponent],
+    imports: [SidebarComponent, RouterOutlet],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
 export default class HomeComponent {
-  protected readonly faChevronRight = faChevronRight;
+
 }

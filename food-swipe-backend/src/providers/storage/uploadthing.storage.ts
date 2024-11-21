@@ -3,13 +3,9 @@ import type { Storage } from "./storage";
 import type { BunFile } from "bun";
 import {v4 as uuid} from "uuid";
 
-export const utapi = new UTApi({
-    apiKey: process.env.UPLOADTHING_SECRET
-});
-
 export class UploadThingStorage implements Storage {
     utapi = new UTApi({
-        apiKey: process.env.UPLOADTHING_SECRET
+        token: process.env.UPLOADTHING_TOKEN
     });
 
     async upload(file: File, isPublic: boolean): Promise<string> {

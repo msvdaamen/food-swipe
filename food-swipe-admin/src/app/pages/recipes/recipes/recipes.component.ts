@@ -1,16 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RecipeRepository } from '../../../modules/recipes/recipe.repository';
 import { FormInputComponent } from '../../../common/components/ui/form/form-input/form-input.component';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {faMagnifyingGlass, faQuestion} from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { CreateRecipeDialogComponent } from '@modules/recipes/components/create-recipe-dialog/create-recipe-dialog.component';
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Component({
     selector: 'app-recipes',
-    imports: [FormInputComponent, FormsModule, RouterLink, ButtonComponent],
+    imports: [FormInputComponent, FormsModule, RouterLink, ButtonComponent, FaIconComponent],
     templateUrl: './recipes.component.html',
     styleUrl: './recipes.component.scss'
 })
@@ -40,4 +41,6 @@ export default class RecipesComponent {
   openCreateRecipeDialog() {
     this.dialog.open(CreateRecipeDialogComponent);
   }
+
+  protected readonly faQuestion = faQuestion;
 }

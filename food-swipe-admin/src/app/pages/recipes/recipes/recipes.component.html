@@ -17,6 +17,7 @@
       class="cursor-pointer rounded border transition-transform hover:scale-105 hover:shadow"
       routerLink="/recipes/{{ recipe.id }}"
     >
+      @if (recipe.coverImageUrl) {
       <div>
         <img
           [src]="recipe.coverImageUrl"
@@ -26,6 +27,11 @@
           class="rounded-t"
         />
       </div>
+      } @else {
+        <div class="w-full bg-gray-100 flex justify-center items-center cursor-pointer">
+          <fa-icon size="10x" [icon]="faQuestion"/>
+        </div>
+      }
       <div class="p-2">
         <h3 class="font-bold">{{ recipe.title }}</h3>
         <div class="description">

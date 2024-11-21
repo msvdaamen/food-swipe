@@ -32,6 +32,12 @@ export class RecipeService extends Service {
     return this.http.put<Recipe>(`${this.api}/recipes/${id}`, payload);
   }
 
+  uploadImage(id: number, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Recipe>(`${this.api}/recipes/${id}/image`, formData);
+  }
+
   getSteps(id: number) {
     return this.http.get<RecipeStep[]>(`${this.api}/recipes/${id}/steps`);
   }
