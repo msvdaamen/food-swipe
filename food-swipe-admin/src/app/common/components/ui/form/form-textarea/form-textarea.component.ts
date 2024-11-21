@@ -18,24 +18,23 @@ import { RegisterOnToucheFn } from '../../../../types/form.types';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
-  selector: 'app-form-textarea',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CdkTextareaAutosize,
-    FormsModule,
-  ],
-  templateUrl: './form-textarea.component.html',
-  styleUrl: './form-textarea.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormTextareaComponent,
-      multi: true,
-    },
-  ],
+    selector: 'app-form-textarea',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        CdkTextareaAutosize,
+        FormsModule,
+    ],
+    templateUrl: './form-textarea.component.html',
+    styleUrl: './form-textarea.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormTextareaComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormTextareaComponent implements ControlValueAccessor, OnInit {
   defaultValue = input('', { alias: 'value' });

@@ -20,23 +20,22 @@ import { RecipeModalComponent } from '../../common/components/modals/recipe-moda
 import { AuthRepository } from '../../modules/auth/auth.repository';
 
 @Component({
-  selector: 'app-recipes',
-  standalone: true,
-  imports: [
-    ButtonComponent,
-    FaIconComponent,
-    CdkScrollable,
-    RouterLink,
-    HeaderComponent,
-    IonContent,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
-    IonHeader,
-    IonToolbar,
-    IonFab,
-  ],
-  templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss',
+    selector: 'app-recipes',
+    imports: [
+        ButtonComponent,
+        FaIconComponent,
+        CdkScrollable,
+        RouterLink,
+        HeaderComponent,
+        IonContent,
+        IonInfiniteScroll,
+        IonInfiniteScrollContent,
+        IonHeader,
+        IonToolbar,
+        IonFab,
+    ],
+    templateUrl: './recipes.component.html',
+    styleUrl: './recipes.component.scss'
 })
 export default class RecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);

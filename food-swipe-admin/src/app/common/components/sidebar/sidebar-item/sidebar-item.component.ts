@@ -17,12 +17,11 @@ import {
 import { menuAnimation } from './menu-animation';
 
 @Component({
-  selector: 'app-sidebar-item',
-  standalone: true,
-  imports: [FaIconComponent, RouterLink, RouterLinkActive],
-  templateUrl: './sidebar-item.component.html',
-  styleUrl: './sidebar-item.component.scss',
-  animations: [menuAnimation],
+    selector: 'app-sidebar-item',
+    imports: [FaIconComponent, RouterLink, RouterLinkActive],
+    templateUrl: './sidebar-item.component.html',
+    styleUrl: './sidebar-item.component.scss',
+    animations: [menuAnimation]
 })
 export class SidebarItemComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

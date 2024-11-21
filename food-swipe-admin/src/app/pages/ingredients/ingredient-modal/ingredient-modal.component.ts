@@ -11,16 +11,15 @@ import { IngredientRepository } from '../../../modules/ingredient/ingredient.rep
 import { DialogComponent } from '../../../common/components/dialog.component';
 
 @Component({
-  selector: 'app-ingredient-modal',
-  standalone: true,
-  imports: [
-    ButtonComponent,
-    FormInputComponent,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './ingredient-modal.component.html',
-  styleUrl: './ingredient-modal.component.scss',
+    selector: 'app-ingredient-modal',
+    imports: [
+        ButtonComponent,
+        FormInputComponent,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './ingredient-modal.component.html',
+    styleUrl: './ingredient-modal.component.scss'
 })
 export class IngredientModalComponent extends DialogComponent<{ id?: number }> {
   private readonly ingredientRepository = inject(IngredientRepository);

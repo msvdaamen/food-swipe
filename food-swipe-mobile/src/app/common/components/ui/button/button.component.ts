@@ -17,12 +17,11 @@ type Size = 'auto' | 'small' | 'medium' | 'large' | 'full' | 'icon';
 type Type = 'normal' | 'icon';
 
 @Component({
-  selector: 'app-button',
-  standalone: true,
-  imports: [FaIconComponent, IonRippleEffect],
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-button',
+    imports: [FaIconComponent, IonRippleEffect],
+    templateUrl: './button.component.html',
+    styleUrls: ['./button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent {
   private readonly breakPointObserver = inject(BreakpointObserver);

@@ -32,19 +32,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 type InputType = 'number' | 'text' | 'email' | 'password' | 'file';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FaIconComponent],
-  selector: 'app-form-input',
-  standalone: true,
-  styleUrls: ['./form-input.component.scss'],
-  templateUrl: './form-input.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormInputComponent,
-      multi: true,
-    },
-  ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FaIconComponent],
+    selector: 'app-form-input',
+    styleUrls: ['./form-input.component.scss'],
+    templateUrl: './form-input.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: FormInputComponent,
+            multi: true,
+        },
+    ]
 })
 export class FormInputComponent implements ControlValueAccessor, OnInit {
   private readonly destroyRef = inject(DestroyRef);

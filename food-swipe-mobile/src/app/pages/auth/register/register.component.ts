@@ -20,18 +20,17 @@ import { FormInputComponent } from '../../../common/components/ui/form/form-inpu
 import { AuthRepository } from '../../../modules/auth/auth.repository';
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [
-    ButtonComponent,
-    FormInputComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-register',
+    imports: [
+        ButtonComponent,
+        FormInputComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+    ],
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class RegisterComponent {
   private readonly fb = inject(NonNullableFormBuilder);

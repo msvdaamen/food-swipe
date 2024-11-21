@@ -10,18 +10,17 @@ import {
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-forgot-password',
-  standalone: true,
-  imports: [
-    ButtonComponent,
-    FormInputComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
-  templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-forgot-password',
+    imports: [
+        ButtonComponent,
+        FormInputComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+    ],
+    templateUrl: './forgot-password.component.html',
+    styleUrls: ['./forgot-password.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class ForgotPasswordComponent {
   private readonly fb = inject(FormBuilder);

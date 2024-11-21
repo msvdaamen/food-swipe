@@ -9,17 +9,16 @@ import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-create-recipe-modal',
-  standalone: true,
-  imports: [
-    IonContent,
-    ButtonComponent,
-    FaIconComponent,
-    FormInputComponent,
-    FormsModule,
-  ],
-  templateUrl: './create-recipe-modal.component.html',
-  styleUrl: './create-recipe-modal.component.scss',
+    selector: 'app-create-recipe-modal',
+    imports: [
+        IonContent,
+        ButtonComponent,
+        FaIconComponent,
+        FormInputComponent,
+        FormsModule,
+    ],
+    templateUrl: './create-recipe-modal.component.html',
+    styleUrl: './create-recipe-modal.component.scss'
 })
 export class CreateRecipeModalComponent {
   private readonly recipeRepository = inject(RecipeRepository);

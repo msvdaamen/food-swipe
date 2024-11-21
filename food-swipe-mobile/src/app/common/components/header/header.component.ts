@@ -12,18 +12,17 @@ import { ButtonComponent } from '../ui/button/button.component';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [
-    FaIconComponent,
-    IonBackButton,
-    IonButtons,
-    IonHeader,
-    IonToolbar,
-    ButtonComponent,
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+    selector: 'app-header',
+    imports: [
+        FaIconComponent,
+        IonBackButton,
+        IonButtons,
+        IonHeader,
+        IonToolbar,
+        ButtonComponent,
+    ],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   private readonly elRef = inject(ElementRef);

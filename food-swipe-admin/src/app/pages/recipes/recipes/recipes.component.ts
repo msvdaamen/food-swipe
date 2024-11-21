@@ -9,11 +9,10 @@ import { Dialog } from '@angular/cdk/dialog';
 import { CreateRecipeDialogComponent } from '@modules/recipes/components/create-recipe-dialog/create-recipe-dialog.component';
 
 @Component({
-  selector: 'app-recipes',
-  standalone: true,
-  imports: [FormInputComponent, FormsModule, RouterLink, ButtonComponent],
-  templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss',
+    selector: 'app-recipes',
+    imports: [FormInputComponent, FormsModule, RouterLink, ButtonComponent],
+    templateUrl: './recipes.component.html',
+    styleUrl: './recipes.component.scss'
 })
 export default class RecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);

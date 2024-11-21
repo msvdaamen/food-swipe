@@ -7,12 +7,11 @@ import {MenuItemDirective} from "@common/components/ui/menu/menu-item.directive"
 import {AuthRepository} from "@modules/auth";
 
 @Component({
-  selector: 'app-navbar',
-  standalone: true,
-  imports: [CommonModule, MenuTriggerDirective, MenuDirective, MenuItemDirective, RouterLink],
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-navbar',
+    imports: [CommonModule, MenuTriggerDirective, MenuDirective, MenuItemDirective, RouterLink],
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent {
   private readonly authRepository = inject(AuthRepository);
