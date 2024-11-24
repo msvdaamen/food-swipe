@@ -38,6 +38,14 @@ export class RecipeService extends Service {
     return this.http.post<Recipe>(`${this.api}/recipes/${id}/image`, formData);
   }
 
+  importRecipe(url: string) {
+    return this.http.post<Recipe>(`${this.api}/recipes/import`, { url });
+  }
+
+  deleteRecipe(id: number) {
+    return this.http.delete<void>(`${this.api}/recipes/${id}`);
+  }
+
   getSteps(id: number) {
     return this.http.get<RecipeStep[]>(`${this.api}/recipes/${id}/steps`);
   }

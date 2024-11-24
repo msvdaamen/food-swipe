@@ -26,6 +26,11 @@ export class IngredientService extends DbService {
         };
     }
 
+    async findByName(name: string): Promise<IngredientEntity | null> {
+        const [ingredient] = await this.database.select().from(ingredientsSchema).where(eq(ingredientsSchema.name, name)).execute();
+        return ingredient || null;
+    }
+
     async create(payload: CreateIngredientDto): Promise<IngredientEntity> {
         const [ingredient] = await this.database.insert(ingredientsSchema).values(payload).returning();
         return ingredient;

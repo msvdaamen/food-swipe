@@ -86,7 +86,7 @@ export class AuthService extends DbService  {
           sub: userId,
           email
         };
-        return await this.jwtService.sign(tokenPayload, '10m');
+        return await this.jwtService.sign(tokenPayload, '10s');
       }
     
       private async createRefreshToken(userId: number): Promise<string> {

@@ -78,6 +78,7 @@ export class RecipeService extends DbService {
         const stepRows = await this.database.select()
         .from(recipeStep)
         .where(inArray(recipeStep.recipeId, ids))
+        .orderBy(recipeStep.stepNumber)
         .execute();
 
         const recipeMap = new Map<number, RecipeSerialized>();

@@ -1,21 +1,30 @@
 @if (recipe(); as recipe) {
+  <div class="flex justify-end">
+    <app-button (click)="deleteRecipe(recipe.id)" color="danger"
+      >Delete</app-button
+    >
+  </div>
   <div class="flex">
     <div class="w-1/3">
       <div (click)="openFileUploader()">
         @if (isLoading()) {
-          <div class="w-full aspect-video flex justify-center items-center cursor-pointer">
-            <fa-icon size="10x" [icon]="faSpinner" animation="spin"/>
+          <div
+            class="flex aspect-video w-full cursor-pointer items-center justify-center"
+          >
+            <fa-icon size="10x" [icon]="faSpinner" animation="spin" />
           </div>
         } @else if (recipe.coverImageUrl) {
           <div class="cursor-pointer">
             <img [src]="recipe.coverImageUrl" alt="" />
           </div>
         } @else {
-          <div class="w-full aspect-video bg-gray-100 flex justify-center items-center cursor-pointer">
-            <fa-icon size="10x" [icon]="faQuestion"/>
+          <div
+            class="flex aspect-video w-full cursor-pointer items-center justify-center bg-gray-100"
+          >
+            <fa-icon size="10x" [icon]="faQuestion" />
           </div>
         }
-        <input type="file" hidden #fileUploader (change)="uploadFile($event)">
+        <input type="file" hidden #fileUploader (change)="uploadFile($event)" />
       </div>
       <div class="mt-4 flex gap-2">
         <div>

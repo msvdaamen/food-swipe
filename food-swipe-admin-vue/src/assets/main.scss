@@ -1,0 +1,18 @@
+@use './table.scss';
+@use './dialog.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.heading {
+  @apply mb-10;
+}
+
+.select {
+  @apply flex w-full rounded border border-gray-300 px-1.5 py-1 outline-0 transition-colors invalid:border-red-600 focus-within:border-primary-600 disabled:bg-gray-200;
+}

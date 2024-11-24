@@ -66,6 +66,14 @@ export class RecipeRepository {
     this.recipeStore.uploadImage({ id, file });
   }
 
+  importRecipe(url: string) {
+    this.recipeStore.importRecipe(url);
+  }
+
+  deleteRecipe(id: number) {
+    this.recipeStore.delete(id);
+  }
+
   loadSteps(recipeId: number) {
     this.recipeStepStore.loadAll(recipeId);
   }

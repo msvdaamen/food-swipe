@@ -3,6 +3,7 @@ import {
   computed,
   ElementRef,
   inject,
+  linkedSignal,
   OnInit,
   signal,
   viewChild,
@@ -26,16 +27,16 @@ import { ButtonComponent } from '../../ui/button/button.component';
 import { RecipeRepository } from '../../../../modules/recipe/recipe.repository';
 
 @Component({
-    selector: 'app-recipe-modal',
-    imports: [
-        IonContent,
-        HeaderComponent,
-        FormCheckboxComponent,
-        ButtonComponent,
-        FaIconComponent,
-    ],
-    templateUrl: './recipe-modal.component.html',
-    styleUrl: './recipe-modal.component.scss'
+  selector: 'app-recipe-modal',
+  imports: [
+    IonContent,
+    HeaderComponent,
+    FormCheckboxComponent,
+    ButtonComponent,
+    FaIconComponent,
+  ],
+  templateUrl: './recipe-modal.component.html',
+  styleUrl: './recipe-modal.component.scss',
 })
 export class RecipeModalComponent implements OnInit, ViewDidEnter {
   private readonly recipeRepository = inject(RecipeRepository);
@@ -50,7 +51,7 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
     return this.recipeRepository.getRecipe(this.id)();
   });
 
-  peopleCounter = signal(2);
+  peopleCounter = linkedSignal(() => this.recipe()?.servings);
   ingredientAmount = computed(() => {
     const servings = this.recipe()?.servings || 2;
     if (!servings) {
