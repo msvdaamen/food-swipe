@@ -38,7 +38,7 @@
     @apply text-left text-xs font-semibold;
   }
 
-  &:not(:first-child) {
+  &:not(:first-child):not(.sortable-chosen) {
     @apply border-t hover:bg-gray-100;
   }
 }

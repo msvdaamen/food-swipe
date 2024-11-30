@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+
 type InputType = 'number' | 'text' | 'email' | 'password' | 'file'
 
 const { placeholder, disabled, type, iconSuffix } = defineProps<{
   placeholder?: string
   disabled?: boolean
   type?: InputType
-  iconSuffix?: string
+  iconSuffix?: IconDefinition
 }>()
 
 const model = defineModel<string | number>()
@@ -26,11 +29,9 @@ const model = defineModel<string | number>()
           class="w-full bg-transparent outline-none"
         />
       </div>
-      <!--      @if (iconSuffix()) {-->
-      <!--      <div class="px-2 text-gray-500">-->
-      <!--        <fa-icon [icon]="iconSuffix()!"></fa-icon>-->
-      <!--      </div>-->
-      <!--      }-->
+      <div v-if="iconSuffix" class="px-2 text-gray-500">
+        <FontAwesomeIcon :icon="iconSuffix" />
+      </div>
     </div>
   </label>
 </template>

@@ -1,13 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Recipe } from '@/modules/recipe/types/recipe.type'
+import { computed, ref, watch } from 'vue'
 import Button from '@/components/ui/button.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faQuestion, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faPencil, faQuestion, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Input from '@/components/ui/form/input.vue'
+import { useRecipeStore } from '@/modules/recipe/recipe.store'
+import Textarea from '@/components/ui/form/textarea.vue'
+import Checkbox from '@/components/ui/form/checkbox.vue'
+import draggable from 'vuedraggable'
 
-// @ts-ignore
-const recipe = ref<Recipe>({})
+const store = useRecipeStore()
+
+const props = defineProps<{ id: number }>()
+
+await Promise.all([
+  store.loadRecipe(props.id),
+  store.loadIngredients(props.id),
+  store.loadSteps(props.id),
+])
+
+const drag = ref(false)
+
+watch(
+  () => props.id,
+  async (id) => {
+    await Promise.all([store.loadRecipe(id), store.loadIngredients(id), store.loadSteps(id)])
+  },
+)
+
+const recipe = computed(() => {
+  const recipe = store.getRecipe(props.id)
+  return recipe.value
+})
+const ingredients = store.ingredients
+const steps = store.steps
+
 const loading = ref(false)
 
 function deleteRecipe(id: number) {
@@ -25,9 +52,29 @@ function uploadFile(event: Event) {
 function updateRecipe(key: string, event: Event) {
   console.log('updateRecipe', key, event)
 }
+
+function updateIsPublished(event: Event) {
+  console.log('updateIsPublished', event)
+}
+
+function openManageIngredientDialog(recipeId: number, ingredientId?: number) {
+  console.log('openManageIngredientDialog', recipeId, ingredientId)
+}
+
+function deleteIngredient(ingredientId: number) {
+  console.log('deleteIngredient', ingredientId)
+}
+
+function openManageStepDialog(recipeId: number, stepId?: number) {
+  console.log('openManageStepDialog', recipeId, stepId)
+}
+
+function deleteStep(stepId: number) {
+  console.log('deleteStep', stepId)
+}
 </script>
 
-<template v-if="recipe">
+<template>
   <div class="flex justify-end">
     <Button @click="deleteRecipe(recipe.id)" color="danger">Delete</Button>
   </div>
@@ -55,7 +102,7 @@ function updateRecipe(key: string, event: Event) {
         <div>
           <Input
             type="number"
-            :value="recipe.calories?.toString() ?? ''"
+            :model-value="recipe.calories?.toString() ?? ''"
             @blur="updateRecipe('calories', $event)"
             >Cals</Input
           >
@@ -63,7 +110,7 @@ function updateRecipe(key: string, event: Event) {
         <div>
           <Input
             type="number"
-            :value="recipe.prepTime?.toString() ?? ''"
+            :model-value="recipe.prepTime?.toString() ?? ''"
             @blur="updateRecipe('prepTime', $event)"
             >Time</Input
           >
@@ -71,7 +118,7 @@ function updateRecipe(key: string, event: Event) {
         <div>
           <Input
             type="number"
-            :value="recipe.servings?.toString() ?? ''"
+            :model-value="recipe.servings?.toString() ?? ''"
             @blur="updateRecipe('servings', $event)"
             >serv</Input
           >
@@ -80,109 +127,136 @@ function updateRecipe(key: string, event: Event) {
     </div>
     <div class="w-2/3 p-8 pt-0">
       <h1 class="font-bold">
-        <Input :value="recipe.title" @blur="updateRecipe('title', $event)">
+        <Input :model-value="recipe.title" @blur="updateRecipe('title', $event)">
           <span class="font-normal">Title</span>
         </Input>
       </h1>
       <p class="mt-1 text-gray-600">
-        <!--        <app-form-textarea-->
-        <!--          autoSize-->
-        <!--          [value]="recipe.description"-->
-        <!--          @blur="updateRecipe('description', $event)"-->
-        <!--          >Description</app-form-textarea>-->
+        <Textarea
+          autoRows
+          :model-value="recipe.description"
+          @blur="updateRecipe('description', $event)"
+          >Description</Textarea
+        >
       </p>
       <div>
-        <!--        <app-form-checkbox [value]="recipe.isPublished" (change)="updateIsPublished($event)"-->
-        <!--          >Is publish</app-form-checkbox>-->
+        <Checkbox :model-value="recipe.isPublished" @blur="updateIsPublished($event)"
+          >Is publish</Checkbox
+        >
       </div>
     </div>
   </div>
 
   <div class="mt-8">
-    <!--    <div class="mb-1 flex gap-2">-->
-    <!--      <h2 class="grow text-2xl font-bold">Ingredients</h2>-->
-    <!--      <app-button size="small" (click)="openManageIngredientDialog(recipe.id)"-->
-    <!--      >Add ingredient</app-button-->
-    <!--      >-->
-    <!--    </div>-->
-    <!--    <div class="table-container">-->
-    <!--      <div class="ingredients">-->
-    <!--        <div class="t-row ingredient">-->
-    <!--          <div class="name">Ingredient</div>-->
-    <!--          <div class="amount min-w-20 flex-shrink">Amount</div>-->
-    <!--          <div class="min-w-28 flex-shrink"></div>-->
-    <!--        </div>-->
-    <!--        @for (ingredient of ingredients(); track ingredient) {-->
-    <!--        <div class="t-row flex items-center">-->
-    <!--          <div class="name">{{ ingredient.ingredient }}</div>-->
-    <!--          <div class="amount min-w-20 flex-shrink">-->
-    <!--            {{ ingredient.amount }}{{ ingredient.measurement }}-->
-    <!--          </div>-->
-    <!--          <div class="flex min-w-28 flex-shrink gap-1">-->
-    <!--            <app-button-->
-    <!--              type="icon"-->
-    <!--              size="small"-->
-    <!--              (click)="-->
-    <!--                  openManageIngredientDialog(recipe.id, ingredient.ingredientId)-->
-    <!--                "-->
-    <!--            ><fa-icon [icon]="faPencil"-->
-    <!--            /></app-button>-->
-    <!--            <app-button-->
-    <!--              type="icon"-->
-    <!--              size="small"-->
-    <!--              color="danger"-->
-    <!--              (click)="deleteIngredient(ingredient.ingredientId)"-->
-    <!--            ><fa-icon [icon]="faTrash"-->
-    <!--            /></app-button>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--        }-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <div class="mb-1 flex gap-2">
+      <h2 class="grow text-2xl font-bold">Ingredients</h2>
+      <Button size="small" @click="openManageIngredientDialog(recipe.id)">Add ingredient</Button>
+    </div>
+    <div class="table-container">
+      <div class="ingredients">
+        <div class="t-row ingredient font-semibold">
+          <div class="name">Ingredient</div>
+          <div class="amount min-w-20 flex-shrink">Amount</div>
+          <div class="min-w-28 flex-shrink"></div>
+        </div>
+        <div
+          v-for="ingredient in ingredients"
+          :key="ingredient.ingredientId"
+          class="t-row flex items-center"
+        >
+          <div class="name">{{ ingredient.ingredient }}</div>
+          <div class="amount min-w-20 flex-shrink">
+            {{ ingredient.amount }}{{ ingredient.measurement }}
+          </div>
+          <div class="flex min-w-28 flex-shrink gap-1">
+            <Button
+              type="icon"
+              size="small"
+              @click="openManageIngredientDialog(recipe.id, ingredient.ingredientId)"
+              ><FontAwesomeIcon :icon="faPencil"
+            /></Button>
+            <Button
+              type="icon"
+              size="small"
+              color="danger"
+              @click="deleteIngredient(ingredient.ingredientId)"
+              ><FontAwesomeIcon :icon="faTrash"
+            /></Button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-8">
-    <!--    <div class="mb-1 flex gap-2">-->
-    <!--      <h2 class="grow text-2xl font-bold">Steps</h2>-->
-    <!--      <app-button size="small" (click)="openManageStepDialog(recipe.id)"-->
-    <!--      >Add Step</app-button-->
-    <!--      >-->
-    <!--    </div>-->
-    <!--    <div class="table-container">-->
-    <!--      <div-->
-    <!--        class="ingredients"-->
-    <!--        cdkDropList-->
-    <!--        (cdkDropListDropped)="stepsDrop($event)"-->
-    <!--      >-->
-    <!--        <div class="t-row ingredient">-->
-    <!--          <div class="step min-w-20 flex-shrink">Step</div>-->
-    <!--          <div class="description">Description</div>-->
-    <!--          <div class="min-w-28 flex-shrink"></div>-->
-    <!--        </div>-->
-    <!--        @for (step of steps(); track step.id) {-->
-    <!--        <div class="t-row flex items-center" cdkDrag>-->
-    <!--          <div class="step min-w-20 flex-shrink">{{ step.stepNumber }}</div>-->
-    <!--          <div class="description">{{ step.description }}</div>-->
-    <!--          <div class="flex min-w-28 flex-shrink gap-1">-->
-    <!--            <app-button-->
-    <!--              type="icon"-->
-    <!--              size="small"-->
-    <!--              (click)="openManageStepDialog(recipe.id, step.id)"-->
-    <!--            ><fa-icon [icon]="faPencil"-->
-    <!--            /></app-button>-->
-    <!--            <app-button-->
-    <!--              type="icon"-->
-    <!--              size="small"-->
-    <!--              color="danger"-->
-    <!--              (click)="deleteStep(step.id)"-->
-    <!--            ><fa-icon [icon]="faTrash"-->
-    <!--            /></app-button>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--        }-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <div class="mb-1 flex gap-2">
+      <h2 class="grow text-2xl font-bold">Steps</h2>
+      <Button size="small" @click="openManageStepDialog(recipe.id)">Add Step</Button>
+    </div>
+    <div class="table-container">
+      <div class="ingredients">
+        <draggable
+          v-model="steps"
+          @start="drag = true"
+          @end="drag = false"
+          ghost-class="ghost"
+          item-key="id"
+        >
+          <template #header>
+            <div class="t-row ingredient font-semibold">
+              <div class="step min-w-20 flex-shrink">Step</div>
+              <div class="description">Description</div>
+              <div class="min-w-28 flex-shrink"></div>
+            </div>
+          </template>
+          <template #item="{ element }">
+            <div class="t-row flex items-center">
+              <div class="step min-w-20 flex-shrink">{{ element.stepNumber }}</div>
+              <div class="description">{{ element.description }}</div>
+              <div class="flex min-w-28 flex-shrink gap-1">
+                <Button
+                  type="icon"
+                  size="small"
+                  @click="openManageStepDialog(recipe.id, element.id)"
+                  ><FontAwesomeIcon :icon="faPencil"
+                /></Button>
+                <Button type="icon" size="small" color="danger" @click="deleteStep(element.id)"
+                  ><FontAwesomeIcon :icon="faTrash"
+                /></Button>
+              </div>
+            </div>
+          </template>
+        </draggable>
+        <!--        <div v-for="step of steps" :key="step.id" class="t-row flex items-center">-->
+        <!--          <div class="step min-w-20 flex-shrink">{{ step.stepNumber }}</div>-->
+        <!--          <div class="description">{{ step.description }}</div>-->
+        <!--          <div class="flex min-w-28 flex-shrink gap-1">-->
+        <!--            <Button type="icon" size="small" @click="openManageStepDialog(recipe.id, step.id)"-->
+        <!--              ><FontAwesomeIcon :icon="faPencil"-->
+        <!--            /></Button>-->
+        <!--            <Button type="icon" size="small" color="danger" @click="deleteStep(step.id)"-->
+        <!--              ><FontAwesomeIcon :icon="faTrash"-->
+        <!--            /></Button>-->
+        <!--          </div>-->
+        <!--        </div>-->
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ghost {
+  opacity: 0;
+}
+
+.sortable-chosen {
+  border: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  background: white;
+}
+</style>

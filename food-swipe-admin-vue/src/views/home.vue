@@ -9,7 +9,12 @@ import Sidebar from '@/components/sidebar/sidebar.vue'
     </div>
     <main class="grow overflow-auto">
       <div class="p-6">
-        <router-view />
+        <Suspense>
+          <router-view />
+          <template #fallback>
+            <div>Loading...</div>
+          </template>
+        </Suspense>
       </div>
     </main>
   </div>

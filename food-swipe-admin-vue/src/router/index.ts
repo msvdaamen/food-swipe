@@ -12,11 +12,14 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'recipes',
           component: () => import('../views/recipes/recipes.vue'),
         },
         {
           path: ':id',
+          name: 'recipe',
           component: () => import('../views/recipes/recipe.vue'),
+          props: (route) => ({ id: Number(route.params.id) }),
         },
       ],
     },
