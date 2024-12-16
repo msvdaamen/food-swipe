@@ -11,12 +11,12 @@ const router = createRouter({
       beforeEnter: authGuard,
       children: [
         {
-          path: '',
+          path: 'recipes',
           name: 'recipes',
           component: () => import('../views/recipes/recipes.vue'),
         },
         {
-          path: ':id',
+          path: 'recipes/:id',
           name: 'recipe',
           component: () => import('../views/recipes/recipe.vue'),
           props: (route) => ({ id: Number(route.params.id) }),

@@ -60,6 +60,10 @@ export const useRecipeStore = defineStore('recipes', () => {
     ingredients.value = response.data
   }
 
+  function setSteps(newSteps: RecipeStep[]) {
+    steps.value = newSteps
+  }
+
   return {
     ids,
     entities,
@@ -71,5 +75,6 @@ export const useRecipeStore = defineStore('recipes', () => {
     loadRecipe,
     loadSteps,
     loadIngredients,
+    setSteps,
   }
 })

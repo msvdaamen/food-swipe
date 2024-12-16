@@ -3,6 +3,7 @@ import Input from '@/components/ui/form/input.vue'
 import { ref } from 'vue'
 import Button from '@/components/ui/button.vue'
 import { useRecipeStore } from '@/modules/recipe/recipe.store'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 const store = useRecipeStore()
 
@@ -14,7 +15,7 @@ const search = ref('')
 <template>
   <div class="mb-4 flex justify-between bg-white">
     <div class="w-64">
-      <Input placeholder="Search" iconSuffix="faMagnifyingGlass" v-model="search" />
+      <Input placeholder="Search" :iconSuffix="faMagnifyingGlass" v-model="search" />
       <!--      <app-form-input placeholder="Search" [iconSuffix]="faMagnifyingGlass" [(ngModel)]="search" />-->
     </div>
     <div>
@@ -28,7 +29,7 @@ const search = ref('')
     <router-link
       v-for="recipe in store.recipes"
       :key="recipe.id"
-      :to="`/${recipe.id}`"
+      :to="`recipes/${recipe.id}`"
       :id="`recipe-${recipe.id}`"
     >
       <div class="cursor-pointer rounded border transition-transform hover:scale-105 hover:shadow">

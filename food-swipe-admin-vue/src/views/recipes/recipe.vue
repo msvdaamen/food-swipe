@@ -8,6 +8,7 @@ import { useRecipeStore } from '@/modules/recipe/recipe.store'
 import Textarea from '@/components/ui/form/textarea.vue'
 import Checkbox from '@/components/ui/form/checkbox.vue'
 import draggable from 'vuedraggable'
+import type { RecipeStep } from '@/modules/recipe/types/recipe-step.type'
 
 const store = useRecipeStore()
 
@@ -33,7 +34,22 @@ const recipe = computed(() => {
   return recipe.value
 })
 const ingredients = store.ingredients
-const steps = store.steps
+
+const steps = computed<RecipeStep[]>({
+  // getter
+  get() {
+    return store.steps
+  },
+  // setter
+  set(newStepsOrder) {
+    console.log('set', newStepsOrder)
+    store.setSteps(newStepsOrder)
+  }
+})
+
+watch(steps, (news, old) => {
+  console.log({news, old})
+})
 
 const loading = ref(false)
 
@@ -71,6 +87,10 @@ function openManageStepDialog(recipeId: number, stepId?: number) {
 
 function deleteStep(stepId: number) {
   console.log('deleteStep', stepId)
+}
+function reorderStepsList(event: Event) {
+  console.log(event)
+
 }
 </script>
 
@@ -196,10 +216,14 @@ function deleteStep(stepId: number) {
     <div class="table-container">
       <div class="ingredients">
         <draggable
+          animate-pulse
           v-model="steps"
           @start="drag = true"
           @end="drag = false"
+          @change="reorderStepsList($event)"
+          group="steps"
           ghost-class="ghost"
+          :anmation="200"
           item-key="id"
         >
           <template #header>
@@ -227,18 +251,6 @@ function deleteStep(stepId: number) {
             </div>
           </template>
         </draggable>
-        <!--        <div v-for="step of steps" :key="step.id" class="t-row flex items-center">-->
-        <!--          <div class="step min-w-20 flex-shrink">{{ step.stepNumber }}</div>-->
-        <!--          <div class="description">{{ step.description }}</div>-->
-        <!--          <div class="flex min-w-28 flex-shrink gap-1">-->
-        <!--            <Button type="icon" size="small" @click="openManageStepDialog(recipe.id, step.id)"-->
-        <!--              ><FontAwesomeIcon :icon="faPencil"-->
-        <!--            /></Button>-->
-        <!--            <Button type="icon" size="small" color="danger" @click="deleteStep(step.id)"-->
-        <!--              ><FontAwesomeIcon :icon="faTrash"-->
-        <!--            /></Button>-->
-        <!--          </div>-->
-        <!--        </div>-->
       </div>
     </div>
   </div>
@@ -250,13 +262,16 @@ function deleteStep(stepId: number) {
 }
 
 .sortable-chosen {
-  border: none;
   box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow:
-    0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
   background: white;
+  @apply border rounded overflow-hidden;
 }
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.no-move {
+  transition: transform 0s;
+}
+
 </style>
