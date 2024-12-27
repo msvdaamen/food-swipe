@@ -13,14 +13,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@food-swipe/ui": "workspace:*",
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/vue-fontawesome": "^3.0.8",
-    "@trpc/client": "^10.45.2",
     "@vueuse/core": "^11.3.0",
     "axios": "^1.7.7",
-    "food-swipe-admin-api": "workspace:*",
     "motion": "^11.11.17",
     "pinia": "^2.2.6",
     "vue": "^3.5.12",

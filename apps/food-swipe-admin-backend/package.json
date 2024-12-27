@@ -1,6 +1,8 @@
 {
-  "name": "food-swipe-admin-api",
+  "name": "food-swipe-admin-backend",
+  "version": "1.0.0",
   "module": "src/app.ts",
+  "types": "src/app.ts",
   "type": "module",
   "scripts": {
     "start": "bun --watch run ./src/app.ts"
@@ -11,8 +13,6 @@
     "@types/uuid": "^10.0.0"
   },
   "dependencies": {
-    "@hono/trpc-server": "^0.3.4",
-    "database": "workspace:*",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.36.0",
     "hono": "^4.6.9",

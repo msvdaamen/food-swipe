@@ -11,7 +11,7 @@ import {registerIngredientController} from "./modules/ingredient/ingredient.cont
 import {ZodError} from "zod";
 import {FormatZodErrors} from "./common/format-zod-errors.ts";
 import {appRouter} from "./router.ts";
-import {trpcServer} from "@hono/trpc-server";
+import {authContext} from "./modules/auth/auth.context.ts";
 
 const app = new Hono();
 
@@ -44,13 +44,6 @@ app.onError((err, c) => {
 })
 
 app.get('/', (c) => c.text('Hello Bun!'))
-
-app.use(
-  '/trpc/*',
-  trpcServer({
-      router: appRouter,
-  })
-)
 
 
 
