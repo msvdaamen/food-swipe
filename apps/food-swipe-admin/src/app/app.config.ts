@@ -9,6 +9,7 @@ import { AuthInterceptor } from './modules/auth/interceptors/auth.interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { DEFAULT_DIALOG_CONFIG } from '@angular/cdk/dialog';
+import { provideStore } from '@ngrx/store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,13 +18,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([AuthInterceptor])),
     provideAnimationsAsync(),
     {
-      provide: DEFAULT_DIALOG_CONFIG,
-      useValue: {
-        hasBackdrop: true,
-        width: '40vw',
-        minWidth: '300px',
-        panelClass: 'default-dialog',
-      },
+        provide: DEFAULT_DIALOG_CONFIG,
+        useValue: {
+            hasBackdrop: true,
+            width: '40vw',
+            minWidth: '300px',
+            panelClass: 'default-dialog',
+        },
     },
-  ],
+    provideStore()
+],
 };
