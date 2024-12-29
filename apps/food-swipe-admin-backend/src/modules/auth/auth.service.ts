@@ -23,6 +23,7 @@ export class AuthService extends DbService  {
         if (!existingUser || !existingUser.isAdmin) {
           throw new Error('User does not exists');
         }
+        console.log(existingUser)
     
         const correct = await Bun.password.verify(payload.password, existingUser.password);
         if (!correct) {

@@ -10,8 +10,6 @@ import {registerMeasurementsController} from "./modules/measurement/measurement.
 import {registerIngredientController} from "./modules/ingredient/ingredient.controller.ts";
 import {ZodError} from "zod";
 import {FormatZodErrors} from "./common/format-zod-errors.ts";
-import {appRouter} from "./router.ts";
-import {authContext} from "./modules/auth/auth.context.ts";
 
 const app = new Hono();
 
@@ -52,8 +50,6 @@ registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
-
-export * from './router.ts'
 
 export default {
     port: process.env.APP_PORT || 3000,
