@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
@@ -12,32 +18,43 @@ import {
 } from '../../../../types/form.types';
 
 @Component({
-    selector: 'app-form-select',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './form-select.component.html',
-    styleUrl: './form-select.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: FormSelectComponent,
-            multi: true,
-        },
-    ]
+  selector: 'app-form-select',
+  imports: [CommonModule, FormsModule],
+  template: ` <select
+    class="invalid:border-danger-600 flex w-full rounded border border-gray-300 px-1.5 py-1 outline-0 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
+    [(ngModel)]="_value"
+  >
+    <ng-content />
+  </select>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: FormSelectComponent,
+      multi: true,
+    },
+  ],
 })
-export class FormSelectComponent implements ControlValueAccessor {
-  private _value: FormTypes | null = null;
+export class FormSelectComponent implements ControlValueAccessor, OnInit {
+  private __value: FormTypes | null = null;
 
+  value = input<string>('');
   disabled = signal<boolean>(false);
 
-  set value(value: FormTypes) {
-    this._value = value;
+  set _value(value: FormTypes) {
+    this.__value = value;
     this.onChange(value);
     this.onTouched();
   }
 
-  get value(): FormTypes | null {
-    return this._value;
+  get _value(): FormTypes | null {
+    return this.__value;
+  }
+
+  ngOnInit() {
+    if (this.value()) {
+      this.writeValue(this.value());
+    }
   }
 
   // *** ControlValueAccessor Methods
@@ -46,7 +63,7 @@ export class FormSelectComponent implements ControlValueAccessor {
   }
 
   writeValue(value: FormTypes | null): void {
-    this._value = value;
+    this.__value = value;
   }
 
   onChange: RegisterOnChangeFn<FormTypes> = () => {};

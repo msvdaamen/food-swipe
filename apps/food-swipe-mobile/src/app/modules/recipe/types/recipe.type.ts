@@ -1,16 +1,24 @@
+import { Nutrition, NutritionUnit } from '../constants/nutritions';
+
 export type Recipe = {
   id: number;
   title: string;
   description: string;
   prepTime: number;
   servings: number;
-  calories: number;
   coverImageUrl: string;
   liked: boolean;
   createdAt: Date;
   updatedAt: Date;
   ingredients: RecipeIngredient[];
   steps: RecipeStep[];
+  nutritions: {
+    [name in Nutrition]?: {
+      name: Nutrition;
+      unit: NutritionUnit;
+      value: number;
+    };
+  };
 };
 
 export type RecipeIngredient = {

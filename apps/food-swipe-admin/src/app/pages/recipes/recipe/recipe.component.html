@@ -7,7 +7,7 @@
   <div class="flex">
     <div class="w-1/3">
       <div (click)="openFileUploader()">
-        @if (isLoading()) {
+        @if (isChangingImage()) {
           <div
             class="flex aspect-video w-full cursor-pointer items-center justify-center"
           >
@@ -30,14 +30,6 @@
         <div>
           <app-form-input
             type="number"
-            [value]="recipe.calories?.toString() ?? ''"
-            (blur)="updateRecipe('calories', $event)"
-            >Cals</app-form-input
-          >
-        </div>
-        <div>
-          <app-form-input
-            type="number"
             [value]="recipe.prepTime?.toString() ?? ''"
             (blur)="updateRecipe('prepTime', $event)"
             >Time</app-form-input
@@ -48,7 +40,7 @@
             type="number"
             [value]="recipe.servings?.toString() ?? ''"
             (blur)="updateRecipe('servings', $event)"
-            >serv</app-form-input
+            >servings</app-form-input
           >
         </div>
       </div>
@@ -160,6 +152,50 @@
           </div>
         }
       </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 flex gap-2">
+      <h2 class="grow text-2xl font-bold">Nutrition's</h2>
+    </div>
+    <div class="table-container">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Unit</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (nutrition of nutritions(); track nutrition) {
+            <tr>
+              <td>{{ nutrition?.name }}</td>
+              <td>
+                <app-form-input
+                  [ngModel]="nutrition.value"
+                  (blur)="
+                    updateNutritionValue(nutrition.name, nutrition.unit, $event)
+                  "
+                />
+              </td>
+              <td>
+                <app-form-select
+                  [ngModel]="nutrition.unit"
+                  (ngModelChange)="
+                    updateNutrition(nutrition.name, $event, nutrition.value)
+                  "
+                >
+                  @for (unit of nutritionUnits; track unit) {
+                    <option value="{{ unit }}">{{ unit }}</option>
+                  }
+                </app-form-select>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
   </div>
 }

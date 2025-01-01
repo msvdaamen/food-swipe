@@ -9,18 +9,24 @@ import { UpdateRecipeIngredientRequest } from '@modules/recipes/requests/update-
 import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.request';
 import { LoadRecipesRequest } from '@modules/recipes/requests/load-recipes.request';
 import { CreateRecipeRequest } from '@modules/recipes/requests/create-recipe.request';
+import { RecipeNutritionStore } from '@modules/recipes/store/recipe.nutrition.store';
+import { Nutrition } from '@modules/recipes/constants/nutritions';
+import { UpdateRecipeNutritionRequest } from '@modules/recipes/requests/update-recipe-nutrition.request';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeRepository {
   private readonly recipeStore = inject(RecipeStore);
   private readonly recipeStepStore = inject(RecipeStepStore);
   private readonly recipeIngredientStore = inject(RecipeIngredientStore);
+  private readonly recipeNutritionStore = inject(RecipeNutritionStore);
 
   recipes = this.recipeStore.entities;
   steps = this.recipeStepStore.entities;
   stepEntities = this.recipeStepStore.entityMap;
   ingredients = this.recipeIngredientStore.entities;
   ingredientEntities = this.recipeIngredientStore.entityMap;
+
+  nutritions = this.recipeNutritionStore.entities;
 
   isLoading = this.recipeStore.isLoading;
 
@@ -124,5 +130,17 @@ export class RecipeRepository {
 
   deleteIngredient(recipeId: number, ingredientId: number) {
     this.recipeIngredientStore.deleteIngredient({ recipeId, ingredientId });
+  }
+
+  loadNutritions(recipeId: number) {
+    this.recipeNutritionStore.loadAll(recipeId);
+  }
+
+  updateNutrition(
+    recipeId: number,
+    name: Nutrition,
+    payload: UpdateRecipeNutritionRequest,
+  ) {
+    this.recipeNutritionStore.updateNutrition({ recipeId, name, payload });
   }
 }

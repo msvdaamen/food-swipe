@@ -11,6 +11,8 @@ import type { RecipeSerialized } from "./models/recipe.model";
 import { storageService, type StorageService } from "../../providers/storage/storage.service";
 import { files, type FileObj as FileModel } from "../../providers/storage/file.schema";
 import {userLikedRecipes} from "./schema/user-liked-recipe.schema.ts";
+import {recipeNutritionsSchema} from "./schema/recipe-nutrition.schema.ts";
+import type {Nutrition} from "./constants/nutritions.ts";
 
 export class RecipeService extends DbService {
 
@@ -51,35 +53,44 @@ export class RecipeService extends DbService {
     }
 
     async getMany(userId: number, ids: number[]): Promise<RecipeSerialized[]> {
-        const recipeRows = await this.database.select({
-            recipe: recipes,
-            coverImage: files,
-            liked: userLikedRecipes
-        }).from(recipes)
-        .innerJoin(files, eq(recipes.coverImageId, files.id))
-        .leftJoin(userLikedRecipes, and(eq(recipes.id, userLikedRecipes.recipeId), eq(userLikedRecipes.userId, userId)))
-        .where(inArray(recipes.id, ids))
-        .execute();
 
-        const ingredientRows = await this.database.select({
-            id: ingredients.id,
-            name: ingredients.name,
-            measurement: measurements.name,
-            abbreviation: measurements.abbreviation,
-            amount: recipeIngredients.amount,
-            recipeId: recipeIngredients.recipeId
-        })
-        .from(recipeIngredients)
-        .innerJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
-        .leftJoin(measurements, eq(recipeIngredients.measurementId, measurements.id))
-        .where(inArray(recipeIngredients.recipeId, ids))
-        .execute();
+        const [
+          recipeRows,
+            ingredientRows,
+            stepRows,
+            nutritionRows
+        ] = await Promise.all([
+            this.database.select({
+                recipe: recipes,
+                coverImage: files,
+                liked: userLikedRecipes
+            }).from(recipes)
+              .innerJoin(files, eq(recipes.coverImageId, files.id))
+              .leftJoin(userLikedRecipes, and(eq(recipes.id, userLikedRecipes.recipeId), eq(userLikedRecipes.userId, userId)))
+              .where(inArray(recipes.id, ids)),
 
-        const stepRows = await this.database.select()
-        .from(recipeStep)
-        .where(inArray(recipeStep.recipeId, ids))
-        .orderBy(recipeStep.stepNumber)
-        .execute();
+            this.database.select({
+                id: ingredients.id,
+                name: ingredients.name,
+                measurement: measurements.name,
+                abbreviation: measurements.abbreviation,
+                amount: recipeIngredients.amount,
+                recipeId: recipeIngredients.recipeId
+            })
+              .from(recipeIngredients)
+              .innerJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+              .leftJoin(measurements, eq(recipeIngredients.measurementId, measurements.id))
+              .where(inArray(recipeIngredients.recipeId, ids)),
+
+            this.database.select()
+              .from(recipeStep)
+              .where(inArray(recipeStep.recipeId, ids))
+              .orderBy(recipeStep.stepNumber),
+
+            this.database.select()
+              .from(recipeNutritionsSchema)
+              .where(inArray(recipeNutritionsSchema.recipeId, ids))
+        ]);
 
         const recipeMap = new Map<number, RecipeSerialized>();
         for (const recipeRow of recipeRows) {
@@ -97,6 +108,17 @@ export class RecipeService extends DbService {
             const recipe = recipeMap.get(step.recipeId);
             if (recipe) {
                 recipe.steps.push(step);
+            }
+        }
+
+        for (const nutrition of nutritionRows) {
+            const recipe = recipeMap.get(nutrition.recipeId);
+            if (recipe) {
+                recipe.nutritions[nutrition.name as Nutrition] = {
+                    name: nutrition.name,
+                    unit: nutrition.unit,
+                    value: nutrition.value
+                }
             }
         }
 
@@ -136,7 +158,8 @@ export class RecipeService extends DbService {
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
             ingredients,
-            steps
+            steps,
+            nutritions: {}
         }
     }
 }
