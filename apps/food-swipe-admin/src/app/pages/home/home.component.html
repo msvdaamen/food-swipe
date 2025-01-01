@@ -1,0 +1,12 @@
+<div class="flex h-screen flex-row">
+  <div class="w-64 min-w-64">
+    <div class="fixed top-0 left-0 w-64 min-w-64 max-h-screen bg-gray-100 border-r-2">
+      <app-sidebar />
+    </div>
+  </div>
+  <main class="grow">
+    <div class="overflow-auto p-6">
+      <router-outlet />
+    </div>
+  </main>
+</div>
