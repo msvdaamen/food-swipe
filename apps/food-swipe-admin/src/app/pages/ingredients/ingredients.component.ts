@@ -14,16 +14,16 @@ import { IngredientModalComponent } from './ingredient-modal/ingredient-modal.co
 import { PaginationComponent } from '../../common/components/pagination/pagination.component';
 
 @Component({
-    selector: 'app-ingredients',
-    imports: [
-        ButtonComponent,
-        FaIconComponent,
-        FormInputComponent,
-        FormsModule,
-        PaginationComponent,
-    ],
-    templateUrl: './ingredients.component.html',
-    styleUrl: './ingredients.component.scss'
+  selector: 'app-ingredients',
+  imports: [
+    ButtonComponent,
+    FaIconComponent,
+    FormInputComponent,
+    FormsModule,
+    PaginationComponent,
+  ],
+  templateUrl: './ingredients.component.html',
+  styleUrl: './ingredients.component.scss',
 })
 export default class IngredientsComponent {
   private readonly ingredientRepository = inject(IngredientRepository);
