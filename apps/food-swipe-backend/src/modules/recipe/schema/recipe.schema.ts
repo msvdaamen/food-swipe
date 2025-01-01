@@ -7,7 +7,6 @@ export const recipes = pgTable('recipes', {
     description: varchar('description'),
     prepTime: integer('prep_time'),
     servings: integer('servings'),
-    calories: integer('calories'),
     isPublished: boolean('is_published').notNull().default(false),
     coverImageId: bigint('cover_image_id', {mode: 'number'}).references(() => files.id),
     createdAt: timestamp('created_at').notNull().defaultNow(),

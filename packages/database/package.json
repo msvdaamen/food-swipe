@@ -3,8 +3,10 @@
   "type": "module",
   "scripts": {
     "make:migration": "bunx kysely migrate:make ",
+    "make:seed": "bunx kysely seed:make ",
     "migrate": "bunx kysely migrate:latest",
-    "rollback": "bunx kysely migrate:rollback --all"
+    "seed": "bunx kysely seed:run",
+    "rollback:all": "bunx kysely migrate:rollback --all"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

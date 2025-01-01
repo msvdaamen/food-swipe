@@ -12,6 +12,8 @@ import { UpdateRecipeRequest } from '@modules/recipes/requests/update-recipe.req
 import { LoadRecipesRequest } from '@modules/recipes/requests/load-recipes.request';
 import { HttpParams } from '@angular/common/http';
 import { CreateRecipeRequest } from '@modules/recipes/requests/create-recipe.request';
+import { RecipeNutrition } from '@modules/recipes/types/recipe-nutrition.type';
+import { UpdateRecipeNutritionRequest } from '@modules/recipes/requests/update-recipe-nutrition.request';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService extends Service {
@@ -102,6 +104,23 @@ export class RecipeService extends Service {
   deleteIngredient(id: number, ingredientId: number) {
     return this.http.delete<void>(
       `${this.api}/recipes/${id}/ingredients/${ingredientId}`,
+    );
+  }
+
+  getNutritions(id: number) {
+    return this.http.get<RecipeNutrition[]>(
+      `${this.api}/recipes/${id}/nutritions`,
+    );
+  }
+
+  updateNutrition(
+    id: number,
+    name: string,
+    payload: UpdateRecipeNutritionRequest,
+  ) {
+    return this.http.put<RecipeNutrition>(
+      `${this.api}/recipes/${id}/nutritions/${name}`,
+      payload,
     );
   }
 }

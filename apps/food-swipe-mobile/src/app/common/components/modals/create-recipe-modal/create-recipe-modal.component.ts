@@ -9,16 +9,16 @@ import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-create-recipe-modal',
-    imports: [
-        IonContent,
-        ButtonComponent,
-        FaIconComponent,
-        FormInputComponent,
-        FormsModule,
-    ],
-    templateUrl: './create-recipe-modal.component.html',
-    styleUrl: './create-recipe-modal.component.scss'
+  selector: 'app-create-recipe-modal',
+  imports: [
+    IonContent,
+    ButtonComponent,
+    FaIconComponent,
+    FormInputComponent,
+    FormsModule,
+  ],
+  templateUrl: './create-recipe-modal.component.html',
+  styleUrl: './create-recipe-modal.component.scss',
 })
 export class CreateRecipeModalComponent {
   private readonly recipeRepository = inject(RecipeRepository);
@@ -31,20 +31,17 @@ export class CreateRecipeModalComponent {
   isLoading = signal(false);
 
   constructor() {
-    effect(
-      () => {
-        const isLoading = this.recipeRepository.isLoading();
-        console.log(this.recipeRepository.createRecipeError());
-        if (this.isLoading() && !isLoading) {
-          this.isLoading.set(false);
-          this.modalController.dismiss(
-            !this.recipeRepository.createRecipeError(),
-            'confirm',
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const isLoading = this.recipeRepository.isLoading();
+      console.log(this.recipeRepository.createRecipeError());
+      if (this.isLoading() && !isLoading) {
+        this.isLoading.set(false);
+        this.modalController.dismiss(
+          !this.recipeRepository.createRecipeError(),
+          'confirm',
+        );
+      }
+    });
   }
 
   async uploadImage() {

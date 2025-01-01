@@ -1,5 +1,6 @@
 import type { Ingredient } from "../schema/ingredient.schema";
 import type { RecipeStep } from "../schema/recipe-step.schema";
+import type {Nutrition} from "../constants/nutritions.ts";
 
 export type RecipeSerialized = {
     id: number,
@@ -15,4 +16,11 @@ export type RecipeSerialized = {
     updatedAt: Date
     ingredients: Ingredient[],
     steps: RecipeStep[]
+    nutritions: {
+        [name in Nutrition]?: {
+            name: string,
+            unit: string,
+            value: number
+        }
+    }
 };

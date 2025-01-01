@@ -10,6 +10,8 @@ import {updateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
 import {loadRecipesDto} from "./dto/load-recipes.dto.ts";
 import {createRecipeDto} from "./dto/create-recipe.dto.ts";
 import {importRecipeDto} from "./dto/import-recipe.dto.ts";
+    import {updateRecipeNutritionDto} from "./dto/update-nutrition.dto.ts";
+    import {type Nutrition, nutritions} from "./constants/nutritions.ts";
 
 const app = authRouter.createApp();
 
@@ -121,6 +123,24 @@ app.delete('/:id/ingredients/:ingredientId', async (c) => {
     const ingredientId = Number(c.req.param('ingredientId'));
     await recipeService.deleteIngredient(id, ingredientId);
     return c.json({}, 204);
+});
+
+app.get('/:id/nutritions', async (c) => {
+    const nutritions = await recipeService.getNutritions(Number(c.req.param('id')));
+    return c.json(nutritions);
+});
+
+
+const allowedNutritions = new Set<string>(nutritions);
+app.put('/:id/nutritions/:name', async (c) => {
+    const id = Number(c.req.param('id'));
+    const name = c.req.param('name');
+    if (!name || !allowedNutritions.has(name)) {
+        return c.json({}, 400);
+    }
+    const payload = updateRecipeNutritionDto.parse(await c.req.json());
+    const nutrition = await recipeService.updateNutrition(id, name as Nutrition, payload);
+    return c.json(nutrition);
 });
 
 

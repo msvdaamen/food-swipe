@@ -17,21 +17,21 @@ import {
 import { RecipeModalComponent } from '../../common/components/modals/recipe-modal/recipe-modal.component';
 
 @Component({
-    selector: 'app-liked-recipes',
-    imports: [
-        ButtonComponent,
-        FaIconComponent,
-        CdkScrollable,
-        RouterLink,
-        HeaderComponent,
-        IonContent,
-        IonInfiniteScroll,
-        IonInfiniteScrollContent,
-        IonHeader,
-        IonToolbar,
-    ],
-    templateUrl: './liked-recipes.component.html',
-    styleUrl: './liked-recipes.component.scss'
+  selector: 'app-liked-recipes',
+  imports: [
+    ButtonComponent,
+    FaIconComponent,
+    CdkScrollable,
+    RouterLink,
+    HeaderComponent,
+    IonContent,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonHeader,
+    IonToolbar,
+  ],
+  templateUrl: './liked-recipes.component.html',
+  styleUrl: './liked-recipes.component.scss',
 })
 export default class LikedRecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);
@@ -50,16 +50,13 @@ export default class LikedRecipesComponent {
   constructor() {
     this.recipeRepository.loadLikedRecipes({ limit: 10 });
 
-    effect(
-      () => {
-        const isLoading = this.recipeRepository.isLoading();
-        if (this.isLoading && !isLoading) {
-          this.infiniteScroll()?.complete();
-          this.isLoading = false;
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const isLoading = this.recipeRepository.isLoading();
+      if (this.isLoading && !isLoading) {
+        this.infiniteScroll()?.complete();
+        this.isLoading = false;
+      }
+    });
   }
 
   loadMore() {

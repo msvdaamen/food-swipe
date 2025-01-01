@@ -5,7 +5,6 @@ import {
   inject,
   linkedSignal,
   OnInit,
-  signal,
   viewChild,
 } from '@angular/core';
 import {
@@ -21,19 +20,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { HeaderComponent } from '../../header/header.component';
 import { FormCheckboxComponent } from '../../ui/form/form-checkbox/form-checkbox.component';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { RecipeRepository } from '../../../../modules/recipe/recipe.repository';
+import { nutritionOrder } from '../../../../modules/recipe/constants/nutritions';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-recipe-modal',
   imports: [
     IonContent,
-    HeaderComponent,
     FormCheckboxComponent,
     ButtonComponent,
     FaIconComponent,
+    DecimalPipe,
   ],
   templateUrl: './recipe-modal.component.html',
   styleUrl: './recipe-modal.component.scss',
@@ -117,4 +117,6 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
   dismiss() {
     this.modalController.dismiss();
   }
+
+  protected readonly nutritions = nutritionOrder;
 }
