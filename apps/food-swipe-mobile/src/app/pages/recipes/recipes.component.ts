@@ -20,22 +20,22 @@ import { RecipeModalComponent } from '../../common/components/modals/recipe-moda
 import { AuthRepository } from '../../modules/auth/auth.repository';
 
 @Component({
-    selector: 'app-recipes',
-    imports: [
-        ButtonComponent,
-        FaIconComponent,
-        CdkScrollable,
-        RouterLink,
-        HeaderComponent,
-        IonContent,
-        IonInfiniteScroll,
-        IonInfiniteScrollContent,
-        IonHeader,
-        IonToolbar,
-        IonFab,
-    ],
-    templateUrl: './recipes.component.html',
-    styleUrl: './recipes.component.scss'
+  selector: 'app-recipes',
+  imports: [
+    ButtonComponent,
+    FaIconComponent,
+    CdkScrollable,
+    RouterLink,
+    HeaderComponent,
+    IonContent,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonHeader,
+    IonToolbar,
+    IonFab,
+  ],
+  templateUrl: './recipes.component.html',
+  styleUrl: './recipes.component.scss',
 })
 export default class RecipesComponent {
   private readonly recipeRepository = inject(RecipeRepository);
@@ -57,16 +57,13 @@ export default class RecipesComponent {
   constructor() {
     this.recipeRepository.loadAll({ limit: 10 });
 
-    effect(
-      () => {
-        const isLoading = this.recipeRepository.isLoading();
-        if (this.isLoading && !isLoading) {
-          this.infiniteScroll()?.complete();
-          this.isLoading = false;
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const isLoading = this.recipeRepository.isLoading();
+      if (this.isLoading && !isLoading) {
+        this.infiniteScroll()?.complete();
+        this.isLoading = false;
+      }
+    });
   }
 
   loadMore() {

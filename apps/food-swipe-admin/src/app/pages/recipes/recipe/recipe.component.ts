@@ -6,10 +6,10 @@ import {
   inject,
   input,
   numberAttribute,
+  signal,
   viewChild,
 } from '@angular/core';
 import { RecipeRepository } from '@modules/recipes/recipe.repository';
-import { JsonPipe } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -28,6 +28,15 @@ import { FormTextareaComponent } from '../../../common/components/ui/form/form-t
 import { Recipe } from '@modules/recipes/types/recipe.type';
 import { FormCheckboxComponent } from '../../../common/components/ui/form/form-checkbox/form-checkbox.component';
 import { Router } from '@angular/router';
+import {
+  Nutrition,
+  nutritionOrder,
+  nutritions,
+  NutritionUnit,
+  nutritionUnits,
+} from '@modules/recipes/constants/nutritions';
+import { RecipeNutrition } from '@modules/recipes/types/recipe-nutrition.type';
+import { FormSelectComponent } from '../../../common/components/ui/form/form-select/form-select.component';
 
 @Component({
   selector: 'app-recipe',
@@ -40,6 +49,7 @@ import { Router } from '@angular/router';
     FormsModule,
     FormTextareaComponent,
     FormCheckboxComponent,
+    FormSelectComponent,
   ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
@@ -54,6 +64,30 @@ export default class RecipeComponent {
 
   ingredients = this.recipeRepository.ingredients;
   steps = this.recipeRepository.steps;
+  nutritions = computed(() => {
+    const recipeId = this.id();
+    const nutritions = this.recipeRepository.nutritions();
+    const nutritionMap = new Map<string, RecipeNutrition>();
+    for (const nutrition of nutritions) {
+      nutritionMap.set(nutrition.name, nutrition);
+    }
+    const orderedNutritions: RecipeNutrition[] = [];
+    for (const name of nutritionOrder) {
+      const nutrition = nutritionMap.get(name);
+      if (nutrition) {
+        orderedNutritions.push(nutrition);
+      } else {
+        orderedNutritions.push({
+          id: -1,
+          recipeId,
+          name,
+          value: 0,
+          unit: 'g',
+        });
+      }
+    }
+    return orderedNutritions;
+  });
 
   id = input.required<number, string>({ transform: numberAttribute });
   recipe = computed(() => this.recipeRepository.getRecipe(this.id())());
@@ -62,24 +96,30 @@ export default class RecipeComponent {
 
   isLoading = this.recipeRepository.isLoading;
   isDeleting = false;
+  isChangingImage = signal(false);
 
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
 
   constructor() {
-    effect(
-      () => {
-        this.recipeRepository.loadRecipe(this.id());
-        this.recipeRepository.loadSteps(this.id());
-        this.recipeRepository.loadIngredients(this.id());
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.recipeRepository.loadRecipe(this.id());
+      this.recipeRepository.loadSteps(this.id());
+      this.recipeRepository.loadIngredients(this.id());
+      this.recipeRepository.loadNutritions(this.id());
+    });
 
     effect(() => {
       const isLoading = this.isLoading();
       if (this.isDeleting && !isLoading) {
         this.router.navigate(['/recipes']);
+      }
+    });
+
+    effect(() => {
+      const isLoading = this.isLoading();
+      if (this.isChangingImage() && !isLoading) {
+        this.isChangingImage.set(false);
       }
     });
   }
@@ -92,11 +132,14 @@ export default class RecipeComponent {
     ) {
       return;
     }
-    const title = target.value;
-    if (!title?.trim()) {
+    const value = target.value;
+    if (!value?.trim()) {
       return;
     }
-    this.recipeRepository.updateRecipe(this.id(), { [prop]: title });
+    if (this.recipe()[prop] == value) {
+      return;
+    }
+    this.recipeRepository.updateRecipe(this.id(), { [prop]: value });
   }
 
   updateIsPublished(event: Event) {
@@ -152,6 +195,7 @@ export default class RecipeComponent {
       return;
     }
     this.recipeRepository.uploadImage(this.id(), file);
+    this.isChangingImage.set(true);
   }
 
   deleteRecipe(recipeId: number) {
@@ -159,6 +203,25 @@ export default class RecipeComponent {
     this.isDeleting = true;
   }
 
+  updateNutritionValue(name: Nutrition, unit: NutritionUnit, event: Event) {
+    if (
+      !(event instanceof FocusEvent) ||
+      !(event.target instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+    const value = event.target.value;
+    this.updateNutrition(name, unit, Number(value));
+  }
+
+  updateNutrition(name: Nutrition, unit: NutritionUnit, value: number) {
+    this.recipeRepository.updateNutrition(this.id(), name, {
+      value: value,
+      unit,
+    });
+  }
+
   protected readonly faQuestion = faQuestion;
   protected readonly faSpinner = faSpinner;
+  protected readonly nutritionUnits = nutritionUnits;
 }

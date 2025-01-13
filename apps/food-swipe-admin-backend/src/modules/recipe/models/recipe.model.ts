@@ -7,7 +7,6 @@ export type RecipeModel = {
     description: string | null,
     prepTime: number | null,
     servings: number | null,
-    calories: number | null,
     isPublished: boolean,
     coverImageUrl: string | null,
     createdAt: Date,

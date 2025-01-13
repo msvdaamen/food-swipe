@@ -19,9 +19,13 @@ import type {UpdateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto
 import type {LoadRecipesDto} from "./dto/load-recipes.dto.ts";
 import {usersSchema} from "../user/schema/user.schema.ts";
 import type {CreateRecipeDto} from "./dto/create-recipe.dto.ts";
-import {fetchRecipeFromAh} from "./function/fetch-recipe-from-ah.ts";
+import {AHRecipe, fetchRecipeFromAh} from "./function/fetch-recipe-from-ah.ts";
 import {measurementService, type MeasurementService} from "../measurement/measurement.service.ts";
 import {ingredientService, type IngredientService} from "../ingredient/ingredient.service.ts";
+import {type RecipeNutritionEntity, recipeNutritionsSchema} from "./schema/recipe-nutrition.schema.ts";
+import type {CreateRecipeNutritionDto} from "./dto/create-nutrition.dto.ts";
+import type {UpdateRecipeNutritionDto} from "./dto/update-nutrition.dto.ts";
+import type {Nutrition} from "./constants/nutritions.ts";
 
 export class RecipeService extends DbService {
 
@@ -260,6 +264,51 @@ export class RecipeService extends DbService {
             .execute();
     }
 
+    async getNutritions(recipeId: number): Promise<RecipeNutritionEntity[]> {
+        const nutritions = await this.database.select().from(recipeNutritionsSchema).where(eq(recipeNutritionsSchema.recipeId, recipeId)).orderBy(asc(recipeNutritionsSchema.name)).execute();
+        return nutritions;
+    }
+
+    async updateNutrition(recipeId: number, name: Nutrition, payload: UpdateRecipeNutritionDto): Promise<RecipeNutritionEntity> {
+        const [nutrition] = await this.database.insert(recipeNutritionsSchema)
+        .values({
+            recipeId,
+            name,
+            ...payload,
+        })
+          .onConflictDoUpdate({
+            target: [recipeNutritionsSchema.recipeId, recipeNutritionsSchema.name],
+            set: payload
+          })
+        .returning();
+        return nutrition;
+    }
+
+    async createNutrition(recipeId: number, payload: CreateRecipeNutritionDto): Promise<RecipeNutritionEntity> {
+        const [nutrition] = await this.database.insert(recipeNutritionsSchema)
+            .values({
+                recipeId,
+                name: payload.name,
+                unit: payload.unit,
+                value: payload.value,
+            })
+            .returning();
+        return nutrition;
+    }
+
+    async createManyNutritions(recipeId: number, payload: CreateRecipeNutritionDto[]) {
+        const inserts = payload.map((nutrition) => ({
+            recipeId,
+            name: nutrition.name,
+            unit: nutrition.unit,
+            value: nutrition.value,
+        }));
+        const nutritions = await this.database.insert(recipeNutritionsSchema)
+          .values(inserts)
+          .returning();
+        return nutritions;
+    }
+
     async importRecipe(url: string) {
         // https://www.ah.nl/allerhande/recept/R-R1188160/mac-and-cheese-met-ham-en-prei
         const idPart = url.split('/').find((part) => part.startsWith('R-R'));
@@ -313,6 +362,23 @@ export class RecipeService extends DbService {
                 amount: Math.round(ingredient.quantity),
             });
         }
+        const nutritions = [];
+        for (const name in recipe.nutritions) {
+            if (!(name in recipe.nutritions) || name === '__typename') {
+                continue;
+            }
+            const nutrition = recipe.nutritions[name as keyof AHRecipe['nutritions']];
+            if (!nutrition) {
+                continue;
+            }
+            nutritions.push({
+                name: name,
+                unit: nutrition.unit,
+                value: nutrition.value,
+            });
+        }
+        console.log(nutritions)
+        await this.createManyNutritions(newRecipe.id, nutritions);
         return await this.getById(newRecipe.id);
     }
 }
