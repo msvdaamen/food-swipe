@@ -18,7 +18,7 @@ func (s *controller) handle(router fiber.Router) {
 	//router.Delete("/ingredients/:id", s.authMiddleware, s.deleteIngredient)
 }
 
-func RegisterService(router fiber.Router, authMiddleware fiber.Handler, service *service.Service) {
+func New(router fiber.Router, authMiddleware fiber.Handler, service *service.Service) {
 	controller := &controller{
 		service:        service,
 		authMiddleware: authMiddleware,

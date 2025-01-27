@@ -16,7 +16,7 @@ type ParseOptions struct {
 	Issuer    string
 }
 
-func NewJwt(secret string) *Jwt {
+func New(secret string) *Jwt {
 	return &Jwt{secret: secret}
 }
 

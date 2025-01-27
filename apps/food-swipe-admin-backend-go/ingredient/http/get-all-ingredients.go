@@ -15,7 +15,6 @@ func (s *controller) GetAll(ctx *fiber.Ctx) error {
 	ingredients, err := s.service.GetAll(*payload)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
-		return ctx.SendStatus(fiber.StatusInternalServerError)
 	}
 	return ctx.JSON(ingredients)
 }

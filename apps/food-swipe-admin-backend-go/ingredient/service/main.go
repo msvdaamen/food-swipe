@@ -14,7 +14,7 @@ type Service struct {
 	storage *storage.Storage
 }
 
-func NewService(db *pgxpool.Pool) *Service {
+func New(db *pgxpool.Pool) *Service {
 	return &Service{
 		storage: storage.NewStorage(db),
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"food-swipe.app/auth"
-	"food-swipe.app/auth/middleware"
+	AuthMiddleware "food-swipe.app/auth/middleware"
 	AuthService "food-swipe.app/auth/service"
 	"food-swipe.app/common/jwt"
 	"food-swipe.app/ingredient"
@@ -37,10 +37,10 @@ func main() {
 	}
 	defer dbPool.Close()
 
-	jwtService := jwt.NewJwt("gsudykfhgbvzmaysgioufamuwhfldkcjnfstalwuvnfwegfyiuakjvapioweuropnvcifpasuhfkuhvsf")
-	userService := UserService.NewService(dbPool)
-	authService := AuthService.NewService(dbPool, userService, jwtService)
-	ingredientService := IngredientService.NewService(dbPool)
+	jwtService := jwt.New("gsudykfhgbvzmaysgioufamuwhfldkcjnfstalwuvnfwegfyiuakjvapioweuropnvcifpasuhfkuhvsf")
+	userService := UserService.New(dbPool)
+	authService := AuthService.New(dbPool, userService, jwtService)
+	ingredientService := IngredientService.New(dbPool)
 
 	app := fiber.New(fiber.Config{
 		// Global custom error handler
@@ -69,7 +69,7 @@ func main() {
 		},
 	}))
 
-	authMiddleware := middleware.CreateAuthMiddleware(jwtService, userService)
+	authMiddleware := AuthMiddleware.New(jwtService, userService)
 
 	api := app.Group("/v1")
 

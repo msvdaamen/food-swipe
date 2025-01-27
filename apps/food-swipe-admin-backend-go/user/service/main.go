@@ -22,7 +22,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func NewService(db *pgxpool.Pool) *Service {
+func New(db *pgxpool.Pool) *Service {
 	userStorage := storage.NewStorage(db)
 	return &Service{userStorage}
 }

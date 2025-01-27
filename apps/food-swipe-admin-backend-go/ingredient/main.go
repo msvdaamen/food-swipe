@@ -8,5 +8,5 @@ import (
 
 func Init(router fiber.Router, authMiddleware fiber.Handler, service *service.Service) {
 	authGroup := router.Group("/ingredients")
-	http.RegisterService(authGroup, authMiddleware, service)
+	http.New(authGroup, authMiddleware, service)
 }

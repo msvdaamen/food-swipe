@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func CreateAuthMiddleware(jwtService *jwt.Jwt, userService *UserService.Service) fiber.Handler {
+func New(jwtService *jwt.Jwt, userService *UserService.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		bearer := c.Get("Authorization")
 		if bearer == "" {

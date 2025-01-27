@@ -25,7 +25,7 @@ type AuthUser struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func NewService(dbPool *pgxpool.Pool, userService *user.Service, jwtService *jwt.Jwt) *Service {
+func New(dbPool *pgxpool.Pool, userService *user.Service, jwtService *jwt.Jwt) *Service {
 	authStorage := storage.NewStorage(dbPool)
 	return &Service{
 		authStorage,
