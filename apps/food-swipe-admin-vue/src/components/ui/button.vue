@@ -38,7 +38,7 @@ const {
       'icon-only': type === 'icon',
       'text-white': color !== 'transparent',
     }"
-    class="relative select-none overflow-hidden rounded text-white outline-none transition-colors"
+    class="relative select-none overflow-hidden rounded-sm text-white outline-hidden transition-colors"
     :disabled="disabled"
   >
     <slot />
@@ -46,6 +46,8 @@ const {
 </template>
 
 <style scoped>
+@reference "../../assets/main.css";
+
 .primary {
   @apply bg-primary-600;
 

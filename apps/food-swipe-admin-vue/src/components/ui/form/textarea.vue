@@ -29,7 +29,7 @@ watch(model, () => {
   <label>
     <p><slot /></p>
     <div
-      class="invalid:border-danger-600 flex w-full rounded border px-1.5 py-1 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
+      class="invalid:border-danger-600 flex w-full rounded-sm border border-gray-200 px-1.5 py-1 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
     >
       <textarea
         ref="textarea"

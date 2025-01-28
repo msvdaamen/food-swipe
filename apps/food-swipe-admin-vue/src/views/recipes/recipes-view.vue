@@ -32,7 +32,7 @@ const search = ref('')
       :to="`recipes/${recipe.id}`"
       :id="`recipe-${recipe.id}`"
     >
-      <div class="cursor-pointer rounded border transition-transform hover:scale-105 hover:shadow">
+      <div class="cursor-pointer rounded-sm border transition-transform hover:scale-105 hover:shadow-sm">
         <div v-if="recipe.coverImageUrl">
           <img
             :src="recipe.coverImageUrl"

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { useAuthStore } from '@/modules/auth/auth.store'
 import { useRouter } from 'vue-router'
-import { authApi } from '@/modules/auth/auth.api'
+import { useAuthApi } from '@/modules/auth/auth.api'
 
 const authHttpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -60,6 +60,7 @@ authHttpClient.interceptors.response.use(
 
 let activeReq: Promise<{ accessToken: string; refreshToken: string }> | null = null
 async function fetchNewTokens(refreshToken: string) {
+  const authApi = useAuthApi();
   if (activeReq) {
     return activeReq
   }

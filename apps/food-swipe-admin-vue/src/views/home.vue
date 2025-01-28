@@ -4,7 +4,7 @@ import Sidebar from '@/components/sidebar/sidebar.vue'
 
 <template>
   <div class="flex h-screen flex-row">
-    <div class="w-64 min-w-64 border-r-2 bg-gray-100">
+    <div class="w-64 min-w-64 border-r-2 border-gray-300 bg-gray-100">
       <Sidebar />
     </div>
     <main class="grow overflow-auto">

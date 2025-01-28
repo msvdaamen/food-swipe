@@ -7,7 +7,6 @@ import Input from '@/components/ui/form/input.vue'
 import { useRecipeStore } from '@/modules/recipe/recipe.store'
 import Textarea from '@/components/ui/form/textarea.vue'
 import Checkbox from '@/components/ui/form/checkbox.vue'
-import draggable from 'vuedraggable'
 import type { RecipeStep } from '@/modules/recipe/types/recipe-step.type'
 
 const store = useRecipeStore()
@@ -176,8 +175,8 @@ function reorderStepsList(event: Event) {
       <div class="ingredients">
         <div class="t-row ingredient font-semibold">
           <div class="name">Ingredient</div>
-          <div class="amount min-w-20 flex-shrink">Amount</div>
-          <div class="min-w-28 flex-shrink"></div>
+          <div class="amount min-w-20 shrink">Amount</div>
+          <div class="min-w-28 shrink"></div>
         </div>
         <div
           v-for="ingredient in ingredients"
@@ -185,10 +184,10 @@ function reorderStepsList(event: Event) {
           class="t-row flex items-center"
         >
           <div class="name">{{ ingredient.ingredient }}</div>
-          <div class="amount min-w-20 flex-shrink">
+          <div class="amount min-w-20 shrink">
             {{ ingredient.amount }}{{ ingredient.measurement }}
           </div>
-          <div class="flex min-w-28 flex-shrink gap-1">
+          <div class="flex min-w-28 shrink gap-1">
             <Button
               type="icon"
               size="small"
@@ -215,48 +214,51 @@ function reorderStepsList(event: Event) {
     </div>
     <div class="table-container">
       <div class="ingredients">
-        <draggable
-          animate-pulse
-          v-model="steps"
-          @start="drag = true"
-          @end="drag = false"
-          @change="reorderStepsList($event)"
-          group="steps"
-          ghost-class="ghost"
-          :anmation="200"
-          item-key="id"
-        >
-          <template #header>
-            <div class="t-row ingredient font-semibold">
-              <div class="step min-w-20 flex-shrink">Step</div>
-              <div class="description">Description</div>
-              <div class="min-w-28 flex-shrink"></div>
-            </div>
-          </template>
-          <template #item="{ element }">
-            <div class="t-row flex items-center">
-              <div class="step min-w-20 flex-shrink">{{ element.stepNumber }}</div>
-              <div class="description">{{ element.description }}</div>
-              <div class="flex min-w-28 flex-shrink gap-1">
-                <Button
-                  type="icon"
-                  size="small"
-                  @click="openManageStepDialog(recipe.id, element.id)"
-                  ><FontAwesomeIcon :icon="faPencil"
-                /></Button>
-                <Button type="icon" size="small" color="danger" @click="deleteStep(element.id)"
-                  ><FontAwesomeIcon :icon="faTrash"
-                /></Button>
-              </div>
-            </div>
-          </template>
-        </draggable>
+<!--        <draggable-->
+<!--          animate-pulse-->
+<!--          v-model="steps"-->
+<!--          @start="drag = true"-->
+<!--          @end="drag = false"-->
+<!--          @change="reorderStepsList($event)"-->
+<!--          group="steps"-->
+<!--          ghost-class="ghost"-->
+<!--          :anmation="200"-->
+<!--          item-key="id"-->
+<!--        >-->
+<!--          <template #header>-->
+<!--            <div class="t-row ingredient font-semibold">-->
+<!--              <div class="step min-w-20 shrink">Step</div>-->
+<!--              <div class="description">Description</div>-->
+<!--              <div class="min-w-28 shrink"></div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--          <template #item="{ element }">-->
+<!--            <div class="t-row flex items-center">-->
+<!--              <div class="step min-w-20 shrink">{{ element.stepNumber }}</div>-->
+<!--              <div class="description">{{ element.description }}</div>-->
+<!--              <div class="flex min-w-28 shrink gap-1">-->
+<!--                <Button-->
+<!--                  type="icon"-->
+<!--                  size="small"-->
+<!--                  @click="openManageStepDialog(recipe.id, element.id)"-->
+<!--                  ><FontAwesomeIcon :icon="faPencil"-->
+<!--                /></Button>-->
+<!--                <Button type="icon" size="small" color="danger" @click="deleteStep(element.id)"-->
+<!--                  ><FontAwesomeIcon :icon="faTrash"-->
+<!--                /></Button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </draggable>-->
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+@reference "../../assets/main.css";
+
 .ghost {
   opacity: 0;
 }

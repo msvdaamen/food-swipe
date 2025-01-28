@@ -42,7 +42,7 @@ const submit = async () => {
       <h1 class="mb-3 text-center text-4xl">Food swipe admin</h1>
 
       <h2 class="mb-10 text-center text-2xl">Sign in to your account</h2>
-      <div class="rounded-xl p-10 shadow backdrop-blur-xl dark:bg-dark-900 dark:bg-opacity-50">
+      <div class="rounded-xl p-10 shadow-sm backdrop-blur-xl dark:bg-dark-900 dark:bg-opacity-50">
         <form @submit.prevent="submit">
           <span class="text-red-500" v-if="error">Invalid email or password</span>
           <div class="mb-4">

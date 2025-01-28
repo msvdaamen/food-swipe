@@ -72,13 +72,5 @@ function onLeave(el: Element, done: () => void) {
 </template>
 
 <style scoped>
-.active {
-  .icon {
-    @apply text-primary-600;
-  }
 
-  .title {
-    @apply font-medium;
-  }
-}
 </style>

@@ -18,7 +18,7 @@ const model = defineModel<string | number>()
   <label>
     <p><slot /></p>
     <div
-      class="invalid:border-danger-600 flex rounded border px-1.5 py-1 outline-0 transition-colors focus-within:border-primary-600 disabled:bg-gray-200"
+      class="invalid:border-danger-600 focus-within:border-primary-600 flex rounded-sm border border-gray-200 px-1.5 py-1 outline-0 transition-colors disabled:bg-gray-200"
     >
       <div class="grow">
         <input
@@ -26,7 +26,7 @@ const model = defineModel<string | number>()
           :placeholder="placeholder"
           :disabled="disabled"
           :type="type"
-          class="w-full bg-transparent outline-none"
+          class="w-full bg-transparent outline-hidden"
         />
       </div>
       <div v-if="iconSuffix" class="px-2 text-gray-500">

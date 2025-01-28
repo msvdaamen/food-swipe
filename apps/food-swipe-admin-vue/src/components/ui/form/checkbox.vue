@@ -11,7 +11,7 @@ const model = defineModel<boolean>()
     <input
       v-model="model"
       :disabled="disabled"
-      class="h-5 w-5 appearance-none rounded border border-gray-300 transition-colors checked:bg-primary-600"
+      class="h-5 w-5 appearance-none rounded-sm border border-gray-300 transition-colors checked:bg-primary-600"
       type="checkbox"
     />
     <span class="ml-1"><slot /></span>
