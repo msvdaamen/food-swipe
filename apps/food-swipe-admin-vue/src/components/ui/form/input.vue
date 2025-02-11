@@ -27,6 +27,7 @@ const model = defineModel<string | number>()
           :disabled="disabled"
           :type="type"
           class="w-full bg-transparent outline-hidden"
+          v-bind="$attrs"
         />
       </div>
       <div v-if="iconSuffix" class="px-2 text-gray-500">

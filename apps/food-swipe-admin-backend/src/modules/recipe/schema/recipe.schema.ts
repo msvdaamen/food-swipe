@@ -1,6 +1,5 @@
 import { pgTable, serial, varchar, integer, timestamp, boolean, bigint } from "drizzle-orm/pg-core";
 import { files } from "../../../providers/storage/file.schema";
-import { SQL } from 'bun';
 
 export const recipesSchema = pgTable('recipes', {
     id: serial('id').primaryKey(),
@@ -16,7 +15,3 @@ export const recipesSchema = pgTable('recipes', {
 
 export type RecipeEntity = typeof recipesSchema.$inferSelect;
 export type NewRecipeEntity = typeof recipesSchema.$inferInsert;
-
-const client = new SQL();
-
-const tmep = await client`SELECT id FROM recipes`;

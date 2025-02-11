@@ -8,6 +8,9 @@ import { useRecipeStore } from '@/modules/recipe/recipe.store'
 import Textarea from '@/components/ui/form/textarea.vue'
 import Checkbox from '@/components/ui/form/checkbox.vue'
 import type { RecipeStep } from '@/modules/recipe/types/recipe-step.type'
+import { storeToRefs } from 'pinia';
+import type { Recipe } from '@/modules/recipe/types/recipe.type.ts'
+import type { UpdateRecipeRequest } from '@/modules/recipe/requests/update-recipe.request.ts'
 
 const store = useRecipeStore()
 
@@ -19,8 +22,6 @@ await Promise.all([
   store.loadSteps(props.id),
 ])
 
-const drag = ref(false)
-
 watch(
   () => props.id,
   async (id) => {
@@ -28,11 +29,12 @@ watch(
   },
 )
 
-const recipe = computed(() => {
+const recipe = computed<Recipe>(() => {
   const recipe = store.getRecipe(props.id)
   return recipe.value
 })
-const ingredients = store.ingredients
+
+const {ingredients} = storeToRefs(store);
 
 const steps = computed<RecipeStep[]>({
   // getter
@@ -53,7 +55,7 @@ watch(steps, (news, old) => {
 const loading = ref(false)
 
 function deleteRecipe(id: number) {
-  console.log('deleteRecipe', id)
+  store.deleteRecipe(id)
 }
 
 function openFileUploader() {
@@ -65,7 +67,9 @@ function uploadFile(event: Event) {
 }
 
 function updateRecipe(key: string, event: Event) {
-  console.log('updateRecipe', key, event)
+  const target = event.target as HTMLInputElement
+  const value = target.value
+  store.updateRecipe(props.id, {[key]: value})
 }
 
 function updateIsPublished(event: Event) {
@@ -77,7 +81,7 @@ function openManageIngredientDialog(recipeId: number, ingredientId?: number) {
 }
 
 function deleteIngredient(ingredientId: number) {
-  console.log('deleteIngredient', ingredientId)
+  store.deleteIngredient(recipe.value.id, ingredientId)
 }
 
 function openManageStepDialog(recipeId: number, stepId?: number) {
@@ -85,11 +89,7 @@ function openManageStepDialog(recipeId: number, stepId?: number) {
 }
 
 function deleteStep(stepId: number) {
-  console.log('deleteStep', stepId)
-}
-function reorderStepsList(event: Event) {
-  console.log(event)
-
+  store.deleteStep(recipe.value.id, stepId)
 }
 </script>
 
@@ -214,42 +214,27 @@ function reorderStepsList(event: Event) {
     </div>
     <div class="table-container">
       <div class="ingredients">
-<!--        <draggable-->
-<!--          animate-pulse-->
-<!--          v-model="steps"-->
-<!--          @start="drag = true"-->
-<!--          @end="drag = false"-->
-<!--          @change="reorderStepsList($event)"-->
-<!--          group="steps"-->
-<!--          ghost-class="ghost"-->
-<!--          :anmation="200"-->
-<!--          item-key="id"-->
-<!--        >-->
-<!--          <template #header>-->
-<!--            <div class="t-row ingredient font-semibold">-->
-<!--              <div class="step min-w-20 shrink">Step</div>-->
-<!--              <div class="description">Description</div>-->
-<!--              <div class="min-w-28 shrink"></div>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--          <template #item="{ element }">-->
-<!--            <div class="t-row flex items-center">-->
-<!--              <div class="step min-w-20 shrink">{{ element.stepNumber }}</div>-->
-<!--              <div class="description">{{ element.description }}</div>-->
-<!--              <div class="flex min-w-28 shrink gap-1">-->
-<!--                <Button-->
-<!--                  type="icon"-->
-<!--                  size="small"-->
-<!--                  @click="openManageStepDialog(recipe.id, element.id)"-->
-<!--                  ><FontAwesomeIcon :icon="faPencil"-->
-<!--                /></Button>-->
-<!--                <Button type="icon" size="small" color="danger" @click="deleteStep(element.id)"-->
-<!--                  ><FontAwesomeIcon :icon="faTrash"-->
-<!--                /></Button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </draggable>-->
+        <div class="t-row ingredient font-semibold">
+            <div class="step min-w-20 shrink">Step</div>
+            <div class="description">Description</div>
+            <div class="min-w-28 shrink"></div>
+        </div>
+        <div v-for="step of steps" :key="step.id" class="t-row flex items-center">
+          <div class="step min-w-20 shrink">{{ step.stepNumber }}</div>
+          <div class="description">{{ step.description }}</div>
+          <div class="flex min-w-28 shrink gap-1">
+            <Button
+              type="icon"
+              size="small"
+              @click="openManageStepDialog(recipe.id, step.id)"
+            >
+              <FontAwesomeIcon :icon="faPencil"/>
+            </Button>
+            <Button type="icon" size="small" color="danger" @click="deleteStep(step.id)">
+              <FontAwesomeIcon :icon="faTrash" />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

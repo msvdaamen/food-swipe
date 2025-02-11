@@ -16,7 +16,6 @@ export const updateRecipeDto = z.object({
     description: z.string().min(1).optional(),
     prepTime: intParser,
     servings: intParser,
-    calories: intParser,
     isPublished: z.boolean().optional(),
 });
 
