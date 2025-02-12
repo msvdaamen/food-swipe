@@ -1,3 +1,3 @@
 export const environment = {
-  api: 'https://food-swipe-admin-api.msvdaamen.com',
+  api: 'https://admin-api.food-swipe.app',
 };
