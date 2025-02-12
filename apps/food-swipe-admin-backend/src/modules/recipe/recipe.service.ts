@@ -264,7 +264,7 @@ export class RecipeService extends DbService {
             .execute();
     }
 
-    async getNutritions(recipeId: number): Promise<RecipeNutritionEntity[]> {
+    async getNutrition(recipeId: number): Promise<RecipeNutritionEntity[]> {
         const nutritions = await this.database.select().from(recipeNutritionsSchema).where(eq(recipeNutritionsSchema.recipeId, recipeId)).orderBy(asc(recipeNutritionsSchema.name)).execute();
         return nutritions;
     }

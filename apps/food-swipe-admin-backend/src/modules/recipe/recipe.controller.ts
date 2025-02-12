@@ -126,7 +126,7 @@ app.delete('/:id/ingredients/:ingredientId', async (c) => {
 });
 
 app.get('/:id/nutritions', async (c) => {
-    const nutritions = await recipeService.getNutritions(Number(c.req.param('id')));
+    const nutritions = await recipeService.getNutrition(Number(c.req.param('id')));
     return c.json(nutritions);
 });
 
