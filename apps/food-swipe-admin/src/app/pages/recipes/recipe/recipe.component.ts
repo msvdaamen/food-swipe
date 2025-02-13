@@ -37,6 +37,7 @@ import {
 } from '@modules/recipes/constants/nutritions';
 import { RecipeNutrition } from '@modules/recipes/types/recipe-nutrition.type';
 import { FormSelectComponent } from '../../../common/components/ui/form/form-select/form-select.component';
+import { FormRadioComponent } from '../../../common/components/ui/form/form-radio/form-radio.component';
 
 @Component({
   selector: 'app-recipe',
@@ -50,6 +51,7 @@ import { FormSelectComponent } from '../../../common/components/ui/form/form-sel
     FormTextareaComponent,
     FormCheckboxComponent,
     FormSelectComponent,
+    FormRadioComponent,
   ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',

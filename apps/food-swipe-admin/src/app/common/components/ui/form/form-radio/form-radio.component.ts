@@ -5,21 +5,25 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import {FormTypes, RegisterOnChangeFn, RegisterOnToucheFn} from "@common/types/form.types";
+import {
+  FormTypes,
+  RegisterOnChangeFn,
+  RegisterOnToucheFn,
+} from '@common/types/form.types';
 
 @Component({
-    selector: 'app-form-radio',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './form-radio.component.html',
-    styleUrls: ['./form-radio.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: FormRadioComponent,
-            multi: true,
-        },
-    ]
+  selector: 'app-form-radio',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './form-radio.component.html',
+  styleUrls: ['./form-radio.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: FormRadioComponent,
+      multi: true,
+    },
+  ],
 })
 export class FormRadioComponent implements ControlValueAccessor {
   _value!: any;

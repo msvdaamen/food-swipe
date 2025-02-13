@@ -1,0 +1,127 @@
+model User {
+    id        BigInt   @id @default(autoincrement())
+    email     String   @unique
+    username  String   @unique
+    password  String
+    firstName String
+    lastName  String
+    isAdmin   Boolean  @default(false)
+    createdAt DateTime @default(now()) @db.Timestamptz
+    updatedAt DateTime @updatedAt @db.Timestamptz
+
+    // Relations
+    files         File[]
+    likedRecipes  UserLikedRecipe[]
+    refreshTokens AuthRefreshToken[]
+}
+
+model AuthRefreshToken {
+    id        String   @id @db.Uuid
+    userId    BigInt
+    expiresAt DateTime @db.Timestamptz
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([expiresAt])
+}
+
+model File {
+    id        BigInt   @id @default(autoincrement())
+    userId    BigInt
+    filename  String   @unique
+    type      String
+    isPublic  Boolean  @default(false)
+    createdAt DateTime @default(now()) @db.Timestamptz
+    updatedAt DateTime @updatedAt @db.Timestamptz
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Recipe    Recipe[]
+
+    @@index([isPublic])
+    @@index([userId])
+}
+
+model Recipe {
+    id           Int      @id @default(autoincrement())
+    title        String   @unique
+    description  String?
+    prepTime     Int?
+    servings     Int?
+    isPublished  Boolean  @default(false)
+    coverImageId BigInt?
+    createdAt    DateTime @default(now()) @db.Timestamptz
+    updatedAt    DateTime @updatedAt @db.Timestamptz
+
+    // Relations
+    coverImage   File?              @relation(fields: [coverImageId], references: [id], onDelete: SetNull)
+    steps        RecipeStep[]
+    ingredients  RecipeIngredient[]
+    likedByUsers UserLikedRecipe[]
+    nutritions   RecipeNutrition[]
+
+    @@index([isPublished])
+    @@index([coverImageId])
+}
+
+model RecipeStep {
+    id          Int      @id @default(autoincrement())
+    recipeId    Int
+    stepNumber  Int
+    description String
+    createdAt   DateTime @default(now()) @db.Timestamptz
+    updatedAt   DateTime @updatedAt @db.Timestamptz
+    recipe      Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+    @@index([recipeId])
+}
+
+model Ingredient {
+    id      Int                @id @default(autoincrement())
+    name    String
+    recipes RecipeIngredient[]
+
+    @@index([name])
+}
+
+model Measurement {
+    id           Int                @id @default(autoincrement()) @db.SmallInt
+    name         String
+    abbreviation String
+    ingredients  RecipeIngredient[]
+}
+
+model RecipeIngredient {
+    recipeId      Int
+    ingredientId  Int
+    measurementId Int         @db.SmallInt
+    amount        Int
+    recipe        Recipe      @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+    ingredient    Ingredient  @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+    measurement   Measurement @relation(fields: [measurementId], references: [id], onDelete: Cascade)
+
+    @@id([recipeId, ingredientId])
+    @@index([measurementId])
+    @@index([ingredientId])
+    @@index([recipeId])
+}
+
+model UserLikedRecipe {
+    userId   BigInt
+    recipeId Int
+    user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+    @@id([userId, recipeId])
+    @@index([recipeId])
+    @@index([userId])
+}
+
+model RecipeNutrition {
+    id       Int    @id @default(autoincrement())
+    recipeId Int
+    name     String
+    unit     String
+    value    Int
+    recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+    @@unique([recipeId, name], name: "recipe_id_name_unit")
+    @@index([recipeId])
+}

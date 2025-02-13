@@ -1,6 +1,7 @@
 import {
   ApplicationConfig,
-  provideExperimentalZonelessChangeDetection, isDevMode,
+  provideExperimentalZonelessChangeDetection,
+  isDevMode,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
@@ -20,16 +21,16 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([AuthInterceptor])),
     provideAnimationsAsync(),
     {
-        provide: DEFAULT_DIALOG_CONFIG,
-        useValue: {
-            hasBackdrop: true,
-            width: '40vw',
-            minWidth: '300px',
-            panelClass: 'default-dialog',
-        },
+      provide: DEFAULT_DIALOG_CONFIG,
+      useValue: {
+        hasBackdrop: true,
+        width: '40vw',
+        minWidth: '300px',
+        panelClass: 'default-dialog',
+      },
     },
     provideStore(),
     provideEffects(),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
-],
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 };
