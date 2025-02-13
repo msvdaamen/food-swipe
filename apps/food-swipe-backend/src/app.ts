@@ -5,7 +5,7 @@ import { registerRecipeController } from "./modules/recipe/recipe.controller";
 import { rateLimiter } from "hono-rate-limiter";
 import { getConnInfo } from "hono/bun";
 import { secureHeaders } from "hono/secure-headers";
-import { testFunction } from "database-v2";
+import { testFunction } from "@food-swipe/database";
 
 const app = new Hono();
 
