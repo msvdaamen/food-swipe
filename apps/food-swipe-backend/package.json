@@ -22,7 +22,8 @@
     "typescript": "^5.6.3",
     "uploadthing": "^7.2.0",
     "uuid": "^11.0.2",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@food-swipe/database": "workspace:*"
   },
   "trustedDependencies": [
     "esbuild",
