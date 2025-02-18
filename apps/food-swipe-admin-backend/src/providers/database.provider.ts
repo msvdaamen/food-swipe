@@ -9,8 +9,7 @@ export type DatabaseProvider = ReturnType<typeof drizzle>;
 export const databaseProvider = drizzle(databaseConfig.url, {casing: 'snake_case', schema});
 
 export async function migrateDatabase() {
-    console.log(resolve(__dirname, '../../packages/database-v2/drizzle'));
     await migrate(databaseProvider, {
-        migrationsFolder: "../../packages/database-v2/drizzle"
+        migrationsFolder: resolve(__dirname, '../../../../packages/database-v2/drizzle')
     });
 }
