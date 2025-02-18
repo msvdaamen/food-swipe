@@ -22,6 +22,7 @@
     "uploadthing": "^7.4.4",
     "uuid": "^11.0.5",
     "zod": "^3.24.1",
-    "@food-swipe/database": "workspace:*"
+    "@food-swipe/database": "workspace:*",
+    "@food-swipe/file-storage": "workspace:*"
   }
 }

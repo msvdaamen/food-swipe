@@ -11,6 +11,7 @@ import {registerIngredientController} from "./modules/ingredient/ingredient.cont
 import {ZodError} from "zod";
 import {FormatZodErrors} from "./common/format-zod-errors.ts";
 import { migrateDatabase } from './providers/database.provider.ts';
+import { ObjStorage } from '@food-swipe/file-storage';
 
 await migrateDatabase();
 

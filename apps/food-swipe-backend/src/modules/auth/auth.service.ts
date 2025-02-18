@@ -1,13 +1,12 @@
 import { addMonths } from "date-fns";
 import type { SignUpDto } from "./dto/sign-up.dto";
-import { authRefreshTokens } from "./schema/auth-refresh-token.schema";
+import { authRefreshTokens, users, type UserEntity} from "@food-swipe/database";
 import { eq } from "drizzle-orm";
 import type { SignInDto } from "./dto/sign-in.dto";
 import { jwtService, type JwtService } from "../../providers/jwt.service";
 import type { SignUpResponse } from "./responses/sign-up.response";
 import type { SignInResponse } from "./responses/sign-in.response";
 import type { RefreshTokenResponse } from "./responses/refresh-token.response";
-import { users, type User } from "../user/schema/user.schema";
 import { userService, type UserService } from "../user/user.service";
 import { DbService } from "../../common/db.service";
 import {v4 as uuid} from 'uuid';
@@ -115,7 +114,7 @@ export class AuthService extends DbService  {
         await this.database.delete(authRefreshTokens).where(eq(authRefreshTokens.userId, userId));
       }
     
-      private async createAccessToken(user: User): Promise<string> {
+      private async createAccessToken(user: UserEntity): Promise<string> {
         const scopes = ['user'];
         if (user.isAdmin) {
           scopes.push('admin');
@@ -128,7 +127,7 @@ export class AuthService extends DbService  {
         return await this.jwtService.sign(tokenPayload, '10m');
       }
     
-      private async createRefreshToken(user: User): Promise<string> {
+      private async createRefreshToken(user: UserEntity): Promise<string> {
         const [token] = await this.database.insert(authRefreshTokens)
           .values({
             id: uuid(),

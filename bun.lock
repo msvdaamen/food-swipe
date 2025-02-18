@@ -61,6 +61,7 @@
       "version": "1.0.0",
       "dependencies": {
         "@food-swipe/database": "workspace:*",
+        "@food-swipe/file-storage": "workspace:*",
         "date-fns": "^4.1.0",
         "drizzle-orm": "^0.39.0",
         "hono": "^4.6.19",
@@ -81,14 +82,15 @@
       "name": "food-swipe-backend",
       "dependencies": {
         "@food-swipe/database": "workspace:*",
+        "@food-swipe/file-storage": "workspace:*",
         "date-fns": "^4.1.0",
-        "drizzle-kit": "^0.27.1",
-        "drizzle-orm": "^0.36.0",
+        "drizzle-kit": "^0.30.4",
+        "drizzle-orm": "^0.39.3",
         "hono": "^4.6.9",
         "hono-rate-limiter": "^0.4.0",
         "jsonwebtoken": "^9.0.2",
         "migrationjs": "^0.4.12",
-        "postgres": "^3.4.5",
+        "mime": "^4.0.6",
         "typescript": "^5.6.3",
         "uploadthing": "^7.2.0",
         "uuid": "^11.0.2",
@@ -182,6 +184,15 @@
       "devDependencies": {
         "@types/bun": "latest",
         "drizzle-kit": "^0.30.4",
+      },
+      "peerDependencies": {
+        "typescript": "^5.0.0",
+      },
+    },
+    "packages/file-storage": {
+      "name": "@food-swipe/file-storage",
+      "devDependencies": {
+        "@types/bun": "latest",
       },
       "peerDependencies": {
         "typescript": "^5.0.0",
@@ -561,6 +572,8 @@
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.2.5", "https://npm.ops.print.com/@eslint/plugin-kit/-/plugin-kit-0.2.5.tgz", { "dependencies": { "@eslint/core": "^0.10.0", "levn": "^0.4.1" } }, "sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A=="],
 
     "@food-swipe/database": ["@food-swipe/database@workspace:packages/database-v2"],
+
+    "@food-swipe/file-storage": ["@food-swipe/file-storage@workspace:packages/file-storage"],
 
     "@fortawesome/angular-fontawesome": ["@fortawesome/angular-fontawesome@1.0.0", "https://npm.ops.print.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-1.0.0.tgz", { "dependencies": { "@fortawesome/fontawesome-svg-core": "^6.7.1", "tslib": "^2.8.1" }, "peerDependencies": { "@angular/core": "^19.0.0" } }, "sha512-EC2fYuXIuw2ld1kzJi+zysWus6OeGGfLQtbh0hW9zyyq5aBo8ZJkcJKBsVQ8E6Mg7nHyTWaXn+sdcXTPDWz+UQ=="],
 
@@ -1958,7 +1971,7 @@
 
     "migrationjs": ["migrationjs@0.4.12", "https://npm.ops.print.com/migrationjs/-/migrationjs-0.4.12.tgz", { "dependencies": { "@types/jest": "^29.5.7", "chalk": "^4.1.2", "mysql2": "^3.3.5", "nodemon": "^2.0.22", "pg": "^8.11.0", "process.args": "^0.1.1", "ts-jest": "^29.1.1", "typescript": "^4.9.5" }, "bin": { "migrationjs": "dist/index.js" } }, "sha512-oze4F2NMbLMRHxCa3yLGFCkBEoxNte1z1CCNs1Y3ubNIngZS4rSUmuFYzjJiqhrAWXeGqGENvUnURDwUvzTkTA=="],
 
-    "mime": ["mime@2.6.0", "https://npm.ops.print.com/mime/-/mime-2.6.0.tgz", { "bin": { "mime": "cli.js" } }, "sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg=="],
+    "mime": ["mime@4.0.6", "https://npm.ops.print.com/mime/-/mime-4.0.6.tgz", { "bin": { "mime": "bin/cli.js" } }, "sha512-4rGt7rvQHBbaSOF9POGkk1ocRP16Md1x36Xma8sz8h8/vfCUI2OtEIeCqe4Ofes853x4xDoPiFLIT47J5fI/7A=="],
 
     "mime-db": ["mime-db@1.52.0", "https://npm.ops.print.com/mime-db/-/mime-db-1.52.0.tgz", {}, "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="],
 
@@ -2878,10 +2891,6 @@
 
     "food-swipe-admin/typescript": ["typescript@5.6.3", "https://npm.ops.print.com/typescript/-/typescript-5.6.3.tgz", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw=="],
 
-    "food-swipe-backend/drizzle-kit": ["drizzle-kit@0.27.2", "https://npm.ops.print.com/drizzle-kit/-/drizzle-kit-0.27.2.tgz", { "dependencies": { "@drizzle-team/brocli": "^0.10.2", "@esbuild-kit/esm-loader": "^2.5.5", "esbuild": "^0.19.7", "esbuild-register": "^3.5.0" }, "bin": { "drizzle-kit": "bin.cjs" } }, "sha512-F6cFZ1wxa9XzFyeeQsp/0/lIzUbDuQjS8/njpYBDWa+wdWmXuY+Z/X2hHFK/9PGHZkv3c9mER+mVWfKlp/B6Vw=="],
-
-    "food-swipe-backend/drizzle-orm": ["drizzle-orm@0.36.4", "https://npm.ops.print.com/drizzle-orm/-/drizzle-orm-0.36.4.tgz", { "peerDependencies": { "@aws-sdk/client-rds-data": ">=3", "@cloudflare/workers-types": ">=3", "@electric-sql/pglite": ">=0.2.0", "@libsql/client": ">=0.10.0", "@libsql/client-wasm": ">=0.10.0", "@neondatabase/serverless": ">=0.10.0", "@op-engineering/op-sqlite": ">=2", "@opentelemetry/api": "^1.4.1", "@planetscale/database": ">=1", "@prisma/client": "*", "@tidbcloud/serverless": "*", "@types/better-sqlite3": "*", "@types/pg": "*", "@types/react": ">=18", "@types/sql.js": "*", "@vercel/postgres": ">=0.8.0", "@xata.io/client": "*", "better-sqlite3": ">=7", "bun-types": "*", "expo-sqlite": ">=14.0.0", "knex": "*", "kysely": "*", "mysql2": ">=2", "pg": ">=8", "postgres": ">=3", "react": ">=18", "sql.js": ">=1", "sqlite3": ">=5" }, "optionalPeers": ["@aws-sdk/client-rds-data", "@cloudflare/workers-types", "@electric-sql/pglite", "@libsql/client", "@libsql/client-wasm", "@neondatabase/serverless", "@op-engineering/op-sqlite", "@opentelemetry/api", "@planetscale/database", "@prisma/client", "@tidbcloud/serverless", "@types/better-sqlite3", "@types/pg", "@types/react", "@types/sql.js", "@vercel/postgres", "@xata.io/client", "better-sqlite3", "bun-types", "expo-sqlite", "knex", "kysely", "mysql2", "pg", "postgres", "react", "sql.js", "sqlite3"] }, "sha512-1OZY3PXD7BR00Gl61UUOFihslDldfH4NFRH2MbP54Yxi0G/PKn4HfO65JYZ7c16DeP3SpM3Aw+VXVG9j6CRSXA=="],
-
     "food-swipe-mobile/@fortawesome/angular-fontawesome": ["@fortawesome/angular-fontawesome@0.15.0", "https://npm.ops.print.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-0.15.0.tgz", { "dependencies": { "@fortawesome/fontawesome-svg-core": "^6.5.2", "tslib": "^2.6.2" }, "peerDependencies": { "@angular/core": "^18.0.0" } }, "sha512-oxmJDYGNSym5ycFR0LX4ZOPAU+wWmMAznYpkm5DNAtWWkhMLcrZl15eZQmVIEE+qruQ7JiVrg3tpo8bEkFlDgw=="],
 
     "food-swipe-mobile/@html-eslint/eslint-plugin": ["@html-eslint/eslint-plugin@0.25.0", "https://npm.ops.print.com/@html-eslint/eslint-plugin/-/eslint-plugin-0.25.0.tgz", {}, "sha512-5DlvqO8bbe90cKSfFDuEblyrEnhAdgNTjWxXeUxt/XXC2OuMC8CsxzLZjtK3+0X6yM8m4xcE3fymCPwg7zdcXQ=="],
@@ -2939,6 +2948,8 @@
     "jsonwebtoken/semver": ["semver@7.6.2", "https://npm.ops.print.com/semver/-/semver-7.6.2.tgz", { "bin": { "semver": "bin/semver.js" } }, "sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w=="],
 
     "karma/chokidar": ["chokidar@3.6.0", "https://npm.ops.print.com/chokidar/-/chokidar-3.6.0.tgz", { "dependencies": { "anymatch": "~3.1.2", "braces": "~3.0.2", "glob-parent": "~5.1.2", "is-binary-path": "~2.1.0", "is-glob": "~4.0.1", "normalize-path": "~3.0.0", "readdirp": "~3.6.0" }, "optionalDependencies": { "fsevents": "~2.3.2" } }, "sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw=="],
+
+    "karma/mime": ["mime@2.6.0", "https://npm.ops.print.com/mime/-/mime-2.6.0.tgz", { "bin": { "mime": "cli.js" } }, "sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg=="],
 
     "karma/yargs": ["yargs@16.2.0", "https://npm.ops.print.com/yargs/-/yargs-16.2.0.tgz", { "dependencies": { "cliui": "^7.0.2", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.0", "y18n": "^5.0.5", "yargs-parser": "^20.2.2" } }, "sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw=="],
 

@@ -1,5 +1,6 @@
 import { bigint, bigserial, pgTable, timestamp, varchar, boolean, integer, text, index } from 'drizzle-orm/pg-core';
 import { users } from './user.schema';
+import { relations } from 'drizzle-orm';
 
 export const files = pgTable('files', {
   id: integer().primaryKey().generatedByDefaultAsIdentity(),
@@ -13,6 +14,13 @@ export const files = pgTable('files', {
   index().on(table.isPublic),
   index().on(table.userId)
 ]);
+
+export const filesRelations = relations(files, ({one}) => ({
+  user: one(users, {
+    fields: [files.userId],
+    references: [users.id]
+  })
+}));
 
 export type FileEntity = typeof files.$inferSelect;
 export type NewFileEntity = typeof files.$inferInsert;

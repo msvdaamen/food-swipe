@@ -5,7 +5,9 @@ import { registerRecipeController } from "./modules/recipe/recipe.controller";
 import { rateLimiter } from "hono-rate-limiter";
 import { getConnInfo } from "hono/bun";
 import { secureHeaders } from "hono/secure-headers";
-import { testFunction } from "@food-swipe/database";
+import { migrateDatabase } from "./providers/database.provider";
+
+await migrateDatabase();
 
 const app = new Hono();
 
@@ -31,7 +33,5 @@ app.get("/", (c) => c.text("Hello Bun!"));
 
 registerAuthController(app);
 registerRecipeController(app);
-
-testFunction();
 
 export default app;

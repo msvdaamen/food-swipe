@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "bun",
+            "request": "launch",
+            "name": "Debug food-swipe-backend",
+            "program": "./src/app.ts",
+            "cwd": "${workspaceFolder}/apps/food-swipe-backend",
+            "watchMode": false
+        },
+        {
+            "type": "bun",
+            "request": "attach",
+            "name": "Attach to Bun",
+      
+            // The URL of the WebSocket inspector to attach to.
+            // This value can be retrieved by using `bun --inspect`.
+            "url": "ws://localhost:6499/",
+          },
+    ]
+}

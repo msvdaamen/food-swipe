@@ -10,7 +10,7 @@ const _getDatabase = () => {
   return dbTransactionStorage.getStore() ?? databaseProvider;
 }
 
-export const getDatabase = (): Omit<DatabaseProvider, 'transaction'> => {
+export const getDatabase = ()=> {
   return _getDatabase();
 }
 
@@ -25,7 +25,7 @@ export const transaction = async <T>(callback: (transaction: TransactionCallback
 export class DbService {
 
   get database(): Omit<DatabaseProvider, 'transaction'> {
-    return this._getDatabase();
+    return this._getDatabase() as Omit<DatabaseProvider, 'transaction'>;
   }
 
   private _getDatabase() {
