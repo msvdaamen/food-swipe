@@ -5,8 +5,6 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: food-swipe
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 

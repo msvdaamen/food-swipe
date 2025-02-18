@@ -1,15 +1,10 @@
 import { DbService } from "../../common/db.service";
 import { storageService, type StorageService } from "../../providers/storage/storage.service";
-import {recipesSchema} from "./schema/recipe.schema.ts";
 import type {RecipeModel} from "./models/recipe.model.ts";
-import {files} from "../../providers/storage/file.schema.ts";
+import {files, recipes, recipeIngredients, recipeSteps, recipeNutritions, measurements, ingredients, type MeasurementEntity, type RecipeNutritionEntity} from "@food-swipe/database";
 import {and, asc, eq, gt, gte, lt, lte, sql} from "drizzle-orm";
-import {recipeStepSchema} from "./schema/recipe-step.schema.ts";
-import {recipeIngredientsSchema} from "./schema/recipe-ingredients.schema.ts";
 import type {RecipeStepModel} from "./models/recipe-step.model.ts";
 import type {RecipeIngredientModel} from "./models/recipe-ingredient.model.ts";
-import {ingredientsSchema} from "./../ingredient/schema/ingredient.schema.ts";
-import {type MeasurementEntity, measurementsSchema} from "./../measurement/schema/measurement.schema.ts";
 import type {UpdateRecipeDto} from "./dto/update-recipe.dto.ts";
 import type {CreateRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import type {CreateRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
@@ -17,12 +12,10 @@ import type {UpdateRecipeStepDto} from "./dto/update-recipe-step.dto.ts";
 import type {ReorderRecipeStepDto} from "./dto/reorder-recipe-step.dto.ts";
 import type {UpdateRecipeIngredientDto} from "./dto/update-recipe-ingredient.dto.ts";
 import type {LoadRecipesDto} from "./dto/load-recipes.dto.ts";
-import {usersSchema} from "../user/schema/user.schema.ts";
 import type {CreateRecipeDto} from "./dto/create-recipe.dto.ts";
-import {AHRecipe, fetchRecipeFromAh} from "./function/fetch-recipe-from-ah.ts";
+import {type AHRecipe, fetchRecipeFromAh} from "./function/fetch-recipe-from-ah.ts";
 import {measurementService, type MeasurementService} from "../measurement/measurement.service.ts";
 import {ingredientService, type IngredientService} from "../ingredient/ingredient.service.ts";
-import {type RecipeNutritionEntity, recipeNutritionsSchema} from "./schema/recipe-nutrition.schema.ts";
 import type {CreateRecipeNutritionDto} from "./dto/create-nutrition.dto.ts";
 import type {UpdateRecipeNutritionDto} from "./dto/update-nutrition.dto.ts";
 import type {Nutrition} from "./constants/nutritions.ts";
@@ -39,11 +32,11 @@ export class RecipeService extends DbService {
 
     async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
         const results = await this.database
-            .select({recipe: recipesSchema, coverImage: files})
-            .from(recipesSchema)
-            .leftJoin(files, eq(files.id, recipesSchema.coverImageId))
-            .where(filters.isPublished !== undefined ? eq(recipesSchema.isPublished, filters.isPublished) : undefined)
-            .orderBy(asc(recipesSchema.title))
+            .select({recipe: recipes, coverImage: files})
+            .from(recipes)
+            .leftJoin(files, eq(files.id, recipes.coverImageId))
+            .where(filters.isPublished !== undefined ? eq(recipes.isPublished, filters.isPublished) : undefined)
+            .orderBy(asc(recipes.title))
             .execute();
 
         return results.map((result) => ({
@@ -54,10 +47,10 @@ export class RecipeService extends DbService {
 
     async getById(id: number): Promise<RecipeModel> {
         const [result] = await this.database
-            .select({recipe: recipesSchema, coverImage: files})
-            .from(recipesSchema)
-            .leftJoin(files, eq(files.id, recipesSchema.coverImageId))
-            .where(eq(recipesSchema.id, id))
+            .select({recipe: recipes, coverImage: files})
+            .from(recipes)
+            .leftJoin(files, eq(files.id, recipes.coverImageId))
+            .where(eq(recipes.id, id))
             .execute();
 
         if (!result) {
@@ -71,21 +64,21 @@ export class RecipeService extends DbService {
     }
 
     async create(payload: CreateRecipeDto): Promise<RecipeModel> {
-        const [{id}] = await this.database.insert(recipesSchema).values(payload).returning({id: recipesSchema.id}).execute();
+        const [{id}] = await this.database.insert(recipes).values(payload).returning({id: recipes.id}).execute();
         return this.getById(id);
     }
 
     async update(recipeId: number, payload: UpdateRecipeDto): Promise<RecipeModel> {
-        await this.database.update(recipesSchema).set(payload).where(eq(recipesSchema.id, recipeId)).execute();
+        await this.database.update(recipes).set(payload).where(eq(recipes.id, recipeId)).execute();
         return this.getById(recipeId);
     }
 
     async uploadImage(userId: number, recipeId: number, file: File): Promise<RecipeModel> {
-        const [recipe] = await this.database.select({id: recipesSchema.id, coverImageId: recipesSchema.coverImageId}).from(recipesSchema).where(eq(recipesSchema.id, recipeId)).execute();
+        const [recipe] = await this.database.select({id: recipes.id, coverImageId: recipes.coverImageId}).from(recipes).where(eq(recipes.id, recipeId)).execute();
         const oldFile = recipe.coverImageId ? await this.storage.getFile(recipe.coverImageId) : null;
         await this.transaction(async tx => {
             const {id} = await this.storage.upload(userId, file, true);
-            await this.database.update(recipesSchema).set({coverImageId: id}).where(eq(recipesSchema.id, recipeId)).execute();
+            await this.database.update(recipes).set({coverImageId: id}).where(eq(recipes.id, recipeId)).execute();
         });
         if (oldFile) {
             await this.storage.delete(oldFile.id);
@@ -94,26 +87,26 @@ export class RecipeService extends DbService {
     }
 
     async delete(recipeId: number) {
-        await this.database.delete(recipesSchema).where(eq(recipesSchema.id, recipeId)).execute();
+        await this.database.delete(recipes).where(eq(recipes.id, recipeId)).execute();
     }
 
     async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
-        const steps = await this.database.select().from(recipeStepSchema).where(eq(recipeStepSchema.recipeId, recipeId)).orderBy(asc(recipeStepSchema.stepNumber)).execute();
+        const steps = await this.database.select().from(recipeSteps).where(eq(recipeSteps.recipeId, recipeId)).orderBy(asc(recipeSteps.stepNumber)).execute();
         return steps;
     }
 
     async createStep(recipeId: number, payload: CreateRecipeStepDto): Promise<RecipeStepModel> {
         return await this.transaction(async () => {
-            await this.database.update(recipeStepSchema)
-                .set({stepNumber: sql`${recipeStepSchema.stepNumber} + 1`})
+            await this.database.update(recipeSteps)
+                .set({stepNumber: sql`${recipeSteps.stepNumber} + 1`})
                 .where(and(
-                    eq(recipeStepSchema.recipeId, recipeId),
-                    gte(recipeStepSchema.stepNumber, payload.order)
+                    eq(recipeSteps.recipeId, recipeId),
+                    gte(recipeSteps.stepNumber, payload.order)
                 ))
                 .execute();
 
 
-            const [step] = await this.database.insert(recipeStepSchema).values({
+            const [step] = await this.database.insert(recipeSteps).values({
                 stepNumber: payload.order,
                 description: payload.description,
                 recipeId
@@ -125,11 +118,11 @@ export class RecipeService extends DbService {
     }
 
     async updateStep(recipeId: number, stepId: number, payload: UpdateRecipeStepDto): Promise<RecipeStepModel> {
-        const [step] = await this.database.update(recipeStepSchema)
+        const [step] = await this.database.update(recipeSteps)
         .set(payload)
         .where(and(
-            eq(recipeStepSchema.id, stepId),
-            eq(recipeStepSchema.recipeId, recipeId)
+            eq(recipeSteps.id, stepId),
+            eq(recipeSteps.recipeId, recipeId)
         ))
         .returning();
         return step;
@@ -137,17 +130,17 @@ export class RecipeService extends DbService {
 
     async deleteStep(recipeId: number, stepId: number) {
         await this.transaction(async () => {
-            const [step] = await this.database.delete(recipeStepSchema).where(and(
-                eq(recipeStepSchema.id, stepId),
-                eq(recipeStepSchema.recipeId, recipeId),
+            const [step] = await this.database.delete(recipeSteps).where(and(
+                eq(recipeSteps.id, stepId),
+                eq(recipeSteps.recipeId, recipeId),
             ))
             .returning()
             .execute();
-            await this.database.update(recipeStepSchema)
-                .set({stepNumber: sql`${recipeStepSchema.stepNumber} - 1`})
+            await this.database.update(recipeSteps)
+                .set({stepNumber: sql`${recipeSteps.stepNumber} - 1`})
                 .where(and(
-                    eq(recipeStepSchema.recipeId, recipeId),
-                    gt(recipeStepSchema.stepNumber, step.stepNumber)
+                    eq(recipeSteps.recipeId, recipeId),
+                    gt(recipeSteps.stepNumber, step.stepNumber)
                 ))
                 .execute();
         });
@@ -158,37 +151,37 @@ export class RecipeService extends DbService {
             return this.getSteps(recipeId);
         }
         await this.transaction(async () => {
-            const [step] = await this.database.select().from(recipeStepSchema).where(and(
-                eq(recipeStepSchema.id, stepId),
-                eq(recipeStepSchema.recipeId, recipeId)
+            const [step] = await this.database.select().from(recipeSteps).where(and(
+                eq(recipeSteps.id, stepId),
+                eq(recipeSteps.recipeId, recipeId)
             )).execute();
             if (!step) {
                 throw new Error('Step not found');
             }
             if (orderTo < orderFrom) {
-                await this.database.update(recipeStepSchema)
-                    .set({stepNumber: sql`${recipeStepSchema.stepNumber} + 1`})
+                await this.database.update(recipeSteps)
+                    .set({stepNumber: sql`${recipeSteps.stepNumber} + 1`})
                     .where(and(
-                        eq(recipeStepSchema.recipeId, recipeId),
-                        gte(recipeStepSchema.stepNumber, orderTo),
-                        lt(recipeStepSchema.stepNumber, orderFrom)
+                        eq(recipeSteps.recipeId, recipeId),
+                        gte(recipeSteps.stepNumber, orderTo),
+                        lt(recipeSteps.stepNumber, orderFrom)
                     ))
                     .execute();
             } else {
-                await this.database.update(recipeStepSchema)
-                    .set({stepNumber: sql`${recipeStepSchema.stepNumber} - 1`})
+                await this.database.update(recipeSteps)
+                    .set({stepNumber: sql`${recipeSteps.stepNumber} - 1`})
                     .where(and(
-                        eq(recipeStepSchema.recipeId, recipeId),
-                        gt(recipeStepSchema.stepNumber, orderFrom),
-                        lte(recipeStepSchema.stepNumber, orderTo)
+                        eq(recipeSteps.recipeId, recipeId),
+                        gt(recipeSteps.stepNumber, orderFrom),
+                        lte(recipeSteps.stepNumber, orderTo)
                     ))
                     .execute();
             }
-            await this.database.update(recipeStepSchema)
+            await this.database.update(recipeSteps)
                 .set({stepNumber: orderTo})
                 .where(and(
-                    eq(recipeStepSchema.id, stepId),
-                    eq(recipeStepSchema.recipeId, recipeId)
+                    eq(recipeSteps.id, stepId),
+                    eq(recipeSteps.recipeId, recipeId)
                 ))
                 .execute();
         });
@@ -196,16 +189,16 @@ export class RecipeService extends DbService {
     }
 
     async getIngredients(recipeId: number): Promise<RecipeIngredientModel[]> {
-        const ingredients = await this.database.select({
-            recipeIngredient: recipeIngredientsSchema,
-            ingredient: ingredientsSchema,
-            measurement: measurementsSchema
-        }).from(recipeIngredientsSchema)
-            .innerJoin(ingredientsSchema, eq(ingredientsSchema.id, recipeIngredientsSchema.ingredientId))
-            .leftJoin(measurementsSchema, eq(measurementsSchema.id, recipeIngredientsSchema.measurementId))
-            .where(eq(recipeIngredientsSchema.recipeId, recipeId))
+        const result = await this.database.select({
+            recipeIngredient: recipeIngredients,
+            ingredient: ingredients,
+            measurement: measurements
+        }).from(recipeIngredients)
+            .innerJoin(ingredients, eq(ingredients.id, recipeIngredients.ingredientId))
+            .leftJoin(measurements, eq(measurements.id, recipeIngredients.measurementId))
+            .where(eq(recipeIngredients.recipeId, recipeId))
             .execute();
-        const models = ingredients.map((ingredient) => ({
+        const models = result.map((ingredient) => ({
             ...ingredient.recipeIngredient,
             ingredient: ingredient.ingredient.name,
             measurement: ingredient.measurement?.name ?? null
@@ -215,15 +208,15 @@ export class RecipeService extends DbService {
 
     async getIngredient(recipeId: number, ingredientId: number): Promise<RecipeIngredientModel> {
         const [recipeIngredient] = await this.database.select({
-            recipeIngredient: recipeIngredientsSchema,
-            ingredient: ingredientsSchema,
-            measurement: measurementsSchema
-        }).from(recipeIngredientsSchema)
-            .innerJoin(ingredientsSchema, eq(ingredientsSchema.id, recipeIngredientsSchema.ingredientId))
-            .leftJoin(measurementsSchema, eq(measurementsSchema.id, recipeIngredientsSchema.measurementId))
+            recipeIngredient: recipeIngredients,
+            ingredient: ingredients,
+            measurement: measurements
+        }).from(recipeIngredients)
+            .innerJoin(ingredients, eq(ingredients.id, recipeIngredients.ingredientId))
+            .leftJoin(measurements, eq(measurements.id, recipeIngredients.measurementId))
             .where(and(
-                eq(recipeIngredientsSchema.recipeId, recipeId),
-                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+                eq(recipeIngredients.recipeId, recipeId),
+                eq(recipeIngredients.ingredientId, ingredientId)
             ))
             .execute();
         return {
@@ -234,50 +227,50 @@ export class RecipeService extends DbService {
     }
 
     async createIngredient(recipeId: number, payload: CreateRecipeIngredientDto): Promise<RecipeIngredientModel> {
-        const [{ingredientId}] = await this.database.insert(recipeIngredientsSchema)
+        const [{ingredientId}] = await this.database.insert(recipeIngredients)
             .values({
                 recipeId,
                 ...payload
             })
-            .returning({ingredientId: recipeIngredientsSchema.ingredientId});
+            .returning({ingredientId: recipeIngredients.ingredientId});
         return await this.getIngredient(recipeId, ingredientId);
     }
 
     async updateIngredient(recipeId: number, ingredientId: number, payload: UpdateRecipeIngredientDto): Promise<RecipeIngredientModel> {
-        const [{ingredientId: updatedIngredientId}] = await this.database.update(recipeIngredientsSchema)
+        const [{ingredientId: updatedIngredientId}] = await this.database.update(recipeIngredients)
             .set(payload)
             .where(and(
-                eq(recipeIngredientsSchema.recipeId, recipeId),
-                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+                eq(recipeIngredients.recipeId, recipeId),
+                eq(recipeIngredients.ingredientId, ingredientId)
             ))
-            .returning({ingredientId: recipeIngredientsSchema.ingredientId})
+            .returning({ingredientId: recipeIngredients.ingredientId})
             .execute();
         return await this.getIngredient(recipeId, updatedIngredientId);
     }
 
     async deleteIngredient(recipeId: number, ingredientId: number) {
-        await this.database.delete(recipeIngredientsSchema)
+        await this.database.delete(recipeIngredients)
             .where(and(
-                eq(recipeIngredientsSchema.recipeId, recipeId),
-                eq(recipeIngredientsSchema.ingredientId, ingredientId)
+                eq(recipeIngredients.recipeId, recipeId),
+                eq(recipeIngredients.ingredientId, ingredientId)
             ))
             .execute();
     }
 
     async getNutrition(recipeId: number): Promise<RecipeNutritionEntity[]> {
-        const nutritions = await this.database.select().from(recipeNutritionsSchema).where(eq(recipeNutritionsSchema.recipeId, recipeId)).orderBy(asc(recipeNutritionsSchema.name)).execute();
+        const nutritions = await this.database.select().from(recipeNutritions).where(eq(recipeNutritions.recipeId, recipeId)).orderBy(asc(recipeNutritions.name)).execute();
         return nutritions;
     }
 
     async updateNutrition(recipeId: number, name: Nutrition, payload: UpdateRecipeNutritionDto): Promise<RecipeNutritionEntity> {
-        const [nutrition] = await this.database.insert(recipeNutritionsSchema)
+        const [nutrition] = await this.database.insert(recipeNutritions)
         .values({
             recipeId,
             name,
             ...payload,
         })
           .onConflictDoUpdate({
-            target: [recipeNutritionsSchema.recipeId, recipeNutritionsSchema.name],
+            target: [recipeNutritions.recipeId, recipeNutritions.name],
             set: payload
           })
         .returning();
@@ -285,7 +278,7 @@ export class RecipeService extends DbService {
     }
 
     async createNutrition(recipeId: number, payload: CreateRecipeNutritionDto): Promise<RecipeNutritionEntity> {
-        const [nutrition] = await this.database.insert(recipeNutritionsSchema)
+        const [nutrition] = await this.database.insert(recipeNutritions)
             .values({
                 recipeId,
                 name: payload.name,
@@ -303,7 +296,7 @@ export class RecipeService extends DbService {
             unit: nutrition.unit,
             value: nutrition.value,
         }));
-        const nutritions = await this.database.insert(recipeNutritionsSchema)
+        const nutritions = await this.database.insert(recipeNutritions)
           .values(inserts)
           .returning();
         return nutritions;
@@ -320,7 +313,7 @@ export class RecipeService extends DbService {
         if (!recipe) {
             throw new Error('Recipe not found');
         }
-        const [exists] = await this.database.select().from(recipesSchema).where(eq(recipesSchema.title, recipe.title)).execute();
+        const [exists] = await this.database.select().from(recipes).where(eq(recipes.title, recipe.title)).execute();
         if (exists) {
             throw new Error('Recipe already exists');
         }

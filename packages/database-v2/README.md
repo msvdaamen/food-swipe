@@ -1,4 +1,4 @@
-# database
+# @food-swipe/database
 
 To install dependencies:
 
