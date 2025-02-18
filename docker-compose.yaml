@@ -1,10 +1,10 @@
 
 services:
   db:
-    image: postgres
+    image: supabase/postgres:17.0.1.036-orioledb
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: food-swipe
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf 
     ports:
       - "5432:5432"
 

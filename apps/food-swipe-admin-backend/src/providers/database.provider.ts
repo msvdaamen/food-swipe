@@ -10,6 +10,7 @@ export const databaseProvider = drizzle(databaseConfig.url, {casing: 'snake_case
 
 export async function migrateDatabase() {
     await migrate(databaseProvider, {
-        migrationsFolder: resolve(__dirname, '../../../../packages/database-v2/drizzle')
+        migrationsFolder: resolve(__dirname, '../../../../packages/database-v2/drizzle'),
+        migrationsSchema: 'public'
     });
 }
