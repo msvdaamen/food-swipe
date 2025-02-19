@@ -1,18 +1,12 @@
 import {and, eq, gt, inArray} from "drizzle-orm";
 import { DbService } from "../../common/db.service";
-import { recipes, type NewRecipe, type Recipe } from "./schema/recipe.schema";
 import type { CursorPagination } from "../../common/types/cursor-pagination";
-import { ingredients, type Ingredient } from "./schema/ingredient.schema";
-import { recipeIngredients } from "./schema/recipe-ingredients.schema";
 import { NotFoundError } from "../../common/errors/not-found.error";
-import { measurements } from "./schema/measurement.schema";
-import { recipeStep, type RecipeStep } from "./schema/recipe-step.schema";
 import type { RecipeSerialized } from "./models/recipe.model";
 import { storageService, type StorageService } from "../../providers/storage/storage.service";
 import { files, type FileObj as FileModel } from "../../providers/storage/file.schema";
-import {userLikedRecipes} from "./schema/user-liked-recipe.schema.ts";
-import {recipeNutritionsSchema} from "./schema/recipe-nutrition.schema.ts";
 import type {Nutrition} from "./constants/nutritions.ts";
+import { ingredients, measurements, recipeIngredients, recipeNutritions, recipes, recipeSteps, userLikedRecipes, type IngredientEntity, type NewRecipeEntity, type RecipeEntity, type RecipeStepEntity } from "@food-swipe/database";
 
 export class RecipeService extends DbService {
 
@@ -83,13 +77,13 @@ export class RecipeService extends DbService {
               .where(inArray(recipeIngredients.recipeId, ids)),
 
             this.database.select()
-              .from(recipeStep)
-              .where(inArray(recipeStep.recipeId, ids))
-              .orderBy(recipeStep.stepNumber),
+              .from(recipeSteps)
+              .where(inArray(recipeSteps.recipeId, ids))
+              .orderBy(recipeSteps.stepNumber),
 
             this.database.select()
-              .from(recipeNutritionsSchema)
-              .where(inArray(recipeNutritionsSchema.recipeId, ids))
+              .from(recipeNutritions)
+              .where(inArray(recipeNutritions.recipeId, ids))
         ]);
 
         const recipeMap = new Map<number, RecipeSerialized>();
@@ -125,7 +119,11 @@ export class RecipeService extends DbService {
         return recipeRows.map(row => recipeMap.get(row.recipe.id)!);
     }
 
-    async create(userId: number, payload: NewRecipe, coverImage: File): Promise<void> {
+    async create(userId: number, payload: NewRecipeEntity, coverImage: File): Promise<void> {
+        if (!coverImage.type.startsWith('image/')) {
+            throw new Error('Cover image must be an image');
+        }
+        
         await this.transaction(async (transaction) => {
             const recipe = await transaction.insert(recipes).values(payload).returning().execute().then((result) => result[0]);
             const file = await this.storageService.upload(userId, coverImage, true);
@@ -143,7 +141,7 @@ export class RecipeService extends DbService {
         return this.get(userId, recipeId);
     }
 
-    serializeRecipe(recipe: Recipe, coverImage: FileModel, ingredients: Ingredient[], steps: RecipeStep[], liked: boolean): RecipeSerialized {
+    serializeRecipe(recipe: RecipeEntity, coverImage: FileModel, ingredients: IngredientEntity[], steps: RecipeStepEntity[], liked: boolean): RecipeSerialized {
         const coverImageUrl = this.storageService.getPublicUrl(coverImage.filename)
         return {
             id: recipe.id,
@@ -151,7 +149,6 @@ export class RecipeService extends DbService {
             description: recipe.description,
             prepTime: recipe.prepTime,
             servings: recipe.servings,
-            calories: recipe.calories,
             isPublished: recipe.isPublished,
             coverImageUrl,
             liked,

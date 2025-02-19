@@ -19,8 +19,9 @@
     "hono-rate-limiter": "^0.4.2",
     "jsonwebtoken": "^9.0.2",
     "typescript": "^5.7.3",
-    "uploadthing": "^7.4.4",
     "uuid": "^11.0.5",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@food-swipe/database": "workspace:*",
+    "@food-swipe/file-storage": "workspace:*"
   }
 }

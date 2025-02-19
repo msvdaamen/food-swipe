@@ -1,11 +1,16 @@
-import postgres from "postgres";
-import {drizzle} from 'drizzle-orm/postgres-js';
+import { drizzle } from 'drizzle-orm/bun-sql';
+import { migrate } from 'drizzle-orm/bun-sql/migrator';
 import {databaseConfig} from "../config/database.config.ts";
 
-
-const queryClient = postgres(databaseConfig.url);
-
-console.log(databaseConfig.url);
+import * as schema from "@food-swipe/database";
+import { resolve } from 'path';
 
 export type DatabaseProvider = ReturnType<typeof drizzle>
-export const databaseProvider: DatabaseProvider = drizzle(queryClient);
+export const databaseProvider = drizzle(databaseConfig.url, {casing: 'snake_case', schema});
+
+export async function migrateDatabase() {
+    await migrate(databaseProvider, {
+        migrationsFolder: resolve(__dirname, '../../../../packages/database-v2/drizzle'),
+        migrationsSchema: 'public'
+    });
+}

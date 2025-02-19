@@ -8,7 +8,6 @@ export type RecipeSerialized = {
     description: string | null,
     prepTime: number | null,
     servings: number | null,
-    calories: number | null,
     isPublished: boolean,
     coverImageUrl: string | null,
     liked: boolean,

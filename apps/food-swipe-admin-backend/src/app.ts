@@ -10,6 +10,9 @@ import {registerMeasurementsController} from "./modules/measurement/measurement.
 import {registerIngredientController} from "./modules/ingredient/ingredient.controller.ts";
 import {ZodError} from "zod";
 import {FormatZodErrors} from "./common/format-zod-errors.ts";
+import { migrateDatabase } from './providers/database.provider.ts';
+
+await migrateDatabase();
 
 const app = new Hono();
 

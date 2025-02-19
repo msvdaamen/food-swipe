@@ -1,10 +1,9 @@
 FROM oven/bun
 
-COPY bun.lockb .
-COPY package.json .
+COPY package.json bun.lock ./
+COPY /packages/ ./packages/
+COPY /apps/food-swipe-admin-backend/ ./apps/food-swipe-admin-backend/
 
-RUN bun install --frozen-lockfile
+RUN bun install --filter 'food-swipe-admin-backend'
 
-COPY src ./src
-
-CMD ["bun", "src/app.ts"]
+CMD ["bun", "apps/food-swipe-admin-backend/src/app.ts"]

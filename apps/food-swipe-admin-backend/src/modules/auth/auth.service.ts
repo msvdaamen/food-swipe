@@ -1,5 +1,5 @@
 import { addMonths } from "date-fns";
-import { authRefreshTokenSchema } from "./schema/auth-refresh-token.schema";
+import { authRefreshTokens, users } from "@food-swipe/database";
 import type { SignInDto } from "./dto/sign-in.dto";
 import { jwtService, type JwtService } from "../../providers/jwt.service";
 import type { SignInResponse } from "./responses/sign-in.response";
@@ -7,7 +7,6 @@ import type { RefreshTokenResponse } from "./responses/refresh-token.response";
 import { userService, type UserService } from "../user/user.service";
 import { DbService } from "../../common/db.service";
 import {v4 as uuid} from 'uuid';
-import {usersSchema} from "../user/schema/user.schema.ts";
 import {eq} from "drizzle-orm";
 
 export class AuthService extends DbService  {
@@ -54,18 +53,18 @@ export class AuthService extends DbService  {
 
         const [result] = await this.database
           .select({
-            expiresAt: authRefreshTokenSchema.expiresAt,
-            userId: usersSchema.id,
-            email: usersSchema.email
+            expiresAt: authRefreshTokens.expiresAt,
+            userId: users.id,
+            email: users.email
           })
-          .from(authRefreshTokenSchema)
-          .innerJoin(usersSchema, eq(authRefreshTokenSchema.userId, usersSchema.id))
-          .where(eq(authRefreshTokenSchema.id, refreshTokenId))
+          .from(authRefreshTokens)
+          .innerJoin(users, eq(authRefreshTokens.userId, users.id))
+          .where(eq(authRefreshTokens.id, refreshTokenId))
           .limit(1);
         if (!result || result.expiresAt < new Date()) {
           throw new Error('Invalid refresh token');
         }
-        await this.database.delete(authRefreshTokenSchema).where(eq(authRefreshTokenSchema.id, refreshTokenId));
+        await this.database.delete(authRefreshTokens).where(eq(authRefreshTokens.id, refreshTokenId));
         const [accessToken, newRefreshToken] = await Promise.all([
           this.createAccessToken(result.userId, result.email),
           this.createRefreshToken(result.userId)
@@ -78,7 +77,7 @@ export class AuthService extends DbService  {
     
     
       async signOut(userId: number): Promise<void> {
-        await this.database.delete(authRefreshTokenSchema).where(eq(authRefreshTokenSchema.userId, userId));
+        await this.database.delete(authRefreshTokens).where(eq(authRefreshTokens.userId, userId));
       }
     
       private async createAccessToken(userId: number, email: string): Promise<string> {
@@ -90,7 +89,7 @@ export class AuthService extends DbService  {
       }
     
       private async createRefreshToken(userId: number): Promise<string> {
-        const [token] = await this.database.insert(authRefreshTokenSchema)
+        const [token] = await this.database.insert(authRefreshTokens)
           .values({
             id: uuid(),
             userId,

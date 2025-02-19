@@ -1,13 +1,11 @@
 import { type FileObj as FileModel, files } from './file.schema';
-import { v4 as uuid } from 'uuid';
-import path from 'path';
 import { FileUploadException } from './file-upload.exception';
 import { eq } from 'drizzle-orm';
 import { FileNotFoundException } from './file-not-found.exception';
 import {DbService} from "../../common/db.service";
-import { storageProvider, type Storage } from './storage';
 import { storageConfig } from '../../config/storage/storage.config';
 import type { BunFile } from 'bun';
+import { ObjStorage, type Storage } from '@food-swipe/file-storage';
 
 export class StorageService extends DbService {
   constructor(
@@ -64,5 +62,11 @@ export class StorageService extends DbService {
     });
   }
 }
-export const storageService = new StorageService(storageProvider);
+const storage = new ObjStorage(
+  storageConfig.accessKeyId,
+  storageConfig.secretAccessKey,
+  storageConfig.bucket,
+  storageConfig.endpoint
+);
+export const storageService = new StorageService(storage);
 
