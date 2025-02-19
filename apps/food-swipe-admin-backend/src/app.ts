@@ -11,6 +11,7 @@ import {registerIngredientController} from "./modules/ingredient/ingredient.cont
 import {ZodError} from "zod";
 import {FormatZodErrors} from "./common/format-zod-errors.ts";
 import { migrateDatabase } from './providers/database.provider.ts';
+import { registerToolsController } from './modules/tools/tools.controller.ts';
 
 await migrateDatabase();
 
@@ -46,13 +47,12 @@ app.onError((err, c) => {
 
 app.get('/', (c) => c.text('Hello Bun!'))
 
-
-
 registerAuthController(app);
 registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
+registerToolsController(app);
 
 export default {
     port: process.env.APP_PORT || 3000,

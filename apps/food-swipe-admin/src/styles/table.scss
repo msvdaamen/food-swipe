@@ -1,4 +1,3 @@
-
 .table {
   //@apply border rounded-md border-separate border-spacing-0;
 
@@ -6,7 +5,8 @@
     @apply hover:bg-gray-100;
   }
 
-  td, th {
+  td,
+  th {
     @apply px-4 py-2;
   }
 
@@ -20,7 +20,7 @@
 }
 
 .table-container {
-  @apply overflow-x-auto border rounded-md;
+  @apply overflow-x-auto rounded-md border;
 }
 
 .t-row {

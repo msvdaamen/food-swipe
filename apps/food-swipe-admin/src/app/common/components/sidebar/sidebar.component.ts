@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {
   faBook,
+  faCode,
   faEgg,
   faList,
   faPencil,
   faPerson,
   faRuler,
   faUtensils,
+  faWrench,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
@@ -19,10 +21,10 @@ export type SidebarItem = {
 };
 
 @Component({
-    selector: 'app-sidebar',
-    imports: [SidebarItemComponent],
-    templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.scss'
+  selector: 'app-sidebar',
+  imports: [SidebarItemComponent],
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
   sidebarItems: SidebarItem[] = [
@@ -42,6 +44,11 @@ export class SidebarComponent {
         { title: 'Ingredients', icon: faEgg, link: '/ingredients' },
         { title: 'Measurements', icon: faRuler, link: '/measurements' },
       ],
+    },
+    {
+      title: 'Tools',
+      icon: faWrench,
+      items: [{ title: 'Query Logs', icon: faCode, link: '/tools/query-logs' }],
     },
   ];
 }

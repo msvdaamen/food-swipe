@@ -63,13 +63,13 @@
         "@food-swipe/database": "workspace:*",
         "@food-swipe/file-storage": "workspace:*",
         "date-fns": "^4.1.0",
-        "drizzle-orm": "^0.39.0",
-        "hono": "^4.6.19",
+        "drizzle-orm": "^0.39.3",
+        "hono": "^4.7.2",
         "hono-rate-limiter": "^0.4.2",
         "jsonwebtoken": "^9.0.2",
         "typescript": "^5.7.3",
         "uuid": "^11.0.5",
-        "zod": "^3.24.1",
+        "zod": "^3.24.2",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -89,7 +89,6 @@
         "hono-rate-limiter": "^0.4.2",
         "jsonwebtoken": "^9.0.2",
         "migrationjs": "^0.4.12",
-        "mime": "^4.0.6",
         "typescript": "^5.7.3",
         "uploadthing": "^7.5.2",
         "uuid": "^11.0.5",
@@ -190,6 +189,9 @@
     },
     "packages/file-storage": {
       "name": "@food-swipe/file-storage",
+      "dependencies": {
+        "mime": "^4.0.6",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -1644,7 +1646,7 @@
 
     "hasown": ["hasown@2.0.2", "https://npm.ops.print.com/hasown/-/hasown-2.0.2.tgz", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
 
-    "hono": ["hono@4.7.1", "https://npm.ops.print.com/hono/-/hono-4.7.1.tgz", {}, "sha512-V3eWoPkBxoNgFCkSc5Y5rpLF6YoQQx1pkYO4qrF6YfOw8RZbujUNlJLZCxh0z9gZct70+je2Ih7Zrdpv21hP9w=="],
+    "hono": ["hono@4.7.2", "", {}, "sha512-8V5XxoOF6SI12jkHkzX/6aLBMU5GEF5g387EjVSQipS0DlxWgWGSMeEayY3CRBjtTUQYwLHx9JYouWqKzy2Vng=="],
 
     "hono-rate-limiter": ["hono-rate-limiter@0.4.2", "https://npm.ops.print.com/hono-rate-limiter/-/hono-rate-limiter-0.4.2.tgz", { "peerDependencies": { "hono": "^4.1.1" } }, "sha512-AAtFqgADyrmbDijcRTT/HJfwqfvhalya2Zo+MgfdrMPas3zSMD8SU03cv+ZsYwRU1swv7zgVt0shwN059yzhjw=="],
 

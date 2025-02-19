@@ -54,6 +54,10 @@ export const routes: Routes = [
         path: 'recipes',
         loadChildren: () => import('./pages/recipes/routes'),
       },
+      {
+        path: 'tools',
+        loadChildren: () => import('./pages/tools/routes'),
+      },
     ],
   },
 ];
