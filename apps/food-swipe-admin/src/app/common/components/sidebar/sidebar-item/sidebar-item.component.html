@@ -17,6 +17,7 @@
     }
   </div>
   @if (item().items && open()) {
+    {{ log() }}
     <div class="mt-1 flex flex-col overflow-hidden" @menuAnimation>
       @for (item of item().items; track i; let i = $index; let last = $last) {
         <div class="flex">

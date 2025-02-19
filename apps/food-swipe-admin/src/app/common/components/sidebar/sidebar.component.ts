@@ -3,7 +3,6 @@ import {
   faBook,
   faCode,
   faEgg,
-  faList,
   faPencil,
   faPerson,
   faRuler,
