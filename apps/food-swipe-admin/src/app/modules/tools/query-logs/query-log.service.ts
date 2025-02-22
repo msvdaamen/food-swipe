@@ -6,7 +6,16 @@ import { QueryLog } from './types/query-log.type';
   providedIn: 'root',
 })
 export class QueryLogService extends Service {
-  getQueryLogs() {
-    return this.http.get<QueryLog[]>(`${this.api}/tools/query-logs`);
+  getQueryLogs(
+    sort: keyof Pick<
+      QueryLog,
+      'totalExecTime' | 'calls' | 'maxExecTime'
+    > = 'totalExecTime',
+  ) {
+    return this.http.get<QueryLog[]>(`${this.api}/tools/query-logs`, {
+      params: {
+        sort,
+      },
+    });
   }
 }

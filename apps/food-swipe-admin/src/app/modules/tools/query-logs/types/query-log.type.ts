@@ -4,5 +4,8 @@ export type QueryLog = {
   query: string;
   calls: number;
   totalExecTime: number;
+  maxExecTime: number;
+  minExecTime: number;
+  meanExecTime: number;
   rows: number;
 };

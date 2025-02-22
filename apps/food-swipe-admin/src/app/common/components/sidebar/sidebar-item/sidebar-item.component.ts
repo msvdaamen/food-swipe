@@ -46,10 +46,6 @@ export class SidebarItemComponent {
   protected readonly faChevronDown = faChevronDown;
   protected readonly faPlus = faPlus;
 
-  a = effect(() => {
-    console.log(this.item().title);
-  });
-
   constructor() {
     afterNextRender(() => {
       const items = this.item().items;
@@ -69,9 +65,5 @@ export class SidebarItemComponent {
     if (this.item().items) {
       this.open.set(!this.open());
     }
-  }
-
-  log() {
-    console.log('rerender ', this.item().title);
   }
 }

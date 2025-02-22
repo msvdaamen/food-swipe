@@ -3,6 +3,8 @@ import {
   computed,
   contentChildren,
   effect,
+  input,
+  model,
   signal,
 } from '@angular/core';
 import { TabComponent } from './tab.component';
@@ -40,6 +42,8 @@ import { TabContentComponent } from './tab-content.component';
 export class TabsComponent {
   tabs = contentChildren(TabComponent);
 
+  activeTab = model<number>(0);
+
   tabHeaders = computed(() => {
     const tabs = this.tabs();
     if (!tabs) return [];
@@ -67,9 +71,12 @@ export class TabsComponent {
   activeTabContent = computed(() => {
     const contents = this.tabContents();
     const activeTab = this.activeTab();
-    return contents[activeTab];
+    const activeContent = contents[activeTab];
+    if (!activeContent)
+      throw new Error(`Active content not found for index ${activeTab}`);
+
+    return activeContent;
   });
-  activeTab = signal(0);
 
   setActiveTab(index: number) {
     this.activeTab.set(index);
