@@ -81,10 +81,4 @@ export class TabsComponent {
   setActiveTab(index: number) {
     this.activeTab.set(index);
   }
-
-  constructor() {
-    effect(() => {
-      console.log(this.tabHeaders());
-    });
-  }
 }

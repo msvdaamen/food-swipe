@@ -13,15 +13,17 @@
     "@types/uuid": "^10.0.0"
   },
   "dependencies": {
+    "@food-swipe/database": "workspace:*",
+    "@food-swipe/file-storage": "workspace:*",
+    "@keyv/redis": "^4.2.0",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.2",
     "hono-rate-limiter": "^0.4.2",
     "jsonwebtoken": "^9.0.2",
+    "keyv": "^5.2.3",
     "typescript": "^5.7.3",
     "uuid": "^11.0.5",
-    "zod": "^3.24.2",
-    "@food-swipe/database": "workspace:*",
-    "@food-swipe/file-storage": "workspace:*"
+    "zod": "^3.24.2"
   }
 }

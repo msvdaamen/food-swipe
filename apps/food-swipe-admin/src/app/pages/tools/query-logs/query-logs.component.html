@@ -5,15 +5,7 @@
       <div class="table-container mt-2">
         <table class="table w-full">
           <thead>
-            <tr>
-              <th colspan="5" class="border-b">
-                <div class="flex justify-end">
-                  <app-button size="small" (click)="refresh()">
-                    <fa-icon [icon]="faRefresh" /> Refresh
-                  </app-button>
-                </div>
-              </th>
-            </tr>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
             <tr>
               <th class="w-3/4">Query</th>
               <th class="w-10 whitespace-nowrap">User</th>
@@ -50,15 +42,7 @@
       <div class="table-container mt-2">
         <table class="table w-full">
           <thead>
-            <tr>
-              <th colspan="8" class="border-b">
-                <div class="flex justify-end">
-                  <app-button size="small" (click)="refresh()">
-                    <fa-icon [icon]="faRefresh" /> Refresh
-                  </app-button>
-                </div>
-              </th>
-            </tr>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
             <tr>
               <th class="w-3/4">Query</th>
               <th class="w-10 whitespace-nowrap">User</th>
@@ -118,15 +102,7 @@
       <div class="table-container mt-2">
         <table class="table w-full">
           <thead>
-            <tr>
-              <th colspan="8" class="border-b">
-                <div class="flex justify-end">
-                  <app-button size="small" (click)="refresh()">
-                    <fa-icon [icon]="faRefresh" /> Refresh
-                  </app-button>
-                </div>
-              </th>
-            </tr>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
             <tr>
               <th class="w-3/4">Query</th>
               <th class="w-10 whitespace-nowrap">User</th>
@@ -181,3 +157,48 @@
     </app-tab-content>
   </app-tab>
 </app-tabs>
+<ng-template #tableHeaderRefresh>
+  <tr>
+    <th colspan="8" class="border-b">
+      <div class="flex justify-end">
+        <app-button size="small" (click)="refresh()">
+          <fa-icon [icon]="faRefresh" /> Refresh
+        </app-button>
+      </div>
+    </th>
+  </tr>
+</ng-template>
+<ng-template #loaderTemplate let-columns>
+  <div class="table-container">
+    <table class="table-loader w-full">
+      <thead>
+        <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
+        <tr>
+          <th class="w-3/4">Query</th>
+          <th class="w-10 whitespace-nowrap">User</th>
+          <th class="w-1">Calls</th>
+          <th class="w-10 whitespace-nowrap">Total Time</th>
+          <th class="w-10">Rows</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (
+          log of [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20,
+          ];
+          let index = $index;
+          track index
+        ) {
+          <tr>
+            @for (i of getIttr(columns); track i) {
+              <td>
+                <div class="h-6 animate-pulse rounded bg-gray-300"></div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</ng-template>

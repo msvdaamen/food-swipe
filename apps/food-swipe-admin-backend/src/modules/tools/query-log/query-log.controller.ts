@@ -4,10 +4,18 @@ import { databaseProvider } from "../../../providers/database.provider";
 import { desc, eq, getTableColumns } from "drizzle-orm";
 import { pgView, integer, text } from "drizzle-orm/pg-core";
 import { getQueryLogsDto } from "./dto/get-query-logs.dto";
+import { cacheProvider } from "../../../providers/cache.provider";
 const app = new Hono();
 
 app.get("/", async (c) => {
   const { sort } = getQueryLogsDto.parse(c.req.query());
+
+  const cacheKey = `query-logs:${sort}`;
+  const cached = await cacheProvider.get<PgStatStatements[]>(cacheKey);
+  if (cached) {
+    console.log(cached);
+    return c.json(cached);
+  }
 
   const result = await databaseProvider
     .select({
@@ -25,6 +33,9 @@ app.get("/", async (c) => {
     .innerJoin(pgRoles, eq(pgStatStatements.userid, pgRoles.oid))
     .orderBy(desc(getSortColumn(sort)))
     .limit(20);
+
+  await cacheProvider.set(cacheKey, result, 1000 * 10);
+
   return c.json(result);
 });
 

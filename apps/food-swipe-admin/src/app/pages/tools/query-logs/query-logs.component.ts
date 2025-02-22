@@ -1,5 +1,5 @@
-import { DecimalPipe } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { QueryLogService } from '@modules/tools/query-logs/query-log.service';
 import { TabsComponent } from '../../../common/components/tab/tabs.component';
@@ -20,6 +20,7 @@ import { faRefresh } from '@fortawesome/free-solid-svg-icons';
     TabContentComponent,
     ButtonComponent,
     FaIconComponent,
+    NgTemplateOutlet,
   ],
   templateUrl: './query-logs.component.html',
   styleUrl: './query-logs.component.scss',
@@ -36,6 +37,14 @@ export default class QueryLogsComponent {
   });
   maxTimeLogs = rxResource({
     loader: () => this.queryLogService.getQueryLogs('maxExecTime'),
+  });
+
+  isLoading = computed(() => {
+    return (
+      this.totalTimeLogs.isLoading() ||
+      this.callsLogs.isLoading() ||
+      this.maxTimeLogs.isLoading()
+    );
   });
 
   activeTab = signal(0);
@@ -59,5 +68,9 @@ export default class QueryLogsComponent {
     this.totalTimeLogs.reload();
     this.callsLogs.reload();
     this.maxTimeLogs.reload();
+  }
+
+  getIttr(columns: number) {
+    return new Array(columns);
   }
 }
