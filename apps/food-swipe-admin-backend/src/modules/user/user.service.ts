@@ -1,18 +1,30 @@
-import { eq } from "drizzle-orm";
+import { count, eq, getTableColumns, gte, sql } from "drizzle-orm";
 import { DbService } from "../../common/db.service";
-import { users, type UserEntity } from "@food-swipe/database";
+import {
+  authRefreshTokens,
+  users,
+  type UserEntity,
+} from "@food-swipe/database";
+import { getUsersDto, type GetUsersDto } from "./dto/get-users.dto";
+import { CreatePagination } from "../../common/create-pagination";
+import type { UserModel } from "./models/user.model";
+import type { PaginatedData } from "../../common/types/paginated-data";
+
+const { password, ...columns } = getTableColumns(users);
 
 export class UserService extends DbService {
-  async findById(userId: number): Promise<UserEntity | undefined> {
+  async findById(userId: number): Promise<UserModel | undefined> {
     const [user] = await this.database
-      .select()
+      .select(columns)
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
     return user;
   }
 
-  async findByEmail(email: string): Promise<UserEntity | undefined> {
+  async findByEmailWithPassword(
+    email: string
+  ): Promise<UserEntity | undefined> {
     const [user] = await this.database
       .select()
       .from(users)
@@ -21,7 +33,71 @@ export class UserService extends DbService {
     return user;
   }
 
-  async getUserStats() {}
+  async findByEmail(email: string): Promise<UserModel | undefined> {
+    const [user] = await this.database
+      .select(columns)
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+    return user;
+  }
+
+  async getUsers(dto: GetUsersDto): Promise<PaginatedData<UserModel>> {
+    const { page, amount, sort } = getUsersDto.parse(dto);
+    const sortColumn = this.getSortColumn(sort || "id");
+    const [result, [{ total }]] = await Promise.all([
+      this.database
+        .select(columns)
+        .from(users)
+        .orderBy(sortColumn)
+        .limit(amount)
+        .offset((page - 1) * amount),
+      this.database
+        .select({ total: count(users.id) })
+        .from(users)
+        .limit(1),
+    ]);
+    return {
+      data: result,
+      pagination: CreatePagination(total, amount, page),
+    };
+  }
+
+  getSortColumn(column: keyof UserEntity) {
+    switch (column) {
+      case "createdAt":
+        return users.id;
+      default:
+        return users.id;
+    }
+  }
+  async getTotal(from: Date) {
+    const [result] = await this.database
+      .select({ count: count(users.id) })
+      .from(users)
+      .where(gte(users.createdAt, from))
+      .limit(1);
+    return result.count;
+  }
+
+  async getActive(from: Date) {
+    const [result] = await this.database
+      .select({ count: sql`count(distinct ${users.id})`.mapWith(Number) })
+      .from(users)
+      .innerJoin(authRefreshTokens, eq(users.id, authRefreshTokens.userId))
+      .where(gte(authRefreshTokens.createdAt, from))
+      .limit(1);
+    return result.count;
+  }
+
+  async getNew(from: Date) {
+    const [result] = await this.database
+      .select({ count: count(users.id) })
+      .from(users)
+      .where(gte(users.createdAt, from))
+      .limit(1);
+    return result.count;
+  }
 }
 
 export const userService = new UserService();

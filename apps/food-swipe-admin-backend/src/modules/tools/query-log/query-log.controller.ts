@@ -5,7 +5,9 @@ import { desc, eq, getTableColumns } from "drizzle-orm";
 import { pgView, integer, text } from "drizzle-orm/pg-core";
 import { getQueryLogsDto } from "./dto/get-query-logs.dto";
 import { cacheProvider } from "../../../providers/cache.provider";
-const app = new Hono();
+import { authRouter } from "../../auth/auth.controller";
+
+const app = authRouter.createApp();
 
 app.get("/", async (c) => {
   const { sort } = getQueryLogsDto.parse(c.req.query());
@@ -55,7 +57,7 @@ function getSortColumn(
   return pgStatStatements.totalExecTime;
 }
 
-export function registerQueryLogController(instance: Hono) {
+export function registerQueryLogController(instance: Hono<any>) {
   instance.route("/query-logs", app);
 }
 
