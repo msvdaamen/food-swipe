@@ -6,34 +6,79 @@
   <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
     <span>Total users</span>
     <div class="fap-2 flex items-center">
-      <span class="grow text-2xl font-medium">100</span>
-      <div
-        class="rounded-full border border-green-600 bg-white px-3 py-1.5 text-green-600"
-      >
-        <fa-icon [icon]="faArrowUp" /> 20%
-      </div>
+      @if (totalStats(); as value) {
+        <span class="grow text-2xl font-medium">
+          {{ value.total }}
+        </span>
+        <div
+          class="rounded-full border bg-white px-3 py-1.5"
+          [class.border-red-600]="value.percentage < 0"
+          [class.text-red-600]="value.percentage < 0"
+          [class.border-green-600]="value.percentage > 0"
+          [class.text-green-600]="value.percentage > 0"
+        >
+          @if (value.percentage > 0) {
+            <fa-icon [icon]="faArrowUp" />
+          } @else {
+            <fa-icon [icon]="faArrowDown" />
+          }
+          {{ value.percentage | percent: "1.0-0" }}
+        </div>
+      } @else {
+        <fa-icon class="text-2xl" [icon]="faSpinner" animation="spin" />
+      }
     </div>
   </div>
   <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
-    <span>Daily active users</span>
+    <span>Active users</span>
     <div class="fap-2 flex items-center">
-      <span class="grow text-2xl font-medium">100</span>
-      <div
-        class="rounded-full border border-green-600 bg-white px-4 py-1.5 text-green-600"
-      >
-        <fa-icon [icon]="faArrowUp" /> 20%
-      </div>
+      @if (activeStats(); as value) {
+        <span class="grow text-2xl font-medium">
+          {{ value.active }}
+        </span>
+        <div
+          class="rounded-full border bg-white px-4 py-1.5"
+          [class.border-red-600]="value.percentage < 0"
+          [class.text-red-600]="value.percentage < 0"
+          [class.border-green-600]="value.percentage > 0"
+          [class.text-green-600]="value.percentage > 0"
+        >
+          @if (value.percentage > 0) {
+            <fa-icon [icon]="faArrowUp" />
+          } @else {
+            <fa-icon [icon]="faArrowDown" />
+          }
+          {{ value.percentage | percent: "1.0-0" }}
+        </div>
+      } @else {
+        <fa-icon class="text-2xl" [icon]="faSpinner" animation="spin" />
+      }
     </div>
   </div>
   <div class="flex flex-col gap-4 rounded-xl bg-gray-100 p-4">
     <span>New users</span>
     <div class="fap-2 flex items-center">
-      <span class="grow text-2xl font-medium">100</span>
-      <div
-        class="rounded-full border border-green-600 bg-white px-3 py-1.5 text-green-600"
-      >
-        <fa-icon [icon]="faArrowUp" /> 20%
-      </div>
+      @if (newStats(); as value) {
+        <span class="grow text-2xl font-medium">
+          {{ value.new }}
+        </span>
+        <div
+          class="rounded-full border bg-white px-4 py-1.5"
+          [class.border-red-600]="value.percentage < 0"
+          [class.text-red-600]="value.percentage < 0"
+          [class.border-green-600]="value.percentage > 0"
+          [class.text-green-600]="value.percentage > 0"
+        >
+          @if (value.percentage > 0) {
+            <fa-icon [icon]="faArrowUp" />
+          } @else {
+            <fa-icon [icon]="faArrowDown" />
+          }
+          {{ value.percentage | percent: "1.0-0" }}
+        </div>
+      } @else {
+        <fa-icon class="text-2xl" [icon]="faSpinner" animation="spin" />
+      }
     </div>
   </div>
 </div>
@@ -48,14 +93,36 @@
       </tr>
     </thead>
     <tbody>
-      @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i; let i = $index) {
-        <tr>
-          <td>example&#64;outlook.com</td>
-          <td>examplessasss</td>
-          <td>John Doee</td>
-          <td class="text-nowrap">2024-01-01 12:12:12</td>
-        </tr>
+      @if (users.value(); as users) {
+        @for (user of users.data; track user.id) {
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td class="text-nowrap">
+              {{ user.createdAt | date: "shortDate" }}
+            </td>
+          </tr>
+        }
+      } @else {
+        @for (item of loadingArr; track i; let i = $index) {
+          <tr>
+            <td colspan="4">
+              <div class="h-6 animate-pulse rounded bg-gray-300"></div>
+            </td>
+          </tr>
+        }
       }
     </tbody>
   </table>
 </div>
+@if (pagination(); as pagination) {
+  <div class="mt-2">
+    <app-pagination
+      [currentPage]="pagination.currentPage"
+      [totalPages]="pagination.totalPages"
+      [perPage]="pagination.perPage"
+      (pageChange)="changePage($event)"
+    />
+  </div>
+}
