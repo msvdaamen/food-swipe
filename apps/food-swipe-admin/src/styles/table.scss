@@ -1,12 +1,12 @@
-
-.table {
+.table:not(.table-loader) {
   //@apply border rounded-md border-separate border-spacing-0;
 
   tbody tr {
     @apply hover:bg-gray-100;
   }
 
-  td, th {
+  td,
+  th {
     @apply px-4 py-2;
   }
 
@@ -19,8 +19,27 @@
   }
 }
 
+.table-loader {
+  tbody tr {
+    @apply hover:bg-gray-100;
+  }
+
+  td,
+  th {
+    @apply px-4 py-2;
+  }
+
+  th {
+    @apply text-left text-xs font-semibold;
+  }
+
+  td {
+    @apply px-2 py-2;
+  }
+}
+
 .table-container {
-  @apply overflow-x-auto border rounded-md;
+  @apply overflow-x-auto rounded-md border;
 }
 
 .t-row {

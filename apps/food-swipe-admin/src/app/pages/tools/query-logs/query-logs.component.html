@@ -1,0 +1,204 @@
+<app-tabs [(activeTab)]="activeTab">
+  <app-tab>
+    <app-tab-header>Most time consuming</app-tab-header>
+    <app-tab-content>
+      <div class="table-container mt-2">
+        <table class="table w-full">
+          <thead>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
+            <tr>
+              <th class="w-3/4">Query</th>
+              <th class="w-10 whitespace-nowrap">User</th>
+              <th class="w-1">Calls</th>
+              <th class="w-10 whitespace-nowrap">Total Time</th>
+              <th class="w-10 whitespace-nowrap">Avg. Rows</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of totalTimeLogs.value(); track log.queryid) {
+              <tr class="cursor-pointer">
+                <td class="max-w-1 overflow-hidden whitespace-nowrap border-r">
+                  {{ log.query }}
+                </td>
+                <td class="border-r">{{ log.user }}</td>
+                <td class="border-r text-right">{{ log.calls }}</td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.totalExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.totalExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td>{{ log.rows / log.calls | number: "1.0-0" }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </app-tab-content>
+  </app-tab>
+  <app-tab>
+    <app-tab-header>Most frequent</app-tab-header>
+    <app-tab-content>
+      <div class="table-container mt-2">
+        <table class="table w-full">
+          <thead>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
+            <tr>
+              <th class="w-3/4">Query</th>
+              <th class="w-10 whitespace-nowrap">User</th>
+              <th class="w-10 whitespace-nowrap">Avg. Rows</th>
+              <th class="w-1">Calls</th>
+              <th class="w-10 whitespace-nowrap">Max Time</th>
+              <th class="w-10 whitespace-nowrap">Mean Time</th>
+              <th class="w-10 whitespace-nowrap">Min Time</th>
+              <th class="w-10 whitespace-nowrap">Total Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of callsLogs.value(); track log.queryid) {
+              <tr class="cursor-pointer">
+                <td class="max-w-1 overflow-hidden whitespace-nowrap border-r">
+                  {{ log.query }}
+                </td>
+                <td class="border-r">{{ log.user }}</td>
+                <td class="border-r text-right">
+                  {{ log.rows / log.calls | number: "1.0-0" }}
+                </td>
+                <td class="border-r text-right">{{ log.calls }}</td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.maxExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.maxExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.meanExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.meanExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.minExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.minExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.totalExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.totalExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </app-tab-content>
+  </app-tab>
+  <app-tab>
+    <app-tab-header>Slowest execution</app-tab-header>
+    <app-tab-content>
+      <div class="table-container mt-2">
+        <table class="table w-full">
+          <thead>
+            <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
+            <tr>
+              <th class="w-3/4">Query</th>
+              <th class="w-10 whitespace-nowrap">User</th>
+              <th class="w-10 whitespace-nowrap">Avg. Rows</th>
+              <th class="w-1">Calls</th>
+              <th class="w-10 whitespace-nowrap">Max Time</th>
+              <th class="w-10 whitespace-nowrap">Mean Time</th>
+              <th class="w-10 whitespace-nowrap">Min Time</th>
+              <th class="w-10 whitespace-nowrap">Total Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of maxTimeLogs.value(); track log.queryid) {
+              <tr class="cursor-pointer">
+                <td class="max-w-1 overflow-hidden whitespace-nowrap border-r">
+                  {{ log.query }}
+                </td>
+                <td class="border-r">{{ log.user }}</td>
+                <td class="border-r text-right">
+                  {{ log.rows / log.calls | number: "1.0-0" }}
+                </td>
+                <td class="border-r text-right">{{ log.calls }}</td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.maxExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.maxExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.meanExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.meanExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.minExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.minExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+                <td class="border-r text-right text-sm">
+                  <p>{{ log.totalExecTime | number: "1.0-0" }}ms</p>
+                  <p class="text-gray-400">
+                    {{ log.totalExecTime / 1000 | number: "1.0-2" }}s
+                  </p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </app-tab-content>
+  </app-tab>
+</app-tabs>
+<ng-template #tableHeaderRefresh>
+  <tr>
+    <th colspan="8" class="border-b">
+      <div class="flex justify-end">
+        <app-button size="small" (click)="refresh()">
+          <fa-icon [icon]="faRefresh" /> Refresh
+        </app-button>
+      </div>
+    </th>
+  </tr>
+</ng-template>
+<ng-template #loaderTemplate let-columns>
+  <div class="table-container">
+    <table class="table-loader w-full">
+      <thead>
+        <ng-container *ngTemplateOutlet="tableHeaderRefresh"></ng-container>
+        <tr>
+          <th class="w-3/4">Query</th>
+          <th class="w-10 whitespace-nowrap">User</th>
+          <th class="w-1">Calls</th>
+          <th class="w-10 whitespace-nowrap">Total Time</th>
+          <th class="w-10">Rows</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (
+          log of [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20,
+          ];
+          let index = $index;
+          track index
+        ) {
+          <tr>
+            @for (i of getIttr(columns); track i) {
+              <td>
+                <div class="h-6 animate-pulse rounded bg-gray-300"></div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</ng-template>

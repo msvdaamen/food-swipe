@@ -1,4 +1,13 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  afterNextRender,
+  AfterViewInit,
+  Component,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { SidebarItem } from '../sidebar.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -17,13 +26,13 @@ import {
 import { menuAnimation } from './menu-animation';
 
 @Component({
-    selector: 'app-sidebar-item',
-    imports: [FaIconComponent, RouterLink, RouterLinkActive],
-    templateUrl: './sidebar-item.component.html',
-    styleUrl: './sidebar-item.component.scss',
-    animations: [menuAnimation]
+  selector: 'app-sidebar-item',
+  imports: [FaIconComponent, RouterLink, RouterLinkActive],
+  templateUrl: './sidebar-item.component.html',
+  styleUrl: './sidebar-item.component.scss',
+  animations: [menuAnimation],
 })
-export class SidebarItemComponent implements OnInit {
+export class SidebarItemComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -37,17 +46,19 @@ export class SidebarItemComponent implements OnInit {
   protected readonly faChevronDown = faChevronDown;
   protected readonly faPlus = faPlus;
 
-  ngOnInit() {
-    const items = this.item().items;
-    if (items) {
-      const url = this.router.url;
-      for (const item of items) {
-        if (item.link === url) {
-          this.open.set(true);
-          break;
+  constructor() {
+    afterNextRender(() => {
+      const items = this.item().items;
+      if (items) {
+        const url = this.router.url;
+        for (const item of items) {
+          if (item.link === url) {
+            this.open.set(true);
+            break;
+          }
         }
       }
-    }
+    });
   }
 
   toggleMenu() {

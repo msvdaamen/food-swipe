@@ -31,13 +31,11 @@ import { Router } from '@angular/router';
 import {
   Nutrition,
   nutritionOrder,
-  nutritions,
   NutritionUnit,
   nutritionUnits,
 } from '@modules/recipes/constants/nutritions';
 import { RecipeNutrition } from '@modules/recipes/types/recipe-nutrition.type';
 import { FormSelectComponent } from '../../../common/components/ui/form/form-select/form-select.component';
-import { FormRadioComponent } from '../../../common/components/ui/form/form-radio/form-radio.component';
 
 @Component({
   selector: 'app-recipe',
@@ -51,7 +49,6 @@ import { FormRadioComponent } from '../../../common/components/ui/form/form-radi
     FormTextareaComponent,
     FormCheckboxComponent,
     FormSelectComponent,
-    FormRadioComponent,
   ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.scss',
