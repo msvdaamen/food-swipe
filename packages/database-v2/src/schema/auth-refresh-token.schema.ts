@@ -21,7 +21,11 @@ export const authRefreshTokens = pgTable(
       .defaultNow(),
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   },
-  (table) => [index().on(table.userId), index().on(table.expiresAt)]
+  (table) => [
+    index().on(table.userId),
+    index().on(table.expiresAt),
+    index().on(table.createdAt),
+  ]
 );
 
 export const authRefreshTokensRelations = relations(
