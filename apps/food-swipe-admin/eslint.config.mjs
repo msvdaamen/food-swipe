@@ -1,6 +1,5 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-// import html from "@html-eslint/eslint-plugin";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import tailwind from "eslint-plugin-tailwindcss";
 
