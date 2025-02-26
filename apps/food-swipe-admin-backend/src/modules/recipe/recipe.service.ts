@@ -539,6 +539,7 @@ export class RecipeService extends DbService {
       } catch (error) {
         console.error(error);
         console.log({
+          temp: ingredient.quantityUnit.singular,
           measurement,
           ingredientId: existingIngredient.id,
           measurementId: measurement ? measurement.id : null,
