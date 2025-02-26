@@ -34,4 +34,7 @@ app.get("/", (c) => c.text("Hello Bun!"));
 registerAuthController(app);
 registerRecipeController(app);
 
-export default app;
+export default {
+  port: process.env.APP_PORT || 3000,
+  fetch: app.fetch,
+};
