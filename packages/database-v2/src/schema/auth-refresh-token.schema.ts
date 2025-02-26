@@ -26,7 +26,7 @@ export const authRefreshTokens = pgTable(
     index().on(table.expiresAt),
     index().on(table.createdAt),
   ]
-);
+).enableRLS();
 
 export const authRefreshTokensRelations = relations(
   authRefreshTokens,

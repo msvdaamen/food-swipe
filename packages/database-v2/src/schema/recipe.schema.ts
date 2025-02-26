@@ -17,7 +17,7 @@ export const recipes = pgTable('recipes', {
 }, table => [
   index().on(table.isPublished),
   index().on(table.coverImageId)
-]);
+]).enableRLS();
 
 export const recipesRelations = relations(recipes, ({many, one}) => ({
   steps: many(recipeSteps),
@@ -39,7 +39,7 @@ export const recipeSteps = pgTable('recipe_steps', {
   description: text().notNull(),
 }, table => [
   index().on(table.recipeId)
-]);
+]).enableRLS();
 
 export const recipeStepsRelations = relations(recipeSteps, ({one}) => ({
   recipe: one(recipes, {
@@ -61,7 +61,7 @@ export const recipeIngredients = pgTable('recipe_ingredients', {
   index().on(table.recipeId),
   index().on(table.ingredientId),
   index().on(table.measurementId)
-]);
+]).enableRLS();
 
 export const recipeIngredientsRelations = relations(recipeIngredients, ({one}) => ({
   recipe: one(recipes, {
@@ -91,7 +91,7 @@ export const recipeNutritions = pgTable('recipe_nutritions', {
 }, table => [
   unique().on(table.recipeId, table.name),
   index().on(table.recipeId)
-]);
+]).enableRLS();
 
 export const recipeNutritionsRelations = relations(recipeNutritions, ({one}) => ({
   recipe: one(recipes, {

@@ -1,7 +1,7 @@
 import type { Hono } from "hono";
 import { authRouter } from "../auth/auth.controller.ts";
 import { userService } from "./user.service.ts";
-import { startOfMonth, sub } from "date-fns";
+import { endOfMonth, startOfMonth, sub } from "date-fns";
 import { getUsersDto } from "./dto/get-users.dto.ts";
 
 const app = authRouter.createApp();
@@ -13,8 +13,10 @@ app.get("/", async (c) => {
 });
 
 app.get("/stats", async (c) => {
-  const thisMonth = startOfMonth(new Date());
-  const lastMonth = sub(thisMonth, { months: 1 });
+  const thisMonthStart = startOfMonth(new Date());
+  const thisMonthEnd = endOfMonth(new Date());
+  const lastMonthStart = startOfMonth(sub(thisMonthStart, { months: 1 }));
+  const lastMonthEnd = endOfMonth(sub(thisMonthStart, { months: 1 }));
   const [
     total,
     active,
@@ -23,12 +25,12 @@ app.get("/stats", async (c) => {
     activeLastMonth,
     newLastMonth,
   ] = await Promise.all([
-    userService.getTotal(thisMonth),
-    userService.getActive(thisMonth),
-    userService.getNew(thisMonth),
-    userService.getTotal(lastMonth),
-    userService.getActive(lastMonth),
-    userService.getNew(lastMonth),
+    userService.getTotal(thisMonthStart, thisMonthEnd),
+    userService.getActive(thisMonthStart, thisMonthEnd),
+    userService.getNew(thisMonthStart, thisMonthEnd),
+    userService.getTotal(lastMonthStart, lastMonthEnd),
+    userService.getActive(lastMonthStart, lastMonthEnd),
+    userService.getNew(lastMonthStart, lastMonthEnd),
   ]);
   return c.json({
     total,

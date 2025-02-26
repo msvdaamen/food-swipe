@@ -1,1 +1,0 @@
-ALTER TABLE "auth_refresh_tokens" ADD COLUMN "created_at" timestamp with time zone DEFAULT now() NOT NULL;
