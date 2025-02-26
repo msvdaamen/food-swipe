@@ -530,23 +530,11 @@ export class RecipeService extends DbService {
       if (!existingIngredient) {
         throw new Error("Failed to create ingredient");
       }
-      try {
-        await this.createIngredient(newRecipe.id, {
-          ingredientId: existingIngredient.id,
-          measurementId: measurement ? measurement.id : null,
-          amount: Math.round(ingredient.quantity),
-        });
-      } catch (error) {
-        console.error(error);
-        console.log({
-          temp: ingredient.quantityUnit.singular,
-          measurement,
-          ingredientId: existingIngredient.id,
-          measurementId: measurement ? measurement.id : null,
-          amount: Math.round(ingredient.quantity),
-        });
-        throw error;
-      }
+      await this.createIngredient(newRecipe.id, {
+        ingredientId: existingIngredient.id,
+        measurementId: measurement ? measurement.id : null,
+        amount: Math.round(ingredient.quantity),
+      });
     }
     const nutritions = [];
     for (const name in translatedRecipeJson.nutritions) {
