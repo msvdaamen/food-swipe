@@ -1,7 +1,5 @@
 {
-  "name": "food-swipe-mobile",
-  "integrations": {
-    "capacitor": {}
-  },
+  "name": "food-swipe",
+  "integrations": {},
   "type": "angular-standalone"
 }

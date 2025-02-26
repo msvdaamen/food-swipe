@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  api: 'https://api.food-swipe.app',
+  production: false,
+  api: 'http://localhost:3000',
 };

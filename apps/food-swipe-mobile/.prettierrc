@@ -1,5 +1,5 @@
 {
-    "endOfLine": "auto",
-    "plugins": ["prettier-plugin-tailwindcss"],
-    "tabSize": 2
+  "endOfLine": "auto",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tabSize": 2
 }

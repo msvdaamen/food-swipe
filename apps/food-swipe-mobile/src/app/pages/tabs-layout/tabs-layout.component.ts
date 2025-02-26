@@ -19,22 +19,22 @@ import {
 } from '@ionic/angular/standalone';
 
 @Component({
-    selector: 'app-tabs-layout',
-    imports: [
-        IonRouterOutlet,
-        FaIconComponent,
-        RouterLink,
-        RouterLinkActive,
-        ButtonComponent,
-        HeaderComponent,
-        CdkScrollable,
-        IonContent,
-        IonTabs,
-        IonTabBar,
-        IonTabButton,
-    ],
-    templateUrl: './tabs-layout.component.html',
-    styleUrl: './tabs-layout.component.scss'
+  selector: 'app-tabs-layout',
+  imports: [
+    IonRouterOutlet,
+    FaIconComponent,
+    RouterLink,
+    RouterLinkActive,
+    ButtonComponent,
+    HeaderComponent,
+    CdkScrollable,
+    IonContent,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+  ],
+  templateUrl: './tabs-layout.component.html',
+  styleUrl: './tabs-layout.component.scss',
 })
 export default class TabsLayoutComponent {
   faMagnifyingGlass = faMagnifyingGlass;

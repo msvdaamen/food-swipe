@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">food-swipe-mobile</string>
-    <string name="title_activity_main">food-swipe-mobile</string>
-    <string name="package_name">com.msvdaamen.foodswipe</string>
-    <string name="custom_url_scheme">com.msvdaamen.foodswipe</string>
-</resources>
