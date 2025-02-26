@@ -539,10 +539,12 @@ export class RecipeService extends DbService {
       } catch (error) {
         console.error(error);
         console.log({
+          measurement,
           ingredientId: existingIngredient.id,
           measurementId: measurement ? measurement.id : null,
           amount: Math.round(ingredient.quantity),
         });
+        throw error;
       }
     }
     const nutritions = [];
