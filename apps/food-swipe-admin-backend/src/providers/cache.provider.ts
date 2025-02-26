@@ -6,3 +6,5 @@ export const cacheProvider = new Keyv(new KeyvRedis(cacheConfig.url), {
   serialize: JSON.stringify,
   deserialize: JSON.parse,
 });
+
+export type CacheProvider = typeof cacheProvider;

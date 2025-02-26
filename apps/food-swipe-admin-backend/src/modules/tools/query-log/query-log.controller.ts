@@ -15,7 +15,6 @@ app.get("/", async (c) => {
   const cacheKey = `query-logs:${sort}`;
   const cached = await cacheProvider.get<PgStatStatements[]>(cacheKey);
   if (cached) {
-    console.log(cached);
     return c.json(cached);
   }
 
