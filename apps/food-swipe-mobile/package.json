@@ -1,7 +1,9 @@
 {
   "name": "food-swipe-mobile",
   "version": "0.0.1",
-  "engine": "bun",
+  "engines": {
+    "bun": "^1.2.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
