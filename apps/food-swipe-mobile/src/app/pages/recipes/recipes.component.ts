@@ -18,21 +18,19 @@ import {
 } from '@ionic/angular/standalone';
 import { RecipeModalComponent } from '../../common/components/modals/recipe-modal/recipe-modal.component';
 import { AuthRepository } from '../../modules/auth/auth.repository';
+import { FormInputComponent } from '../../common/components/ui/form/form-input/form-input.component';
 
 @Component({
   selector: 'app-recipes',
   imports: [
     ButtonComponent,
     FaIconComponent,
-    CdkScrollable,
-    RouterLink,
     HeaderComponent,
     IonContent,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonHeader,
-    IonToolbar,
     IonFab,
+    FormInputComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.scss',

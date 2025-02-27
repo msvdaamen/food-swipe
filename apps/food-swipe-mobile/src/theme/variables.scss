@@ -1,2 +1,18 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+:root.ios,
+:root.md {
+  --ion-background-color: #f9fafb;
+
+  @media (prefers-color-scheme: dark) {
+    --ion-text-color: white;
+    --ion-background-color: #121212;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  ion-modal {
+    --background: white;
+    --ion-background-color: white;
+  }
+}

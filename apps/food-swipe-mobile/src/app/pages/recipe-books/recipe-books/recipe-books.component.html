@@ -1,0 +1,174 @@
+<app-header />
+
+<ion-content>
+  <!-- Recipe Books Page -->
+  <div class="flex flex-col bg-gray-50 p-4 dark:bg-dark-900">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+        My Recipe Books
+      </h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Organize your favorite recipes
+      </p>
+    </div>
+
+    <!-- Liked Recipes Book (Always Present) -->
+    <div class="mb-6">
+      <div
+        class="overflow-hidden rounded-xl border border-pink-100 bg-white shadow-md dark:border-pink-900 dark:bg-dark-800"
+      >
+        <div class="flex items-center p-4">
+          <div
+            class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-pink-400 to-red-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </div>
+          <div class="ml-4 flex-1">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Liked Recipes
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              All your favorite recipes in one place
+            </p>
+          </div>
+          <div class="text-gray-400 dark:text-gray-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your Books Section -->
+    <div class="mb-4">
+      <h2 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white">
+        Your Books
+      </h2>
+
+      <!-- Books Grid -->
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Book 1 -->
+        <div
+          class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-800"
+        >
+          <div
+            class="h-32 bg-cover bg-center"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60&quot;);
+            "
+          ></div>
+          <div class="p-3">
+            <h3 class="text-md font-medium text-gray-800 dark:text-white">
+              Italian Cuisine
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">12 recipes</p>
+          </div>
+        </div>
+
+        <!-- Book 2 -->
+        <div
+          class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-800"
+        >
+          <div
+            class="h-32 bg-cover bg-center"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60&quot;);
+            "
+          ></div>
+          <div class="p-3">
+            <h3 class="text-md font-medium text-gray-800 dark:text-white">
+              Healthy Meals
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">8 recipes</p>
+          </div>
+        </div>
+
+        <!-- Book 3 (No Image Example) -->
+        <div
+          class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-800"
+        >
+          <div
+            class="flex h-32 items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-blue-400 dark:text-blue-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+          </div>
+          <div class="p-3">
+            <h3 class="text-md font-medium text-gray-800 dark:text-white">
+              Quick Dinners
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">5 recipes</p>
+          </div>
+        </div>
+
+        <!-- Book 4 (No Image Example) -->
+        <div
+          class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-800"
+        >
+          <div
+            class="flex h-32 items-center justify-center bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-purple-400 dark:text-purple-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+          </div>
+          <div class="p-3">
+            <h3 class="text-md font-medium text-gray-800 dark:text-white">
+              Desserts
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">7 recipes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

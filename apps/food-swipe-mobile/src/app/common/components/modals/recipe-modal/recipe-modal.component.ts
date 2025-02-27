@@ -11,6 +11,7 @@ import {
   IonContent,
   ModalController,
   ViewDidEnter,
+  ViewDidLeave,
 } from '@ionic/angular/standalone';
 import {
   faAdd,
@@ -38,7 +39,9 @@ import { DecimalPipe } from '@angular/common';
   templateUrl: './recipe-modal.component.html',
   styleUrl: './recipe-modal.component.scss',
 })
-export class RecipeModalComponent implements OnInit, ViewDidEnter {
+export class RecipeModalComponent
+  implements OnInit, ViewDidEnter, ViewDidLeave
+{
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly modalController = inject(ModalController);
 
@@ -70,6 +73,8 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
   faHeart = faHeart;
   faHeartOutline = faHeartOutline;
 
+  observer: IntersectionObserver | null = null;
+
   ngOnInit() {
     this.recipeRepository.loadOne(this.id);
   }
@@ -79,7 +84,7 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
     if (!coverImage) {
       return;
     }
-    const observer = new IntersectionObserver(
+    this.observer = new IntersectionObserver(
       ([entry]) => {
         const dismissHeader = this.dismissHeader()?.nativeElement;
         if (!dismissHeader) {
@@ -94,8 +99,12 @@ export class RecipeModalComponent implements OnInit, ViewDidEnter {
       { rootMargin: '-48px 0px 0px 0px' },
     );
     requestAnimationFrame(() => {
-      observer.observe(coverImage);
+      this.observer!.observe(coverImage);
     });
+  }
+
+  ionViewDidLeave() {
+    this.observer?.disconnect();
   }
 
   incrementPeople() {

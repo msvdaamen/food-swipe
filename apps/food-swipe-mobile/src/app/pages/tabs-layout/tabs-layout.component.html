@@ -1,40 +1,11 @@
-<!-- <div class="tabs-container">
-  <app-header />
-  <ion-content>
-    class="overflow-auto p-2" cdkScrollable>
-    <ion-router-outlet />
-  </ion-content>
-  <div
-    class="grid grid-flow-col items-center gap-1 rounded-t-xl dark:bg-white dark:bg-opacity-5"
-  >
-    <a
-      class="flex justify-center"
-      routerLink="/favorite"
-      routerLinkActive="text-primary"
-    >
-      <fa-icon [icon]="faHeart" size="xl" />
-    </a>
-    <a
-      class="flex justify-center"
-      routerLink="/recipes"
-      routerLinkActive="text-primary-600"
-    >
-      <fa-icon [icon]="faMagnifyingGlass" size="xl" />
-    </a>
-    <a class="flex justify-center">
-      <fa-icon [icon]="faPerson" size="xl" />
-    </a>
-  </div>
-</div> -->
-
 <ion-tabs>
   <ion-tab-bar
     id="tab-bar"
     slot="bottom"
     class="border-t border-white border-opacity-5"
   >
-    <ion-tab-button class="flex justify-center" tab="liked">
-      <fa-icon [icon]="faHeart" size="xl" />
+    <ion-tab-button class="flex justify-center" tab="recipe-books">
+      <fa-icon [icon]="faBook" size="xl" />
     </ion-tab-button>
     <ion-tab-button class="flex justify-center" tab="recipes">
       <fa-icon [icon]="faMagnifyingGlass" size="xl" />
