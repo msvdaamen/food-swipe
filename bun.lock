@@ -117,6 +117,7 @@
         "@angular/platform-browser-dynamic": "^19.0.0",
         "@angular/router": "^19.0.0",
         "@capacitor/android": "^7.0.1",
+        "@capacitor/camera": "^7.0.0",
         "@fortawesome/angular-fontawesome": "^1.0.0",
         "@fortawesome/free-regular-svg-icons": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -473,6 +474,8 @@
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@0.2.3", "https://npm.ops.print.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz", {}, "sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw=="],
 
     "@capacitor/android": ["@capacitor/android@7.0.1", "https://npm.ops.print.com/@capacitor/android/-/android-7.0.1.tgz", { "peerDependencies": { "@capacitor/core": "^7.0.0" } }, "sha512-jukJJHfkcyEBOkFBJRD3EwXMIIQo7lSv0ExPWgsIliPdGXLAj6ElvK2JaYEzec3vKyLc4RTNFVv0PMEU0vnImg=="],
+
+    "@capacitor/camera": ["@capacitor/camera@7.0.0", "https://npm.ops.print.com/@capacitor/camera/-/camera-7.0.0.tgz", { "peerDependencies": { "@capacitor/core": ">=7.0.0" } }, "sha512-waEXGt1/qN8Uz8TWBl2exngLrkyll+fNFLj00ayJrPgZxQN8kfWHGz6YlJfQJLlBRXeay7W844Ao4iX0zziEMw=="],
 
     "@capacitor/core": ["@capacitor/core@6.1.1", "https://npm.ops.print.com/@capacitor/core/-/core-6.1.1.tgz", { "dependencies": { "tslib": "^2.1.0" } }, "sha512-b1s4WDMy3Y1/owTG2/XNGCI6G5SDpF2NT1JMAgcShue13fiAuHA+Ans7Wfei6McvR0KdopAE6tMHmDAfL5PM8Q=="],
 
