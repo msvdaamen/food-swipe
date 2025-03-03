@@ -5,3 +5,4 @@ export * from "./src/schema/measurement.schema";
 export * from "./src/schema/file.schema";
 export * from "./src/schema/recipe.schema";
 export * from "./src/schema/pg-stat-statements.schema";
+export * from "./src/schema/recipe-book.schema";

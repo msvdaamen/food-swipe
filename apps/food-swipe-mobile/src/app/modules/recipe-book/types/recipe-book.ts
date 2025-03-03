@@ -1,5 +1,5 @@
 export interface RecipeBook {
-  id: string;
+  id: number;
   title: string;
   imageUrl?: string;
   isLiked: boolean;
