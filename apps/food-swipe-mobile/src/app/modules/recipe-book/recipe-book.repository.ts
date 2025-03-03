@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { RecipeBook } from './types/recipe-book';
-import { setEntities, withEntities } from '@ngrx/signals/entities';
+import { addEntity, setEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { mergeMap, pipe } from 'rxjs';
+import { mergeMap, pipe, switchMap, tap } from 'rxjs';
 import { RecipeBookService } from './recipe-book.service';
 import { mapResponse, tapResponse } from '@ngrx/operators';
-
+import { CreateRecipeBookRequest } from './requests/create-recipe-book.request';
 type State = {
   isLoading: boolean;
   hasLoaded: boolean;
@@ -29,10 +29,23 @@ export class RecipeBookRepository extends signalStore(
 
   loadAll = rxMethod<void>(
     pipe(
-      mergeMap(() => this.service.getAll()),
+      tap(() => patchState(this, { isLoading: true })),
+      switchMap(() => this.service.getAll()),
       tapResponse({
         next: (books) =>
           patchState(this, { hasLoaded: true }, setEntities(books)),
+        finalize: () => patchState(this, { isLoading: false }),
+        error: (error) => {},
+      }),
+    ),
+  );
+
+  create = rxMethod<CreateRecipeBookRequest>(
+    pipe(
+      tap(() => patchState(this, { isLoading: true })),
+      mergeMap((request) => this.service.create(request)),
+      tapResponse({
+        next: (book) => patchState(this, addEntity(book)),
         finalize: () => patchState(this, { isLoading: false }),
         error: (error) => {},
       }),

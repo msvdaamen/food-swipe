@@ -44,7 +44,7 @@ export const recipesRelations = relations(recipes, ({ many, one }) => ({
     fields: [recipes.coverImageId],
     references: [files.id],
   }),
-  recipeToRecipeBooks: many(recipeToRecipeBooks),
+  recipeToRecipeBooks: many(recipesToRecipeBooks),
 }));
 
 export type RecipeEntity = typeof recipes.$inferSelect;
@@ -146,8 +146,8 @@ export const recipeNutritionsRelations = relations(
 export type RecipeNutritionEntity = typeof recipeNutritions.$inferSelect;
 export type NewRecipeNutritionEntity = typeof recipeNutritions.$inferInsert;
 
-export const recipeToRecipeBooks = pgTable(
-  "recipe_books_to_recipes",
+export const recipesToRecipeBooks = pgTable(
+  "recipes_to_recipe_books",
   (t) => ({
     recipeBookId: t
       .integer("recipe_book_id")
@@ -166,14 +166,14 @@ export const recipeToRecipeBooks = pgTable(
 );
 
 export const recipeToRecipeBooksRelations = relations(
-  recipeToRecipeBooks,
+  recipesToRecipeBooks,
   ({ one }) => ({
     recipeBook: one(recipeBooks, {
-      fields: [recipeToRecipeBooks.recipeBookId],
+      fields: [recipesToRecipeBooks.recipeBookId],
       references: [recipeBooks.id],
     }),
     recipe: one(recipes, {
-      fields: [recipeToRecipeBooks.recipeId],
+      fields: [recipesToRecipeBooks.recipeId],
       references: [recipes.id],
     }),
   })

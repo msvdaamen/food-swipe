@@ -2,7 +2,7 @@ import { pgTable, index, uniqueIndex, primaryKey } from "drizzle-orm/pg-core";
 import { files } from "./file.schema";
 import { eq, relations, sql } from "drizzle-orm";
 import { users } from "./user.schema";
-import { recipes, recipeToRecipeBooks } from "./recipe.schema";
+import { recipes, recipesToRecipeBooks } from "./recipe.schema";
 
 export const recipeBooks = pgTable(
   "recipe_books",
@@ -45,5 +45,5 @@ export const recipeBookRelations = relations(recipeBooks, ({ one, many }) => ({
     fields: [recipeBooks.imageId],
     references: [files.id],
   }),
-  recipeToRecipeBooks: many(recipeToRecipeBooks),
+  recipeToRecipeBooks: many(recipesToRecipeBooks),
 }));

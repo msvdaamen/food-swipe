@@ -38,9 +38,20 @@
     </div>
 
     <div class="mb-4">
-      <h2 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white">
-        Your Books
-      </h2>
+      <div class="flex items-center justify-between">
+        <h2 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white">
+          Your Books
+        </h2>
+        <app-button
+          color="primary"
+          type="icon"
+          size="small"
+          rounded
+          (click)="openCreateBookModal()"
+        >
+          <fa-icon [icon]="faPlus" />
+        </app-button>
+      </div>
 
       <div class="grid grid-cols-2 gap-4">
         @for (book of books(); track book.id) {

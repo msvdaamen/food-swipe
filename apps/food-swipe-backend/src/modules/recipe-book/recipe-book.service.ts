@@ -24,6 +24,19 @@ export class RecipeBookService extends DbService {
     return result;
   }
 
+  async getLikedRecipeBook(userId: number): Promise<RecipeBookEntity> {
+    const [result] = await this.database
+      .select()
+      .from(recipeBooks)
+      .where(
+        and(eq(recipeBooks.isLiked, true), eq(recipeBooks.userId, userId))
+      );
+    if (!result) {
+      throw new Error(`No liked recipe book found for user ${userId}`);
+    }
+    return result;
+  }
+
   async createLikedRecipeBook(
     userId: number,
     payload: CreateRecipeBookDto

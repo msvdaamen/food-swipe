@@ -29,44 +29,9 @@ export const users = pgTable("users", {
 }).enableRLS();
 
 export const usersRelations = relations(users, ({ many }) => ({
-  likedRecipes: many(userLikedRecipes),
   files: many(files),
   authRefreshTokens: many(authRefreshTokens),
 }));
 
 export type UserEntity = typeof users.$inferSelect;
 export type NewUserEntity = typeof users.$inferInsert;
-
-export const userLikedRecipes = pgTable(
-  "user_liked_recipe",
-  {
-    userId: integer("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    recipeId: integer("recipe_id")
-      .notNull()
-      .references(() => recipes.id, { onDelete: "cascade" }),
-  },
-  (table) => [
-    primaryKey({ columns: [table.userId, table.recipeId] }),
-    index().on(table.recipeId),
-    index().on(table.userId),
-  ]
-).enableRLS();
-
-export const userLikedRecipesRelations = relations(
-  userLikedRecipes,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [userLikedRecipes.userId],
-      references: [users.id],
-    }),
-    recipe: one(recipes, {
-      fields: [userLikedRecipes.recipeId],
-      references: [recipes.id],
-    }),
-  })
-);
-
-export type UserLikedRecipeEntity = typeof userLikedRecipes.$inferSelect;
-export type NewUserLikedRecipeEntity = typeof userLikedRecipes.$inferInsert;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const CreateRecipeBookDto = z.object({
+export const createRecipeBookDto = z.object({
   title: z.string(),
 });
 
-export type CreateRecipeBookDto = z.infer<typeof CreateRecipeBookDto>;
+export type CreateRecipeBookDto = z.infer<typeof createRecipeBookDto>;
