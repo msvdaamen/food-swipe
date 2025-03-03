@@ -474,6 +474,7 @@ export class RecipeService extends DbService {
           content: `Translate the following recipe to English and return it in the exact same JSON format as the original recipe. I only want the JSON, no other text: ${JSON.stringify(recipe)}`,
         },
       ],
+      store: false,
     });
     const translatedRecipeContent = translatedRecipe.choices[0].message.content;
     if (!translatedRecipeContent) {
@@ -497,7 +498,7 @@ export class RecipeService extends DbService {
     const newRecipe = await this.create({
       title: translatedRecipeJson.title,
       description: translatedRecipeJson.description,
-      calories: translatedRecipeJson.nutritions.energy.value,
+      calories: translatedRecipeJson.nutritions?.energy.value || 0,
       prepTime: translatedRecipeJson.cookTime,
       servings: translatedRecipeJson.servings.number,
       coverImageId: imageId,

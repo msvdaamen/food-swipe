@@ -33,7 +33,6 @@ export class CreateRecipeModalComponent {
   constructor() {
     effect(() => {
       const isLoading = this.recipeRepository.isLoading();
-      console.log(this.recipeRepository.createRecipeError());
       if (this.isLoading() && !isLoading) {
         this.isLoading.set(false);
         this.modalController.dismiss(
@@ -45,11 +44,13 @@ export class CreateRecipeModalComponent {
   }
 
   async uploadImage() {
-    const photo = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
-      quality: 100,
-    });
-    this.image.set(photo);
+    try {
+      const photo = await Camera.getPhoto({
+        resultType: CameraResultType.Uri,
+        quality: 100,
+      });
+      this.image.set(photo);
+    } catch {}
   }
 
   async createRecipe() {

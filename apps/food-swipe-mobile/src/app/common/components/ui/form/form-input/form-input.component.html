@@ -1,7 +1,7 @@
 <label>
   <p><ng-content /></p>
   <div
-    class="flex rounded border border-gray-400 px-1.5 py-1 outline-0 transition-colors invalid:border-danger-600 focus-within:border-primary-600 disabled:bg-gray-200 dark:border-dark-700 dark:bg-white dark:bg-opacity-10"
+    class="flex rounded border border-gray-400 px-1.5 py-0.5 outline-0 transition-colors invalid:border-danger-600 focus-within:border-primary-600 disabled:bg-gray-200 dark:border-dark-700 dark:bg-white dark:bg-opacity-10"
     [class.bg-white]="forceDark()"
     [class.bg-opacity-10]="forceDark()"
     [class.border-dark-700]="forceDark()"
@@ -12,7 +12,7 @@
         [type]="type"
         [placeholder]="placeholder"
         [disabled]="disabled"
-        class="w-full bg-transparent outline-none"
+        class="w-full bg-transparent outline-none placeholder:text-sm"
       />
     </div>
     @if (iconSuffix) {

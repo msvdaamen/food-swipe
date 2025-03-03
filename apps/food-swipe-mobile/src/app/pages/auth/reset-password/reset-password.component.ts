@@ -18,17 +18,16 @@ import { FormInputComponent } from '../../../common/components/ui/form/form-inpu
 import { ButtonComponent } from '../../../common/components/ui/button/button.component';
 
 @Component({
-    selector: 'app-reset-password',
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        RouterLink,
-        FormInputComponent,
-        ButtonComponent,
-    ],
-    templateUrl: './reset-password.component.html',
-    styleUrls: ['./reset-password.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-reset-password',
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    FormInputComponent,
+    ButtonComponent,
+  ],
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ResetPasswordComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

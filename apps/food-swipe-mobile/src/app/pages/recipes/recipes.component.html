@@ -1,39 +1,42 @@
 <app-header />
 
 <ion-content>
+  <div class="mb-4 px-4">
+    <app-form-input placeholder="Search"></app-form-input>
+  </div>
   <div class="flex flex-col gap-4 px-4 pb-4">
     @for (recipe of recipes(); track recipe.id) {
       <div
-        class="card mr-1 flex min-h-10 flex-col rounded bg-white dark:bg-opacity-10"
+        class="card mr-1 flex min-h-10 flex-col bg-white dark:bg-dark-800"
+        (click)="viewRecipe(recipe.id)"
       >
-        <div class="cover flex rounded">
+        <div class="cover relative flex">
           <img
             alt="A bowl of pasta with a fork"
-            class="rounded-t"
+            class="h-48 w-full rounded object-cover"
             [src]="recipe.coverImageUrl"
           />
-        </div>
-        <div class="body rounded-t p-3">
-          <div class="title">{{ recipe.title }}</div>
-          <div class="text-xs text-gray-400 dark:text-gray-300">
-            {{ recipe.nutritions?.energy?.value }}cal
-          </div>
-          <div class="mt-2 flex justify-between">
-            <app-button size="small" (click)="viewRecipe(recipe.id)">
-              <fa-icon [icon]="faEye" /> VIEW
-            </app-button>
-            <span
-              class="flex items-center justify-center text-gray-400 dark:text-gray-300"
-            >
-              <fa-icon [icon]="faClock" /> {{ recipe.prepTime }} mins
-            </span>
+          <div
+            class="absolute inset-0 rounded-t bg-gradient-to-t from-black/70 to-transparent"
+          >
+            <div class="absolute bottom-0 w-full p-3 text-white">
+              <div class="title font-medium">{{ recipe.title }}</div>
+              <div class="flex justify-between">
+                <div class="text-xs text-gray-200">
+                  {{ recipe.nutritions.energy?.value }}cal
+                </div>
+                <div class="text-xs text-gray-200">
+                  <fa-icon [icon]="faClock" /> {{ recipe.prepTime }} mins
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     }
-    <ion-infinite-scroll [disabled]="!cursor()" (ionInfinite)="loadMore()"
-      ><ion-infinite-scroll-content></ion-infinite-scroll-content
-    ></ion-infinite-scroll>
+    <ion-infinite-scroll [disabled]="!cursor()" (ionInfinite)="loadMore()">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
   @if (isAdmin()) {
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">

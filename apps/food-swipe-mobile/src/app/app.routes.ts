@@ -21,9 +21,9 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/recipes/recipes.component'),
       },
       {
-        path: 'liked',
+        path: 'recipe-books',
         loadComponent: () =>
-          import('./pages/liked-recipes/liked-recipes.component'),
+          import('./pages/recipe-books/recipe-books/recipe-books.component'),
       },
     ],
   },

@@ -6,6 +6,7 @@ import { rateLimiter } from "hono-rate-limiter";
 import { getConnInfo } from "hono/bun";
 import { secureHeaders } from "hono/secure-headers";
 import { migrateDatabase } from "./providers/database.provider";
+import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller";
 
 await migrateDatabase();
 
@@ -33,6 +34,7 @@ app.get("/", (c) => c.text("Hello Bun!"));
 
 registerAuthController(app);
 registerRecipeController(app);
+registerRecipeBookController(app);
 
 export default {
   port: process.env.APP_PORT || 3000,

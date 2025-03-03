@@ -1,24 +1,24 @@
 .tabs-container {
-    display: grid;
-    height: 100dvh;
-    grid-template-rows: 3rem 1fr 60px;
+  display: grid;
+  height: 100dvh;
+  grid-template-rows: 3rem 1fr 60px;
 }
 
 ion-tab-bar {
-    --background: white;
+  --background: white;
 
-    @media (prefers-color-scheme: dark) {
-        --background: var(--ion-background-color);
-    }
+  @media (prefers-color-scheme: dark) {
+    --background: black;
+  }
 }
 
 ion-tab-button {
-    --color: black;
-    --color-focused: theme('colors.primary.600');
-    --color-selected: theme('colors.primary.600');
+  --color: black;
+  --color-focused: theme("colors.primary.600");
+  --color-selected: theme("colors.primary.600");
   font-size: 1rem;
 
-    @media (prefers-color-scheme: dark) {
-        --color: white;
-    }
+  @media (prefers-color-scheme: dark) {
+    --color: white;
+  }
 }
