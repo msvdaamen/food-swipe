@@ -15,16 +15,16 @@ import { FormInputComponent } from '../../../common/components/ui/form/form-inpu
 import { AuthRepository } from '../../../modules/auth/auth.repository';
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        ButtonComponent,
-        FormInputComponent,
-        ReactiveFormsModule,
-        RouterLink,
-    ],
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-login',
+  imports: [
+    ButtonComponent,
+    FormInputComponent,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class LoginComponent {
   private readonly fb = inject(NonNullableFormBuilder);
@@ -37,7 +37,7 @@ export default class LoginComponent {
     effect(() => {
       const user = this.authRepository.user();
       if (user) {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/', { replaceUrl: true });
       }
     });
   }

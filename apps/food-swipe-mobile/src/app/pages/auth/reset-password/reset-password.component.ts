@@ -40,7 +40,7 @@ export default class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.token) {
-      this.router.navigateByUrl('/auth/login');
+      this.router.navigateByUrl('/auth/login', { replaceUrl: true });
     }
   }
 
