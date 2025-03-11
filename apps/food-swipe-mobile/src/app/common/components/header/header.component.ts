@@ -13,7 +13,7 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [FaIconComponent],
+  imports: [FaIconComponent, IonHeader, IonToolbar],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideExperimentalZonelessChangeDetection(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({ _forceStatusbarPadding: true }),
     provideRouter(
       routes,
       withPreloading(PreloadAllModules),

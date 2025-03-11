@@ -20,17 +20,17 @@ import { FormInputComponent } from '../../../common/components/ui/form/form-inpu
 import { AuthRepository } from '../../../modules/auth/auth.repository';
 
 @Component({
-    selector: 'app-register',
-    imports: [
-        ButtonComponent,
-        FormInputComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterLink,
-    ],
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-register',
+  imports: [
+    ButtonComponent,
+    FormInputComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class RegisterComponent {
   private readonly fb = inject(NonNullableFormBuilder);
@@ -43,7 +43,7 @@ export default class RegisterComponent {
     effect(() => {
       const user = this.authRepository.user();
       if (user) {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/', { replaceUrl: true });
       }
     });
   }
