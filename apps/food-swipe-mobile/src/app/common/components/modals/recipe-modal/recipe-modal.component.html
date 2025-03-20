@@ -1,18 +1,4 @@
 <ion-content>
-  <div
-    #dismissHeader
-    class="fixed z-10 h-12 w-full border-y-dark-800 text-white transition-colors duration-300"
-    (click)="dismiss()"
-  >
-    <app-button
-      type="icon"
-      size="small"
-      rounded
-      color="transparent"
-      class="absolute left-2 top-2"
-      ><fa-icon [icon]="faArrowLeft" size="lg"
-    /></app-button>
-  </div>
   <div #coverImage class="image">
     <img [src]="recipe().coverImageUrl" alt="test" />
   </div>
