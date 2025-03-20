@@ -1,10 +1,10 @@
-import type { Hono } from "hono";
 import { authRouter } from "../auth/auth.controller";
 import { allRecipesDtoSchema } from "./dto/all-recipes.dto";
 import { recipeService } from "./recipe.service";
 import { NotFoundError } from "../../common/errors/not-found.error";
 import { createRecipeDtoSchema } from "./dto/create-recipe.dto";
 import {likeRecipeDtoSchema} from "./dto/like-recipe.dto.ts";
+import type { Hono } from 'hono';
 
 const app = authRouter.createApp();
 

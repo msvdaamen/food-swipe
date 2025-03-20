@@ -78,6 +78,8 @@ export default class RecipesComponent {
     const modal = await this.modalController.create({
       component: RecipeModalComponent,
       componentProps: { id },
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
     modal.present();
   }

@@ -39,14 +39,9 @@ import { DecimalPipe } from '@angular/common';
   templateUrl: './recipe-modal.component.html',
   styleUrl: './recipe-modal.component.scss',
 })
-export class RecipeModalComponent
-  implements OnInit, ViewDidEnter, ViewDidLeave
-{
+export class RecipeModalComponent implements OnInit {
   private readonly recipeRepository = inject(RecipeRepository);
   private readonly modalController = inject(ModalController);
-
-  dismissHeader = viewChild<ElementRef<HTMLDivElement>>('dismissHeader');
-  coverImage = viewChild<ElementRef<HTMLDivElement>>('coverImage');
 
   id!: number;
 
@@ -77,34 +72,6 @@ export class RecipeModalComponent
 
   ngOnInit() {
     this.recipeRepository.loadOne(this.id);
-  }
-
-  ionViewDidEnter() {
-    const coverImage = this.coverImage()?.nativeElement;
-    if (!coverImage) {
-      return;
-    }
-    this.observer = new IntersectionObserver(
-      ([entry]) => {
-        const dismissHeader = this.dismissHeader()?.nativeElement;
-        if (!dismissHeader) {
-          return;
-        }
-        if (!entry.isIntersecting) {
-          dismissHeader.classList.add('header-visible');
-        } else {
-          dismissHeader.classList.remove('header-visible');
-        }
-      },
-      { rootMargin: '-48px 0px 0px 0px' },
-    );
-    requestAnimationFrame(() => {
-      this.observer!.observe(coverImage);
-    });
-  }
-
-  ionViewDidLeave() {
-    this.observer?.disconnect();
   }
 
   incrementPeople() {

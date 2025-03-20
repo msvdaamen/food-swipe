@@ -1,9 +1,15 @@
 import {
+  afterNextRender,
+  afterRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  EnvironmentInjector,
+  inject,
   input,
   Input,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -16,6 +22,7 @@ import {
 } from '@angular/forms';
 import { FaIconComponent, IconName } from '@fortawesome/angular-fontawesome';
 import { RegisterOnToucheFn } from '../../../../types/form.types';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 
 type InputType = 'number' | 'text' | 'email' | 'password' | 'file';
 
@@ -34,8 +41,12 @@ type InputType = 'number' | 'text' | 'email' | 'password' | 'file';
   ],
 })
 export class FormInputComponent implements ControlValueAccessor {
+  private readonly injector = inject(EnvironmentInjector);
+
   @ViewChild(DefaultValueAccessor, { static: true })
   dva: DefaultValueAccessor | null = null;
+
+  input = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
   @Input() type: InputType = 'text';
   @Input() placeholder = '';

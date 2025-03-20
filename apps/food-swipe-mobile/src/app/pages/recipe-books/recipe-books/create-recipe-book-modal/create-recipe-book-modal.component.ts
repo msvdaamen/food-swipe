@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, ViewDidEnter } from '@ionic/angular/standalone';
 import { FormInputComponent } from '../../../../common/components/ui/form/form-input/form-input.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from 'src/app/common/components/ui/button/button.component';
