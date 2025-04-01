@@ -64,18 +64,20 @@ function RouteComponent() {
 function UsersTable() {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, isPending } = useQuery({
     queryKey: ["users", "page", page],
-    queryFn: () => userApi.getUsers({ amount: 1, page, sort: "id" }),
-    retry: false,
+    queryFn: () => userApi.getUsers({ amount: 10, page, sort: "id" }),
     placeholderData: keepPreviousData,
   });
 
   const loadingArr = Array(5).fill(null);
 
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <>
-      {isError ? <div>Error: {error.message}</div> : null}
       <div className="rounded-md border">
         <Table>
           <TableHeader className="bg-muted">
@@ -87,7 +89,7 @@ function UsersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
+            {isPending
               ? loadingArr.map((_, i) => (
                   <TableRow key={i}>
                     <TableCell colSpan={4}>
@@ -95,7 +97,7 @@ function UsersTable() {
                     </TableCell>
                   </TableRow>
                 ))
-              : data?.data.map((user) => (
+              : data.data.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.username}</TableCell>

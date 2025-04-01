@@ -15,7 +15,7 @@ import { RecipeNutrition } from "./types/recipe-nutrition.type";
 import { UpdateRecipeNutritionRequest } from "./requests/update-recipe-nutrition.request";
 
 export class RecipeApi {
-  getAll(payload: LoadRecipesRequest = {}) {
+  async getAll(payload: LoadRecipesRequest = {}) {
     const params = objectToSearchParams(payload);
     return httpApi.get<Recipe[]>(`/v1/recipes?${params}`);
   }

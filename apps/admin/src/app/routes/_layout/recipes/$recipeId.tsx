@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { recipeApi } from "@/modules/recipes/recipe.api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/common/components/ui/button";
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
@@ -15,14 +15,13 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { CircleHelp, Loader, Pencil, Trash } from "lucide-react";
+import { CircleHelp, GripVertical, Loader, Pencil, Trash } from "lucide-react";
 import { Textarea } from "@/common/components/ui/textarea";
 import { Checkbox } from "@/common/components/ui/checkbox";
 import {
@@ -49,44 +48,33 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import { RecipeStep } from "@/modules/recipes/types/recipe-step.type";
+import {
+  useRecipeStepDelete,
+  useRecipeSteps,
+  useRecipeStepsReorder,
+} from "@/modules/recipes/hooks/recipe-step.hooks";
+import { useRecipe } from "@/modules/recipes/hooks/recipe.hooks";
+import {
+  useRecipeNutrition,
+  useRecipeNutritionUpdate,
+} from "@/modules/recipes/hooks/recipe-nutrition.hooks";
+import { CreateRecipeIngredientDialog } from "@/modules/recipes/components/create-recipe-ingredient.dialog";
+import { UpdateRecipeIngredientDialog } from "@/modules/recipes/components/update-recipe-ingredient.dialog";
+import { useRecipeIngredients } from "@/modules/recipes/hooks/recipe-ingredient.hooks";
+import { RecipeIngredient } from "@/modules/recipes/types/recipe-ingredient.type";
 
 export const Route = createFileRoute("/_layout/recipes/$recipeId")({
   component: RouteComponent,
+  params: {
+    parse: (params) => ({
+      recipeId: Number(params.recipeId),
+    }),
+  },
 });
-
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  coverImageUrl?: string;
-  prepTime?: number;
-  servings?: number;
-  isPublished: boolean;
-  ingredients?: Array<{
-    ingredientId: number;
-    ingredient: string;
-    amount: number;
-    measurement: string;
-  }>;
-  steps?: Array<{
-    id: number;
-    stepNumber: number;
-    description: string;
-  }>;
-  nutritions?: Array<{
-    name: string;
-    value: number;
-    unit: string;
-  }>;
-  nutritionUnits?: string[];
-}
 
 function RouteComponent() {
   const { recipeId } = Route.useParams();
-  const { data: recipe, isLoading } = useQuery({
-    queryKey: ["recipe", recipeId],
-    queryFn: () => recipeApi.getById(Number(recipeId)),
-  });
+  const { data: recipe, isLoading } = useRecipe({ recipeId });
 
   const [isChangingImage, setIsChangingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,7 +93,7 @@ function RouteComponent() {
     });
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = () => {
     setIsChangingImage(true);
     // TODO: Implement file upload
     setTimeout(() => setIsChangingImage(false), 1000);
@@ -221,10 +209,35 @@ function RouteComponent() {
 }
 
 function Ingredients({ recipeId }: { recipeId: number }) {
-  const { data: ingredients, isLoading } = useQuery({
-    queryKey: ["recipe", recipeId, "ingredients"],
-    queryFn: () => recipeApi.getIngredients(Number(recipeId)),
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] =
+    useState<RecipeIngredient | null>(null);
+  const { data: ingredients, isLoading } = useRecipeIngredients(recipeId);
+  const queryClient = useQueryClient();
+  const deleteIngredient = useMutation({
+    mutationFn: () =>
+      recipeApi.deleteIngredient(recipeId, selectedIngredient!.ingredientId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["recipe", recipeId, "ingredients"],
+      });
+    },
   });
+
+  const openCreateDialog = () => {
+    setIsCreateOpen(true);
+  };
+
+  const openUpdateDialog = (ingredient: RecipeIngredient) => {
+    setSelectedIngredient(ingredient);
+    setIsUpdateOpen(true);
+  };
+
+  const closeUpdateDialog = () => {
+    setSelectedIngredient(null);
+    setIsUpdateOpen(false);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -234,7 +247,7 @@ function Ingredients({ recipeId }: { recipeId: number }) {
     <div className="mt-8">
       <div className="mb-1 flex gap-2">
         <h2 className="grow text-2xl font-bold">Ingredients</h2>
-        <Button size="sm" onClick={() => {}}>
+        <Button size="sm" onClick={openCreateDialog}>
           Add ingredient
         </Button>
       </div>
@@ -256,26 +269,47 @@ function Ingredients({ recipeId }: { recipeId: number }) {
                 {ingredient.measurement}
               </div>
               <div className="flex min-w-28 flex-shrink gap-1">
-                <Button variant="ghost" size="sm" onClick={() => {}}>
-                  <Pencil />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => openUpdateDialog(ingredient)}
+                >
+                  <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => {}}>
-                  <Trash />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => deleteIngredient.mutate()}
+                >
+                  <Trash className="h-4 w-4" />
                 </Button>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <CreateRecipeIngredientDialog
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        recipeId={recipeId}
+      />
+      {selectedIngredient && (
+        <UpdateRecipeIngredientDialog
+          isOpen={isUpdateOpen}
+          onClose={closeUpdateDialog}
+          recipeId={recipeId}
+          ingredient={selectedIngredient}
+        />
+      )}
     </div>
   );
 }
 
 function Steps({ recipeId }: { recipeId: number }) {
-  const { data: steps, isLoading } = useQuery({
-    queryKey: ["recipe", recipeId, "steps"],
-    queryFn: () => recipeApi.getSteps(Number(recipeId)),
-  });
+  const { data: steps, isLoading } = useRecipeSteps({ recipeId });
+  const reorderSteps = useRecipeStepsReorder({ recipeId });
+  const deleteStep = useRecipeStepDelete({ recipeId });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStepId, setActiveStepId] = useState<number | undefined>(
     undefined
@@ -294,7 +328,6 @@ function Steps({ recipeId }: { recipeId: number }) {
   function closeModal() {
     setIsModalOpen(false);
     setActiveStepId(undefined);
-    console.log("closeModal");
   }
 
   function openModal(stepId?: number) {
@@ -302,12 +335,25 @@ function Steps({ recipeId }: { recipeId: number }) {
     setIsModalOpen(true);
   }
 
+  function removeStep(stepId: number) {
+    deleteStep.mutate(stepId);
+  }
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    console.log(event);
+    const oldIndex = steps?.findIndex((step) => step.id === Number(active.id));
+    const newIndex = steps?.findIndex((step) => step.id === Number(over?.id));
 
-    if (active.id !== over?.id) {
-      // TODO: Implement step reordering
+    if (
+      active.id !== over?.id &&
+      oldIndex !== undefined &&
+      newIndex !== undefined
+    ) {
+      reorderSteps.mutate({
+        stepId: Number(active.id),
+        orderFrom: oldIndex + 1,
+        orderTo: newIndex + 1,
+      });
     }
   };
   return (
@@ -323,7 +369,7 @@ function Steps({ recipeId }: { recipeId: number }) {
           <div className="ingredients">
             <div className="flex">
               <div className="step min-w-20 flex-shrink">Step</div>
-              <div className="description">Description</div>
+              <div className="description flex-grow">Description</div>
               <div className="min-w-28 flex-shrink"></div>
             </div>
             <div>
@@ -342,7 +388,7 @@ function Steps({ recipeId }: { recipeId: number }) {
                       key={step.id}
                       step={step}
                       update={openModal}
-                      remove={() => {}}
+                      remove={removeStep}
                     />
                   ))}
                 </SortableContext>
@@ -361,9 +407,51 @@ function Steps({ recipeId }: { recipeId: number }) {
   );
 }
 
+function SortableStep({
+  step,
+  update,
+  remove,
+}: {
+  step: RecipeStep;
+  update: (id: number) => void;
+  remove: (id: number) => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: step.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="t-row flex items-center px-2 py-1"
+    >
+      <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
+      <div className="description flex-grow">{step.description}</div>
+      <div className="flex min-w-28 flex-shrink gap-1">
+        <Button variant="outline" size="sm" onClick={() => update(step.id)}>
+          <Pencil />
+        </Button>
+        <Button variant="destructive" size="sm" onClick={() => remove(step.id)}>
+          <Trash />
+        </Button>
+        <Button variant="ghost" {...listeners} {...attributes}>
+          <GripVertical />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function Nutritions({ recipeId }: { recipeId: number }) {
+  const { data, isFetching } = useRecipeNutrition(recipeId);
+
   const nutritions = useMemo(() => {
-    const nutritions: RecipeNutrition[] = [];
+    const nutritions: RecipeNutrition[] = data || [];
     const nutritionMap = new Map<string, RecipeNutrition>();
     for (const nutrition of nutritions) {
       nutritionMap.set(nutrition.name, nutrition);
@@ -384,7 +472,9 @@ function Nutritions({ recipeId }: { recipeId: number }) {
       }
     }
     return orderedNutritions;
-  }, [recipeId]);
+  }, [data, recipeId]);
+
+  const updateNutritionMutation = useRecipeNutritionUpdate(recipeId);
 
   const updateNutritionValue = (
     name: Nutrition,
@@ -399,11 +489,16 @@ function Nutritions({ recipeId }: { recipeId: number }) {
     unit: NutritionUnit,
     value: number
   ) => {
-    recipeApi.updateNutrition(recipeId, name, {
-      value: value,
+    updateNutritionMutation.mutate({
+      name,
       unit,
+      value,
     });
   };
+
+  if (isFetching) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="mt-8">
@@ -464,45 +559,6 @@ function Nutritions({ recipeId }: { recipeId: number }) {
             ))}
           </TableBody>
         </Table>
-      </div>
-    </div>
-  );
-}
-
-function SortableStep({
-  step,
-  update,
-  remove,
-}: {
-  step: RecipeStep;
-  update: (id: number) => void;
-  remove: (id: number) => void;
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: step.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="t-row flex items-center"
-    >
-      <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
-      <div className="description">{step.description}</div>
-      <div className="flex min-w-28 flex-shrink gap-1">
-        <Button variant="ghost" size="sm" onClick={() => update(step.id)}>
-          <Pencil />
-        </Button>
-        <Button variant="destructive" size="sm" onClick={() => remove(step.id)}>
-          <Trash />
-        </Button>
       </div>
     </div>
   );

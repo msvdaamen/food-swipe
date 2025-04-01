@@ -51,7 +51,13 @@ export class Api {
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
-    return response.json();
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text);
+      return json as T;
+    } catch {
+      return text as unknown as T;
+    }
   }
 
   private async request(
@@ -100,6 +106,9 @@ export class Api {
         this.activeReq = null;
         return;
       }
+      useAuthStore.setState(() => ({ accessToken: null, refreshToken: null }));
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       throw new Error("Failed to refresh tokens");
     });
     return this.activeReq;

@@ -26,10 +26,6 @@ const validator = type({
 function RouteComponent() {
   const accessToken = useAuthStore((state) => state.accessToken);
 
-  if (accessToken) {
-    return <Navigate to="/" />;
-  }
-
   const signIn = useAuthStore((state) => state.signIn);
   const form = useForm({
     defaultValues: {
@@ -44,6 +40,10 @@ function RouteComponent() {
       signIn(data.value);
     },
   });
+
+  if (accessToken) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

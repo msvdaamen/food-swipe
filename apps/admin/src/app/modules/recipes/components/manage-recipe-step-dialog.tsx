@@ -16,6 +16,11 @@ import { recipeApi } from "../recipe.api";
 import { Loader } from "lucide-react";
 import { type } from "arktype";
 import React, { useEffect } from "react";
+import {
+  useRecipeStepCreate,
+  useRecipeSteps,
+} from "../hooks/recipe-step.hooks";
+import { useRecipeStepUpdate } from "../hooks/recipe-step.hooks";
 
 interface ManageRecipeStepDialogProps {
   recipeId: number;
@@ -36,6 +41,11 @@ export function ManageRecipeStepDialog({
   onClose,
 }: ManageRecipeStepDialogProps) {
   const queryClient = useQueryClient();
+  const createStep = useRecipeStepCreate({ recipeId });
+  const updateStep = useRecipeStepUpdate({
+    recipeId,
+    stepId: stepId as number,
+  });
   const form = useForm({
     defaultValues: {
       description: "",
@@ -44,33 +54,31 @@ export function ManageRecipeStepDialog({
     validators: {
       onChange: validator,
     },
-    onSubmit: async (form) => {
-      const key = ["recipe", recipeId, "steps"];
+    onSubmit: async ({ value, formApi }) => {
       if (stepId) {
-        await recipeApi.updateStep(recipeId, stepId, form.value);
-        const steps = queryClient.getQueryData<RecipeStep[]>(key);
-        if (steps) {
-          queryClient.setQueryData(
-            key,
-            steps.map((step) => {
-              if (step.id === stepId) {
-                return form.value;
-              }
-              return step;
-            })
-          );
-        }
+        await updateStep.mutateAsync(value);
       } else {
-        await recipeApi.createStep(recipeId, form.value);
-        queryClient.setQueryData(key, (old: RecipeStep[]) => [
-          ...old,
-          form.value,
-        ]);
+        await createStep.mutateAsync(value);
       }
-      form.formApi.reset();
+      formApi.reset();
       onClose();
     },
   });
+
+  useEffect(() => {
+    if (stepId) {
+      const steps = queryClient.getQueryData<RecipeStep[]>([
+        "recipe",
+        recipeId,
+        "steps",
+      ]);
+      const step = steps?.find((step) => step.id === stepId);
+      if (step) {
+        form.setFieldValue("description", step.description);
+        form.setFieldValue("order", step.stepNumber);
+      }
+    }
+  }, [form, queryClient, recipeId, stepId]);
 
   useEffect(() => {
     const steps = queryClient.getQueryData<RecipeStep[]>([
@@ -81,27 +89,7 @@ export function ManageRecipeStepDialog({
     if (steps) {
       form.setFieldValue("order", steps.length + 1);
     }
-  }, [recipeId, form, queryClient]);
-
-  // useEffect(() => {
-  //   const allSteps = steps();
-  //   setCurrentSteps(allSteps);
-
-  //   // Set order based on last step
-  //   const lastStep = allSteps[allSteps.length - 1];
-  //   if (lastStep) {
-  //     setValue("order", lastStep.stepNumber + 1);
-  //   }
-
-  //   // If editing existing step, populate form
-  //   if (stepId) {
-  //     const step = stepEntities()[stepId];
-  //     if (step) {
-  //       setValue("description", step.description);
-  //       setValue("order", step.stepNumber);
-  //     }
-  //   }
-  // }, [stepId, steps, stepEntities, setValue]);
+  }, [recipeId, form, queryClient, isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

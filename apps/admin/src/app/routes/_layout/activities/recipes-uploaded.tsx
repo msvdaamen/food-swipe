@@ -8,10 +8,8 @@ import {
   TableRow,
 } from "@/common/components/ui/table";
 import { format } from "date-fns";
-import { Recipe } from "@/modules/recipes/types/recipe.type";
 import { useNavigate } from "@tanstack/react-router";
-import { recipeApi } from "@/modules/recipes/recipe.api";
-import { useQuery } from "@tanstack/react-query";
+import { useRecipes } from "@/modules/recipes/hooks/recipe.hooks";
 
 export const Route = createFileRoute("/_layout/activities/recipes-uploaded")({
   component: RouteComponent,
@@ -23,15 +21,7 @@ export const Route = createFileRoute("/_layout/activities/recipes-uploaded")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const {
-    data: recipes,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["recipes", "isPublished", false],
-    queryFn: () => recipeApi.getAll({ isPublished: false }),
-  });
+  const { data: recipes, isLoading } = useRecipes({ isPublished: false });
   const loadingArr = Array(5).fill(null);
 
   return (
@@ -69,7 +59,7 @@ function RouteComponent() {
                     onClick={() =>
                       navigate({
                         to: "/recipes/$recipeId",
-                        params: { recipeId: recipe.id.toString() },
+                        params: { recipeId: recipe.id },
                       })
                     }
                   >

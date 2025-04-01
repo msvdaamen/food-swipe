@@ -5,11 +5,14 @@ import { UpdateIngredientRequest } from "./requests/update-ingredient.request";
 import { PaginatedData } from "../../common/types/paginated-data";
 import { httpApi } from "@/common/api";
 import { objectToSearchParams } from "@/common/lib/utils";
-export class IngredientService {
-  getAll(payload: GetIngredientsRequest) {
+
+export class IngredientApi {
+  getAll(payload: GetIngredientsRequest, signal?: AbortSignal) {
     const params = objectToSearchParams(payload);
 
-    return httpApi.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
+    return httpApi.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`, {
+      signal,
+    });
   }
 
   getNext(cursor: string | null = null) {
@@ -32,3 +35,5 @@ export class IngredientService {
     return httpApi.delete(`/v1/ingredients/${id}`);
   }
 }
+
+export const ingredientApi = new IngredientApi();
