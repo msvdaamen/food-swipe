@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PropsWithoutRef, useMemo, useState } from "react";
 import { ArrowUp, ArrowDown, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import AppPagination from "@/common/components/app-pagination";
-import { Card, CardContent } from "@/common/components/ui/card";
+import AppPagination from "@/components/app-pagination";
+import { Card, CardContent } from "@/components/ui/card";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { userApi } from "@/modules/user/api";
+import { userApi } from "@/features/user/api";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/common/components/ui/table";
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/_layout/activities/login-activity")({
   component: RouteComponent,

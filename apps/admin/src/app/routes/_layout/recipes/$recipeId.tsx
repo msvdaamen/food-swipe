@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { recipeApi } from "@/modules/recipes/recipe.api";
+import { recipeApi } from "@/features/recipes/recipe.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/common/components/ui/button";
-import { Input } from "@/common/components/ui/input";
-import { Label } from "@/common/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useMemo, useRef, useState } from "react";
 import {
   DndContext,
@@ -22,18 +22,18 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CircleHelp, GripVertical, Loader, Pencil, Trash } from "lucide-react";
-import { Textarea } from "@/common/components/ui/textarea";
-import { Checkbox } from "@/common/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Nutrition,
   nutritionOrder,
   NutritionUnit,
   nutritionUnits,
-} from "@/modules/recipes/constants/nutritions";
-import { RecipeNutrition } from "@/modules/recipes/types/recipe-nutrition.type";
-import { SelectTrigger, SelectValue } from "@/common/components/ui/select";
-import { Select, SelectItem } from "@/common/components/ui/select";
-import { SelectContent } from "@/common/components/ui/select";
+} from "@/features/recipes/constants/nutritions";
+import { RecipeNutrition } from "@/features/recipes/types/recipe-nutrition.type";
+import { SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectItem } from "@/components/ui/select";
+import { SelectContent } from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -41,27 +41,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/common/components/ui/table";
-import { ManageRecipeStepDialog } from "@/modules/recipes/components/manage-recipe-step-dialog";
+} from "@/components/ui/table";
+import { ManageRecipeStepDialog } from "@/features/recipes/components/manage-recipe-step-dialog";
 import {
   restrictToParentElement,
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
-import { RecipeStep } from "@/modules/recipes/types/recipe-step.type";
+import { RecipeStep } from "@/features/recipes/types/recipe-step.type";
 import {
   useRecipeStepDelete,
   useRecipeSteps,
   useRecipeStepsReorder,
-} from "@/modules/recipes/hooks/recipe-step.hooks";
-import { useRecipe } from "@/modules/recipes/hooks/recipe.hooks";
+} from "@/features/recipes/hooks/recipe-step.hooks";
+import { useRecipe } from "@/features/recipes/hooks/recipe.hooks";
 import {
   useRecipeNutrition,
   useRecipeNutritionUpdate,
-} from "@/modules/recipes/hooks/recipe-nutrition.hooks";
-import { CreateRecipeIngredientDialog } from "@/modules/recipes/components/create-recipe-ingredient.dialog";
-import { UpdateRecipeIngredientDialog } from "@/modules/recipes/components/update-recipe-ingredient.dialog";
-import { useRecipeIngredients } from "@/modules/recipes/hooks/recipe-ingredient.hooks";
-import { RecipeIngredient } from "@/modules/recipes/types/recipe-ingredient.type";
+} from "@/features/recipes/hooks/recipe-nutrition.hooks";
+import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
+import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
+import { useRecipeIngredients } from "@/features/recipes/hooks/recipe-ingredient.hooks";
+import { RecipeIngredient } from "@/features/recipes/types/recipe-ingredient.type";
 
 export const Route = createFileRoute("/_layout/recipes/$recipeId")({
   component: RouteComponent,

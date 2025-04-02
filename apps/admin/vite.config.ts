@@ -14,6 +14,7 @@ export default defineConfig({
       target: "react",
       autoCodeSplitting: true,
       routesDirectory: "./src/app/routes",
+      generatedRouteTree: "./src/app/routeTree.gen.ts"
     }),
     react({
       babel: {
@@ -24,7 +25,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src/app"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Button } from "@/common/components/ui/button";
-import { Input } from "@/common/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Search, PencilIcon, TrashIcon } from "lucide-react";
 import {
   Table,
@@ -10,14 +10,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/common/components/ui/table";
-import AppPagination from "@/common/components/app-pagination";
-import { CreateMeasurementDialog } from "@/modules/measurement/components/create-measurement.dialog";
-import { UpdateMeasurementDialog } from "@/modules/measurement/components/update-measurement.dialog";
-import {
-  useDeleteMeasurement,
-  useMeasurements,
-} from "@/modules/measurement/hooks/measurement.hooks";
+} from "@/components/ui/table";
+import { CreateMeasurementDialog } from "@/features/measurement/components/create-measurement.dialog";
+import { UpdateMeasurementDialog } from "@/features/measurement/components/update-measurement.dialog";
+import { useMeasurements } from "@/features/measurement/api/get-measurements";
+import { useDeleteMeasurement } from "@/features/measurement/api/delete-measurement";
 
 export const Route = createFileRoute("/_layout/recipes/measurements")({
   component: RouteComponent,
@@ -36,7 +33,7 @@ function RouteComponent() {
 
   const { data, isError, error, isPending } = useMeasurements();
   const deleteMeasurement = useDeleteMeasurement();
-
+  
   const openCreateMeasurementDialog = () => {
     setIsCreateOpen(true);
   };

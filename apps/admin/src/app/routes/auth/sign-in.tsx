@@ -1,6 +1,6 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { Button } from "@/common/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import { type } from "arktype";
 import {
   Card,
@@ -8,11 +8,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/common/components/ui/card";
-import { Input } from "@/common/components/ui/input";
-import { Label } from "@/common/components/ui/label";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
-import { useAuthStore } from "@/modules/auth/auth.store";
+import { useAuthStore } from "@/features/auth/auth.store";
+import { useSignIn } from "@/features/auth/api/sign-in";
 
 export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent,
@@ -26,7 +27,7 @@ const validator = type({
 function RouteComponent() {
   const accessToken = useAuthStore((state) => state.accessToken);
 
-  const signIn = useAuthStore((state) => state.signIn);
+  const signIn = useSignIn();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -35,9 +36,8 @@ function RouteComponent() {
     validators: {
       onChange: validator,
     },
-    onSubmit: async (data) => {
-      console.log(data);
-      signIn(data.value);
+    onSubmit: async ({value}) => {
+      await signIn.mutateAsync(value);
     },
   });
 
