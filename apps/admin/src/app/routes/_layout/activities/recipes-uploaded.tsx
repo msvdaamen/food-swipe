@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
-import { useRecipes } from "@/features/recipes/hooks/recipe.hooks";
+import { useRecipes } from "@/features/recipes/api/get-recipes";
 
 export const Route = createFileRoute("/_layout/activities/recipes-uploaded")({
   component: RouteComponent,

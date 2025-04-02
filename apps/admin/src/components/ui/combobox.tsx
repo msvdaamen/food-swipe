@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,26 +13,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useMemo, useState } from "react";
 
-export interface ComboBoxItem {
-  value: string;
-  label: string;
-}
-
-export interface ComboBoxProps {
-  items: ComboBoxItem[];
+export interface ComboBoxProps<T> {
+  items: T[];
   value: string;
   onValueChange: (value: string) => void;
+  onSearchChange?: (search: string) => void;
   placeholder?: string;
+  valueFn: (item: T) => string;
+  displayFn: (item?: T) => string;
+  filterFn?: (item: T, search: string) => boolean;
 }
 
-export function ComboBox({
+export function ComboBox<T>({
   items,
   value,
   onValueChange,
+  onSearchChange,
   placeholder,
-}: ComboBoxProps) {
-  const [open, setOpen] = React.useState(false);
+  valueFn,
+  displayFn,
+  filterFn,
+}: ComboBoxProps<T>) {
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+
+  function findItem(value: string) {
+    return items.find((item) => valueFn(item) === value);
+  }
+
+  const filteredItems = useMemo(() => {
+    if (!filterFn) return items;
+    return items.filter((item) => filterFn(item, search));
+  }, [items, search, filterFn]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -44,21 +57,26 @@ export function ComboBox({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? items.find((item) => item.value === value)?.label
-            : placeholder || "Select item..."}
+          {value ? displayFn(findItem(value)) : placeholder || "Select item..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-        <Command>
-          <CommandInput placeholder={placeholder || "Search item..."} />
+        <Command shouldFilter={false}>
+          <CommandInput
+            placeholder={placeholder || "Search item..."}
+            value={search}
+            onValueChange={(value) => {
+              setSearch(value);
+              onSearchChange?.(value);
+            }}
+          />
           <CommandEmpty>No item found.</CommandEmpty>
           <CommandGroup>
-            {items.map((item) => (
+            {filteredItems.map((item) => (
               <CommandItem
-                key={item.value}
-                value={item.value}
+                key={valueFn(item)}
+                value={valueFn(item)}
                 onSelect={(currentValue) => {
                   onValueChange(currentValue === value ? "" : currentValue);
                   setOpen(false);
@@ -67,10 +85,10 @@ export function ComboBox({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === item.value ? "opacity-100" : "opacity-0"
+                    value === valueFn(item) ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {item.label}
+                {displayFn(item)}
               </CommandItem>
             ))}
           </CommandGroup>

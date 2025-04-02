@@ -11,13 +11,16 @@ export type ReorderRecipeStepsInput = {
     orderFrom: number;
     orderTo: number;
   };
-}
+};
 
 export const reorderRecipeSteps = (payload: ReorderRecipeStepsInput) => {
-  return httpApi.put<RecipeStep[]>(`/v1/recipes/${payload.recipeId}/steps/${payload.stepId}/reorder`, payload.data);
-}
+  return httpApi.put<RecipeStep[]>(
+    `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}/reorder`,
+    payload.data
+  );
+};
 
-export const useRecipeStepsReorder = ({ recipeId }: { recipeId: number }) => {
+export const useRecipeStepsReorder = (recipeId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: reorderRecipeSteps,
@@ -26,7 +29,11 @@ export const useRecipeStepsReorder = ({ recipeId }: { recipeId: number }) => {
       const previousSteps = queryClient.getQueryData<RecipeStep[]>(key);
       queryClient.setQueryData<RecipeStep[]>(key, (old) => {
         if (!old) return [];
-        return arrayMove(old, payload.data.orderFrom - 1, payload.data.orderTo - 1);
+        return arrayMove(
+          old,
+          payload.data.orderFrom - 1,
+          payload.data.orderTo - 1
+        );
       });
       return { previousSteps };
     },
@@ -36,4 +43,4 @@ export const useRecipeStepsReorder = ({ recipeId }: { recipeId: number }) => {
       queryClient.setQueryData(key, context.previousSteps);
     },
   });
-}; 
+};

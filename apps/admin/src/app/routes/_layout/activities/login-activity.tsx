@@ -4,8 +4,6 @@ import { ArrowUp, ArrowDown, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import AppPagination from "@/components/app-pagination";
 import { Card, CardContent } from "@/components/ui/card";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { userApi } from "@/features/user/api";
 import {
   Table,
   TableBody,
@@ -14,6 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useUserStats } from "@/features/user/api/get-user-stats";
+import { useUsers } from "@/features/user/api/get-users";
 
 export const Route = createFileRoute("/_layout/activities/login-activity")({
   component: RouteComponent,
@@ -24,11 +24,7 @@ export const Route = createFileRoute("/_layout/activities/login-activity")({
 });
 
 function RouteComponent() {
-  const { data: stats, isLoading: isLoadingStats } = useQuery({
-    queryKey: ["user-stats"],
-    queryFn: () => userApi.getStats(),
-    retry: false,
-  });
+  const { data: stats, isLoading: isLoadingStats } = useUserStats();
 
   return (
     <div className="space-y-6">
@@ -64,10 +60,10 @@ function RouteComponent() {
 function UsersTable() {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError, error, isPending } = useQuery({
-    queryKey: ["users", "page", page],
-    queryFn: () => userApi.getUsers({ amount: 10, page, sort: "id" }),
-    placeholderData: keepPreviousData,
+  const { data, isLoading, isError, error, isPending } = useUsers({
+    amount: 10,
+    page,
+    sort: "id",
   });
 
   const loadingArr = Array(5).fill(null);

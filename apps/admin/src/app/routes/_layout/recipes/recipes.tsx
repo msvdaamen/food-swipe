@@ -5,11 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Search, Plus, Import } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import styles from "./recipes.module.css";
-import { useRecipes } from "@/features/recipes/hooks/recipe.hooks";
 import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
+import { useRecipes } from "@/features/recipes/api/get-recipes";
 
 export const Route = createFileRoute("/_layout/recipes/recipes")({
   component: RouteComponent,
+  context: () => ({
+    breadcrumb: "Recipes",
+  }),
 });
 
 function RouteComponent() {

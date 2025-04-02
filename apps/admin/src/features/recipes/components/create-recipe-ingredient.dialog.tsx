@@ -12,8 +12,7 @@ import {
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
-import { FC } from "react";
-import { useRecipeIngredientCreate } from "../hooks/recipe-ingredient.hooks";
+import { FC, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -26,6 +25,8 @@ import { Ingredient } from "@/features/ingredient/types/ingredient.type";
 import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
+import { useRecipeIngredientCreate } from "../api/ingredients/create-recipe-ingredient";
+import { useDebounce } from "@uidotdev/usehooks";
 
 interface CreateRecipeIngredientProps {
   isOpen: boolean;
@@ -44,7 +45,9 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   onClose,
   recipeId,
 }) => {
-  const createIngredient = useRecipeIngredientCreate(recipeId);
+  const createIngredient = useRecipeIngredientCreate();
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 200);
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100,
@@ -54,7 +57,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   const form = useForm({
     defaultValues: {
       ingredientId: null as number | null,
-      amount: "",
+      amount: null as number | null,
       measurementId: null as number | null,
     },
     validators: {
@@ -62,9 +65,12 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
     },
     onSubmit: async ({ value, formApi }) => {
       await createIngredient.mutateAsync({
-        ingredientId: value.ingredientId!,
-        amount: Number(value.amount),
-        measurementId: value.measurementId,
+        recipeId,
+        data: {
+          amount: Number(value.amount),
+          measurementId: value.measurementId,
+          ingredientId: value.ingredientId!,
+        },
       });
       formApi.reset();
       onClose();
@@ -84,16 +90,21 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
             children={(field) => (
               <>
                 <Label>Ingredient</Label>
-                <ComboBox
-                  items={ingredients.data.map((i: Ingredient) => ({
-                    value: i.id.toString(),
-                    label: i.name,
-                  }))}
+                <ComboBox<Ingredient>
+                  items={ingredients.data}
                   value={field.state.value?.toString() ?? ""}
-                  onValueChange={(value: string) =>
-                    field.handleChange(Number(value))
-                  }
+                  onValueChange={(value) => {
+                    field.handleChange(value ? Number(value) : null);
+                  }}
                   placeholder="Select ingredient"
+                  valueFn={(item) => item.id.toString()}
+                  displayFn={(item) => item?.name ?? ""}
+                  filterFn={(item, search) =>
+                    item.name.toLowerCase().includes(search.toLowerCase())
+                  }
+                  onSearchChange={(search) => {
+                    setSearch(search);
+                  }}
                 />
               </>
             )}
@@ -108,9 +119,9 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                     id={field.name}
                     name={field.name}
                     type="number"
-                    value={field.state.value}
+                    value={field.state.value ?? ""}
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                    onChange={(e) => field.handleChange(e.target.valueAsNumber)}
                     placeholder="Amount"
                   />
                 </>

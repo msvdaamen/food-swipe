@@ -12,15 +12,11 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { useForm } from "@tanstack/react-form";
 import { RecipeStep } from "../types/recipe-step.type";
 import { useQueryClient } from "@tanstack/react-query";
-import { recipeApi } from "../recipe.api";
 import { Loader } from "lucide-react";
 import { type } from "arktype";
-import React, { useEffect } from "react";
-import {
-  useRecipeStepCreate,
-  useRecipeSteps,
-} from "../hooks/recipe-step.hooks";
-import { useRecipeStepUpdate } from "../hooks/recipe-step.hooks";
+import { useEffect } from "react";
+import { useRecipeStepCreate } from "../api/steps/create-recipe-step";
+import { useRecipeStepUpdate } from "../api/steps/update-recipe-step";
 
 interface ManageRecipeStepDialogProps {
   recipeId: number;
@@ -30,7 +26,7 @@ interface ManageRecipeStepDialogProps {
 }
 
 const validator = type({
-  description: "string",
+  description: "string > 0",
   order: "number",
 });
 
@@ -41,11 +37,8 @@ export function ManageRecipeStepDialog({
   onClose,
 }: ManageRecipeStepDialogProps) {
   const queryClient = useQueryClient();
-  const createStep = useRecipeStepCreate({ recipeId });
-  const updateStep = useRecipeStepUpdate({
-    recipeId,
-    stepId: stepId as number,
-  });
+  const createStep = useRecipeStepCreate();
+  const updateStep = useRecipeStepUpdate();
   const form = useForm({
     defaultValues: {
       description: "",
@@ -56,9 +49,9 @@ export function ManageRecipeStepDialog({
     },
     onSubmit: async ({ value, formApi }) => {
       if (stepId) {
-        await updateStep.mutateAsync(value);
+        await updateStep.mutateAsync({ recipeId, stepId, data: value });
       } else {
-        await createStep.mutateAsync(value);
+        await createStep.mutateAsync({ recipeId, data: value });
       }
       formApi.reset();
       onClose();

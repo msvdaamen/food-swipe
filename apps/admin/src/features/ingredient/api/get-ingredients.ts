@@ -2,27 +2,32 @@ import { objectToSearchParams } from "@/lib/utils";
 import { Ingredient } from "../types/ingredient.type";
 import { PaginatedData } from "@/types/paginated-data";
 import { httpApi } from "@/lib/api";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  queryOptions,
+  useQuery,
+} from "@tanstack/react-query";
 
 export type GetIngredientsInput = {
-    search?: string;
-    sort?: string;
-    order?: 'asc' | 'desc';
-    page: number;
-    amount: number;
-}
+  search?: string;
+  sort?: string;
+  order?: "asc" | "desc";
+  page: number;
+  amount: number;
+};
 
-export const getIngredients = (payload: GetIngredientsInput, signal?: AbortSignal) => {
-    const params = objectToSearchParams(payload);
+export const getIngredients = (payload: GetIngredientsInput) => {
+  const params = objectToSearchParams(payload);
 
-    return httpApi.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`, {
-        signal,
-    });
-}
+  return httpApi.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
+};
 
-export const getIngredientsQueryOptions = (payload: GetIngredientsInput) => queryOptions({
+export const getIngredientsQueryOptions = (payload: GetIngredientsInput) =>
+  queryOptions({
     queryKey: ["ingredients", payload],
-    queryFn: ({signal}) => getIngredients(payload, signal),
-})
+    queryFn: () => getIngredients(payload),
+    placeholderData: keepPreviousData,
+  });
 
-export const useIngredients = (payload: GetIngredientsInput) => useQuery(getIngredientsQueryOptions(payload));
+export const useIngredients = (payload: GetIngredientsInput) =>
+  useQuery(getIngredientsQueryOptions(payload));

@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { recipeApi } from "@/features/recipes/recipe.api";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,23 +47,25 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import { RecipeStep } from "@/features/recipes/types/recipe-step.type";
-import {
-  useRecipeStepDelete,
-  useRecipeSteps,
-  useRecipeStepsReorder,
-} from "@/features/recipes/hooks/recipe-step.hooks";
-import { useRecipe } from "@/features/recipes/hooks/recipe.hooks";
-import {
-  useRecipeNutrition,
-  useRecipeNutritionUpdate,
-} from "@/features/recipes/hooks/recipe-nutrition.hooks";
 import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
 import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
-import { useRecipeIngredients } from "@/features/recipes/hooks/recipe-ingredient.hooks";
 import { RecipeIngredient } from "@/features/recipes/types/recipe-ingredient.type";
+import { useRecipe } from "@/features/recipes/api/get-recipe";
+import { useRecipeIngredients } from "@/features/recipes/api/ingredients/get-recipe-ingredients";
+import { useRecipeSteps } from "@/features/recipes/api/steps/get-recipe-steps";
+import { useRecipeStepsReorder } from "@/features/recipes/api/steps/reorder-recipe-steps";
+import { useRecipeStepDelete } from "@/features/recipes/api/steps/delete-recipe-step";
+import { useRecipeNutrition } from "@/features/recipes/api/nutritions/get-recipe-nutrition";
+import { useRecipeNutritionUpdate } from "@/features/recipes/api/nutritions/update-recipe-nutrition";
+import { useDeleteRecipe } from "@/features/recipes/api/delete-recipe";
+import { useUpdateRecipe } from "@/features/recipes/api/update-recipe";
+import { useRecipeIngredientDelete } from "@/features/recipes/api/ingredients/delete-recipe-ingredient";
 
 export const Route = createFileRoute("/_layout/recipes/$recipeId")({
   component: RouteComponent,
+  context: () => ({
+    breadcrumb: "Recipes",
+  }),
   params: {
     parse: (params) => ({
       recipeId: Number(params.recipeId),
@@ -73,23 +74,33 @@ export const Route = createFileRoute("/_layout/recipes/$recipeId")({
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const { recipeId } = Route.useParams();
   const { data: recipe, isLoading } = useRecipe({ recipeId });
+  const deleteRecipe = useDeleteRecipe({
+    onSuccess: () => {
+      navigate({ to: "/recipes/recipes" });
+    },
+  });
+
+  const updateRecipe = useUpdateRecipe();
 
   const [isChangingImage, setIsChangingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDeleteRecipe = (id: number) => {
-    // TODO: Implement delete recipe
-    recipeApi.deleteRecipe(id);
+    deleteRecipe.mutate(id);
   };
 
   const handleUpdateRecipe = async (
     field: string,
     value: string | number | boolean
   ) => {
-    await recipeApi.updateRecipe(Number(recipeId), {
-      [field]: value,
+    updateRecipe.mutate({
+      recipeId,
+      data: {
+        [field]: value,
+      },
     });
   };
 
@@ -214,16 +225,7 @@ function Ingredients({ recipeId }: { recipeId: number }) {
   const [selectedIngredient, setSelectedIngredient] =
     useState<RecipeIngredient | null>(null);
   const { data: ingredients, isLoading } = useRecipeIngredients(recipeId);
-  const queryClient = useQueryClient();
-  const deleteIngredient = useMutation({
-    mutationFn: () =>
-      recipeApi.deleteIngredient(recipeId, selectedIngredient!.ingredientId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["recipe", recipeId, "ingredients"],
-      });
-    },
-  });
+  const deleteIngredient = useRecipeIngredientDelete();
 
   const openCreateDialog = () => {
     setIsCreateOpen(true);
@@ -251,19 +253,19 @@ function Ingredients({ recipeId }: { recipeId: number }) {
           Add ingredient
         </Button>
       </div>
-      <div className="table-container">
-        <div className="ingredients">
-          <div className="t-row ingredient">
-            <div className="name">Ingredient</div>
+      <div className="table-container mt-2">
+        <div className="ingredients border rounded">
+          <div className="flex px-2 py-2 bg-muted">
+            <div className="name flex-grow">Ingredient</div>
             <div className="amount min-w-20 flex-shrink">Amount</div>
             <div className="min-w-28 flex-shrink"></div>
           </div>
           {ingredients?.map((ingredient) => (
             <div
               key={ingredient.ingredientId}
-              className="t-row flex items-center"
+              className="t-row flex items-center px-2 py-1 border-t"
             >
-              <div className="name">{ingredient.ingredient}</div>
+              <div className="name flex-grow">{ingredient.ingredient}</div>
               <div className="amount min-w-20 flex-shrink">
                 {ingredient.amount}
                 {ingredient.measurement}
@@ -279,7 +281,12 @@ function Ingredients({ recipeId }: { recipeId: number }) {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => deleteIngredient.mutate()}
+                  onClick={() =>
+                    deleteIngredient.mutate({
+                      recipeId,
+                      ingredientId: ingredient.ingredientId,
+                    })
+                  }
                 >
                   <Trash className="h-4 w-4" />
                 </Button>
@@ -306,9 +313,9 @@ function Ingredients({ recipeId }: { recipeId: number }) {
 }
 
 function Steps({ recipeId }: { recipeId: number }) {
-  const { data: steps, isLoading } = useRecipeSteps({ recipeId });
-  const reorderSteps = useRecipeStepsReorder({ recipeId });
-  const deleteStep = useRecipeStepDelete({ recipeId });
+  const { data: steps, isLoading } = useRecipeSteps(recipeId);
+  const reorderSteps = useRecipeStepsReorder(recipeId);
+  const deleteStep = useRecipeStepDelete(recipeId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStepId, setActiveStepId] = useState<number | undefined>(
@@ -336,7 +343,7 @@ function Steps({ recipeId }: { recipeId: number }) {
   }
 
   function removeStep(stepId: number) {
-    deleteStep.mutate(stepId);
+    deleteStep.mutate({ recipeId, stepId });
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -350,9 +357,12 @@ function Steps({ recipeId }: { recipeId: number }) {
       newIndex !== undefined
     ) {
       reorderSteps.mutate({
+        recipeId,
         stepId: Number(active.id),
-        orderFrom: oldIndex + 1,
-        orderTo: newIndex + 1,
+        data: {
+          orderFrom: oldIndex + 1,
+          orderTo: newIndex + 1,
+        },
       });
     }
   };
@@ -366,8 +376,8 @@ function Steps({ recipeId }: { recipeId: number }) {
           </Button>
         </div>
         <div className="table-container">
-          <div className="ingredients">
-            <div className="flex">
+          <div className="ingredients mt-2 rounded border">
+            <div className="flex px-2 py-2 bg-muted">
               <div className="step min-w-20 flex-shrink">Step</div>
               <div className="description flex-grow">Description</div>
               <div className="min-w-28 flex-shrink"></div>
@@ -428,7 +438,7 @@ function SortableStep({
     <div
       ref={setNodeRef}
       style={style}
-      className="t-row flex items-center px-2 py-1"
+      className="t-row flex items-center px-2 py-1 border-t"
     >
       <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
       <div className="description flex-grow">{step.description}</div>
@@ -474,7 +484,7 @@ function Nutritions({ recipeId }: { recipeId: number }) {
     return orderedNutritions;
   }, [data, recipeId]);
 
-  const updateNutritionMutation = useRecipeNutritionUpdate(recipeId);
+  const updateNutritionMutation = useRecipeNutritionUpdate();
 
   const updateNutritionValue = (
     name: Nutrition,
@@ -490,9 +500,12 @@ function Nutritions({ recipeId }: { recipeId: number }) {
     value: number
   ) => {
     updateNutritionMutation.mutate({
+      recipeId,
       name,
-      unit,
-      value,
+      data: {
+        unit,
+        value,
+      },
     });
   };
 

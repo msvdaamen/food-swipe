@@ -7,15 +7,19 @@ export type UpdateRecipeIngredientInput = {
   recipeId: number;
   ingredientId: number;
   data: {
-    ingredientId?: number;
     amount?: number;
     measurementId?: number | null;
-  }
-}
+  };
+};
 
-export const updateRecipeIngredient = (payload: UpdateRecipeIngredientInput) => {
-  return httpApi.put<RecipeIngredient>(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`, payload.data);
-}
+export const updateRecipeIngredient = (
+  payload: UpdateRecipeIngredientInput
+) => {
+  return httpApi.put<RecipeIngredient>(
+    `/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`,
+    payload.data
+  );
+};
 
 export const useRecipeIngredientUpdate = () => {
   const queryClient = useQueryClient();
@@ -31,4 +35,4 @@ export const useRecipeIngredientUpdate = () => {
       );
     },
   });
-}; 
+};

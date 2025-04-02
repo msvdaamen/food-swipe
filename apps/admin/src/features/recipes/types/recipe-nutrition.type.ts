@@ -1,7 +1,7 @@
 import {
   Nutrition,
   NutritionUnit,
-} from '@modules/recipes/constants/nutritions';
+} from "@/features/recipes/constants/nutritions";
 
 export type RecipeNutrition = {
   id: number;
