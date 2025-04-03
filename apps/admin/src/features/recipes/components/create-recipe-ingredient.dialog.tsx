@@ -26,7 +26,6 @@ import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
 import { useRecipeIngredientCreate } from "../api/ingredients/create-recipe-ingredient";
-import { useDebounce } from "@uidotdev/usehooks";
 
 interface CreateRecipeIngredientProps {
   isOpen: boolean;
@@ -46,8 +45,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   recipeId,
 }) => {
   const createIngredient = useRecipeIngredientCreate();
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 200);
+  const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100,

@@ -1,4 +1,4 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Measurement } from "../types/measurement.type";
 import { getMeasurementsQueryOptions } from "./get-measurements";
@@ -13,7 +13,7 @@ export type UpdateMeasurementInput = {
 }
 
 export const updateMeasurement = (payload: UpdateMeasurementInput) => {
-    return httpApi.put<Measurement>(`/v1/measurements/${payload.measurementId}`, payload.data);
+    return api.put<Measurement>(`/v1/measurements/${payload.measurementId}`, payload.data);
 }
 
 export const useUpdateMeasurement = () => {

@@ -27,7 +27,6 @@ import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
 import { useRecipeIngredientUpdate } from "../api/ingredients/update-recipe-ingredient";
-import { useDebounce } from "@uidotdev/usehooks";
 
 interface UpdateRecipeIngredientProps {
   isOpen: boolean;
@@ -49,8 +48,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
   ingredient,
 }) => {
   const updateIngredient = useRecipeIngredientUpdate();
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 200);
+  const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100,

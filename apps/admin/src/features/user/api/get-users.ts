@@ -2,7 +2,7 @@ import { objectToSearchParams } from "@/lib/utils";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { User } from "../types/user.type";
 import { PaginatedData } from "@/types/paginated-data";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 
 export type GetUsersInput = {
   amount: number;
@@ -12,7 +12,7 @@ export type GetUsersInput = {
 
 export const getUsers = (payload: GetUsersInput) => {
   const searchParams = objectToSearchParams(payload);
-  return httpApi.get<PaginatedData<User>>(`/v1/users?${searchParams}`);
+  return api.get<PaginatedData<User>>(`/v1/users?${searchParams}`);
 };
 
 export const getUsersQueryOptions = (payload: GetUsersInput) => {

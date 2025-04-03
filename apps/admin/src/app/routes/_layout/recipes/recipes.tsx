@@ -7,6 +7,7 @@ import { useNavigate } from "@tanstack/react-router";
 import styles from "./recipes.module.css";
 import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
 import { useRecipes } from "@/features/recipes/api/get-recipes";
+import { CreateRecipeDialog } from "@/features/recipes/components/create-recipe-dialog";
 
 export const Route = createFileRoute("/_layout/recipes/recipes")({
   component: RouteComponent,
@@ -20,9 +21,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { data: recipes, isPending, error } = useRecipes();
   const [importRecipeDialogOpen, setImportRecipeDialogOpen] = useState(false);
-  const openCreateRecipeDialog = () => {
-    // TODO: Implement create recipe dialog
-  };
+  const [createRecipeDialogOpen, setCreateRecipeDialogOpen] = useState(false);
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -34,6 +33,10 @@ function RouteComponent() {
 
   return (
     <>
+      <CreateRecipeDialog
+        open={createRecipeDialogOpen}
+        onOpenChange={setCreateRecipeDialogOpen}
+      />
       <ImportRecipeDialog
         isOpen={importRecipeDialogOpen}
         onClose={() => setImportRecipeDialogOpen(false)}
@@ -49,7 +52,7 @@ function RouteComponent() {
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={openCreateRecipeDialog}>
+            <Button onClick={() => setCreateRecipeDialogOpen(true)}>
               <Plus className="size-4" />
               Create
             </Button>

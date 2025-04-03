@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+// import { visualizer } from "rollup-plugin-visualizer";
 
 const ReactCompilerConfig = {
   /* ... */
@@ -22,6 +23,9 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
+    // visualizer({
+    //   open: true
+    // })
   ],
   resolve: {
     alias: {

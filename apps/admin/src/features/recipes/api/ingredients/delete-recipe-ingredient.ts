@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { RecipeIngredient } from "../../types/recipe-ingredient.type";
 import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
 
@@ -9,7 +9,7 @@ export type DeleteRecipeIngredientInput = {
 }
 
 export const deleteRecipeIngredient = (payload: DeleteRecipeIngredientInput) => {
-  return httpApi.delete<RecipeIngredient>(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`);
+  return api.delete<RecipeIngredient>(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`);
 }
 
 export const useRecipeIngredientDelete = () => {

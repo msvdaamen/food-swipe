@@ -1,4 +1,4 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { Recipe } from "../types/recipe.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MutationConfig } from "@/lib/react-query";
@@ -18,7 +18,7 @@ export type UpdateRecipeInput = {
 };
 
 export const updateRecipe = (payload: UpdateRecipeInput) => {
-  return httpApi.put<Recipe>(`/v1/recipes/${payload.recipeId}`, payload.data);
+  return api.put<Recipe>(`/v1/recipes/${payload.recipeId}`, payload.data);
 };
 
 type UseUpdateRecipeOptions = MutationConfig<typeof updateRecipe>;

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { RecipeNutrition } from "../../types/recipe-nutrition.type";
 import { NutritionUnit } from "../../constants/nutritions";
 import { getRecipeNutritionQueryOptions } from "./get-recipe-nutrition";
@@ -14,7 +14,7 @@ export type UpdateRecipeNutritionInput = {
 };
 
 export const updateRecipeNutrition = (payload: UpdateRecipeNutritionInput) => {
-  return httpApi.put<RecipeNutrition>(
+  return api.put<RecipeNutrition>(
     `/v1/recipes/${payload.recipeId}/nutritions/${payload.name}`,
     payload.data
   );

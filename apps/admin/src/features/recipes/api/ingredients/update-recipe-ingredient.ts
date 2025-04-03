@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { RecipeIngredient } from "../../types/recipe-ingredient.type";
 import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
 
@@ -15,7 +15,7 @@ export type UpdateRecipeIngredientInput = {
 export const updateRecipeIngredient = (
   payload: UpdateRecipeIngredientInput
 ) => {
-  return httpApi.put<RecipeIngredient>(
+  return api.put<RecipeIngredient>(
     `/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`,
     payload.data
   );

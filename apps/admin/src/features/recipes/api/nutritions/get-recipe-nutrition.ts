@@ -1,9 +1,9 @@
 import { useQuery, queryOptions } from "@tanstack/react-query";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { RecipeNutrition } from "../../types/recipe-nutrition.type";
 
 export const getRecipeNutrition = (recipeId: number) => {
-  return httpApi.get<RecipeNutrition[]>(`/v1/recipes/${recipeId}/nutritions`);
+  return api.get<RecipeNutrition[]>(`/v1/recipes/${recipeId}/nutritions`);
 };
 
 export const getRecipeNutritionQueryOptions = (recipeId: number) => {

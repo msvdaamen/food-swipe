@@ -117,4 +117,4 @@ export class Api {
   }
 }
 
-export const httpApi = new Api();
+export const api = new Api();

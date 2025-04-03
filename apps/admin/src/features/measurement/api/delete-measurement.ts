@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Measurement } from "../types/measurement.type";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getMeasurementsQueryOptions } from "./get-measurements";
 
 
 export const deleteMeasurement = (id: number) => {
-    return httpApi.delete(`/v1/measurements/${id}`);
+    return api.delete(`/v1/measurements/${id}`);
 }
 
 export const useDeleteMeasurement = () => {

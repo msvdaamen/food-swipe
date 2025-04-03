@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Recipe } from "../types/recipe.type";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 
 
 export const importRecipe = (url: string) => {
-  return httpApi.post<Recipe>(`/v1/recipes/import`, { url });
+  return api.post<Recipe>(`/v1/recipes/import`, { url });
 }
 
 export const useRecipeImport = () => {

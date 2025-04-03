@@ -1,4 +1,4 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { Ingredient } from "../types/ingredient.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -11,7 +11,7 @@ export type UpdateIngredientInput = {
   
 
 export const updateIngredient = (payload: UpdateIngredientInput) => {
-    return httpApi.put<Ingredient>(`/v1/ingredients/${payload.ingredientId}`, payload.data);
+    return api.put<Ingredient>(`/v1/ingredients/${payload.ingredientId}`, payload.data);
 }
 
 export const useUpdateIngredient = () => {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { RecipeStep } from "../../types/recipe-step.type";
 import { arrayMove } from "@dnd-kit/sortable";
 import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
@@ -14,7 +14,7 @@ export type ReorderRecipeStepsInput = {
 };
 
 export const reorderRecipeSteps = (payload: ReorderRecipeStepsInput) => {
-  return httpApi.put<RecipeStep[]>(
+  return api.put<RecipeStep[]>(
     `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}/reorder`,
     payload.data
   );

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Measurement } from "../types/measurement.type";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getMeasurementsQueryOptions } from "./get-measurements";
 
 export type CreateMeasurementInput = {
@@ -10,7 +10,7 @@ export type CreateMeasurementInput = {
 
 
 export const createMeasurement = (payload: CreateMeasurementInput) => {
-    return httpApi.post<Measurement>("/v1/measurements", payload);
+    return api.post<Measurement>("/v1/measurements", payload);
 }
 
 export const useCreateMeasurement = () => {

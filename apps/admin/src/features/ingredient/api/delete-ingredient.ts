@@ -1,4 +1,4 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type DeleteIngredientInput = {
@@ -6,7 +6,7 @@ type DeleteIngredientInput = {
 }
 
 export const deleteIngredient = (payload: DeleteIngredientInput) => {
-    return httpApi.delete(`/v1/ingredients/${payload.ingredientId}`);
+    return api.delete(`/v1/ingredients/${payload.ingredientId}`);
 }
 
 export const useDeleteIngredient = () => {

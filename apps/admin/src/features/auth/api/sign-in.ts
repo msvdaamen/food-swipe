@@ -1,4 +1,4 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { AuthResponse } from "../types/auth.response";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "../auth.store";
@@ -9,7 +9,7 @@ export type SignInInput = {
 }
 
 export const signIn = (payload: SignInInput) => {
-    return httpApi.post<AuthResponse>("/v1/auth/sign-in", payload);
+    return api.post<AuthResponse>("/v1/auth/sign-in", payload);
 }
 
 export const useSignIn = () => {

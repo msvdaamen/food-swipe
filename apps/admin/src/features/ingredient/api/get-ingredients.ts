@@ -1,7 +1,7 @@
 import { objectToSearchParams } from "@/lib/utils";
 import { Ingredient } from "../types/ingredient.type";
 import { PaginatedData } from "@/types/paginated-data";
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import {
   keepPreviousData,
   queryOptions,
@@ -19,7 +19,7 @@ export type GetIngredientsInput = {
 export const getIngredients = (payload: GetIngredientsInput) => {
   const params = objectToSearchParams(payload);
 
-  return httpApi.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
+  return api.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
 };
 
 export const getIngredientsQueryOptions = (payload: GetIngredientsInput) =>

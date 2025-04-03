@@ -1,9 +1,9 @@
-import { httpApi } from "@/lib/api";
+import { api } from "@/lib/api";
 import { UserStats } from "../types/user-stats.type";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 export const getUserStats = async () => {
-  return httpApi.get<UserStats>("/v1/users/stats");
+  return api.get<UserStats>("/v1/users/stats");
 };
 
 export const getUserStatsQueryOptions = () => {
