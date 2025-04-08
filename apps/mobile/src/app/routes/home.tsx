@@ -1,10 +1,18 @@
 import { AppText } from "@/components/ui/text";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 
-export default function TabOneScreen() {
+export function HomeScreen() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <AppText style={styles.title}>Home</AppText>
+      <AppText
+        style={styles.title}
+        onPress={() => navigation.navigate("SignIn")}
+      >
+        Home
+      </AppText>
     </View>
   );
 }
