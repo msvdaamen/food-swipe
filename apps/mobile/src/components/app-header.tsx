@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 32,
     height: 32,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
   },
   title: {

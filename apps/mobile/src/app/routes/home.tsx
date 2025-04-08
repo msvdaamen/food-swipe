@@ -1,9 +1,13 @@
 import { AppText } from "@/components/ui/text";
+import { useClerk } from "@clerk/clerk-expo";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 
 export function HomeScreen() {
+  const { signOut } = useClerk();
   const navigation = useNavigation();
+
+  signOut();
 
   return (
     <View style={styles.container}>

@@ -27,6 +27,15 @@
         "projectId": "7182ba7a-1854-4f1f-9f93-f70ce4e6fb6e"
       }
     },
-    "owner": "msvdaamen"
+    "owner": "msvdaamen",
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-asset",
+        {
+          "assets": ["./assets/images/auth-background.jpg"]
+        }
+      ]
+    ]
   }
 }

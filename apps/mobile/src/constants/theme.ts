@@ -24,6 +24,6 @@ export const DarkTheme: Theme = {
     primary: "#10b981",
     card: "#121212",
     border: "#27272a",
-    text: "#f9fafb",
+    text: "white",
   },
 };

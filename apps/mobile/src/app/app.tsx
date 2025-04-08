@@ -1,4 +1,4 @@
-import { useColorScheme } from "react-native";
+import { useColorScheme, View } from "react-native";
 import {
   createStaticNavigation,
   StaticParamList,
@@ -14,7 +14,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignInScreen } from "./routes/auth/sign-in";
 import { DarkTheme, LightTheme } from "@/constants/theme";
 import { SignUpScreen } from "./routes/auth/sign-up";
-import { AuthStack } from "./routes/auth/auth.stack";
+import { useIsSignedIn, useIsSignedOut } from "@/hooks/is-signed-in";
+import { Colors } from "@/constants/colors";
 
 const HomeTabs = createBottomTabNavigator({
   screenOptions: {
@@ -53,15 +54,29 @@ const HomeTabs = createBottomTabNavigator({
 });
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: "HomeTabs",
+  initialRouteName: "SignIn",
   screenOptions: {
     headerShown: false,
   },
   screens: {
-    HomeTabs: HomeTabs,
     SignIn: SignInScreen,
     SignUp: SignUpScreen,
   },
+  // groups: {
+  //   Auth: {
+  //     if: useIsSignedOut,
+  //     screens: {
+  //       SignIn: SignInScreen,
+  //       SignUp: SignUpScreen,
+  //     },
+  //   },
+  //   SignedIn: {
+  //     if: useIsSignedIn,
+  //     screens: {
+  //       HomeTabs: HomeTabs,
+  //     },
+  //   },
+  // },
 });
 
 const Navigation = createStaticNavigation(RootStack);
@@ -76,10 +91,13 @@ declare global {
 
 export function App() {
   const theme = useColorScheme();
+  const backgroundColor = theme === "dark" ? Colors.dark900 : Colors.gray50;
 
   return (
     <AppProviders>
-      <Navigation theme={theme === "dark" ? DarkTheme : LightTheme} />
+      <View style={{ flex: 1, backgroundColor }}>
+        <Navigation theme={theme === "dark" ? DarkTheme : LightTheme} />
+      </View>
     </AppProviders>
   );
 }
