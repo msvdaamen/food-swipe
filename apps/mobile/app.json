@@ -1,41 +1,51 @@
 {
   "expo": {
-    "name": "food-swipe",
+    "name": "Food Swipe",
     "slug": "food-swipe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "scheme": "food-swipe",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.msvdaamen.food-swipe"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./src/assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/images/"
+          ]
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
     },
     "extra": {
       "eas": {
         "projectId": "7182ba7a-1854-4f1f-9f93-f70ce4e6fb6e"
       }
     },
-    "owner": "msvdaamen",
-    "plugins": [
-      "expo-secure-store",
-      [
-        "expo-asset",
-        {
-          "assets": ["./assets/images/auth-background.jpg"]
-        }
-      ]
-    ]
+    "owner": "msvdaamen"
   }
 }

@@ -3,6 +3,7 @@ import {
   DefaultTheme,
   DarkTheme as RNDarkTheme,
 } from "@react-navigation/native";
+
 export const LightTheme: Theme = {
   ...DefaultTheme,
   dark: false,

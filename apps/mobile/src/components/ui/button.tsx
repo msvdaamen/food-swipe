@@ -1,5 +1,4 @@
 import { Colors } from "@/constants/colors";
-import { useTheme } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import {
   Pressable,

@@ -1,0 +1,146 @@
+import { AppButton } from "@/components/ui/button";
+import { AppInput } from "@/components/ui/input";
+import { AppText } from "@/components/ui/text";
+import { Colors } from "@/constants/colors";
+import { BlurView } from "expo-blur";
+import { StyleSheet, View } from "react-native";
+import { Link, useRouter } from 'expo-router';
+import { ImageBackground } from 'expo-image';
+import { useClerk, useSignIn } from "@clerk/clerk-expo";
+
+import { z } from "zod"
+import { useForm } from "@tanstack/react-form"
+
+const validator = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+export default function SignInScreen() {
+  const { signIn, setActive, isLoaded } = useSignIn();
+  const router = useRouter();
+
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    validators: {
+      onChange: validator
+    },
+    onSubmit: async ({value}) => {
+      if (!isLoaded) return;
+
+      const signInAttempt = await signIn.create({
+        identifier: value.email,
+        password: value.password,
+      });
+
+      if (signInAttempt.status === 'complete') {
+        await setActive({ session: signInAttempt.createdSessionId })
+        router.replace('/')
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2))
+      }
+    },
+  });
+  
+  return (
+    <ImageBackground
+      source={{uri: 'auth-background'}}
+      contentFit="cover"
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <AppText style={styles.title}>Food Swipe</AppText>
+          <AppText style={styles.subtitle}>Sign in to your account</AppText>
+        </View>
+        <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
+          <BlurView intensity={90} tint="dark" style={styles.form}>
+            <form.Field
+              name="email"
+              children={field => (
+                <AppInput
+                  id={field.name}
+                color="transparent"
+                placeholder="example@email.com"
+                keyboardType="email-address"
+                value={field.state.value}
+                onChangeText={field.handleChange}
+              >
+                Email
+              </AppInput>
+              )}
+            />
+            <AppInput
+              color="transparent"
+              placeholder="Password"
+              secureTextEntry={true}
+            >
+              Password
+            </AppInput>
+            <AppText style={styles.forgotPassword}>Forgot password?</AppText>
+            <AppButton size="full" onPress={() => {}}>
+              Sign up
+            </AppButton>
+          </BlurView>
+        </View>
+        <View style={styles.footer}>
+          <AppText style={{ color: Colors.gray400 }}>
+            Don't have an account?
+          </AppText>
+          <Link href="/sign-up">
+            <AppText>Sign up</AppText>
+          </Link>
+        </View>
+      </View>
+    </ImageBackground>
+  );
+}
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    width: "100%",
+  },
+  header: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 36,
+  },
+  subtitle: {
+    fontSize: 24,
+  },
+  form: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 40,
+    borderRadius: 12,
+    gap: 16,
+  },
+  forgotPassword: {
+    width: "100%",
+    textAlign: "right",
+  },
+  footer: {
+    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+  },
+});
