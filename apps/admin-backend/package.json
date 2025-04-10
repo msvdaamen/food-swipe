@@ -1,0 +1,33 @@
+{
+  "name": "food-swipe-admin-backend",
+  "version": "1.0.0",
+  "module": "src/app.ts",
+  "types": "src/app.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun --watch run ./src/app.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/uuid": "^10.0.0"
+  },
+  "dependencies": {
+    "@clerk/backend": "^1.27.2",
+    "@food-swipe/database": "workspace:*",
+    "@food-swipe/file-storage": "workspace:*",
+    "@keyv/redis": "^4.2.0",
+    "date-fns": "^4.1.0",
+    "drizzle-orm": "^0.39.3",
+    "hono": "^4.7.2",
+    "hono-rate-limiter": "^0.4.2",
+    "jsonwebtoken": "^9.0.2",
+    "keyv": "^5.2.3",
+    "openai": "^4.85.4",
+    "postgres": "^3.4.5",
+    "svix": "^1.63.1",
+    "typescript": "^5.7.3",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
+  }
+}
