@@ -42,8 +42,8 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      {children && <AppLabel style={styles.label}>{children}</AppLabel>}
+    <View style={[styles.container, style]}>
+      {children && <AppText>{children}</AppText>}
       <View style={[styles.inputContainer, { backgroundColor, borderColor }]}>
         {Icon && (
           <View style={[styles.icon]}>
@@ -52,7 +52,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
         )}
         <TextInput
           {...props}
-          style={[styles.input, { color: textColor }, style]}
+          style={[styles.input, { color: textColor }]}
           placeholderTextColor={placeholderColor}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -64,21 +64,15 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 
 export const AppLabel = ({ children, style }: Props) => {
   return (
-    <View style={styles.labelContainer}>
+    // <View style={styles.labelContainer}>
       <AppText style={[style]}>{children}</AppText>
-    </View>
+    // </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-  },
-  labelContainer: {
-    width: "100%",
-  },
-  label: {
-    textAlign: "left",
+    // textAlign: "left",
   },
   inputContainer: {
     display: "flex",
@@ -87,13 +81,13 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 4
   },
   input: {
     flexGrow: 1,
     borderColor: "gray",
     height: 30,
-    padding: 0,
+    padding: 0
   },
   icon: {
     marginRight: 4,

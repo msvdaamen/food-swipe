@@ -6,10 +6,11 @@ import { BlurView } from "expo-blur";
 import { StyleSheet, View } from "react-native";
 import { Link, useRouter } from 'expo-router';
 import { ImageBackground } from 'expo-image';
-import { useClerk, useSignIn } from "@clerk/clerk-expo";
+import { useAuth, useSignIn,  } from "@clerk/clerk-expo";
 
 import { z } from "zod"
 import { useForm } from "@tanstack/react-form"
+import { Spinner } from "@/components/spinner";
 
 const validator = z.object({
   email: z.string().email(),
@@ -66,6 +67,8 @@ export default function SignInScreen() {
                 color="transparent"
                 placeholder="example@email.com"
                 keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
                 value={field.state.value}
                 onChangeText={field.handleChange}
               >
@@ -73,17 +76,30 @@ export default function SignInScreen() {
               </AppInput>
               )}
             />
-            <AppInput
-              color="transparent"
-              placeholder="Password"
-              secureTextEntry={true}
-            >
-              Password
-            </AppInput>
+            <form.Field
+              name="password"
+              children={field => (
+                <AppInput
+                  id={field.name}
+                  color="transparent"
+                  placeholder="Password"
+                  secureTextEntry={true}
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                >
+                  Password
+                </AppInput>
+              )}
+            />
             <AppText style={styles.forgotPassword}>Forgot password?</AppText>
-            <AppButton size="full" onPress={() => {}}>
-              Sign up
-            </AppButton>
+            <form.Subscribe
+              selector={state => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => (
+                <AppButton size="full" disabled={!canSubmit} onPress={form.handleSubmit} PreIcon={isSubmitting && <Spinner />}>
+                  Sign in
+                </AppButton>
+              )}
+            />
           </BlurView>
         </View>
         <View style={styles.footer}>
@@ -126,9 +142,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 40,
+    padding: 15,
     borderRadius: 12,
     gap: 16,
   },

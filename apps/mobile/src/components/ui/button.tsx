@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/colors";
+import { LoaderCircle } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
   Pressable,
@@ -22,6 +23,7 @@ type Props = TouchableOpacityProps & {
   color?: Color;
   size?: Size;
   type?: Type;
+  PreIcon?: React.ReactNode;
 };
 
 export function AppButton({
@@ -30,6 +32,8 @@ export function AppButton({
   color = "primary",
   size = "auto",
   type = "normal",
+  disabled = false,
+  PreIcon,
   ...props
 }: Props) {
   const progress = useSharedValue(0);
@@ -41,13 +45,30 @@ export function AppButton({
     } else {
       progress.value = withTiming(0, { duration: 100 });
     }
-  }, [isPressed, progress]);
+  }, [isPressed, progress, disabled]);
 
   const animatedStyle = useAnimatedStyle(() => {
-    let colors = [Colors.emerald600, Colors.emerald700];
+    if (disabled) {
+      switch (color) {
+        case "secondary":
+          return {
+            backgroundColor: Colors.amber700,
+          }
+        case "default":
+          return {
+            backgroundColor: Colors.gray300,
+          }
+        default:
+          return {
+            backgroundColor: Colors.emerald700,
+          }
+      }
+    }
+
+    let colors = [Colors.emerald500, Colors.emerald600];
     switch (color) {
       case "secondary":
-        colors = [Colors.amber500, Colors.amber700];
+        colors = [Colors.amber500, Colors.amber600];
         break;
       case "default":
         colors = [Colors.gray200, Colors.gray300];
@@ -61,7 +82,7 @@ export function AppButton({
     return {
       backgroundColor,
     };
-  }, [color, progress]);
+  }, [color, progress, disabled]);
 
   const textColor = useMemo(() => {
     if (color === "default") return "black";
@@ -92,6 +113,7 @@ export function AppButton({
     <Pressable
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
+      disabled={disabled}
       style={{
         width,
       }}
@@ -109,6 +131,7 @@ export function AppButton({
         ]}
         {...props}
       >
+        {PreIcon && PreIcon }
         <Text style={[styles.buttonText, { color: textColor }]}>
           {children}
         </Text>
@@ -119,9 +142,12 @@ export function AppButton({
 
 const styles = StyleSheet.create({
   button: {
+    flexDirection: 'row',
     borderRadius: 4,
+    alignItems: 'center',
   },
   buttonText: {
+    flexGrow: 1,
     width: "100%",
     textAlign: "center",
     color: "white",
