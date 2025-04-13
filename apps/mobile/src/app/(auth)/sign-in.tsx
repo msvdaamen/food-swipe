@@ -6,11 +6,11 @@ import { BlurView } from "expo-blur";
 import { StyleSheet, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ImageBackground } from "expo-image";
-import { useAuth, useSignIn } from "@clerk/clerk-expo";
 
 import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { Spinner } from "@/components/spinner";
+import { useSignIn } from "@/features/auth/api/sign-in";
 
 const validator = z.object({
   email: z.string().email(),
@@ -18,7 +18,7 @@ const validator = z.object({
 });
 
 export default function SignInScreen() {
-  const { signIn, setActive, isLoaded } = useSignIn();
+  const signIn = useSignIn();
   const router = useRouter();
 
   const form = useForm({
@@ -30,19 +30,11 @@ export default function SignInScreen() {
       onChange: validator,
     },
     onSubmit: async ({ value }) => {
-      if (!isLoaded) return;
-
-      const signInAttempt = await signIn.create({
-        identifier: value.email,
+      await signIn.mutateAsync({
+        email: value.email,
         password: value.password,
       });
-
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/");
-      } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
-      }
+      router.replace("/");
     },
   });
 

@@ -25,4 +25,8 @@ export async function getRefreshToken() {
   return refreshToken;
 }
 
-function memo() {}
+export function getAccessTokenSync() {
+  if (accessToken) return accessToken;
+  accessToken = SecureStore.getItem(ACCESS_TOKEN_KEY);
+  return accessToken;
+}
