@@ -1,7 +1,7 @@
 import { api } from "@/lib/api";
 import { AuthResponse } from "../types/auth.response";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthStore } from "../auth.store";
+import { setTokens } from "./set-tokens";
 
 export type SignInInput = {
   email: string;
@@ -13,13 +13,10 @@ export const signIn = (payload: SignInInput) => {
 };
 
 export const useSignIn = () => {
-  const authStore = useAuthStore();
-
   return useMutation({
     mutationFn: signIn,
-    onSuccess: (data) => {
-      authStore.setAccessToken(data.accessToken);
-      authStore.setRefreshToken(data.refreshToken);
+    onSuccess: async (data) => {
+      await setTokens(data.accessToken, data.refreshToken);
     },
   });
 };

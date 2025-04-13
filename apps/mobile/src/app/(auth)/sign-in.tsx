@@ -4,12 +4,12 @@ import { AppText } from "@/components/ui/text";
 import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
 import { StyleSheet, View } from "react-native";
-import { Link, useRouter } from 'expo-router';
-import { ImageBackground } from 'expo-image';
-import { useAuth, useSignIn,  } from "@clerk/clerk-expo";
+import { Link, useRouter } from "expo-router";
+import { ImageBackground } from "expo-image";
+import { useAuth, useSignIn } from "@clerk/clerk-expo";
 
-import { z } from "zod"
-import { useForm } from "@tanstack/react-form"
+import { z } from "zod";
+import { useForm } from "@tanstack/react-form";
 import { Spinner } from "@/components/spinner";
 
 const validator = z.object({
@@ -27,9 +27,9 @@ export default function SignInScreen() {
       password: "",
     },
     validators: {
-      onChange: validator
+      onChange: validator,
     },
-    onSubmit: async ({value}) => {
+    onSubmit: async ({ value }) => {
       if (!isLoaded) return;
 
       const signInAttempt = await signIn.create({
@@ -37,18 +37,18 @@ export default function SignInScreen() {
         password: value.password,
       });
 
-      if (signInAttempt.status === 'complete') {
-        await setActive({ session: signInAttempt.createdSessionId })
-        router.replace('/')
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.replace("/");
       } else {
-        console.error(JSON.stringify(signInAttempt, null, 2))
+        console.error(JSON.stringify(signInAttempt, null, 2));
       }
     },
   });
-  
+
   return (
     <ImageBackground
-      source={{uri: 'auth-background'}}
+      source={{ uri: "auth_background" }}
       contentFit="cover"
       style={styles.background}
     >
@@ -61,24 +61,24 @@ export default function SignInScreen() {
           <BlurView intensity={90} tint="dark" style={styles.form}>
             <form.Field
               name="email"
-              children={field => (
+              children={(field) => (
                 <AppInput
                   id={field.name}
-                color="transparent"
-                placeholder="example@email.com"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                value={field.state.value}
-                onChangeText={field.handleChange}
-              >
-                Email
-              </AppInput>
+                  color="transparent"
+                  placeholder="example@email.com"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  value={field.state.value}
+                  onChangeText={field.handleChange}
+                >
+                  Email
+                </AppInput>
               )}
             />
             <form.Field
               name="password"
-              children={field => (
+              children={(field) => (
                 <AppInput
                   id={field.name}
                   color="transparent"
@@ -93,9 +93,14 @@ export default function SignInScreen() {
             />
             <AppText style={styles.forgotPassword}>Forgot password?</AppText>
             <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting]}
+              selector={(state) => [state.canSubmit, state.isSubmitting]}
               children={([canSubmit, isSubmitting]) => (
-                <AppButton size="full" disabled={!canSubmit} onPress={form.handleSubmit} PreIcon={isSubmitting && <Spinner />}>
+                <AppButton
+                  size="full"
+                  disabled={!canSubmit}
+                  onPress={form.handleSubmit}
+                  PreIcon={isSubmitting && <Spinner />}
+                >
                   Sign in
                 </AppButton>
               )}

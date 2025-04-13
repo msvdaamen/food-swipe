@@ -4,14 +4,10 @@ import { AppText } from "@/components/ui/text";
 import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
 import { StyleSheet, View } from "react-native";
-import { Link, useRouter } from 'expo-router';
-import { ImageBackground } from 'expo-image';
-import { useSignUp } from "@clerk/clerk-expo";
-import { LoaderCircle } from "lucide-react-native";
+import { Link, useRouter } from "expo-router";
+import { ImageBackground } from "expo-image";
 import { SignUpForm } from "./sign-up-form";
-import { useState } from "react";
-import { SignUpCode } from "./sign-up-code";
-
+import { useSignUp } from "@/features/auth/api/sign-up";
 
 type SignUpFormValues = {
   email: string;
@@ -19,56 +15,24 @@ type SignUpFormValues = {
   password: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export default function SignUpScreen() {
+  const signUp = useSignUp();
   const router = useRouter();
-  const {signUp, setActive, isLoaded} = useSignUp();
-  const [pendingVerification, setPendingVerification] = useState<boolean>(false);
-  const [isLoadingCode, setIsLoadingCode] = useState<boolean>(false);
-  if (!isLoaded) return;
 
   async function handleSignUp(value: SignUpFormValues) {
-    if (!isLoaded) return;
-
     try {
-      await signUp.create({
-        emailAddress: value.email,
-        username: value.username,
-        password: value.password,
-        firstName: value.firstName,
-        lastName: value.lastName,
-      });
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
-      setPendingVerification(true)
+      await signUp.mutateAsync(value);
+      router.replace("/");
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
-  async function handleSignUpCode(code: string) {
-    if (!isLoaded) return
-    setIsLoadingCode(true);
-    try {
-      const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code,
-      })
-      if (signUpAttempt.status === 'complete') {
-        await setActive({ session: signUpAttempt.createdSessionId })
-        router.replace('/')
-      } else {
-        console.error(JSON.stringify(signUpAttempt, null, 2))
-      }
-    } catch (error) {
-      console.error(error)
-    }
-
-    setIsLoadingCode(true);
-  }
-  
   return (
     <ImageBackground
-    source={{uri: 'auth-background'}}
+      source={{ uri: "auth_background" }}
       contentFit="cover"
       style={styles.background}
     >
@@ -79,8 +43,7 @@ export default function SignUpScreen() {
         </View>
         <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
           <BlurView intensity={90} tint="dark" style={styles.form}>
-            {!pendingVerification && <SignUpForm onSubmit={handleSignUp} />}
-            {pendingVerification && <SignUpCode isLoading={isLoadingCode} onSubmit={handleSignUpCode} />}
+            <SignUpForm onSubmit={handleSignUp} />
           </BlurView>
         </View>
         <View style={styles.footer}>

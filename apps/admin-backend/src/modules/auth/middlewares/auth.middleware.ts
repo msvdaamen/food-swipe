@@ -12,24 +12,6 @@ export type AuthContext = {
 };
 
 export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
-  const { isSignedIn, toAuth } = await verifyClerkToken(c.req.raw);
-  if (!isSignedIn) {
-    return c.json({}, 401);
-  }
-  const auth = toAuth();
-  const user = await userService.findById(Number(auth.userId));
-  if (!user) {
-    return c.json({}, 401);
-  }
-  c.set("user", {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    createdAt: user.createdAt,
-  });
-
   const bearer = c.req.header("authorization");
   if (!bearer) {
     return c.json({}, 401);
@@ -39,14 +21,12 @@ export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
     return c.json({}, 401);
   }
   try {
-    const { sub } = (await jwtService.verify(accessToken)) as JwtPayload & {
-      scopes: ("user" | "admin")[] | undefined;
-    };
+    const { sub } = await jwtService.verify(accessToken);
     if (!sub) {
       return c.json({}, 401);
     }
     const user = await userService.findById(Number(sub));
-    if (!user) {
+    if (!user || !user.isAdmin) {
       return c.json({}, 401);
     }
     c.set("user", {

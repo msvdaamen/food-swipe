@@ -1,4 +1,4 @@
-import { Clerk, getClerkInstance } from "@clerk/clerk-expo";
+import { getAccessToken } from "@/features/auth/api/set-tokens";
 
 export class Api {
   public apiUrl: string = process.env.EXPO_PUBLIC_API_URL!;
@@ -67,9 +67,9 @@ export class Api {
     const headers: Record<string, string> = {
       ...(init?.headers as Record<string, string>),
     };
-    
-    const accessToken = await getClerkInstance()?.session?.getToken();
-    
+
+    const accessToken = await getAccessToken();
+
     if (accessToken) {
       headers["Authorization"] = `Bearer ${accessToken}`;
     }
@@ -89,32 +89,32 @@ export class Api {
     return response;
   }
 
-//   activeReq: Promise<void> | null = null;
-//   private async refreshTokens(refreshToken: string) {
-//     if (this.activeReq) {
-//       return this.activeReq;
-//     }
-//     this.activeReq = fetch(`${this.apiUrl}/v1/auth/refresh-token`, {
-//       method: "POST",
-//       body: JSON.stringify({ refreshToken }),
-//     }).then(async (res) => {
-//       if (res.ok) {
-//         const { accessToken, refreshToken } = (await res.json()) as {
-//           accessToken: string;
-//           refreshToken: string;
-//         };
-//         localStorage.setItem("accessToken", accessToken);
-//         localStorage.setItem("refreshToken", refreshToken);
-//         this.activeReq = null; 
-//         return;
-//       }
-//       localStorage.removeItem("accessToken");
-//       localStorage.removeItem("refreshToken");
-//       window.location.replace("/auth/sign-in");
-//       throw new Error("Failed to refresh tokens");
-//     });
-//     return this.activeReq;
-//   }
+  //   activeReq: Promise<void> | null = null;
+  //   private async refreshTokens(refreshToken: string) {
+  //     if (this.activeReq) {
+  //       return this.activeReq;
+  //     }
+  //     this.activeReq = fetch(`${this.apiUrl}/v1/auth/refresh-token`, {
+  //       method: "POST",
+  //       body: JSON.stringify({ refreshToken }),
+  //     }).then(async (res) => {
+  //       if (res.ok) {
+  //         const { accessToken, refreshToken } = (await res.json()) as {
+  //           accessToken: string;
+  //           refreshToken: string;
+  //         };
+  //         localStorage.setItem("accessToken", accessToken);
+  //         localStorage.setItem("refreshToken", refreshToken);
+  //         this.activeReq = null;
+  //         return;
+  //       }
+  //       localStorage.removeItem("accessToken");
+  //       localStorage.removeItem("refreshToken");
+  //       window.location.replace("/auth/sign-in");
+  //       throw new Error("Failed to refresh tokens");
+  //     });
+  //     return this.activeReq;
+  //   }
 }
 
 export const api = new Api();
