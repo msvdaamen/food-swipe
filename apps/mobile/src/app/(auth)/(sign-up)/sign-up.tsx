@@ -3,7 +3,12 @@ import { AppInput } from "@/components/ui/input";
 import { AppText } from "@/components/ui/text";
 import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
-import { StyleSheet, View } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ImageBackground } from "expo-image";
 import { SignUpForm } from "./sign-up-form";
@@ -36,25 +41,27 @@ export default function SignUpScreen() {
       contentFit="cover"
       style={styles.background}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <AppText style={styles.title}>Food Swipe</AppText>
-          <AppText style={styles.subtitle}>Sign up for a account</AppText>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <AppText style={styles.title}>Food Swipe</AppText>
+            <AppText style={styles.subtitle}>Sign up for a account</AppText>
+          </View>
+          <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
+            <BlurView intensity={90} tint="dark" style={styles.form}>
+              <SignUpForm onSubmit={handleSignUp} />
+            </BlurView>
+          </View>
+          <View style={styles.footer}>
+            <AppText style={{ color: Colors.gray400 }}>
+              Already have an account?
+            </AppText>
+            <Link href="/sign-in">
+              <AppText>Sign in</AppText>
+            </Link>
+          </View>
         </View>
-        <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
-          <BlurView intensity={90} tint="dark" style={styles.form}>
-            <SignUpForm onSubmit={handleSignUp} />
-          </BlurView>
-        </View>
-        <View style={styles.footer}>
-          <AppText style={{ color: Colors.gray400 }}>
-            Already have an account?
-          </AppText>
-          <Link href="/sign-in">
-            <AppText>Sign in</AppText>
-          </Link>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 }
@@ -62,8 +69,6 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   container: {
     flex: 1,

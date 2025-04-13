@@ -37,7 +37,8 @@
             "./assets/images/"
           ]
         }
-      ]
+      ],
+      "react-native-edge-to-edge"
     ],
     "experiments": {
       "typedRoutes": true
