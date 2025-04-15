@@ -15,7 +15,7 @@ export async function migrateDatabase() {
   await migrate(databaseProvider, {
     migrationsFolder: resolve(
       __dirname,
-      "../../../../packages/database-v2/drizzle"
+      "../../../../packages/database/drizzle"
     ),
     migrationsSchema: "public",
   });

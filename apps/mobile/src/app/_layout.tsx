@@ -36,17 +36,17 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <KeyboardProvider>
-        <SystemBars style="auto" />
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <KeyboardProvider>
+          <SystemBars style="auto" />
           <Slot />
           {/* <Stack>
           <Stack.Screen name="(logged-in)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
           <Stack.Screen name="auth" />
         </Stack> */}
-        </QueryClientProvider>
-      </KeyboardProvider>
+        </KeyboardProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

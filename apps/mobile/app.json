@@ -33,9 +33,7 @@
       [
         "expo-asset",
         {
-          "assets": [
-            "./assets/images/"
-          ]
+          "assets": ["./assets/images/"]
         }
       ],
       "react-native-edge-to-edge"

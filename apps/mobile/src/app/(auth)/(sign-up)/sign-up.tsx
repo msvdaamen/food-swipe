@@ -18,6 +18,7 @@ type SignUpFormValues = {
   email: string;
   username: string;
   password: string;
+  passwordConfirmation: string;
   firstName: string;
   lastName: string;
 };

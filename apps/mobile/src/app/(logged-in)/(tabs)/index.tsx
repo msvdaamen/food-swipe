@@ -1,19 +1,15 @@
 import { AppText } from "@/components/ui/text";
-import { api } from "@/lib/api";
-import { useClerk } from "@clerk/clerk-expo";
-import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
 
+  console.log("home screen");
+
   return (
     <View style={styles.container}>
-      <AppText
-        style={styles.title}
-        onPress={() => router.navigate("/sign-in")}
-      >
+      <AppText style={styles.title} onPress={() => router.navigate("/sign-in")}>
         Home
       </AppText>
     </View>
