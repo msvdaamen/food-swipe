@@ -1,5 +1,3 @@
-import { AppButton } from "@/components/ui/button";
-import { AppInput } from "@/components/ui/input";
 import { AppText } from "@/components/ui/text";
 import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
@@ -11,7 +9,7 @@ import {
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ImageBackground } from "expo-image";
-import { SignUpForm } from "./sign-up-form";
+import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { useSignUp } from "@/features/auth/api/sign-up";
 
 type SignUpFormValues = {

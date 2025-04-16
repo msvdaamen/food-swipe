@@ -1,6 +1,6 @@
 import { AppText } from "@/components/ui/text";
 import { ChevronRight, Heart } from "lucide-react-native";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { StyleSheet, useColorScheme, View, FlatList, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function RecipeBooksScreen() {
@@ -10,6 +10,8 @@ export default function RecipeBooksScreen() {
   const likedBackgroundColor = theme === "dark" ? "#424242" : "#ffffff";
   const likedTextColor = theme === "dark" ? "#9ca3af" : "#6b7280";
 
+  const data = new Array(199).fill(0);
+  const gap = 10;
   return (
     <View style={styles.container}>
       <View
@@ -46,46 +48,44 @@ export default function RecipeBooksScreen() {
       <View style={styles.yourBooksHeader}>
         <AppText style={styles.yourBooksHeaderText}>Your Books</AppText>
       </View>
-      <View style={styles.yourBooksContainer}>
-        <View style={styles.yourBooksRow}>
-          <View
-            style={[
-              styles.yourBooksItem,
-              { backgroundColor: likedBackgroundColor },
-            ]}
-          >
-            <LinearGradient
-              style={styles.yourBooksItemGradient}
-              colors={["#f472b6", "#ef4444"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            ></LinearGradient>
-            <View style={styles.yourBooksItemTextContainer}>
-              <AppText>Your asdf</AppText>
-              <AppText style={{ color: likedTextColor }}>12 recipes</AppText>
-            </View>
-          </View>
-          <View
-            style={[
-              styles.yourBooksItem,
-              { backgroundColor: likedBackgroundColor },
-            ]}
-          >
-            <LinearGradient
-              style={styles.yourBooksItemGradient}
-              colors={["#f472b6", "#ef4444"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            ></LinearGradient>
-            <View style={styles.yourBooksItemTextContainer}>
-              <AppText>Your asdf</AppText>
-              <AppText style={{ color: likedTextColor }}>12 recipes</AppText>
-            </View>
-          </View>
-        </View>
-      </View>
+      <FlatList 
+        data={data}
+        renderItem={({ item }) => <RecipeBookItem />}
+        contentContainerStyle={{gap}}
+        columnWrapperStyle={{gap}}
+        numColumns={2}
+        keyExtractor={(item, index) => index.toString()}
+      />
+        
     </View>
   );
+}
+
+function RecipeBookItem() {
+  const theme = useColorScheme();
+
+  const backgroundColor = theme === "dark" ? "#424242" : "#ffffff";
+  const color = theme === "dark" ? "#9ca3af" : "#6b7280";
+
+  return (
+    <View
+    style={[
+      styles.yourBooksItem,
+      { backgroundColor },
+    ]}
+  >
+    <LinearGradient
+      style={styles.yourBooksItemGradient}
+      colors={["#f472b6", "#ef4444"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+    ></LinearGradient>
+    <View style={styles.yourBooksItemTextContainer}>
+      <AppText>Your asdf</AppText>
+      <AppText style={{ color }}>12 recipes</AppText>
+    </View>
+  </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -131,17 +131,14 @@ const styles = StyleSheet.create({
   },
   yourBooksContainer: {
     display: "flex",
-    rowGap: 16,
-  },
-  yourBooksRow: {
-    display: "flex",
-    flexDirection: "row",
     gap: 16,
+    flexDirection: "row",
+    alignItems: 'flex-start'
   },
   yourBooksItem: {
-    flex: 1,
     borderRadius: 12,
     overflow: "hidden",
+    flex: 1/2,
   },
   yourBooksItemGradient: {
     height: 128,

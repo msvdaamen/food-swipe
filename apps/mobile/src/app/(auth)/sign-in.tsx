@@ -35,10 +35,11 @@ export default function SignInScreen() {
       onChange: validator,
     },
     onSubmit: async ({ value }) => {
-      await signIn.mutateAsync({
+      const res = await signIn.mutateAsync({
         email: value.email,
         password: value.password,
       });
+      console.log(res);
       router.replace("/");
     },
   });
