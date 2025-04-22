@@ -1,18 +1,29 @@
 import { AppText } from "@/components/ui/text";
 import { AppInput } from "@/components/ui/input";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Clock, Search } from "lucide-react-native";
 import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 
 export default function RecipesScreen() {
+  const router = useRouter();
+
+  const handleRecipeCardPress = () => {
+    router.push("/recipe-modal");
+  };
+
   return (
     <View style={styles.container}>
       <View>
         <AppInput placeholder="Search recipes" Icon={Search} />
       </View>
       <View style={styles.recipesContainer}>
-        <View style={styles.recipeCard}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.recipeCard}
+          onPress={handleRecipeCardPress}
+        >
           <Image
             style={styles.recipeImage}
             source={{
@@ -50,7 +61,7 @@ export default function RecipesScreen() {
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

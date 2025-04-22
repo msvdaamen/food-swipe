@@ -40,11 +40,6 @@ export default function RootLayout() {
         <KeyboardProvider>
           <SystemBars style="auto" />
           <Slot />
-          {/* <Stack>
-          <Stack.Screen name="(logged-in)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-          <Stack.Screen name="auth" />
-        </Stack> */}
         </KeyboardProvider>
       </QueryClientProvider>
     </ThemeProvider>
