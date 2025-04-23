@@ -1,6 +1,5 @@
 import { getAccessTokenSync } from "@/features/auth/api/set-tokens";
 import { Redirect, Stack } from "expo-router";
-import { Presentation } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 export default function LoggedInLayout() {
   const isAuthenticated = getAccessTokenSync() !== null;
@@ -18,7 +17,7 @@ export default function LoggedInLayout() {
         options={{
           presentation: "transparentModal",
           headerShown: false,
-          animation: "none",
+          // animation: "none",
         }}
       />
     </Stack>

@@ -5,6 +5,7 @@ import { Clock, Search } from "lucide-react-native";
 import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import Animated from "react-native-reanimated";
 
 export default function RecipesScreen() {
   const router = useRouter();
@@ -24,11 +25,12 @@ export default function RecipesScreen() {
           style={styles.recipeCard}
           onPress={handleRecipeCardPress}
         >
-          <Image
+          <Animated.Image
             style={styles.recipeImage}
             source={{
               uri: "https://static.food-swipe.app/9b9b6ccc-ac28-45af-a245-1d0dd9d00547.jpeg",
             }}
+            sharedTransitionTag="tag"
           />
           <View style={styles.recipeCardOverlay}>
             <LinearGradient
