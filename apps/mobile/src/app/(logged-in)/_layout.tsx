@@ -17,7 +17,7 @@ export default function LoggedInLayout() {
         options={{
           presentation: "transparentModal",
           headerShown: false,
-          // animation: "none",
+          animation: "none",
         }}
       />
     </Stack>

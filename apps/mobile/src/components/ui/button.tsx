@@ -53,15 +53,15 @@ export function AppButton({
         case "secondary":
           return {
             backgroundColor: Colors.amber700,
-          }
+          };
         case "default":
           return {
             backgroundColor: Colors.gray300,
-          }
+          };
         default:
           return {
             backgroundColor: Colors.emerald700,
-          }
+          };
       }
     }
 
@@ -93,15 +93,17 @@ export function AppButton({
     if (size === "small") return 12;
     if (size === "medium") return 16;
     if (size === "large") return 20;
+    if (type === "icon") return 12;
     return 12;
-  }, [size]);
+  }, [size, type]);
 
   const paddingVertical = useMemo(() => {
-    if (size === "small") return 8;
+    if (size === "small") return 6;
     if (size === "medium") return 12;
     if (size === "large") return 16;
+    if (type === "icon") return 4;
     return 8;
-  }, [size]);
+  }, [size, type]);
 
   const width = useMemo(() => {
     if (size === "auto") return "auto";
@@ -131,10 +133,13 @@ export function AppButton({
         ]}
         {...props}
       >
-        {PreIcon && PreIcon }
-        <Text style={[styles.buttonText, { color: textColor }]}>
-          {children}
-        </Text>
+        {PreIcon && PreIcon}
+        {type !== "icon" && (
+          <Text style={[styles.buttonText, { color: textColor }]}>
+            {children}
+          </Text>
+        )}
+        {type === "icon" && children}
       </Animated.View>
     </Pressable>
   );
@@ -142,9 +147,9 @@ export function AppButton({
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderRadius: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
     flexGrow: 1,

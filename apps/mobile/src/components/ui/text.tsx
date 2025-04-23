@@ -5,7 +5,10 @@ export const AppText = ({ children, style, ...props }: TextProps) => {
   const theme = useColorScheme();
   const textColor = theme === "dark" ? "white" : "black";
   return (
-    <RNText style={[{ color: textColor }, style]} {...props}>
+    <RNText
+      style={[{ color: textColor, fontFamily: "Roboto", fontSize: 16 }, style]}
+      {...props}
+    >
       {children}
     </RNText>
   );

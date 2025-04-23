@@ -1,11 +1,22 @@
 import { AppText } from "@/components/ui/text";
 import { AppInput } from "@/components/ui/input";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Keyboard,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { Clock, Search } from "lucide-react-native";
 import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import Animated from "react-native-reanimated";
+import Animated, {
+  SharedTransitionType,
+  withSpring,
+} from "react-native-reanimated";
+import { SharedTransition } from "react-native-reanimated";
 
 export default function RecipesScreen() {
   const router = useRouter();
@@ -13,58 +24,73 @@ export default function RecipesScreen() {
   const handleRecipeCardPress = () => {
     router.push("/recipe-modal");
   };
-
   return (
-    <View style={styles.container}>
-      <View>
+    <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <AppInput placeholder="Search recipes" Icon={Search} />
       </View>
-      <View style={styles.recipesContainer}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={styles.recipeCard}
-          onPress={handleRecipeCardPress}
-        >
-          <Animated.Image
-            style={styles.recipeImage}
-            source={{
-              uri: "https://static.food-swipe.app/9b9b6ccc-ac28-45af-a245-1d0dd9d00547.jpeg",
-            }}
-            sharedTransitionTag="tag"
-          />
-          <View style={styles.recipeCardOverlay}>
-            <LinearGradient
-              colors={["transparent", "rgba(0, 0, 0, 0.5)"]}
-              style={{
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-                inset: 0,
-              }}
-            />
-            <View style={styles.recipeCardOverlayContent}>
-              <AppText style={styles.recipeCardText}>
-                Airfryer chicken 'tandoori' with rice and cucumber skyr
-              </AppText>
-              <View style={styles.recipeCardDetailsContainer}>
-                <AppText style={styles.recipeCardDetailText}>1 cal</AppText>
-                <View
+      <TouchableWithoutFeedback
+        onPressOut={Keyboard.dismiss}
+        accessible={false}
+      >
+        <FlatList
+          style={styles.recipesContainer}
+          contentContainerStyle={{
+            gap: 16,
+            marginBottom: 16,
+          }}
+          data={[1, 2, 3, 4, 5]}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              key={item}
+              activeOpacity={0.8}
+              style={styles.recipeCard}
+              onPress={handleRecipeCardPress}
+            >
+              <Animated.Image
+                style={styles.recipeImage}
+                source={{
+                  uri: "https://static.food-swipe.app/9b9b6ccc-ac28-45af-a245-1d0dd9d00547.jpeg",
+                }}
+                sharedTransitionTag="tag"
+              />
+              <View style={styles.recipeCardOverlay}>
+                <LinearGradient
+                  colors={["transparent", "rgba(0, 0, 0, 0.5)"]}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    gap: 4,
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    inset: 0,
                   }}
-                >
-                  <Clock size={16} color="#d1d5db" />
-                  <AppText style={styles.recipeCardDetailText}>25 mins</AppText>
+                />
+                <View style={styles.recipeCardOverlayContent}>
+                  <AppText style={styles.recipeCardText}>
+                    Airfryer chicken 'tandoori' with rice and cucumber skyr
+                  </AppText>
+                  <View style={styles.recipeCardDetailsContainer}>
+                    <AppText style={styles.recipeCardDetailText}>1 cal</AppText>
+                    <View
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "row",
+                        gap: 4,
+                      }}
+                    >
+                      <Clock size={16} color="#d1d5db" />
+                      <AppText style={styles.recipeCardDetailText}>
+                        25 mins
+                      </AppText>
+                    </View>
+                  </View>
                 </View>
               </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+            </TouchableOpacity>
+          )}
+        />
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -85,9 +111,10 @@ const styles = StyleSheet.create({
   },
   recipesContainer: {
     display: "flex",
-    marginBottom: 4,
-    gap: 16,
+    marginBottom: 10,
     marginTop: 16,
+    paddingHorizontal: 16,
+    flex: 1,
   },
   recipeCard: {
     position: "relative",
