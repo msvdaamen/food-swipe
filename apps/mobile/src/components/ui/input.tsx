@@ -1,16 +1,16 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 import {
   Keyboard,
   StyleSheet,
   TextInputProps,
   View,
   useColorScheme,
-} from "react-native";
-import { TextInput } from "react-native";
-import { AppText } from "./text";
-import { Colors } from "@/constants/colors";
+} from 'react-native';
+import { TextInput } from 'react-native';
+import { AppText } from './text';
+import { Colors } from '@/constants/colors';
 
-type Color = "transparent";
+type Color = 'transparent';
 
 type Props = TextInputProps & {
   Icon?: React.ElementType;
@@ -22,15 +22,21 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
   const [focused, setFocused] = useState(false);
 
   const backgroundColor = useMemo(() => {
-    if (color === "transparent") return "rgba(255, 255, 255, 0.1)";
-    return theme === "dark" ? "#424242" : "white";
+    if (color === 'transparent') return 'rgba(255, 255, 255, 0.1)';
+    return theme === 'dark' ? '#424242' : 'white';
   }, [theme, color]);
-  const placeholderColor = theme === "dark" ? "#a1a1aa" : "#4b5563";
-  const textColor = theme === "dark" ? "white" : "black";
+  const placeholderColor = theme === 'dark' ? '#a1a1aa' : '#4b5563';
+  const textColor = theme === 'dark' ? 'white' : 'black';
+
   const borderColor = useMemo(() => {
-    if (focused) return "rgb(5 150 105)";
-    if (color === "transparent") return Colors.dark700;
-    return "rgb(97 97 97)";
+    if (theme === 'dark') {
+      if (focused) return Colors.emerald600;
+      if (color === 'transparent') return Colors.dark700;
+      return Colors.dark400;
+    }
+    if (focused) return Colors.emerald600;
+    if (color === 'transparent') return 'rgba(0, 0, 0, 0.1)';
+    return Colors.gray300;
   }, [focused, color]);
 
   function onBlur() {
@@ -65,7 +71,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 export const AppLabel = ({ children, style }: Props) => {
   return (
     // <View style={styles.labelContainer}>
-      <AppText style={[style]}>{children}</AppText>
+    <AppText style={[style]}>{children}</AppText>
     // </View>
   );
 };
@@ -75,19 +81,19 @@ const styles = StyleSheet.create({
     // textAlign: "left",
   },
   inputContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: 1,
-    borderRadius: 4
+    borderRadius: 4,
   },
   input: {
     flexGrow: 1,
-    borderColor: "gray",
+    borderColor: 'gray',
     height: 30,
-    padding: 0
+    padding: 0,
   },
   icon: {
     marginRight: 4,

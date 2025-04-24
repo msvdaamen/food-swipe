@@ -1,5 +1,5 @@
-import { AppText } from "@/components/ui/text";
-import { AppInput } from "@/components/ui/input";
+import { AppText } from '@/components/ui/text';
+import { AppInput } from '@/components/ui/input';
 import {
   FlatList,
   Keyboard,
@@ -7,22 +7,22 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
-import { Clock, Search } from "lucide-react-native";
-import { Image } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+} from 'react-native';
+import { Clock, Search } from 'lucide-react-native';
+import { Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import Animated, {
   SharedTransitionType,
   withSpring,
-} from "react-native-reanimated";
-import { SharedTransition } from "react-native-reanimated";
+} from 'react-native-reanimated';
+import { SharedTransition } from 'react-native-reanimated';
 
 export default function RecipesScreen() {
   const router = useRouter();
 
   const handleRecipeCardPress = () => {
-    router.push("/recipe-modal");
+    router.push('/recipe-modal');
   };
   return (
     <View style={{ flex: 1 }}>
@@ -50,17 +50,17 @@ export default function RecipesScreen() {
               <Animated.Image
                 style={styles.recipeImage}
                 source={{
-                  uri: "https://static.food-swipe.app/9b9b6ccc-ac28-45af-a245-1d0dd9d00547.jpeg",
+                  uri: 'https://static.food-swipe.app/9b9b6ccc-ac28-45af-a245-1d0dd9d00547.jpeg',
                 }}
                 sharedTransitionTag="tag"
               />
               <View style={styles.recipeCardOverlay}>
                 <LinearGradient
-                  colors={["transparent", "rgba(0, 0, 0, 0.5)"]}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.5)']}
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    position: "absolute",
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
                     inset: 0,
                   }}
                 />
@@ -72,10 +72,10 @@ export default function RecipesScreen() {
                     <AppText style={styles.recipeCardDetailText}>1 cal</AppText>
                     <View
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "row",
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'row',
                         gap: 4,
                       }}
                     >
@@ -97,63 +97,63 @@ export default function RecipesScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    display: 'flex',
     paddingHorizontal: 16,
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: "80%",
+    width: '80%',
   },
   recipesContainer: {
-    display: "flex",
+    display: 'flex',
     marginBottom: 10,
     marginTop: 16,
     paddingHorizontal: 16,
     flex: 1,
   },
   recipeCard: {
-    position: "relative",
-    overflow: "hidden",
+    position: 'relative',
+    overflow: 'hidden',
   },
   recipeCardOverlay: {
-    position: "absolute",
+    position: 'absolute',
     inset: 0,
     // backgroundColor: 'rgba(0, 0, 0, 0.5)',
     zIndex: 100,
   },
   recipeCardOverlayContent: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
-    width: "100%",
+    width: '100%',
     padding: 12,
-    color: "white",
+    color: 'white',
     zIndex: 100,
   },
   recipeCardText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   recipeCardDetailsContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   recipeCardDetailText: {
-    color: "#d1d5db",
+    color: '#d1d5db',
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   recipeImage: {
-    width: "100%",
+    width: '100%',
     height: 200,
-    objectFit: "cover",
+    objectFit: 'cover',
     borderRadius: 4,
   },
 });

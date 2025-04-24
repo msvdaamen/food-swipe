@@ -13,7 +13,7 @@ import "react-native-reanimated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Roboto_400Regular } from "@expo-google-fonts/roboto/400Regular";
-
+import { Roboto_700Bold } from "@expo-google-fonts/roboto/700Bold";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -21,6 +21,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     Roboto: Roboto_400Regular,
+    RobotoBold: Roboto_700Bold,
   });
 
   useEffect(() => {

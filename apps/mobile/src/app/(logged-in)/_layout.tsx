@@ -1,10 +1,11 @@
-import { getAccessTokenSync } from "@/features/auth/api/set-tokens";
-import { Redirect, Stack } from "expo-router";
-import { useColorScheme } from "react-native";
+import { getAccessTokenSync } from '@/features/auth/api/set-tokens';
+import { Redirect, Stack } from 'expo-router';
+import { useColorScheme } from 'react-native';
+import { RecipeModalHeader } from './recipe-modal';
 export default function LoggedInLayout() {
   const isAuthenticated = getAccessTokenSync() !== null;
   const theme = useColorScheme();
-  const backgroundColor = theme === "dark" ? "#121212" : "#f9fafb";
+  const backgroundColor = theme === 'dark' ? '#121212' : '#f9fafb';
   if (!isAuthenticated) {
     return <Redirect href="/sign-in" />;
   }
@@ -15,9 +16,9 @@ export default function LoggedInLayout() {
       <Stack.Screen
         name="recipe-modal"
         options={{
-          presentation: "transparentModal",
           headerShown: false,
-          animation: "none",
+          headerTransparent: true,
+          // header: () => <RecipeModalHeader />,
         }}
       />
     </Stack>
