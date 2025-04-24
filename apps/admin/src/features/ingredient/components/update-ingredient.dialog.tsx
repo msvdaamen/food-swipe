@@ -1,0 +1,95 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { type } from "arktype";
+import { useForm } from "@tanstack/react-form";
+import { Loader } from "lucide-react";
+import { FC } from "react";
+import { useUpdateIngredient } from "../api/update-ingredient";
+
+interface UpdateIngredientProps {
+  isOpen: boolean;
+  onClose: () => void;
+  ingredientId: number;
+  name?: string;
+}
+
+const validator = type({
+  name: "string",
+});
+
+export const UpdateIngredientDialog: FC<UpdateIngredientProps> = ({
+  isOpen,
+  onClose,
+  ingredientId,
+  name,
+}) => {
+  const updateIngredient = useUpdateIngredient();
+  const form = useForm({
+    defaultValues: {
+      name: name || "",
+    },
+    validators: {
+      onChange: validator,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      await updateIngredient.mutateAsync({
+        data: value,
+        ingredientId,
+      });
+      formApi.reset();
+      onClose();
+    },
+  });
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Update ingredient</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <form.Field
+            name="name"
+            children={(field) => (
+              <>
+                <Label htmlFor={field.name}>Ingredient</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="Name"
+                />
+              </>
+            )}
+          />
+        </form>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Close
+          </Button>
+          <form.Subscribe
+            selector={(state) => [state.isSubmitting, state.canSubmit]}
+            children={([isSubmitting, canSubmit]) => (
+              <Button disabled={!canSubmit} onClick={() => form.handleSubmit()}>
+                {isSubmitting ? <Loader className="animate-spin" /> : null}
+                Submit
+              </Button>
+            )}
+          />
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};

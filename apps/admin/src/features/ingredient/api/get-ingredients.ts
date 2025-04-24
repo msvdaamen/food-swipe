@@ -1,0 +1,33 @@
+import { objectToSearchParams } from "@/lib/utils";
+import { Ingredient } from "../types/ingredient.type";
+import { PaginatedData } from "@/types/paginated-data";
+import { api } from "@/lib/api";
+import {
+  keepPreviousData,
+  queryOptions,
+  useQuery,
+} from "@tanstack/react-query";
+
+export type GetIngredientsInput = {
+  search?: string;
+  sort?: string;
+  order?: "asc" | "desc";
+  page: number;
+  amount: number;
+};
+
+export const getIngredients = (payload: GetIngredientsInput) => {
+  const params = objectToSearchParams(payload);
+
+  return api.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
+};
+
+export const getIngredientsQueryOptions = (payload: GetIngredientsInput) =>
+  queryOptions({
+    queryKey: ["ingredients", payload],
+    queryFn: () => getIngredients(payload),
+    placeholderData: keepPreviousData,
+  });
+
+export const useIngredients = (payload: GetIngredientsInput) =>
+  useQuery(getIngredientsQueryOptions(payload));
