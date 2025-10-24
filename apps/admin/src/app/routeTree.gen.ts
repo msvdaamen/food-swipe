@@ -8,175 +8,244 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as LayoutActivitiesRouteRouteImport } from './routes/_layout/activities/route'
+import { Route as LayoutRecipesRecipesRouteImport } from './routes/_layout/recipes/recipes'
+import { Route as LayoutRecipesMeasurementsRouteImport } from './routes/_layout/recipes/measurements'
+import { Route as LayoutRecipesIngredientsRouteImport } from './routes/_layout/recipes/ingredients'
+import { Route as LayoutRecipesRecipeIdRouteImport } from './routes/_layout/recipes/$recipeId'
+import { Route as LayoutActivitiesRecipesUploadedRouteImport } from './routes/_layout/activities/recipes-uploaded'
+import { Route as LayoutActivitiesLoginActivityRouteImport } from './routes/_layout/activities/login-activity'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthIndexImport } from './routes/auth/index'
-import { Route as AuthSignInImport } from './routes/auth/sign-in'
-import { Route as LayoutActivitiesRouteImport } from './routes/_layout/activities/route'
-import { Route as LayoutRecipesRecipesImport } from './routes/_layout/recipes/recipes'
-import { Route as LayoutRecipesMeasurementsImport } from './routes/_layout/recipes/measurements'
-import { Route as LayoutRecipesIngredientsImport } from './routes/_layout/recipes/ingredients'
-import { Route as LayoutRecipesRecipeIdImport } from './routes/_layout/recipes/$recipeId'
-import { Route as LayoutActivitiesRecipesUploadedImport } from './routes/_layout/activities/recipes-uploaded'
-import { Route as LayoutActivitiesLoginActivityImport } from './routes/_layout/activities/login-activity'
-
-// Create/Update Routes
-
-const LayoutRoute = LayoutImport.update({
+const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthIndexRoute = AuthIndexImport.update({
+const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
   path: '/auth/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthSignInRoute = AuthSignInImport.update({
+const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LayoutActivitiesRouteRoute = LayoutActivitiesRouteImport.update({
+const LayoutActivitiesRouteRoute = LayoutActivitiesRouteRouteImport.update({
   id: '/activities',
   path: '/activities',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutRecipesRecipesRoute = LayoutRecipesRecipesImport.update({
+const LayoutRecipesRecipesRoute = LayoutRecipesRecipesRouteImport.update({
   id: '/recipes/recipes',
   path: '/recipes/recipes',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutRecipesMeasurementsRoute = LayoutRecipesMeasurementsImport.update({
-  id: '/recipes/measurements',
-  path: '/recipes/measurements',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutRecipesIngredientsRoute = LayoutRecipesIngredientsImport.update({
-  id: '/recipes/ingredients',
-  path: '/recipes/ingredients',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutRecipesRecipeIdRoute = LayoutRecipesRecipeIdImport.update({
+const LayoutRecipesMeasurementsRoute =
+  LayoutRecipesMeasurementsRouteImport.update({
+    id: '/recipes/measurements',
+    path: '/recipes/measurements',
+    getParentRoute: () => LayoutRoute,
+  } as any)
+const LayoutRecipesIngredientsRoute =
+  LayoutRecipesIngredientsRouteImport.update({
+    id: '/recipes/ingredients',
+    path: '/recipes/ingredients',
+    getParentRoute: () => LayoutRoute,
+  } as any)
+const LayoutRecipesRecipeIdRoute = LayoutRecipesRecipeIdRouteImport.update({
   id: '/recipes/$recipeId',
   path: '/recipes/$recipeId',
   getParentRoute: () => LayoutRoute,
 } as any)
-
 const LayoutActivitiesRecipesUploadedRoute =
-  LayoutActivitiesRecipesUploadedImport.update({
+  LayoutActivitiesRecipesUploadedRouteImport.update({
     id: '/recipes-uploaded',
     path: '/recipes-uploaded',
     getParentRoute: () => LayoutActivitiesRouteRoute,
   } as any)
-
 const LayoutActivitiesLoginActivityRoute =
-  LayoutActivitiesLoginActivityImport.update({
+  LayoutActivitiesLoginActivityRouteImport.update({
     id: '/login-activity',
     path: '/login-activity',
     getParentRoute: () => LayoutActivitiesRouteRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth': typeof AuthIndexRoute
+  '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
+  '/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
+  '/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
+  '/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
+  '/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
+  '/recipes/recipes': typeof LayoutRecipesRecipesRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth': typeof AuthIndexRoute
+  '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
+  '/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
+  '/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
+  '/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
+  '/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
+  '/recipes/recipes': typeof LayoutRecipesRecipesRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/': typeof AuthIndexRoute
+  '/_layout/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
+  '/_layout/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
+  '/_layout/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
+  '/_layout/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
+  '/_layout/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
+  '/_layout/recipes/recipes': typeof LayoutRecipesRecipesRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/activities'
+    | '/auth/sign-in'
+    | '/auth'
+    | '/activities/login-activity'
+    | '/activities/recipes-uploaded'
+    | '/recipes/$recipeId'
+    | '/recipes/ingredients'
+    | '/recipes/measurements'
+    | '/recipes/recipes'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/activities'
+    | '/auth/sign-in'
+    | '/auth'
+    | '/activities/login-activity'
+    | '/activities/recipes-uploaded'
+    | '/recipes/$recipeId'
+    | '/recipes/ingredients'
+    | '/recipes/measurements'
+    | '/recipes/recipes'
+  id:
+    | '__root__'
+    | '/'
+    | '/_layout'
+    | '/_layout/activities'
+    | '/auth/sign-in'
+    | '/auth/'
+    | '/_layout/activities/login-activity'
+    | '/_layout/activities/recipes-uploaded'
+    | '/_layout/recipes/$recipeId'
+    | '/_layout/recipes/ingredients'
+    | '/_layout/recipes/measurements'
+    | '/_layout/recipes/recipes'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
     '/_layout': {
       id: '/_layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof LayoutImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_layout/activities': {
-      id: '/_layout/activities'
-      path: '/activities'
-      fullPath: '/activities'
-      preLoaderRoute: typeof LayoutActivitiesRouteImport
-      parentRoute: typeof LayoutImport
-    }
-    '/auth/sign-in': {
-      id: '/auth/sign-in'
-      path: '/auth/sign-in'
-      fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInImport
-      parentRoute: typeof rootRoute
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/': {
       id: '/auth/'
       path: '/auth'
       fullPath: '/auth'
-      preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_layout/activities/login-activity': {
-      id: '/_layout/activities/login-activity'
-      path: '/login-activity'
-      fullPath: '/activities/login-activity'
-      preLoaderRoute: typeof LayoutActivitiesLoginActivityImport
-      parentRoute: typeof LayoutActivitiesRouteImport
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_layout/activities/recipes-uploaded': {
-      id: '/_layout/activities/recipes-uploaded'
-      path: '/recipes-uploaded'
-      fullPath: '/activities/recipes-uploaded'
-      preLoaderRoute: typeof LayoutActivitiesRecipesUploadedImport
-      parentRoute: typeof LayoutActivitiesRouteImport
-    }
-    '/_layout/recipes/$recipeId': {
-      id: '/_layout/recipes/$recipeId'
-      path: '/recipes/$recipeId'
-      fullPath: '/recipes/$recipeId'
-      preLoaderRoute: typeof LayoutRecipesRecipeIdImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/recipes/ingredients': {
-      id: '/_layout/recipes/ingredients'
-      path: '/recipes/ingredients'
-      fullPath: '/recipes/ingredients'
-      preLoaderRoute: typeof LayoutRecipesIngredientsImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/recipes/measurements': {
-      id: '/_layout/recipes/measurements'
-      path: '/recipes/measurements'
-      fullPath: '/recipes/measurements'
-      preLoaderRoute: typeof LayoutRecipesMeasurementsImport
-      parentRoute: typeof LayoutImport
+    '/_layout/activities': {
+      id: '/_layout/activities'
+      path: '/activities'
+      fullPath: '/activities'
+      preLoaderRoute: typeof LayoutActivitiesRouteRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/recipes/recipes': {
       id: '/_layout/recipes/recipes'
       path: '/recipes/recipes'
       fullPath: '/recipes/recipes'
-      preLoaderRoute: typeof LayoutRecipesRecipesImport
-      parentRoute: typeof LayoutImport
+      preLoaderRoute: typeof LayoutRecipesRecipesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/recipes/measurements': {
+      id: '/_layout/recipes/measurements'
+      path: '/recipes/measurements'
+      fullPath: '/recipes/measurements'
+      preLoaderRoute: typeof LayoutRecipesMeasurementsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/recipes/ingredients': {
+      id: '/_layout/recipes/ingredients'
+      path: '/recipes/ingredients'
+      fullPath: '/recipes/ingredients'
+      preLoaderRoute: typeof LayoutRecipesIngredientsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/recipes/$recipeId': {
+      id: '/_layout/recipes/$recipeId'
+      path: '/recipes/$recipeId'
+      fullPath: '/recipes/$recipeId'
+      preLoaderRoute: typeof LayoutRecipesRecipeIdRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/activities/recipes-uploaded': {
+      id: '/_layout/activities/recipes-uploaded'
+      path: '/recipes-uploaded'
+      fullPath: '/activities/recipes-uploaded'
+      preLoaderRoute: typeof LayoutActivitiesRecipesUploadedRouteImport
+      parentRoute: typeof LayoutActivitiesRouteRoute
+    }
+    '/_layout/activities/login-activity': {
+      id: '/_layout/activities/login-activity'
+      path: '/login-activity'
+      fullPath: '/activities/login-activity'
+      preLoaderRoute: typeof LayoutActivitiesLoginActivityRouteImport
+      parentRoute: typeof LayoutActivitiesRouteRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface LayoutActivitiesRouteRouteChildren {
   LayoutActivitiesLoginActivityRoute: typeof LayoutActivitiesLoginActivityRoute
@@ -212,173 +281,12 @@ const LayoutRouteChildren: LayoutRouteChildren = {
 const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth': typeof AuthIndexRoute
-  '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
-  '/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
-  '/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
-  '/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
-  '/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
-  '/recipes/recipes': typeof LayoutRecipesRecipesRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth': typeof AuthIndexRoute
-  '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
-  '/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
-  '/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
-  '/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
-  '/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
-  '/recipes/recipes': typeof LayoutRecipesRecipesRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/activities': typeof LayoutActivitiesRouteRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth/': typeof AuthIndexRoute
-  '/_layout/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
-  '/_layout/activities/recipes-uploaded': typeof LayoutActivitiesRecipesUploadedRoute
-  '/_layout/recipes/$recipeId': typeof LayoutRecipesRecipeIdRoute
-  '/_layout/recipes/ingredients': typeof LayoutRecipesIngredientsRoute
-  '/_layout/recipes/measurements': typeof LayoutRecipesMeasurementsRoute
-  '/_layout/recipes/recipes': typeof LayoutRecipesRecipesRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/activities'
-    | '/auth/sign-in'
-    | '/auth'
-    | '/activities/login-activity'
-    | '/activities/recipes-uploaded'
-    | '/recipes/$recipeId'
-    | '/recipes/ingredients'
-    | '/recipes/measurements'
-    | '/recipes/recipes'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/activities'
-    | '/auth/sign-in'
-    | '/auth'
-    | '/activities/login-activity'
-    | '/activities/recipes-uploaded'
-    | '/recipes/$recipeId'
-    | '/recipes/ingredients'
-    | '/recipes/measurements'
-    | '/recipes/recipes'
-  id:
-    | '__root__'
-    | '/'
-    | '/_layout'
-    | '/_layout/activities'
-    | '/auth/sign-in'
-    | '/auth/'
-    | '/_layout/activities/login-activity'
-    | '/_layout/activities/recipes-uploaded'
-    | '/_layout/recipes/$recipeId'
-    | '/_layout/recipes/ingredients'
-    | '/_layout/recipes/measurements'
-    | '/_layout/recipes/recipes'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LayoutRoute: typeof LayoutRouteWithChildren
-  AuthSignInRoute: typeof AuthSignInRoute
-  AuthIndexRoute: typeof AuthIndexRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_layout",
-        "/auth/sign-in",
-        "/auth/"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_layout": {
-      "filePath": "_layout.tsx",
-      "children": [
-        "/_layout/activities",
-        "/_layout/recipes/$recipeId",
-        "/_layout/recipes/ingredients",
-        "/_layout/recipes/measurements",
-        "/_layout/recipes/recipes"
-      ]
-    },
-    "/_layout/activities": {
-      "filePath": "_layout/activities/route.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/activities/login-activity",
-        "/_layout/activities/recipes-uploaded"
-      ]
-    },
-    "/auth/sign-in": {
-      "filePath": "auth/sign-in.tsx"
-    },
-    "/auth/": {
-      "filePath": "auth/index.tsx"
-    },
-    "/_layout/activities/login-activity": {
-      "filePath": "_layout/activities/login-activity.tsx",
-      "parent": "/_layout/activities"
-    },
-    "/_layout/activities/recipes-uploaded": {
-      "filePath": "_layout/activities/recipes-uploaded.tsx",
-      "parent": "/_layout/activities"
-    },
-    "/_layout/recipes/$recipeId": {
-      "filePath": "_layout/recipes/$recipeId.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/recipes/ingredients": {
-      "filePath": "_layout/recipes/ingredients.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/recipes/measurements": {
-      "filePath": "_layout/recipes/measurements.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/recipes/recipes": {
-      "filePath": "_layout/recipes/recipes.tsx",
-      "parent": "/_layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
