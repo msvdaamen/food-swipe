@@ -31,7 +31,7 @@ export class UserService extends DbService {
   }
 
   async findByEmailWithPassword(
-    email: string
+    email: string,
   ): Promise<UserEntity | undefined> {
     const [user] = await this.database
       .select()
@@ -110,8 +110,8 @@ export class UserService extends DbService {
       .where(
         and(
           gte(authRefreshTokens.createdAt, from),
-          lte(authRefreshTokens.createdAt, until)
-        )
+          lte(authRefreshTokens.createdAt, until),
+        ),
       )
       .limit(1);
 

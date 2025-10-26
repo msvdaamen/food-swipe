@@ -1,21 +1,26 @@
 import { createClerkClient } from "@clerk/backend";
 
-const clerkClient = createClerkClient({
-  secretKey: process.env.CLERK_SECRET_KEY,
-  publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
-});
 
-const permittedOrigins = [
-  "http://localhost:5137",
-  "https://food-swipe.app",
-  "http://admin.food-swipe.app",
-]; // Replace with your permitted origins
 
-export const verifyClerkToken = async (req: Request) => {
-  return await clerkClient.authenticateRequest(req, {
-    jwtKey: process.env.CLERK_JWT_KEY,
-    authorizedParties: permittedOrigins,
+export class AuthProvider {
+  private clerkClient = createClerkClient({
+    secretKey: process.env.CLERK_SECRET_KEY,
+    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
   });
-};
+  permittedOrigins = [
+    "http://localhost:5137",
+    "http://admin.food-swipe.app",
+  ];
 
-export default clerkClient;
+  async verifyToken(req: Request): Promise<boolean> {
+    try {
+      const response = await this.clerkClient.authenticateRequest(req);
+      return response.isAuthenticated;
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      return false;
+    }
+  }
+}
+
+export const authProvider = new AuthProvider();

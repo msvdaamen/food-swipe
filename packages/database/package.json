@@ -8,12 +8,12 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "drizzle-kit": "^0.30.5"
+    "drizzle-kit": "catalog:"
   },
   "peerDependencies": {
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "drizzle-orm": "^0.39.3"
+    "drizzle-orm": "catalog:"
   }
 }

@@ -1,11 +1,21 @@
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/sidebar/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Separator } from "@/components/ui/separator";
 import AppBreadcrumbs from "@/components/app-breadcrumbs";
 
 export const Route = createFileRoute("/_layout")({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/auth/sign-in',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
   component: Layout,
 });
 

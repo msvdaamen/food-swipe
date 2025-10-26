@@ -2,8 +2,7 @@ import { createMiddleware } from "hono/factory";
 import type { AuthUser } from "../models/auth-user.interface";
 import { userService } from "../../user/user.service";
 import { jwtService } from "../../../providers/jwt.service";
-import type { JwtPayload } from "jsonwebtoken";
-import { verifyClerkToken } from "../../../providers/auth.provider";
+import { authProvider } from "../../../providers/auth.provider";
 
 export type AuthContext = {
   Variables: {
@@ -12,6 +11,8 @@ export type AuthContext = {
 };
 
 export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
+  const isAuthenticated = await authProvider.verifyToken(c.req.raw);
+
   const bearer = c.req.header("authorization");
   if (!bearer) {
     return c.json({}, 401);
