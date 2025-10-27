@@ -8,6 +8,6 @@ import (
 
 // User interface defines the methods for interacting with the user servce.
 type User interface {
-	ExistsByAuthId(ctx context.Context, authId string) (bool, error)
-	CreateUser(ctx context.Context, payload *model.CreateUserPayload) (*model.User, error)
+	CreateUser(ctx context.Context, payload *model.CreateUserPayload) (model.User, error)
+	GetUserByAuthId(ctx context.Context, authId string) (model.User, error)
 }

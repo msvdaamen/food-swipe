@@ -1,44 +1,37 @@
 package main
 
 import (
-	"context"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	todoHttp "github.com/msvdaamen/food-swipe/internal/app/todo/adapter/primary/http"
 	todoCore "github.com/msvdaamen/food-swipe/internal/app/todo/core"
-	auth "github.com/msvdaamen/food-swipe/internal/pkg/auth/port"
+	userHttp "github.com/msvdaamen/food-swipe/internal/app/user/adapters/secondary/primary/http"
+	userCore "github.com/msvdaamen/food-swipe/internal/app/user/core"
+	"github.com/msvdaamen/food-swipe/internal/pkg/auth"
 	"github.com/msvdaamen/food-swipe/internal/pkg/http_server"
-	"github.com/msvdaamen/food-swipe/internal/pkg/shutdown"
 	"go.uber.org/zap"
 )
 
 func startHttpServer(
 	logger *zap.Logger,
-	shutdownManager *shutdown.Manager,
 	config http_server.Config,
-	auth auth.Port,
+	auth auth.Auth,
+	userCore *userCore.Core,
 	todoCore *todoCore.Core,
 ) error {
 	logger.Debug("Starting HTTP server")
 
 	httpServer := http_server.New(logger, config)
 
-	err := registerServices(logger, httpServer, auth, todoCore)
+	err := registerServices(logger, httpServer, auth, userCore, todoCore)
 	if err != nil {
 		return err
 	}
-	go func() {
-		if err := httpServer.Start(":" + config.Port); err != nil {
-			logger.Error("HTTP server failed to serve", zap.Error(err))
-		}
-	}()
 
-	shutdownManager.SetTask("http", func() error {
-		logger.Info("Shutting down HTTP server")
-		httpServer.Shutdown(context.Background())
-
-		return nil
-	})
+	if err := httpServer.Start(":" + config.Port); err != nil && err != http.ErrServerClosed {
+		logger.Error("HTTP server failed to serve", zap.Error(err))
+	}
 
 	logger.Info("HTTP server started", zap.String("address", httpServer.ListenerAddr().String()))
 
@@ -50,11 +43,14 @@ func startHttpServer(
 func registerServices(
 	logger *zap.Logger,
 	httpServer *echo.Echo,
-	auth auth.Port,
+	auth auth.Auth,
+	userCore *userCore.Core,
 	todoCore *todoCore.Core,
 ) error {
 
-	todoHttp.New(httpServer.Group("/todo"), todoCore, auth)
+	userHttp.New(httpServer, userCore, auth)
+	logger.Info("Registering user service")
+	todoHttp.New(httpServer, todoCore, auth)
 	logger.Info("Registering todo service")
 
 	return nil

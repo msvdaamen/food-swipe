@@ -98,7 +98,7 @@
         "@types/uuid": "^11.0.0",
       },
     },
-    "apps/backend": {
+    "apps/backend2": {
       "name": "food-swipe-backend",
       "dependencies": {
         "@food-swipe/database": "workspace:*",
@@ -1506,7 +1506,7 @@
 
     "food-swipe-admin-backend": ["food-swipe-admin-backend@workspace:apps/admin-backend"],
 
-    "food-swipe-backend": ["food-swipe-backend@workspace:apps/backend"],
+    "food-swipe-backend": ["food-swipe-backend@workspace:apps/backend2"],
 
     "for-each": ["for-each@0.3.5", "https://npm.ops.print.com/for-each/-/for-each-0.3.5.tgz", { "dependencies": { "is-callable": "^1.2.7" } }, "sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg=="],
 

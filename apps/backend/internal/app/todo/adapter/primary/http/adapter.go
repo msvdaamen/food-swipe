@@ -3,14 +3,14 @@ package primary
 import (
 	"github.com/labstack/echo/v4"
 	todo "github.com/msvdaamen/food-swipe/internal/app/todo/core"
-	auth "github.com/msvdaamen/food-swipe/internal/pkg/auth/port"
+	auth "github.com/msvdaamen/food-swipe/internal/pkg/auth"
 )
 
 type Adapter struct {
 	core *todo.Core
 }
 
-func New(http *echo.Group, core *todo.Core, auth auth.Port) *Adapter {
+func New(http *echo.Echo, core *todo.Core, auth auth.Auth) *Adapter {
 	http.Use(auth.Middleware)
 	adapter := &Adapter{
 		core: core,

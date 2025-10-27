@@ -7,13 +7,13 @@ import AppBreadcrumbs from "@/components/app-breadcrumbs";
 
 export const Route = createFileRoute("/_layout")({
   beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
+    if (!context.auth.isAuthenticated && !context.auth.isLoading) {
       throw redirect({
-        to: '/auth/sign-in',
+        to: "/auth/sign-in",
         search: {
           redirect: location.href,
         },
-      })
+      });
     }
   },
   component: Layout,
