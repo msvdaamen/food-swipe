@@ -1,0 +1,20 @@
+{
+  "name": "@food-swipe/client",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "generate": "buf generate"
+  },
+  "devDependencies": {
+    "@bufbuild/protoc-gen-es": "^2.10.0",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.10.0",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-web": "catalog:"
+  }
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package api.v1;
+
+import "buf/validate/validate.proto";
+import "v1/common/pagination.proto";
+
+message User {
+    string id = 1;
+    string email = 2;
+    string first_name = 3;
+    string last_name = 4;
+}
+
+message GetUsersRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetUsersResponse {
+    common.Pagination pagination = 1;
+    repeated User users = 2;
+}
+
+service UserService {
+    rpc GetUsers(GetUsersRequest) returns (GetUsersResponse) { }
+}

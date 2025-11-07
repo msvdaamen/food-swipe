@@ -5,5 +5,5 @@ type Config struct {
 	Port     int    `env:"DB_PORT" env-default:"5432"`
 	User     string `env:"DB_USER" env-default:"postgres"`
 	Password string `env:"DB_PASSWORD" env-default:"password"`
-	DBName   string `env:"DB_NAME" env-default:"music_app"`
+	DBName   string `env:"DB_NAME" env-default:"food-swipe"`
 }

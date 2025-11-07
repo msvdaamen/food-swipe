@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package api.v1;
+
+import "buf/validate/validate.proto";
+
+// The greeting service definition.
+service GreeterService {
+  // Sends a greeting
+  rpc Greet (GreetRequest) returns (GreetResponse) {}
+}
+
+// The request message containing the user's name.
+message GreetRequest {
+  string name = 1 [(buf.validate.field).required = true];
+}
+
+// The response message containing the greetings
+message GreetResponse {
+  string message = 1;
+}

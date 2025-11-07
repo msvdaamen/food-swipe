@@ -13,7 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useUserStats } from "@/features/user/api/get-user-stats";
-import { useUsers } from "@/features/user/api/get-users";
+import { useQuery } from "@tanstack/react-query";
+import { getUsersQueryOptions } from "@food-swipe/user";
 
 export const Route = createFileRoute("/_layout/activities/login-activity")({
   component: RouteComponent,
@@ -58,13 +59,16 @@ function RouteComponent() {
 }
 
 function UsersTable() {
+  const { data, isLoading, isError, error, isPending } = useQuery(
+    getUsersQueryOptions(),
+  );
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError, error, isPending } = useUsers({
-    amount: 10,
-    page,
-    sort: "id",
-  });
+  // const { data, isLoading, isError, error, isPending } = useUsers({
+  //   amount: 10,
+  //   page,
+  //   sort: "id",
+  // });
 
   const loadingArr = Array(5).fill(null);
 
@@ -93,10 +97,9 @@ function UsersTable() {
                     </TableCell>
                   </TableRow>
                 ))
-              : data.data.map((user) => (
+              : data.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.username}</TableCell>
                     <TableCell>
                       {user.firstName} {user.lastName}
                     </TableCell>

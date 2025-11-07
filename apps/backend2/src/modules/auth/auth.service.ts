@@ -23,7 +23,7 @@ export class AuthService extends DbService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly recipeBookService: RecipeBookService
+    private readonly recipeBookService: RecipeBookService,
   ) {
     super();
   }
@@ -77,7 +77,7 @@ export class AuthService extends DbService {
 
     const correct = await Bun.password.verify(
       payload.password,
-      existingUser.password
+      existingUser.password,
     );
     if (!correct) {
       throw new Error("Invalid password");
@@ -167,5 +167,5 @@ export class AuthService extends DbService {
 export const authService = new AuthService(
   userService,
   jwtService,
-  recipeBookService
+  recipeBookService,
 );
