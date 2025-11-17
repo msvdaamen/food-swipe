@@ -1,13 +1,21 @@
 services:
   db:
-    image: supabase/postgres:15.8.1.040
+    image: postgres:18-bookworm
     environment:
       POSTGRES_PASSWORD: postgres
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+      POSTGRES_DB: food-swipe
+    volumes:
+      - pg-data:/var/lib/postgresql
     ports:
       - "5432:5432"
 
   cache:
     image: redis
+    volumes:
+      - redis-data:/data
     ports:
       - "6379:6379"
+
+volumes:
+  pg-data:
+  redis-data:

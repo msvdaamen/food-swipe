@@ -11,7 +11,7 @@ export const databaseProvider = drizzle(databaseConfig.url, {
 
 export async function migrateDatabase() {
   await migrate(databaseProvider, {
-    migrationsFolder: "../../drizzle",
+    migrationsFolder: "./drizzle",
     migrationsSchema: "public",
   });
 }

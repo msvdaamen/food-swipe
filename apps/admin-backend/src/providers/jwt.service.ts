@@ -12,12 +12,52 @@ export interface JwtPayload {
   azp: string;
 }
 
+type Unit =
+    | "Years"
+    | "Year"
+    | "Yrs"
+    | "Yr"
+    | "Y"
+    | "Weeks"
+    | "Week"
+    | "W"
+    | "Days"
+    | "Day"
+    | "D"
+    | "Hours"
+    | "Hour"
+    | "Hrs"
+    | "Hr"
+    | "H"
+    | "Minutes"
+    | "Minute"
+    | "Mins"
+    | "Min"
+    | "M"
+    | "Seconds"
+    | "Second"
+    | "Secs"
+    | "Sec"
+    | "s"
+    | "Milliseconds"
+    | "Millisecond"
+    | "Msecs"
+    | "Msec"
+    | "Ms";
+
+type UnitAnyCase = Unit | Uppercase<Unit> | Lowercase<Unit>;
+
+type StringValue =
+    | `${number}`
+    | `${number}${UnitAnyCase}`
+    | `${number} ${UnitAnyCase}`;
+
 export class JwtService {
   constructor(private readonly secret: string) {}
 
   async sign(
-    payload: string | Buffer | object,
-    expiresIn?: number | string
+    payload: string | object,
+    expiresIn?: number | StringValue
   ): Promise<string> {
     return await new Promise((resolve, reject) => {
       jsonwebtoken.sign(payload, this.secret, { expiresIn }, (err, token) => {
@@ -35,7 +75,6 @@ export class JwtService {
       jsonwebtoken.verify(
         token,
         this.secret,
-        { algorithms: ["RS256"] },
         (err, decoded) => {
           if (err) {
             reject(err);

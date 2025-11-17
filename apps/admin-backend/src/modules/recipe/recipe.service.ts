@@ -44,7 +44,6 @@ import type { Nutrition } from "./constants/nutritions.ts";
 import OpenAI from "openai";
 
 export class RecipeService extends DbService {
-  openai = new OpenAI();
 
   constructor(
     private readonly storage: StorageService,
@@ -466,7 +465,8 @@ export class RecipeService extends DbService {
     if (exists) {
       throw new Error("Recipe already exists");
     }
-    const translatedRecipe = await this.openai.chat.completions.create({
+    const openai = new OpenAI();
+    const translatedRecipe = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {

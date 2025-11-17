@@ -10,8 +10,8 @@ export const authRefreshTokens = pgTable(
   t => ({
     id: t.uuid().notNull().primaryKey(),
     userId: t.integer().notNull().references(() => users.id, { onDelete: "cascade" }),
-    createdAt: t.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    expiresAt: t.timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: t.timestamp({ withTimezone: true }).notNull().defaultNow(),
+    expiresAt: t.timestamp({ withTimezone: true }).notNull(),
   }),
   (table) => [
     index().on(table.userId),

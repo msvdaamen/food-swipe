@@ -59,7 +59,8 @@ function RouteComponent() {
             <CardContent>
               <form
                 onSubmit={(e) => {
-                  e.preventDefault();
+                  e.preventDefault()
+                  e.stopPropagation()
                   form.handleSubmit();
                 }}
               >

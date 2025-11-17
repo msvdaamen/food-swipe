@@ -1,11 +1,12 @@
-import { type BunFile, S3Client } from "bun";
+import { S3Client } from "bun";
 import type { Storage } from "./storage";
-import {v4 as uuid} from "uuid";
 import mime from 'mime/lite';
+
+const dbUrl = 'postgres://user:password@localhost:5432/dbname';
 
 export class ObjStorage implements Storage {
     private client: S3Client;
-    
+
     constructor(
         accessKeyId: string,
         secretAccessKey: string,
@@ -18,10 +19,10 @@ export class ObjStorage implements Storage {
             bucket,
             endpoint
           });
-    } 
-    
+    }
+
     async upload<T extends Blob>(file: T, isPublic: boolean): Promise<string> {
-        const filename = uuid() + '.' + this.getExtension(file.type);
+        const filename = crypto.randomUUID() + '.' + this.getExtension(file.type);
         await this.client.write(filename, file, {bucket: this.getBucket(isPublic)})
         return filename;
     }
@@ -32,8 +33,8 @@ export class ObjStorage implements Storage {
 
     async delete(file: string, isPublic: boolean): Promise<void> {
         await this.client.delete(file, {bucket: this.getBucket(isPublic)});
-    }  
-    
+    }
+
     private getBucket(isPublic: boolean): string {
         return isPublic ? this.bucket + '-public' : this.bucket;
     }

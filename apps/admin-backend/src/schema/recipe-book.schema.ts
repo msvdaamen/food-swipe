@@ -9,18 +9,18 @@ export const recipeBooks = pgTable(
   (t) => ({
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     userId: t
-      .integer("user_id")
+      .integer()
       .notNull()
       .references(() => users.id),
-    imageId: t.integer("image_id").references(() => files.id),
+    imageId: t.integer().references(() => files.id),
     title: t.text().notNull(),
-    isLiked: t.boolean("is_liked").notNull().default(false),
+    isLiked: t.boolean().notNull().default(false),
     createdAt: t
-      .timestamp("created_at", { withTimezone: true })
+      .timestamp({ withTimezone: true })
       .notNull()
       .defaultNow(),
     updatedAt: t
-      .timestamp("updated_at", { withTimezone: true })
+      .timestamp({ withTimezone: true })
       .notNull()
       .defaultNow(),
   }),

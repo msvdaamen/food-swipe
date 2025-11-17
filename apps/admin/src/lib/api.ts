@@ -3,6 +3,10 @@ import { useAuthStore } from "@/features/auth/auth.store";
 export class Api {
   public apiUrl: string = import.meta.env.VITE_API_URL;
 
+  constructor() {
+    console.log(this.apiUrl);
+  }
+
   public async get<T>(path: string, init?: RequestInit): Promise<T> {
     const response = await this.request(`${this.apiUrl}${path}`, init);
     if (!response.ok) {
@@ -21,7 +25,9 @@ export class Api {
       body: data ? JSON.stringify(data) : undefined,
       ...init,
     });
+    console.log(`${this.apiUrl}${path}`);
     if (!response.ok) {
+      console.error(await response.text());
       throw new Error("Failed to fetch data");
     }
     return response.json();
@@ -76,9 +82,10 @@ export class Api {
       headers,
     });
     if (!response.ok && response.status === 401) {
+      console.log(response);
       const refreshToken = useAuthStore.getState().refreshToken;
       if (!refreshToken) {
-        window.location.replace("/auth/sign-in");
+        // window.location.replace("/auth/sign-in");
         return response;
       }
       await this.refreshTokens(refreshToken);
@@ -110,7 +117,7 @@ export class Api {
       useAuthStore.setState(() => ({ accessToken: null, refreshToken: null }));
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      window.location.replace("/auth/sign-in");
+      // window.location.replace("/auth/sign-in");
       throw new Error("Failed to refresh tokens");
     });
     return this.activeReq;

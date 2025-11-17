@@ -2,12 +2,11 @@ import { Hono } from "hono";
 import { signInDtoSchema } from "./dto/sign-in.dto";
 import { authService } from "./auth.service";
 import { refreshTokenDtoSchema } from "./dto/refresh-token.dto";
-import { createFactory, createMiddleware } from "hono/factory";
+import { createFactory } from "hono/factory";
 import {
   authMiddleware,
   type AuthContext,
 } from "./middlewares/auth.middleware";
-import { Webhook } from "svix";
 
 const app = new Hono();
 
@@ -47,12 +46,6 @@ app.post("/sign-out", authMiddleware, async (c) => {
   const user = c.get("user");
   await authService.signOut(user.id);
   return c.json({ message: "Sign out successfully" });
-});
-
-app.get("/webhook/created", async (c) => {
-  const webhookSecret = process.env.CLERK_WEBHOOK_SIGNING_SECRET!;
-  const wh = new Webhook(webhookSecret);
-  const payload = wh.verify(await c.req.json(), c.req.header());
 });
 
 export const authRouter = createFactory<AuthContext>({

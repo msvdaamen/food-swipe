@@ -9,16 +9,16 @@ export const files = pgTable(
   "files",
   t => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
-    userId: t.integer("user_id")
+    userId: t.integer()
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     filename: t.text().notNull().unique(),
     type: t.text().notNull(),
-    isPublic: t.boolean("is_public").default(false).notNull(),
-    createdAt: t.timestamp("created_at", { withTimezone: true })
+    isPublic: t.boolean().default(false).notNull(),
+    createdAt: t.timestamp({ withTimezone: true })
       .defaultNow()
       .notNull(),
-    updatedAt: t.timestamp("updated_at", { withTimezone: true })
+    updatedAt: t.timestamp({ withTimezone: true })
       .defaultNow()
       .notNull(),
   }),

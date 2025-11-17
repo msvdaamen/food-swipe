@@ -6,17 +6,17 @@ import { authRefreshTokens } from "./auth-refresh-token.schema";
 import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", t => ({
-  id: t.integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  email: t.text("email").unique().notNull(),
-  username: t.text("username").unique().notNull(),
-  password: t.text("password").notNull(),
-  firstName: t.text("first_name").notNull(),
-  lastName: t.text("last_name").notNull(),
-  isAdmin: t.boolean("is_admin").default(false).notNull(),
-  createdAt: t.timestamp("created_at", { withTimezone: true })
+  id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
+  email: t.text().unique().notNull(),
+  username: t.text().unique().notNull(),
+  password: t.text().notNull(),
+  firstName: t.text().notNull(),
+  lastName: t.text().notNull(),
+  isAdmin: t.boolean().default(false).notNull(),
+  createdAt: t.timestamp({ withTimezone: true })
     .defaultNow()
     .notNull(),
-  updatedAt: t.timestamp("updated_at", { withTimezone: true })
+  updatedAt: t.timestamp({ withTimezone: true })
     .defaultNow()
     .notNull(),
 })).enableRLS();
