@@ -1,4 +1,4 @@
-import { type FileEntity as FileModel, files } from '@food-swipe/database';
+import { type FileEntity as FileModel, files } from '../../schema';
 import { FileUploadException } from './file-upload.exception';
 import { eq } from 'drizzle-orm';
 import { FileNotFoundException } from './file-not-found.exception';
@@ -73,4 +73,3 @@ const storage = new ObjStorage(
   storageConfig.endpoint
 );
 export const storageService = new StorageService(storage);
-

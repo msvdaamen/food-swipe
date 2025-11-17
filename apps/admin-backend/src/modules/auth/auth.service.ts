@@ -1,5 +1,5 @@
 import { addMonths } from "date-fns";
-import { authRefreshTokens, users } from "@food-swipe/database";
+import { authRefreshTokens, users } from "../../schema";
 import type { SignInDto } from "./dto/sign-in.dto";
 import { jwtService, type JwtService } from "../../providers/jwt.service";
 import type { SignInResponse } from "./responses/sign-in.response";

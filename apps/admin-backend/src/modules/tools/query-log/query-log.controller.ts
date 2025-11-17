@@ -1,7 +1,7 @@
-import { pgStatStatements } from "@food-swipe/database";
+import { pgStatStatements } from "../../../schema";
 import { Hono } from "hono";
 import { databaseProvider } from "../../../providers/database.provider";
-import { desc, eq, getTableColumns } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { pgView, integer, text } from "drizzle-orm/pg-core";
 import { getQueryLogsDto } from "./dto/get-query-logs.dto";
 import { cacheProvider } from "../../../providers/cache.provider";

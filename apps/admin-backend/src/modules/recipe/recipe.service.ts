@@ -14,7 +14,7 @@ import {
   ingredients,
   type MeasurementEntity,
   type RecipeNutritionEntity,
-} from "@food-swipe/database";
+} from "../../schema";
 import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
 import type { RecipeStepModel } from "./models/recipe-step.model.ts";
 import type { RecipeIngredientModel } from "./models/recipe-ingredient.model.ts";

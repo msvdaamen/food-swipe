@@ -4,7 +4,7 @@ import {
   authRefreshTokens,
   users,
   type UserEntity,
-} from "@food-swipe/database";
+} from "../../schema";
 import { getUsersDto, type GetUsersDto } from "./dto/get-users.dto";
 import { CreatePagination } from "../../common/create-pagination";
 import type { UserModel } from "./models/user.model";
@@ -14,7 +14,7 @@ import {
   type CacheProvider,
 } from "../../providers/cache.provider";
 import { format } from "date-fns";
-const { password, ...columns } = getTableColumns(users);
+const { password: _, ...columns } = getTableColumns(users);
 
 export class UserService extends DbService {
   constructor(private readonly cache: CacheProvider) {
