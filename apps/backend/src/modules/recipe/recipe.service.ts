@@ -1,204 +1,563 @@
-import { and, eq, gt, inArray } from "drizzle-orm";
 import { DbService } from "../../common/db.service";
-import type { CursorPagination } from "../../common/types/cursor-pagination";
-import { NotFoundError } from "../../common/errors/not-found.error";
-import type { RecipeSerialized } from "./models/recipe.model";
 import {
   storageService,
   type StorageService,
 } from "../../providers/storage/storage.service";
+import type { RecipeModel } from "./models/recipe.model.ts";
 import {
   files,
-  type FileObj as FileModel,
-} from "../../providers/storage/file.schema";
-import type { Nutrition } from "./constants/nutritions.ts";
-import {
-  ingredients,
-  measurements,
-  recipeIngredients,
-  recipeNutritions,
   recipes,
+  recipeIngredients,
   recipeSteps,
+  recipeNutritions,
+  measurements,
+  ingredients,
+  type MeasurementEntity,
+  type RecipeNutritionEntity,
   recipesToRecipeBooks,
-  type IngredientEntity,
-  type NewRecipeEntity,
-  type RecipeEntity,
-  type RecipeStepEntity,
-} from "@food-swipe/database";
+} from "../../schema";
+import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
+import type { RecipeStepModel } from "./models/recipe-step.model.ts";
+import type { RecipeIngredientModel } from "./models/recipe-ingredient.model.ts";
+import type { UpdateRecipeDto } from "./dto/update-recipe.dto.ts";
+import type { CreateRecipeStepDto } from "./dto/create-recipe-step.dto.ts";
+import type { CreateRecipeIngredientDto } from "./dto/create-recipe-ingredient.dto.ts";
+import type { UpdateRecipeStepDto } from "./dto/update-recipe-step.dto.ts";
+import type { ReorderRecipeStepDto } from "./dto/reorder-recipe-step.dto.ts";
+import type { UpdateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto.ts";
+import type { LoadRecipesDto } from "./dto/load-recipes.dto.ts";
+import type { CreateRecipeDto } from "./dto/create-recipe.dto.ts";
 import {
-  recipeBookService,
-  type RecipeBookService,
-} from "../recipe-book/recipe-book.service.ts";
+  type AHRecipe,
+  fetchRecipeFromAh,
+} from "./function/fetch-recipe-from-ah.ts";
+import {
+  measurementService,
+  type MeasurementService,
+} from "../measurement/measurement.service.ts";
+import {
+  ingredientService,
+  type IngredientService,
+} from "../ingredient/ingredient.service.ts";
+import type { CreateRecipeNutritionDto } from "./dto/create-nutrition.dto.ts";
+import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto.ts";
+import type { Nutrition } from "./constants/nutritions.ts";
+import OpenAI from "openai";
+import { RecipeBookService, recipeBookService } from "../recipe-book/recipe-book.service.ts";
 
 export class RecipeService extends DbService {
+
   constructor(
-    private readonly storageService: StorageService,
-    private readonly recipeBookService: RecipeBookService
+    private readonly storage: StorageService,
+    private readonly measurementService: MeasurementService,
+    private readonly ingredientService: IngredientService,
+    private readonly recipeBookService: RecipeBookService,
   ) {
     super();
   }
 
-  async allCursor(
-    userId: number,
-    limit: number,
-    cursor?: number,
-    liked?: boolean
-  ): Promise<CursorPagination<RecipeSerialized>> {
-    if (!cursor) {
-      cursor = 0;
-    }
-    const result = await this.database
-      .select({ id: recipes.id })
+  async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
+    const results = await this.database
+      .select({ recipe: recipes, coverImage: files })
       .from(recipes)
-      .where(and(gt(recipes.id, cursor), eq(recipes.isPublished, true)))
-      .limit(limit)
+      .leftJoin(files, eq(files.id, recipes.coverImageId))
+      .where(
+        filters.isPublished !== undefined
+          ? eq(recipes.isPublished, filters.isPublished)
+          : undefined
+      )
+      .orderBy(asc(recipes.title))
       .execute();
-    const cursorResult =
-      result.length === limit ? result[result.length - 1].id : null;
-    const recipeModels = result.length
-      ? await this.getMany(
-          userId,
-          result.map((row) => row.id)
-        )
-      : [];
+
+    return results.map((result) => ({
+      ...result.recipe,
+      coverImageUrl: result.coverImage
+        ? this.storage.getPublicUrl(result.coverImage.filename)
+        : null,
+    }));
+  }
+
+  async getById(id: number): Promise<RecipeModel> {
+    const [result] = await this.database
+      .select({ recipe: recipes, coverImage: files })
+      .from(recipes)
+      .leftJoin(files, eq(files.id, recipes.coverImageId))
+      .where(eq(recipes.id, id))
+      .execute();
+
+    if (!result) {
+      throw new Error("Recipe not found");
+    }
+
     return {
-      data: recipeModels,
-      cursor: cursorResult,
+      ...result.recipe,
+      coverImageUrl: result.coverImage
+        ? this.storage.getPublicUrl(result.coverImage.filename)
+        : null,
     };
   }
 
-  async get(userId: number, id: number): Promise<RecipeSerialized> {
-    const [{ id: recipeId }] = await this.database
-      .select({ id: recipes.id })
-      .from(recipes)
-      .where(and(eq(recipes.id, id), eq(recipes.isPublished, true)))
+  async create(payload: CreateRecipeDto): Promise<RecipeModel> {
+    const [{ id }] = await this.database
+      .insert(recipes)
+      .values(payload)
+      .returning({ id: recipes.id })
       .execute();
-    if (!recipeId) throw new NotFoundError();
-    const [recipe] = await this.getMany(userId, [recipeId]);
-
-    return recipe;
+    return this.getById(id);
   }
 
-  async getMany(userId: number, ids: number[]): Promise<RecipeSerialized[]> {
-    const userLikedRecipeBook =
-      await this.recipeBookService.getLikedRecipeBook(userId);
-    const [recipeRows, ingredientRows, stepRows, nutritionRows] =
-      await Promise.all([
-        this.database
-          .select({
-            recipe: recipes,
-            coverImage: files,
-            liked: recipesToRecipeBooks,
-          })
-          .from(recipes)
-          .innerJoin(files, eq(recipes.coverImageId, files.id))
-          .leftJoin(
-            recipesToRecipeBooks,
+  async update(
+    recipeId: number,
+    payload: UpdateRecipeDto
+  ): Promise<RecipeModel> {
+    await this.database
+      .update(recipes)
+      .set(payload)
+      .where(eq(recipes.id, recipeId))
+      .execute();
+    return this.getById(recipeId);
+  }
+
+  async uploadImage(
+    userId: number,
+    recipeId: number,
+    file: File
+  ): Promise<RecipeModel> {
+    const [recipe] = await this.database
+      .select({ id: recipes.id, coverImageId: recipes.coverImageId })
+      .from(recipes)
+      .where(eq(recipes.id, recipeId))
+      .execute();
+    const oldFile = recipe.coverImageId
+      ? await this.storage.getFile(recipe.coverImageId)
+      : null;
+    await this.transaction(async (tx) => {
+      const { id } = await this.storage.upload(userId, file, true);
+      await this.database
+        .update(recipes)
+        .set({ coverImageId: id })
+        .where(eq(recipes.id, recipeId))
+        .execute();
+    });
+    if (oldFile) {
+      await this.storage.delete(oldFile.id);
+    }
+    return await this.getById(recipe.id);
+  }
+
+  async delete(recipeId: number) {
+    await this.database
+      .delete(recipes)
+      .where(eq(recipes.id, recipeId))
+      .execute();
+  }
+
+  async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
+    const steps = await this.database
+      .select()
+      .from(recipeSteps)
+      .where(eq(recipeSteps.recipeId, recipeId))
+      .orderBy(asc(recipeSteps.stepNumber))
+      .execute();
+    return steps;
+  }
+
+  async createStep(
+    recipeId: number,
+    payload: CreateRecipeStepDto
+  ): Promise<RecipeStepModel> {
+    return await this.transaction(async () => {
+      await this.database
+        .update(recipeSteps)
+        .set({ stepNumber: sql`${recipeSteps.stepNumber} + 1` })
+        .where(
+          and(
+            eq(recipeSteps.recipeId, recipeId),
+            gte(recipeSteps.stepNumber, payload.order)
+          )
+        )
+        .execute();
+
+      const [step] = await this.database
+        .insert(recipeSteps)
+        .values({
+          stepNumber: payload.order,
+          description: payload.description,
+          recipeId,
+        })
+        .returning()
+        .execute();
+      return step;
+    });
+  }
+
+  async updateStep(
+    recipeId: number,
+    stepId: number,
+    payload: UpdateRecipeStepDto
+  ): Promise<RecipeStepModel> {
+    const [step] = await this.database
+      .update(recipeSteps)
+      .set(payload)
+      .where(
+        and(eq(recipeSteps.id, stepId), eq(recipeSteps.recipeId, recipeId))
+      )
+      .returning();
+    return step;
+  }
+
+  async deleteStep(recipeId: number, stepId: number) {
+    await this.transaction(async () => {
+      const [step] = await this.database
+        .delete(recipeSteps)
+        .where(
+          and(eq(recipeSteps.id, stepId), eq(recipeSteps.recipeId, recipeId))
+        )
+        .returning()
+        .execute();
+      await this.database
+        .update(recipeSteps)
+        .set({ stepNumber: sql`${recipeSteps.stepNumber} - 1` })
+        .where(
+          and(
+            eq(recipeSteps.recipeId, recipeId),
+            gt(recipeSteps.stepNumber, step.stepNumber)
+          )
+        )
+        .execute();
+    });
+  }
+
+  async reorderSteps(
+    recipeId: number,
+    stepId: number,
+    { orderTo, orderFrom }: ReorderRecipeStepDto
+  ) {
+    if (orderTo === orderFrom) {
+      return this.getSteps(recipeId);
+    }
+    await this.transaction(async () => {
+      const [step] = await this.database
+        .select()
+        .from(recipeSteps)
+        .where(
+          and(eq(recipeSteps.id, stepId), eq(recipeSteps.recipeId, recipeId))
+        )
+        .execute();
+      if (!step) {
+        throw new Error("Step not found");
+      }
+      if (orderTo < orderFrom) {
+        await this.database
+          .update(recipeSteps)
+          .set({ stepNumber: sql`${recipeSteps.stepNumber} + 1` })
+          .where(
             and(
-              eq(recipes.id, recipesToRecipeBooks.recipeId),
-              eq(recipesToRecipeBooks.recipeBookId, userLikedRecipeBook.id)
+              eq(recipeSteps.recipeId, recipeId),
+              gte(recipeSteps.stepNumber, orderTo),
+              lt(recipeSteps.stepNumber, orderFrom)
             )
           )
-          .where(inArray(recipes.id, ids)),
-
-        this.database
-          .select({
-            id: ingredients.id,
-            name: ingredients.name,
-            measurement: measurements.name,
-            abbreviation: measurements.abbreviation,
-            amount: recipeIngredients.amount,
-            recipeId: recipeIngredients.recipeId,
-          })
-          .from(recipeIngredients)
-          .innerJoin(
-            ingredients,
-            eq(recipeIngredients.ingredientId, ingredients.id)
+          .execute();
+      } else {
+        await this.database
+          .update(recipeSteps)
+          .set({ stepNumber: sql`${recipeSteps.stepNumber} - 1` })
+          .where(
+            and(
+              eq(recipeSteps.recipeId, recipeId),
+              gt(recipeSteps.stepNumber, orderFrom),
+              lte(recipeSteps.stepNumber, orderTo)
+            )
           )
-          .leftJoin(
-            measurements,
-            eq(recipeIngredients.measurementId, measurements.id)
-          )
-          .where(inArray(recipeIngredients.recipeId, ids)),
-
-        this.database
-          .select()
-          .from(recipeSteps)
-          .where(inArray(recipeSteps.recipeId, ids))
-          .orderBy(recipeSteps.stepNumber),
-
-        this.database
-          .select()
-          .from(recipeNutritions)
-          .where(inArray(recipeNutritions.recipeId, ids)),
-      ]);
-
-    const recipeMap = new Map<number, RecipeSerialized>();
-    for (const recipeRow of recipeRows) {
-      recipeMap.set(
-        recipeRow.recipe.id,
-        this.serializeRecipe(
-          recipeRow.recipe,
-          recipeRow.coverImage,
-          [],
-          [],
-          !!recipeRow.liked
+          .execute();
+      }
+      await this.database
+        .update(recipeSteps)
+        .set({ stepNumber: orderTo })
+        .where(
+          and(eq(recipeSteps.id, stepId), eq(recipeSteps.recipeId, recipeId))
         )
-      );
-    }
-
-    for (const ingredients of ingredientRows) {
-      const recipe = recipeMap.get(ingredients.recipeId);
-      if (recipe) {
-        recipe.ingredients.push(ingredients);
-      }
-    }
-
-    for (const step of stepRows) {
-      const recipe = recipeMap.get(step.recipeId);
-      if (recipe) {
-        recipe.steps.push(step);
-      }
-    }
-
-    for (const nutrition of nutritionRows) {
-      const recipe = recipeMap.get(nutrition.recipeId);
-      if (recipe) {
-        recipe.nutritions[nutrition.name as Nutrition] = {
-          name: nutrition.name,
-          unit: nutrition.unit,
-          value: nutrition.value,
-        };
-      }
-    }
-
-    return recipeRows.map((row) => recipeMap.get(row.recipe.id)!);
+        .execute();
+    });
+    return this.getSteps(recipeId);
   }
 
-  async create(
-    userId: number,
-    payload: NewRecipeEntity,
-    coverImage: File
-  ): Promise<void> {
-    if (!coverImage.type.startsWith("image/")) {
-      throw new Error("Cover image must be an image");
-    }
+  async getIngredients(recipeId: number): Promise<RecipeIngredientModel[]> {
+    const result = await this.database
+      .select({
+        recipeIngredient: recipeIngredients,
+        ingredient: ingredients,
+        measurement: measurements,
+      })
+      .from(recipeIngredients)
+      .innerJoin(
+        ingredients,
+        eq(ingredients.id, recipeIngredients.ingredientId)
+      )
+      .leftJoin(
+        measurements,
+        eq(measurements.id, recipeIngredients.measurementId)
+      )
+      .where(eq(recipeIngredients.recipeId, recipeId))
+      .execute();
+    const models = result.map((ingredient) => ({
+      ...ingredient.recipeIngredient,
+      ingredient: ingredient.ingredient.name,
+      measurement: ingredient.measurement?.name ?? null,
+    }));
+    return models;
+  }
 
-    await this.transaction(async (transaction) => {
-      const recipe = await transaction
-        .insert(recipes)
-        .values(payload)
-        .returning()
-        .execute()
-        .then((result) => result[0]);
-      const file = await this.storageService.upload(userId, coverImage, true);
-      await transaction
-        .update(recipes)
-        .set({ coverImageId: file.id })
-        .where(eq(recipes.id, recipe.id))
-        .execute();
-      return recipe;
+  async getIngredient(
+    recipeId: number,
+    ingredientId: number
+  ): Promise<RecipeIngredientModel> {
+    const [recipeIngredient] = await this.database
+      .select({
+        recipeIngredient: recipeIngredients,
+        ingredient: ingredients,
+        measurement: measurements,
+      })
+      .from(recipeIngredients)
+      .innerJoin(
+        ingredients,
+        eq(ingredients.id, recipeIngredients.ingredientId)
+      )
+      .leftJoin(
+        measurements,
+        eq(measurements.id, recipeIngredients.measurementId)
+      )
+      .where(
+        and(
+          eq(recipeIngredients.recipeId, recipeId),
+          eq(recipeIngredients.ingredientId, ingredientId)
+        )
+      )
+      .execute();
+    return {
+      ...recipeIngredient.recipeIngredient,
+      ingredient: recipeIngredient.ingredient.name,
+      measurement: recipeIngredient.measurement?.name ?? null,
+    };
+  }
+
+  async createIngredient(
+    recipeId: number,
+    payload: CreateRecipeIngredientDto
+  ): Promise<RecipeIngredientModel> {
+    const [{ ingredientId }] = await this.database
+      .insert(recipeIngredients)
+      .values({
+        recipeId,
+        ...payload,
+      })
+      .returning({ ingredientId: recipeIngredients.ingredientId });
+    return await this.getIngredient(recipeId, ingredientId);
+  }
+
+  async updateIngredient(
+    recipeId: number,
+    ingredientId: number,
+    payload: UpdateRecipeIngredientDto
+  ): Promise<RecipeIngredientModel> {
+    const [{ ingredientId: updatedIngredientId }] = await this.database
+      .update(recipeIngredients)
+      .set(payload)
+      .where(
+        and(
+          eq(recipeIngredients.recipeId, recipeId),
+          eq(recipeIngredients.ingredientId, ingredientId)
+        )
+      )
+      .returning({ ingredientId: recipeIngredients.ingredientId })
+      .execute();
+    return await this.getIngredient(recipeId, updatedIngredientId);
+  }
+
+  async deleteIngredient(recipeId: number, ingredientId: number) {
+    await this.database
+      .delete(recipeIngredients)
+      .where(
+        and(
+          eq(recipeIngredients.recipeId, recipeId),
+          eq(recipeIngredients.ingredientId, ingredientId)
+        )
+      )
+      .execute();
+  }
+
+  async getNutrition(recipeId: number): Promise<RecipeNutritionEntity[]> {
+    const nutritions = await this.database
+      .select()
+      .from(recipeNutritions)
+      .where(eq(recipeNutritions.recipeId, recipeId))
+      .orderBy(asc(recipeNutritions.name))
+      .execute();
+    return nutritions;
+  }
+
+  async updateNutrition(
+    recipeId: number,
+    name: Nutrition,
+    payload: UpdateRecipeNutritionDto
+  ): Promise<RecipeNutritionEntity> {
+    const [nutrition] = await this.database
+      .insert(recipeNutritions)
+      .values({
+        recipeId,
+        name,
+        ...payload,
+      })
+      .onConflictDoUpdate({
+        target: [recipeNutritions.recipeId, recipeNutritions.name],
+        set: payload,
+      })
+      .returning();
+    return nutrition;
+  }
+
+  async createNutrition(
+    recipeId: number,
+    payload: CreateRecipeNutritionDto
+  ): Promise<RecipeNutritionEntity> {
+    const [nutrition] = await this.database
+      .insert(recipeNutritions)
+      .values({
+        recipeId,
+        name: payload.name,
+        unit: payload.unit,
+        value: payload.value,
+      })
+      .returning();
+    return nutrition;
+  }
+
+  async createManyNutritions(
+    recipeId: number,
+    payload: CreateRecipeNutritionDto[]
+  ) {
+    const inserts = payload.map((nutrition) => ({
+      recipeId,
+      name: nutrition.name,
+      unit: nutrition.unit,
+      value: nutrition.value,
+    }));
+    const nutritions = await this.database
+      .insert(recipeNutritions)
+      .values(inserts)
+      .returning();
+    return nutritions;
+  }
+
+  async importRecipe(url: string) {
+    const idPart = url.split("/").find((part) => part.startsWith("R-R"));
+    if (!idPart) {
+      throw new Error("Invalid URL");
+    }
+    const id = parseInt(idPart.split("R-R")[1], 10);
+    const recipe = await fetchRecipeFromAh(id);
+    if (!recipe) {
+      throw new Error("Recipe not found");
+    }
+    const [exists] = await this.database
+      .select()
+      .from(recipes)
+      .where(eq(recipes.title, recipe.title))
+      .execute();
+    if (exists) {
+      throw new Error("Recipe already exists");
+    }
+    const openai = new OpenAI();
+    const translatedRecipe = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "developer",
+          content: `Translate the following recipe to English and return it in the exact same JSON format as the original recipe. I only want the JSON, no other text: ${JSON.stringify(recipe)}`,
+        },
+      ],
+      store: false,
     });
+    const translatedRecipeContent = translatedRecipe.choices[0].message.content;
+    if (!translatedRecipeContent) {
+      throw new Error("Failed to translate recipe");
+    }
+    const jsonStartIndex = translatedRecipeContent.indexOf("{");
+    const jsonEndIndex = translatedRecipeContent.lastIndexOf("}") + 1;
+    const jsonString = translatedRecipeContent.substring(
+      jsonStartIndex,
+      jsonEndIndex
+    );
+    const translatedRecipeJson = JSON.parse(jsonString) as AHRecipe;
+    const imageResponse = await fetch(
+      recipe.images[recipe.images.length - 1].url,
+      { method: "GET" }
+    );
+    const imageBuffer = await imageResponse.blob();
+    const imageFile = new File([imageBuffer], recipe.title);
+    const { id: imageId } = await this.storage.upload(1, imageFile, true);
+
+    const newRecipe = await this.create({
+      title: translatedRecipeJson.title,
+      description: translatedRecipeJson.description,
+      calories: translatedRecipeJson.nutritions?.energy.value || 0,
+      prepTime: translatedRecipeJson.cookTime,
+      servings: translatedRecipeJson.servings.number,
+      coverImageId: imageId,
+    });
+    for (let i = 0; i < translatedRecipeJson.preparation.steps.length; i++) {
+      const step = translatedRecipeJson.preparation.steps[i];
+      await this.createStep(newRecipe.id, { description: step, order: i + 1 });
+    }
+    for (const ingredient of translatedRecipeJson.ingredients) {
+      let measurement: MeasurementEntity | null = null;
+      if (ingredient.quantityUnit.singular) {
+        measurement = await this.measurementService.findByAbbreviation(
+          ingredient.quantityUnit.singular
+        );
+        if (!measurement) {
+          measurement = await this.measurementService.create({
+            name: ingredient.quantityUnit.singular,
+            abbreviation: ingredient.quantityUnit.singular,
+          });
+        }
+      }
+      let existingIngredient = await this.ingredientService.findByName(
+        ingredient.name.singular
+      );
+      if (!existingIngredient) {
+        existingIngredient = await this.ingredientService.create({
+          name: ingredient.name.singular,
+        });
+      }
+      if (!existingIngredient) {
+        throw new Error("Failed to create ingredient");
+      }
+      await this.createIngredient(newRecipe.id, {
+        ingredientId: existingIngredient.id,
+        measurementId: measurement ? measurement.id : null,
+        amount: Math.round(ingredient.quantity),
+      });
+    }
+    const nutritions = [];
+    for (const name in translatedRecipeJson.nutritions) {
+      if (!(name in translatedRecipeJson.nutritions) || name === "__typename") {
+        continue;
+      }
+      const nutrition =
+        translatedRecipeJson.nutritions[name as keyof AHRecipe["nutritions"]];
+      if (!nutrition) {
+        continue;
+      }
+      nutritions.push({
+        name: name,
+        unit: nutrition.unit,
+        value: nutrition.value,
+      });
+    }
+    await this.createManyNutritions(newRecipe.id, nutritions);
+    return await this.getById(newRecipe.id);
   }
 
   async like(userId: number, recipeId: number, like: boolean) {
@@ -213,43 +572,20 @@ export class RecipeService extends DbService {
           )
         )
         .execute();
-      return this.get(userId, recipeId);
+      return this.getById(recipeId);
     }
     await this.database
       .insert(recipesToRecipeBooks)
       .values({ recipeBookId: recipeBook.id, recipeId })
       .onConflictDoNothing()
       .execute();
-    return this.get(userId, recipeId);
-  }
-
-  serializeRecipe(
-    recipe: RecipeEntity,
-    coverImage: FileModel,
-    ingredients: IngredientEntity[],
-    steps: RecipeStepEntity[],
-    liked: boolean
-  ): RecipeSerialized {
-    const coverImageUrl = this.storageService.getPublicUrl(coverImage.filename);
-    return {
-      id: recipe.id,
-      title: recipe.title,
-      description: recipe.description,
-      prepTime: recipe.prepTime,
-      servings: recipe.servings,
-      isPublished: recipe.isPublished,
-      coverImageUrl,
-      liked,
-      createdAt: recipe.createdAt,
-      updatedAt: recipe.updatedAt,
-      ingredients,
-      steps,
-      nutritions: {},
-    };
+    return this.getById(recipeId);
   }
 }
 
 export const recipeService = new RecipeService(
   storageService,
+  measurementService,
+  ingredientService,
   recipeBookService
 );

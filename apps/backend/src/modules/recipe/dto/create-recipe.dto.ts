@@ -1,8 +1,12 @@
-import { z } from "zod";
+import {z} from "zod";
 
-export const createRecipeDtoSchema = z.object({
+export const createRecipeDto = z.object({
     title: z.string(),
-    file: z.instanceof(File)
+    description: z.string().optional(),
+    prepTime: z.number().min(1).optional(),
+    servings: z.number().min(1).optional(),
+    calories: z.number().min(1).optional(),
+    coverImageId: z.number().min(1).optional(),
 });
 
-export type CreateRecipeDto = z.infer<typeof createRecipeDtoSchema>;
+export type CreateRecipeDto = z.infer<typeof createRecipeDto>;
