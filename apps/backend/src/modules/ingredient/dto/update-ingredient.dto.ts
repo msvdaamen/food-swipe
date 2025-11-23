@@ -1,7 +1,7 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const updateIngredientDto = z.object({
-    name: z.string()
+	name: z.string(),
 });
 
 export type CreateIngredientDto = z.infer<typeof updateIngredientDto>;

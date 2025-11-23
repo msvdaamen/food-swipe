@@ -5,6 +5,6 @@ import { authRouter } from "../auth/auth.controller";
 const app = authRouter.createApp();
 
 export function registerToolsController(instance: Hono) {
-  registerQueryLogController(app);
-  const router = instance.route("/v1/tools", app);
+	registerQueryLogController(app);
+	const router = instance.route("/v1/tools", app);
 }

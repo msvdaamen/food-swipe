@@ -1,2 +1,1 @@
-export class FileUploadException extends Error {
-}
+export class FileUploadException extends Error {}

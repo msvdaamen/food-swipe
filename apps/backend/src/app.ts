@@ -1,61 +1,52 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { rateLimiter } from "hono-rate-limiter";
-import { getConnInfo } from "hono/bun";
-import { secureHeaders } from "hono/secure-headers";
-import { registerAuthController } from "./modules/auth/auth.controller.ts";
-import { registerRecipeController } from "./modules/recipe/recipe.controller.ts";
-import { registerUserController } from "./modules/user/user.controller.ts";
-import { registerMeasurementsController } from "./modules/measurement/measurement.controller.ts";
-import { registerIngredientController } from "./modules/ingredient/ingredient.controller.ts";
-import { ZodError } from "zod";
-import { FormatZodErrors } from "./common/format-zod-errors.ts";
-import { migrateDatabase } from "./providers/database.provider.ts";
-import { registerToolsController } from "./modules/tools/tools.controller.ts";
-import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller.ts";
+import "./telementry";
 
-await migrateDatabase();
+import { NodeSdk } from "@effect/opentelemetry";
+import {
+	HttpMiddleware,
+	HttpRouter,
+	HttpServer,
+	HttpServerResponse,
+} from "@effect/platform";
+import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
+import {
+	BatchSpanProcessor,
+	ConsoleSpanExporter,
+} from "@opentelemetry/sdk-trace-base";
+import { SentrySpanProcessor } from "@sentry/opentelemetry";
+import { Effect, Layer } from "effect";
+import { userRouter } from "./modules/user/router";
+import { UserServiceLive } from "./modules/user/user.service";
 
-const app = new Hono();
+const port = 3000;
+const ServerLive = BunHttpServer.layer({ port });
 
-app.use(secureHeaders());
-app.use(cors());
+const router = HttpRouter.empty.pipe(
+	HttpRouter.get(
+		"/",
+		Effect.gen(function* () {
+			return HttpServerResponse.text("Hello, World!");
+		}),
+	),
+	HttpRouter.mount("/users", userRouter),
 
-const limiter = rateLimiter({
-  windowMs: 60 * 1000, // 1 minutes
-  limit: 120, // Limit each IP to 100 requests per `window` (here, per 1 minutes).
-  standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-  keyGenerator: (c) => {
-    const info = getConnInfo(c);
-    const cfConnectingIp = c.req.header()["cf-connecting-ip"];
-    const realIp = c.req.header()["x-forwarded-for"];
-    return cfConnectingIp || realIp || (info.remote.address as string);
-  },
-});
+	HttpServer.serve(HttpMiddleware.logger),
+	HttpServer.withLogAddress,
+	Layer.provide(ServerLive),
+);
 
-app.use(limiter);
+// Set up tracing with the OpenTelemetry SDK
 
-app.onError((err, c) => {
-  console.log(err);
-  if (err instanceof ZodError) {
-    const errors = FormatZodErrors(err);
-    return c.json({ error: "validation_error", message: errors }, 400);
-  }
+// const NodeSdkLive = NodeSdk.layer(() => ({
+// 	resource: { serviceName: "food-swipe" },
 
-  return c.json({ error: "Internal Server Error" }, 500);
-});
+// 	// Export span data to the console
 
-app.get("/", (c) => c.text("Hello Bun!"));
+// 	spanProcessor: new SentrySpanProcessor(),
+// }));
 
-registerAuthController(app);
-registerUserController(app);
-registerRecipeController(app);
-registerMeasurementsController(app);
-registerIngredientController(app);
-registerToolsController(app);
-registerRecipeBookController(app);
-
-export default {
-  port: process.env.APP_PORT || 3000,
-  fetch: app.fetch,
-};
+BunRuntime.runMain(
+	Layer.launch(router).pipe(
+		Effect.provide(UserServiceLive),
+		// Effect.provide(NodeSdkLive),
+	),
+);

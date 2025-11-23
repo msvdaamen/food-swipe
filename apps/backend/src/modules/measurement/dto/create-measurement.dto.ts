@@ -1,8 +1,8 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const createMeasurementDto = z.object({
-    name: z.string(),
-    abbreviation: z.string(),
-})
+	name: z.string(),
+	abbreviation: z.string(),
+});
 
-export type CreateMeasurementDto = z.infer<typeof createMeasurementDto>
+export type CreateMeasurementDto = z.infer<typeof createMeasurementDto>;

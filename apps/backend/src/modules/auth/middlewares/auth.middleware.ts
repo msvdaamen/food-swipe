@@ -6,39 +6,39 @@ import type { JwtPayload } from "jsonwebtoken";
 import { verifyClerkToken } from "../../../providers/auth.provider";
 
 export type AuthContext = {
-  Variables: {
-    user: AuthUser;
-  };
+	Variables: {
+		user: AuthUser;
+	};
 };
 
 export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
-  const bearer = c.req.header("authorization");
-  if (!bearer) {
-    return c.json({}, 401);
-  }
-  const accessToken = bearer.split(" ")[1];
-  if (!accessToken) {
-    return c.json({}, 401);
-  }
-  try {
-    const { sub } = await jwtService.verify(accessToken);
-    if (!sub) {
-      return c.json({}, 401);
-    }
-    const user = await userService.findById(Number(sub));
-    if (!user || !user.isAdmin) {
-      return c.json({}, 401);
-    }
-    c.set("user", {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      createdAt: user.createdAt,
-    });
-    await next();
-  } catch (error) {
-    return c.json({}, 401);
-  }
+	const bearer = c.req.header("authorization");
+	if (!bearer) {
+		return c.json({}, 401);
+	}
+	const accessToken = bearer.split(" ")[1];
+	if (!accessToken) {
+		return c.json({}, 401);
+	}
+	try {
+		const { sub } = await jwtService.verify(accessToken);
+		if (!sub) {
+			return c.json({}, 401);
+		}
+		const user = await userService.findById(Number(sub));
+		if (!user || !user.isAdmin) {
+			return c.json({}, 401);
+		}
+		c.set("user", {
+			id: user.id,
+			email: user.email,
+			username: user.username,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			createdAt: user.createdAt,
+		});
+		await next();
+	} catch (error) {
+		return c.json({}, 401);
+	}
 });

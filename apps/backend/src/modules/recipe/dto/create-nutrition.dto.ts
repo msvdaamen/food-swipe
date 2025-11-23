@@ -1,10 +1,9 @@
-import {z} from "zod";
-
+import { z } from "zod";
 
 export const createRecipeNutritionDto = z.object({
-    name: z.string(),
-    unit: z.string(),
-    value: z.number(),
+	name: z.string(),
+	unit: z.string(),
+	value: z.number(),
 });
 
 export type CreateRecipeNutritionDto = z.infer<typeof createRecipeNutritionDto>;

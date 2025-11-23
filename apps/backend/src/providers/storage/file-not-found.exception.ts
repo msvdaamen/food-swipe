@@ -1,7 +1,5 @@
 export class FileNotFoundException extends Error {
-    constructor() {
-      super('File not found');
-    }
-  }
-  
-  
+	constructor() {
+		super("File not found");
+	}
+}
