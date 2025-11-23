@@ -2,8 +2,8 @@ FROM oven/bun
 
 COPY package.json bun.lock ./
 COPY /packages/ ./packages/
-COPY /apps/food-swipe-backend/ ./apps/food-swipe-backend/
+COPY /apps/food-swipe-admin-backend/ ./apps/food-swipe-admin-backend/
 
-RUN bun install --filter 'food-swipe-backend'
+RUN bun install --filter 'food-swipe-admin-backend'
 
-CMD ["bun", "apps/food-swipe-backend/src/app.ts"]
+CMD ["bun", "apps/food-swipe-admin-backend/src/app.ts"]

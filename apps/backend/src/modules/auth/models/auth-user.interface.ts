@@ -4,7 +4,6 @@ export interface AuthUser {
     username: string;
     firstName: string;
     lastName: string;
-    createdAt: string | Date,
-    scopes: Set<string>
+    createdAt: string | Date;
   };
   

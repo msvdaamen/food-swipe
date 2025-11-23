@@ -1,5 +1,5 @@
-import { recipeBooks, type RecipeBookEntity } from "@food-swipe/database";
 import { DbService } from "../../common/db.service";
+import { recipeBooks, type RecipeBookEntity } from "../../schema";
 import type { CreateRecipeBookDto } from "./dto/create-recipe-book.dto";
 import { eq, and } from "drizzle-orm";
 export class RecipeBookService extends DbService {

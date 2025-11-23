@@ -1,8 +1,7 @@
-import type { Ingredient } from "../schema/ingredient.schema";
-import type { RecipeStep } from "../schema/recipe-step.schema";
-import type {Nutrition} from "../constants/nutritions.ts";
+import type { IngredientEntity } from "../../ingredient/schema/ingredient.schema.ts";
+import type { RecipeStepEntity } from "../schema/recipe-step.schema";
 
-export type RecipeSerialized = {
+export type RecipeModel = {
     id: number,
     title: string,
     description: string | null,
@@ -10,16 +9,6 @@ export type RecipeSerialized = {
     servings: number | null,
     isPublished: boolean,
     coverImageUrl: string | null,
-    liked: boolean,
     createdAt: Date,
     updatedAt: Date
-    ingredients: Ingredient[],
-    steps: RecipeStep[]
-    nutritions: {
-        [name in Nutrition]?: {
-            name: string,
-            unit: string,
-            value: number
-        }
-    }
 };

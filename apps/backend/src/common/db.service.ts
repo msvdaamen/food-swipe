@@ -1,39 +1,30 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
-import { databaseProvider, type DatabaseProvider } from '../providers/database.provider';
+import { AsyncLocalStorage } from "node:async_hooks";
+import {
+  databaseProvider,
+  type DatabaseProvider,
+} from "../providers/database.provider";
 
-type TransactionFn = Parameters<DatabaseProvider['transaction']>;
+type TransactionFn = Parameters<DatabaseProvider["transaction"]>;
 type TransactionCallbackParam = Parameters<TransactionFn[0]>[0];
 const dbTransactionStorage = new AsyncLocalStorage<TransactionCallbackParam>();
 
-
-const _getDatabase = () => {
-  return dbTransactionStorage.getStore() ?? databaseProvider;
-}
-
-export const getDatabase = ()=> {
-  return _getDatabase();
-}
-
-export const transaction = async <T>(callback: (transaction: TransactionCallbackParam) => Promise<T>): Promise<T> => {
-  return await _getDatabase().transaction(async transaction => {
-    return await dbTransactionStorage.run(transaction, async () => {
-      return await callback(transaction);
-    });
-  });
-}
-
 export class DbService {
-
-  get database(): Omit<DatabaseProvider, 'transaction'> {
-    return this._getDatabase() as Omit<DatabaseProvider, 'transaction'>;
+  get database(): Omit<DatabaseProvider, "transaction"> {
+    return this.transactionInstance ?? databaseProvider;
   }
 
-  private _getDatabase() {
-    return dbTransactionStorage.getStore() ?? databaseProvider;
+  private get _database(): DatabaseProvider {
+    return databaseProvider;
   }
 
-  async transaction<T>(callback: (transaction: TransactionCallbackParam) => Promise<T>): Promise<T> {
-    return await this._getDatabase().transaction(async transaction => {
+  private get transactionInstance(): DatabaseProvider | undefined {
+    return dbTransactionStorage.getStore();
+  }
+
+  async transaction<T>(
+    callback: (transaction: TransactionCallbackParam) => Promise<T>
+  ): Promise<T> {
+    return await this._database.transaction(async (transaction) => {
       return await dbTransactionStorage.run(transaction, async () => {
         return await callback(transaction);
       });
