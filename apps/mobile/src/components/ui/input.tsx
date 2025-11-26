@@ -21,20 +21,27 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
   const [focused, setFocused] = useState(false);
 
   const backgroundColor = useMemo(() => {
-    if (color === 'transparent') return 'rgba(255, 255, 255, 0.1)';
+    if (color === 'transparent') return 'rgba(255, 255, 255, 0.15)';
     return theme === 'dark' ? '#424242' : 'white';
   }, [theme, color]);
-  const placeholderColor = theme === 'dark' ? '#a1a1aa' : '#4b5563';
-  const textColor = theme === 'dark' ? 'white' : 'black';
+
+  const placeholderColor = useMemo(() => {
+    if (color === 'transparent') return '#e2e8f0';
+    return theme === 'dark' ? '#a1a1aa' : '#4b5563';
+  }, [theme, color]);
+
+  const textColor = useMemo(() => {
+    if (color === 'transparent') return 'white';
+    return theme === 'dark' ? 'white' : 'black';
+  }, [theme, color]);
 
   const borderColor = useMemo(() => {
+    if (focused) return Colors.emerald500;
+    if (color === 'transparent') return 'rgba(255, 255, 255, 0.3)';
+
     if (theme === 'dark') {
-      if (focused) return Colors.emerald600;
-      if (color === 'transparent') return Colors.stone700;
       return Colors.stone400;
     }
-    if (focused) return Colors.emerald600;
-    if (color === 'transparent') return 'rgba(0, 0, 0, 0.1)';
     return Colors.gray300;
   }, [focused, color, theme]);
 
@@ -48,7 +55,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 
   return (
     <View style={[styles.container, style]}>
-      {children && <FText>{children}</FText>}
+      {children}
       <View style={[styles.inputContainer, { backgroundColor, borderColor }]}>
         {Icon && (
           <View style={[styles.icon]}>
@@ -70,7 +77,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 export const AppLabel = ({ children, style }: Props) => {
   return (
     // <View style={styles.labelContainer}>
-    <AppText style={[style]}>{children}</AppText>
+    <FText style={[style]}>{children}</FText>
     // </View>
   );
 };
@@ -83,15 +90,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 2,
-    paddingHorizontal: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   input: {
     flexGrow: 1,
-    borderColor: 'gray',
-    height: 30,
+    fontSize: 16,
     padding: 0,
   },
   icon: {

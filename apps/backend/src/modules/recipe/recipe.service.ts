@@ -470,7 +470,7 @@ export class RecipeService extends DbService {
     }
     const openai = new OpenAI();
     const translatedRecipe = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5-nano",
       messages: [
         {
           role: "developer",
@@ -501,7 +501,7 @@ export class RecipeService extends DbService {
     const newRecipe = await this.create({
       title: translatedRecipeJson.title,
       description: translatedRecipeJson.description,
-      calories: translatedRecipeJson.nutritions?.energy.value || 0,
+      calories: translatedRecipeJson.nutritions.energy && translatedRecipeJson.nutritions?.energy.value || 0,
       prepTime: translatedRecipeJson.cookTime,
       servings: translatedRecipeJson.servings.number,
       coverImageId: imageId,
@@ -556,7 +556,9 @@ export class RecipeService extends DbService {
         value: nutrition.value,
       });
     }
-    await this.createManyNutritions(newRecipe.id, nutritions);
+    if (nutritions.length) {
+      await this.createManyNutritions(newRecipe.id, nutritions);
+    }
     return await this.getById(newRecipe.id);
   }
 

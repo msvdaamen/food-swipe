@@ -1,25 +1,21 @@
 export async function fetchRecipeFromAh(id: number): Promise<Recipe | null> {
-  const cookies = await getCookies();
-  if (!cookies) {
-    throw new Error("No cookies found");
-  }
+  // const cookies = await getCookies();
+  // if (!cookies) {
+  //   throw new Error("No cookies found");
+  // }
   const response = await fetch("https://www.ah.nl/gql", {
     method: "POST",
     headers: {
-      "access-control-allow-credentials": "true",
-      "access-control-allow-origin": "https://www.ah.nl",
       "Content-Type": "application/json",
-      Origin: "https://www.ah.nl",
-      Cookie: cookies,
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-      "x-client-name": "ah-allerhande",
-      "x-client-platform-type": "Web",
-      "x-client-version": "1.1023.3",
+      "client-name": "ah-bonus",
+      "origin": "https://www.ah.nl",
+      "referer": "https://www.ah.nl/bonus",
+      "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+      // Cookie: cookies,
     },
-    mode: "cors",
-    credentials: "include",
-    referrerPolicy: "strict-origin-when-cross-origin",
+    // mode: "cors",
+    // credentials: "include",
+    // referrerPolicy: "strict-origin-when-cross-origin",
     body: JSON.stringify({
       query: sqlStr,
       variables: {
@@ -28,7 +24,9 @@ export async function fetchRecipeFromAh(id: number): Promise<Recipe | null> {
     }),
   });
   if (!response.ok) {
-    throw new Error(`Failed to fetch recipe: ${await response.text()}`);
+    const text = await response.text()
+    console.error(`Failed to fetch recipe: ${text}, code:${response.status}`);
+    throw new Error(`Failed to fetch recipe: ${text}`);
   }
   const data = await response.json();
   if ("errors" in data) {
@@ -78,42 +76,42 @@ type Recipe = {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     energy: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     fat: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     fibers: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     protein: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     saturatedFat: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     sodium: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
     sugar: {
       name: string;
       unit: string;
       value: number;
-    };
+    } | null;
   };
   cookTime: number;
   ovenTime: number | null;

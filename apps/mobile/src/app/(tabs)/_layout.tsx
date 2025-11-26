@@ -3,13 +3,10 @@ import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { House, Plane, Utensils } from 'lucide-react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   const tabBarActiveTintColor = useThemeColor({
     dark: Colors.emerald600,
     light: Colors.emerald600,

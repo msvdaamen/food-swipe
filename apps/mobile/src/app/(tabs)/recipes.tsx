@@ -29,7 +29,7 @@ function Recipe() {
   const router = useRouter();
 
   const handleRecipeCardPress = () => {
-    router.replace('/(auth)/sign-in');
+    router.navigate('/recipe-modal');
   };
 
   return <TouchableOpacity
@@ -39,7 +39,9 @@ function Recipe() {
   >
     <Image
       style={styles.recipeImage}
-      source={require('@assets/images/react-logo.png')}
+      source={{
+        uri: 'https://static-dev.food-swipe.app/9c55494e-21f3-4d96-be6b-d423b7df02a3.jpeg'
+      }}
     />
     <FView style={styles.recipeCardOverlay}>
       <LinearGradient
