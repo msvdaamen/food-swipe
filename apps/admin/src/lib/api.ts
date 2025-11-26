@@ -1,3 +1,4 @@
+import { router } from "@/app/router";
 import { useAuthStore } from "@/features/auth/auth.store";
 
 export class Api {
@@ -82,10 +83,9 @@ export class Api {
       headers,
     });
     if (!response.ok && response.status === 401) {
-      console.log(response);
       const refreshToken = useAuthStore.getState().refreshToken;
       if (!refreshToken) {
-        // window.location.replace("/auth/sign-in");
+        router.navigate({ to: "/auth/sign-in", replace: true });
         return response;
       }
       await this.refreshTokens(refreshToken);
@@ -117,7 +117,7 @@ export class Api {
       useAuthStore.setState(() => ({ accessToken: null, refreshToken: null }));
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      // window.location.replace("/auth/sign-in");
+      router.navigate({ to: "/auth/sign-in", replace: true });
       throw new Error("Failed to refresh tokens");
     });
     return this.activeReq;

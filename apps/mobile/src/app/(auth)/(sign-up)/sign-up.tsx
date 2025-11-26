@@ -1,16 +1,17 @@
-import { AppText } from "@/components/ui/text";
-import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
 import {
   Keyboard,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ImageBackground } from "expo-image";
-import { SignUpForm } from "@/features/auth/components/sign-up-form";
-import { useSignUp } from "@/features/auth/api/sign-up";
+import { Colors } from "@/constants/theme";
+import { FText } from "@/components/f-text";
+// import { SignUpForm } from "@/features/auth/components/sign-up-form";
+// import { useSignUp } from "@/features/auth/api/sign-up";
 
 type SignUpFormValues = {
   email: string;
@@ -22,41 +23,41 @@ type SignUpFormValues = {
 };
 
 export default function SignUpScreen() {
-  const signUp = useSignUp();
+  // const signUp = useSignUp();
   const router = useRouter();
 
   async function handleSignUp(value: SignUpFormValues) {
-    try {
-      await signUp.mutateAsync(value);
-      router.replace("/");
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   await signUp.mutateAsync(value);
+    //   router.replace("/");
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
   return (
     <ImageBackground
-      source={{ uri: "auth_background" }}
+      source={require('@assets/images/auth_background.jpg')}
       contentFit="cover"
       style={styles.background}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <AppText style={styles.title}>Food Swipe</AppText>
-            <AppText style={styles.subtitle}>Sign up for a account</AppText>
+            <FText style={styles.title}>Food Swipe</FText>
+            <FText style={styles.subtitle}>Sign up for a account</FText>
           </View>
           <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
             <BlurView intensity={90} tint="dark" style={styles.form}>
-              <SignUpForm onSubmit={handleSignUp} />
+              {/*<SignUpForm onSubmit={handleSignUp} />*/}
             </BlurView>
           </View>
           <View style={styles.footer}>
-            <AppText style={{ color: Colors.gray400 }}>
+            <FText style={{ color: Colors.gray400 }}>
               Already have an account?
-            </AppText>
-            <Link href="/sign-in">
-              <AppText>Sign in</AppText>
+            </FText>
+            <Link replace href="/sign-in">
+              <FText style={{ color: Colors.white }}>Sign in</FText>
             </Link>
           </View>
         </View>

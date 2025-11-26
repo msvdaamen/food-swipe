@@ -1,5 +1,4 @@
-import { Colors } from "@/constants/colors";
-import { LoaderCircle } from "lucide-react-native";
+import { Colors } from "@/constants/theme";
 import { useEffect, useMemo, useState } from "react";
 import {
   Pressable,
@@ -65,7 +64,7 @@ export function AppButton({
       }
     }
 
-    let colors = [Colors.emerald500, Colors.emerald600];
+    let colors: [string, string] = [Colors.emerald500, Colors.emerald600];
     switch (color) {
       case "secondary":
         colors = [Colors.amber500, Colors.amber600];

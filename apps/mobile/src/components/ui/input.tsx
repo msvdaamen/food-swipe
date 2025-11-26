@@ -1,14 +1,13 @@
+import { Colors } from '@/constants/theme';
 import { useMemo, useState } from 'react';
 import {
-  Keyboard,
   StyleSheet,
+  TextInput,
   TextInputProps,
   View,
   useColorScheme,
 } from 'react-native';
-import { TextInput } from 'react-native';
-import { AppText } from './text';
-import { Colors } from '@/constants/colors';
+import { FText } from '../f-text';
 
 type Color = 'transparent';
 
@@ -31,13 +30,13 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
   const borderColor = useMemo(() => {
     if (theme === 'dark') {
       if (focused) return Colors.emerald600;
-      if (color === 'transparent') return Colors.dark700;
-      return Colors.dark400;
+      if (color === 'transparent') return Colors.stone700;
+      return Colors.stone400;
     }
     if (focused) return Colors.emerald600;
     if (color === 'transparent') return 'rgba(0, 0, 0, 0.1)';
     return Colors.gray300;
-  }, [focused, color]);
+  }, [focused, color, theme]);
 
   function onBlur() {
     setFocused(false);
@@ -49,7 +48,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 
   return (
     <View style={[styles.container, style]}>
-      {children && <AppText>{children}</AppText>}
+      {children && <FText>{children}</FText>}
       <View style={[styles.inputContainer, { backgroundColor, borderColor }]}>
         {Icon && (
           <View style={[styles.icon]}>

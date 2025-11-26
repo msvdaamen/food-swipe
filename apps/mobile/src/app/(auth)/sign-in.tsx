@@ -1,29 +1,30 @@
 import { AppButton } from "@/components/ui/button";
 import { AppInput } from "@/components/ui/input";
-import { AppText } from "@/components/ui/text";
-import { Colors } from "@/constants/colors";
 import { BlurView } from "expo-blur";
 import {
   Keyboard,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ImageBackground } from "expo-image";
 
-import { z } from "zod";
+import { type } from "arktype"
 import { useForm } from "@tanstack/react-form";
 import { Spinner } from "@/components/spinner";
-import { useSignIn } from "@/features/auth/api/sign-in";
+import { Colors } from "@/constants/theme";
+import { FText } from "@/components/f-text";
+// import { useSignIn } from "@/features/auth/api/sign-in";
 
-const validator = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+const validator = type({
+  email: "string.email",
+  password: "string >= 8"
 });
 
 export default function SignInScreen() {
-  const signIn = useSignIn();
+  // const signIn = useSignIn();
   const router = useRouter();
 
   const form = useForm({
@@ -35,26 +36,26 @@ export default function SignInScreen() {
       onChange: validator,
     },
     onSubmit: async ({ value }) => {
-      const res = await signIn.mutateAsync({
-        email: value.email,
-        password: value.password,
-      });
-      console.log(res);
-      router.replace("/");
+      // const res = await signIn.mutateAsync({
+      //   email: value.email,
+      //   password: value.password,
+      // });
+      // console.log(res);
+      // router.replace("/");
     },
   });
 
   return (
     <ImageBackground
-      source={{ uri: "auth_background" }}
+      source={require('@assets/images/auth_background.jpg')}
       contentFit="cover"
       style={styles.background}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <AppText style={styles.title}>Food Swipe</AppText>
-            <AppText style={styles.subtitle}>Sign in to your account</AppText>
+            <Text style={styles.title}>Food Swipe</Text>
+            <Text style={styles.subtitle}>Sign in to your account</Text>
           </View>
           <View style={{ width: "100%", borderRadius: 12, overflow: "hidden" }}>
             <BlurView intensity={90} tint="dark" style={styles.form}>
@@ -90,7 +91,7 @@ export default function SignInScreen() {
                   </AppInput>
                 )}
               />
-              <AppText style={styles.forgotPassword}>Forgot password?</AppText>
+              <FText style={styles.forgotPassword}>Forgot password?</FText>
               <form.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
@@ -107,11 +108,11 @@ export default function SignInScreen() {
             </BlurView>
           </View>
           <View style={styles.footer}>
-            <AppText style={{ color: Colors.gray400 }}>
+            <FText style={{ color: Colors.gray400 }}>
               Don't have an account?
-            </AppText>
-            <Link href="/sign-up">
-              <AppText>Sign up</AppText>
+            </FText>
+            <Link replace href="/(auth)/(sign-up)/sign-up">
+              <FText style={{ color: Colors.white }}>Sign up</FText>
             </Link>
           </View>
         </View>
@@ -140,9 +141,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 36,
+    color: Colors.white,
   },
   subtitle: {
     fontSize: 24,
+    color: Colors.white,
   },
   form: {
     width: "100%",
