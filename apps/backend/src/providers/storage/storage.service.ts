@@ -66,6 +66,7 @@ export class StorageService extends DbService {
     });
   }
 }
+
 const storage = new ObjStorage(
   storageConfig.accessKeyId,
   storageConfig.secretAccessKey,
