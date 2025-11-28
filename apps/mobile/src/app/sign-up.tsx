@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth/stores/auth-store';
 import { FText } from '@/components/f-text';
 import { AppButton } from '@/components/ui/button';
 import { AppInput } from '@/components/ui/input';
@@ -5,9 +6,10 @@ import { Colors } from '@/constants/theme';
 import { BlurView } from 'expo-blur';
 import { useForm } from '@tanstack/react-form';
 import { type } from 'arktype';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -27,6 +29,7 @@ const signUpSchema = type({
 
 export default function SignUp() {
   const insets = useSafeAreaInsets();
+  const { signUp } = useAuthStore();
 
   const form = useForm({
     defaultValues: {
@@ -46,9 +49,11 @@ export default function SignUp() {
       },
     },
     onSubmit: async ({ value }) => {
-      console.log('Sign Up:', value);
-      // In a real app, you would perform registration here
-      router.replace('/');
+      try {
+        await signUp(value);
+      } catch (error: any) {
+        Alert.alert('Sign Up Failed', error.message);
+      }
     },
   });
 

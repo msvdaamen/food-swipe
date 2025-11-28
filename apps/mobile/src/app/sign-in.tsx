@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth/stores/auth-store';
 import { FText } from '@/components/f-text';
 import { AppButton } from '@/components/ui/button';
 import { AppInput } from '@/components/ui/input';
@@ -5,9 +6,10 @@ import { Colors } from '@/constants/theme';
 import { BlurView } from 'expo-blur';
 import { useForm } from '@tanstack/react-form';
 import { type } from 'arktype';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -23,6 +25,7 @@ const signInSchema = type({
 
 export default function SignIn() {
   const insets = useSafeAreaInsets();
+  const { signIn } = useAuthStore();
 
   const form = useForm({
     defaultValues: {
@@ -33,9 +36,11 @@ export default function SignIn() {
       onSubmit: signInSchema
     },
     onSubmit: async ({ value }) => {
-      console.log('Sign In:', value);
-      // In a real app, you would perform authentication here
-      router.replace('/');
+      try {
+        await signIn(value);
+      } catch (error: any) {
+        Alert.alert('Sign In Failed', error.message);
+      }
     },
   });
 
