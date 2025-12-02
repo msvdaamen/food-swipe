@@ -21,10 +21,6 @@ export class ObjStorage implements Storage {
 
     async upload<T extends Blob>(file: T, isPublic: boolean): Promise<string> {
         const filename = crypto.randomUUID() + '.' + this.getExtension(file.type);
-        console.log({
-          filename,
-          bucket: this.getBucket(isPublic)
-        })
 
         await this.client.write(filename, await file.arrayBuffer(), {bucket: this.getBucket(isPublic)})
         return filename;

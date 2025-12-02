@@ -13,8 +13,6 @@ import { FormatZodErrors } from "./common/format-zod-errors.ts";
 import { migrateDatabase } from "./providers/database.provider.ts";
 import { registerToolsController } from "./modules/tools/tools.controller.ts";
 import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller.ts";
-import { removeBackground } from "@imgly/background-removal-node";
-
 await migrateDatabase();
 
 const app = new Hono();
@@ -55,17 +53,6 @@ registerMeasurementsController(app);
 registerIngredientController(app);
 registerToolsController(app);
 registerRecipeBookController(app);
-
-app.get("/test", async (c) => {
-  const file = Bun.file("test2.png");
-const blob = await removeBackground(file);
-  Bun.write("output.png", await blob.arrayBuffer());
-  return c.body(await blob.arrayBuffer(), {
-    headers: {
-      "Content-Type": "image/png",
-    },
-  })
-})
 
 export default {
   port: process.env.APP_PORT || 3000,

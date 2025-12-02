@@ -5,7 +5,6 @@ import {
 } from "../../providers/storage/storage.service";
 import type { RecipeModel } from "./models/recipe.model.ts";
 import {
-  files,
   recipes,
   recipeIngredients,
   recipeSteps,
@@ -58,9 +57,8 @@ export class RecipeService extends DbService {
 
   async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
     const results = await this.database
-      .select({ recipe: recipes, coverImage: files })
+      .select()
       .from(recipes)
-      .leftJoin(files, eq(files.id, recipes.coverImageId))
       .where(
         filters.isPublished !== undefined
           ? eq(recipes.isPublished, filters.isPublished)
@@ -70,18 +68,17 @@ export class RecipeService extends DbService {
       .execute();
 
     return results.map((result) => ({
-      ...result.recipe,
+      ...result,
       coverImageUrl: result.coverImage
-        ? this.storage.getPublicUrl(result.coverImage.filename)
+        ? this.storage.getPublicUrl(result.coverImage)
         : null,
     }));
   }
 
   async getById(id: number): Promise<RecipeModel> {
     const [result] = await this.database
-      .select({ recipe: recipes, coverImage: files })
+      .select()
       .from(recipes)
-      .leftJoin(files, eq(files.id, recipes.coverImageId))
       .where(eq(recipes.id, id))
       .execute();
 
@@ -90,9 +87,9 @@ export class RecipeService extends DbService {
     }
 
     return {
-      ...result.recipe,
+      ...result,
       coverImageUrl: result.coverImage
-        ? this.storage.getPublicUrl(result.coverImage.filename)
+        ? this.storage.getPublicUrl(result.coverImage)
         : null,
     };
   }
@@ -124,23 +121,20 @@ export class RecipeService extends DbService {
     file: File
   ): Promise<RecipeModel> {
     const [recipe] = await this.database
-      .select({ id: recipes.id, coverImageId: recipes.coverImageId })
+      .select()
       .from(recipes)
       .where(eq(recipes.id, recipeId))
       .execute();
-    const oldFile = recipe.coverImageId
-      ? await this.storage.getFile(recipe.coverImageId)
-      : null;
     await this.transaction(async (tx) => {
-      const { id } = await this.storage.upload(userId, file, true);
-      await this.database
+      const fileName = await this.storage.upload(file, true);
+      await tx
         .update(recipes)
-        .set({ coverImageId: id })
+        .set({ coverImage: fileName })
         .where(eq(recipes.id, recipeId))
         .execute();
     });
-    if (oldFile) {
-      await this.storage.delete(oldFile.id);
+    if (recipe.coverImage) {
+      await this.storage.delete(recipe.coverImage);
     }
     return await this.getById(recipe.id);
   }
@@ -496,7 +490,7 @@ export class RecipeService extends DbService {
     );
     const imageBuffer = await imageResponse.blob();
     const imageFile = new File([imageBuffer], recipe.title);
-    const { id: imageId } = await this.storage.upload(1, imageFile, true);
+    const { id: imageId } = await this.storage.upload(imageFile, true);
 
     const newRecipe = await this.create({
       title: translatedRecipeJson.title,
