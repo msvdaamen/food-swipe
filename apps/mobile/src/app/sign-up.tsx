@@ -1,13 +1,13 @@
-import { useAuthStore } from '@/features/auth/stores/auth-store';
-import { FText } from '@/components/f-text';
-import { AppButton } from '@/components/ui/button';
-import { AppInput } from '@/components/ui/input';
-import { Colors } from '@/constants/theme';
-import { BlurView } from 'expo-blur';
-import { useForm } from '@tanstack/react-form';
-import { type } from 'arktype';
-import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { useAuthStore } from "@/features/auth/stores/auth-store";
+import { FText } from "@/components/f-text";
+import { AppButton } from "@/components/ui/button";
+import { AppInput } from "@/components/ui/input";
+import { Colors } from "@/constants/theme";
+import { BlurView } from "expo-blur";
+import { useForm } from "@tanstack/react-form";
+import { type } from "arktype";
+import { Link, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import {
   Alert,
   ImageBackground,
@@ -16,64 +16,59 @@ import {
   ScrollView,
   StyleSheet,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSignUp } from "@/features/auth/api/sign-up";
 
 const signUpSchema = type({
-  email: 'string.email',
-  username: 'string >= 3',
-  password: 'string >= 6',
-  firstName: 'string >= 1',
-  lastName: 'string >= 1',
+  email: "string.email",
+  username: "string >= 3",
+  password: "string >= 6",
+  firstName: "string >= 1",
+  lastName: "string >= 1",
 });
 
 export default function SignUp() {
-  const insets = useSafeAreaInsets();
-  const { signUp } = useAuthStore();
+  const { setTokens } = useAuthStore();
+  const signUp = useSignUp();
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
-      email: '',
-      username: '',
-      password: '',
-      firstName: '',
-      lastName: '',
+      email: "msv.daamen@outlook.com",
+      username: "msvdaamen",
+      password: "Gymshark98!",
+      passwordConfirmation: "Gymshark98!",
+      firstName: "Mischa",
+      lastName: "Daamen",
     },
     validators: {
-      onChange: ({ value }) => {
-        const result = signUpSchema(value);
-        if (result instanceof type.errors) {
-          return result.summary;
-        }
-        return undefined;
-      },
+      onSubmit: signUpSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        await signUp(value);
-      } catch (error: any) {
-        Alert.alert('Sign Up Failed', error.message);
-      }
+      const { accessToken, refreshToken } = await signUp.mutateAsync(value);
+      setTokens(accessToken, refreshToken);
+      router.replace("/");
     },
   });
 
   return (
     <ImageBackground
-      source={require('@assets/images/auth_background.jpg')}
+      source={require("@assets/images/auth_background.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           <BlurView intensity={50} tint="dark" style={styles.contentContainer}>
             <View style={styles.header}>
-              <FText style={styles.title}>
-                Food Swipe
-              </FText>
+              <FText style={styles.title}>Food Swipe</FText>
               <FText style={styles.subtitle}>Create your account</FText>
             </View>
 
@@ -90,9 +85,9 @@ export default function SignUp() {
                         onBlur={field.handleBlur}
                         color="transparent"
                       />
-                       {field.state.meta.errors ? (
+                      {field.state.meta.errors ? (
                         <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(', ')}
+                          {field.state.meta.errors.join(", ")}
                         </FText>
                       ) : null}
                     </View>
@@ -109,9 +104,9 @@ export default function SignUp() {
                         onBlur={field.handleBlur}
                         color="transparent"
                       />
-                       {field.state.meta.errors ? (
+                      {field.state.meta.errors ? (
                         <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(', ')}
+                          {field.state.meta.errors.join(", ")}
                         </FText>
                       ) : null}
                     </View>
@@ -131,11 +126,11 @@ export default function SignUp() {
                       autoCapitalize="none"
                       color="transparent"
                     />
-                     {field.state.meta.errors ? (
-                        <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(', ')}
-                        </FText>
-                      ) : null}
+                    {field.state.meta.errors ? (
+                      <FText style={styles.errorText}>
+                        {field.state.meta.errors.join(", ")}
+                      </FText>
+                    ) : null}
                   </View>
                 )}
               />
@@ -153,11 +148,11 @@ export default function SignUp() {
                       keyboardType="email-address"
                       color="transparent"
                     />
-                     {field.state.meta.errors ? (
-                        <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(', ')}
-                        </FText>
-                      ) : null}
+                    {field.state.meta.errors ? (
+                      <FText style={styles.errorText}>
+                        {field.state.meta.errors.join(", ")}
+                      </FText>
+                    ) : null}
                   </View>
                 )}
               />
@@ -174,11 +169,32 @@ export default function SignUp() {
                       secureTextEntry
                       color="transparent"
                     />
-                     {field.state.meta.errors ? (
-                        <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(', ')}
-                        </FText>
-                      ) : null}
+                    {field.state.meta.errors ? (
+                      <FText style={styles.errorText}>
+                        {field.state.meta.errors.join(", ")}
+                      </FText>
+                    ) : null}
+                  </View>
+                )}
+              />
+
+              <form.Field
+                name="passwordConfirmation"
+                children={(field) => (
+                  <View style={styles.field}>
+                    <AppInput
+                      placeholder="Password Confirmation"
+                      value={field.state.value}
+                      onChangeText={field.handleChange}
+                      onBlur={field.handleBlur}
+                      secureTextEntry
+                      color="transparent"
+                    />
+                    {field.state.meta.errors ? (
+                      <FText style={styles.errorText}>
+                        {field.state.meta.errors.join(", ")}
+                      </FText>
+                    ) : null}
                   </View>
                 )}
               />
@@ -196,9 +212,7 @@ export default function SignUp() {
             <View style={styles.footer}>
               <FText style={styles.footerText}>Already have an account? </FText>
               <Link href="/sign-in" replace>
-                <FText style={styles.linkText}>
-                  Sign In
-                </FText>
+                <FText style={styles.linkText}>Sign In</FText>
               </Link>
             </View>
           </BlurView>
@@ -211,32 +225,32 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "black",
   },
   container: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 24,
   },
   contentContainer: {
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 24,
     gap: 24,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: 8,
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subtitle: {
     color: Colors.gray300,
@@ -245,7 +259,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   field: {
@@ -255,16 +269,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorText: {
-    color: '#ef4444',
+    color: "#ef4444",
     fontSize: 12,
   },
   submitButton: {
     marginTop: 8,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   footerText: {
     color: Colors.gray300,

@@ -1,58 +1,57 @@
-import { create } from 'zustand';
-import { storage } from '@/utils/storage';
-import { signUp, SignUpInput } from '../api/sign-up';
-import { signIn, SignInput } from '../api/sign-in';
+import { create } from "zustand";
+import * as SecureStore from "expo-secure-store";
+import { me } from "../api/me";
+import { refreshTokens } from "../api/refresh-token";
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+export const ACCESS_TOKEN_KEY = "access_token";
+export const REFRESH_TOKEN_KEY = "refresh_token";
 
 interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  signIn: (data: SignInput) => Promise<void>;
-  signUp: (data: SignUpInput) => Promise<void>;
-  signOut: () => Promise<void>;
-  initialize: () => void;
   setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
+  checkAuthentication: () => Promise<boolean>;
+  signOut: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set, get, store) => ({
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
 
-  signIn: async (data) => {
-    const { accessToken, refreshToken } = await signIn(data);
-    set({ accessToken, refreshToken, isAuthenticated: true });
-    await get().setTokens(accessToken, refreshToken);
-  },
-
-  signUp: async (data) => {
-    const { accessToken, refreshToken } = await signUp(data);
-    await get().setTokens(accessToken, refreshToken);
-  },
-
-  signOut: async () => {
-    await storage.clearTokens();
-    set({ accessToken: null, refreshToken: null, isAuthenticated: false });
-  },
-
-  initialize: () => {
-    const accessToken = storage.getAccessTokenSync();
-    const refreshToken = storage.getRefreshTokenSync();
-
-    if (accessToken && refreshToken) {
-      set({ accessToken, refreshToken, isAuthenticated: true });
-    }
-
-  },
-
   setTokens: async (accessToken, refreshToken) => {
     set({ accessToken, refreshToken, isAuthenticated: true });
     await Promise.all([
-      storage.setAccessToken(accessToken),
-      storage.setRefreshToken(refreshToken),
+      SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken),
+      SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken),
     ]);
+  },
+
+  signOut: async () => {
+    set({ accessToken: null, refreshToken: null, isAuthenticated: false });
+    await Promise.all([
+      SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY),
+      SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY),
+    ]);
+  },
+
+  checkAuthentication: async () => {
+    const accessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
+    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
+    if (!accessToken || !refreshToken) {
+      return false;
+    }
+    if (get().isAuthenticated) {
+      return true;
+    }
+    try {
+      const { accessToken, refreshToken: newRefreshToken } =
+        await refreshTokens(refreshToken);
+      get().setTokens(accessToken, newRefreshToken);
+      return true;
+    } catch {
+      return false;
+    }
   },
 }));

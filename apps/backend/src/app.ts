@@ -34,16 +34,6 @@ const limiter = rateLimiter({
 
 app.use(limiter);
 
-app.onError((err, c) => {
-  console.log(err);
-  if (err instanceof ZodError) {
-    const errors = FormatZodErrors(err);
-    return c.json({ error: "validation_error", message: errors }, 400);
-  }
-
-  return c.json({ error: "Internal Server Error" }, 500);
-});
-
 app.get("/", (c) => c.text("Hello Bun!"));
 
 registerAuthController(app);
