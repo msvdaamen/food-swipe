@@ -36,16 +36,6 @@ const limiter = rateLimiter({
 
 app.use(limiter);
 
-app.onError((err, c) => {
-  console.log(err);
-  if (err instanceof ZodError) {
-    const errors = FormatZodErrors(err);
-    return c.json({ error: "validation_error", message: errors }, 400);
-  }
-
-  return c.json({ error: "Internal Server Error" }, 500);
-});
-
 app.get("/", (c) => c.text("Hello Bun!"));
 
 registerAuthController(app);
@@ -56,16 +46,16 @@ registerIngredientController(app);
 registerToolsController(app);
 registerRecipeBookController(app);
 
-app.get("/test", async (c) => {
-  const file = Bun.file("test2.png");
-const blob = await removeBackground(file);
-  Bun.write("output.png", await blob.arrayBuffer());
-  return c.body(await blob.arrayBuffer(), {
-    headers: {
-      "Content-Type": "image/png",
-    },
-  })
-})
+// app.get("/test", async (c) => {
+//   const file = Bun.file("test2.png");
+// const blob = await removeBackground(file);
+//   Bun.write("output.png", await blob.arrayBuffer());
+//   return c.body(await blob.arrayBuffer(), {
+//     headers: {
+//       "Content-Type": "image/png",
+//     },
+//   })
+// })
 
 export default {
   port: process.env.APP_PORT || 3000,

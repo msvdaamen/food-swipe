@@ -13,11 +13,12 @@ import {importRecipeDto} from "./dto/import-recipe.dto.ts";
     import {updateRecipeNutritionDto} from "./dto/update-nutrition.dto.ts";
     import {type Nutrition, nutritions} from "./constants/nutritions.ts";
 import { likeRecipeDtoSchema } from "./dto/like-recipe.dto.ts";
+import { sValidator } from "@hono/standard-validator";
 
 const app = authRouter.createApp();
 
-app.get('/', async (c) => {
-    const filters = loadRecipesDto.parse(c.req.query());
+app.get('/', sValidator('query', loadRecipesDto), async (c) => {
+    const filters = c.req.valid('query');
     const recipes = await recipeService.getAll(filters);
     return c.json(recipes);
 });

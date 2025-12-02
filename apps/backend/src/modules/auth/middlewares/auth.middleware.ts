@@ -26,7 +26,7 @@ export const authMiddleware = createMiddleware<AuthContext>(async (c, next) => {
       return c.json({}, 401);
     }
     const user = await userService.findById(Number(sub));
-    if (!user || !user.isAdmin) {
+    if (!user) {
       return c.json({}, 401);
     }
     c.set("user", {

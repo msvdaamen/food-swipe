@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { type } from 'arktype';
 
-export const refreshTokenDtoSchema = z.object({
-  refreshToken: z.string().min(1)
+export const refreshTokenDtoSchema = type({
+  refreshToken: "string >= 1"
 });
 
-export type RefreshTokenDto = z.infer<typeof refreshTokenDtoSchema>;
+export type RefreshTokenDto = typeof refreshTokenDtoSchema.infer

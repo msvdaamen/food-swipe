@@ -1,7 +1,8 @@
-import { z } from 'zod';
+import { type } from "arktype";
 
-export const signInDtoSchema = z.object({
-  email: z.string().email(),
-  password: z.string()
+export const signInDtoSchema = type({
+  email: "string.email",
+  password: "string >= 8"
 });
-export type SignInDto = z.infer<typeof signInDtoSchema>;
+
+export type SignInDto = typeof signInDtoSchema.infer;

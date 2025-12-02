@@ -5,8 +5,8 @@ export const loadRecipesDto = z.object({
         if (typeof value === "string") {
             return value === "true";
         }
-        return undefined;
-    }, z.boolean().optional()),
+        return false;
+    }, z.boolean()),
 });
 
 export type LoadRecipesDto = z.infer<typeof loadRecipesDto>;
