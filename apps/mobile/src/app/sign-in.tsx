@@ -1,60 +1,62 @@
-import { FText } from '@/components/f-text';
-import { AppButton } from '@/components/ui/button';
-import { AppInput } from '@/components/ui/input';
-import { Colors } from '@/constants/theme';
-import { BlurView } from 'expo-blur';
-import { useForm } from '@tanstack/react-form';
-import { type } from 'arktype';
-import { Link, router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { useAuthStore } from "@/features/auth/stores/auth-store";
+import { FText } from "@/components/f-text";
+import { AppButton } from "@/components/ui/button";
+import { AppInput } from "@/components/ui/input";
+import { Colors } from "@/constants/theme";
+import { BlurView } from "expo-blur";
+import { useForm } from "@tanstack/react-form";
+import { type } from "arktype";
+import { Link, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import {
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSignIn } from "@/features/auth/api/sign-in";
 
 const signInSchema = type({
-  email: 'string.email',
-  password: 'string >= 1',
+  email: "string.email",
+  password: "string >= 1",
 });
 
 export default function SignIn() {
-  const insets = useSafeAreaInsets();
+  const { setTokens } = useAuthStore();
+  const signIn = useSignIn();
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "msv.daamen@outlook.com",
+      password: "Gymshark98!",
     },
     validators: {
-      onSubmit: signInSchema
+      onSubmit: signInSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log('Sign In:', value);
-      // In a real app, you would perform authentication here
-      router.replace('/');
+      const { accessToken, refreshToken } = await signIn.mutateAsync(value);
+      setTokens(accessToken, refreshToken);
+      router.replace("/");
     },
   });
 
   return (
     <ImageBackground
-      source={require('@assets/images/auth_background.jpg')}
+      source={require("@assets/images/auth_background.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
         <BlurView intensity={50} tint="dark" style={styles.contentContainer}>
           <View style={styles.header}>
-            <FText style={styles.title}>
-              Food Swipe
-            </FText>
+            <FText style={styles.title}>Food Swipe</FText>
             <FText style={styles.subtitle}>Sign in to continue</FText>
           </View>
 
@@ -74,7 +76,7 @@ export default function SignIn() {
                   />
                   {field.state.meta.errors ? (
                     <FText style={styles.errorText}>
-                      {field.state.meta.errors.join(', ')}
+                      {field.state.meta.errors.join(", ")}
                     </FText>
                   ) : null}
                 </View>
@@ -95,7 +97,7 @@ export default function SignIn() {
                   />
                   {field.state.meta.errors ? (
                     <FText style={styles.errorText}>
-                      {field.state.meta.errors.join(', ')}
+                      {field.state.meta.errors.join(", ")}
                     </FText>
                   ) : null}
                 </View>
@@ -113,11 +115,11 @@ export default function SignIn() {
           </View>
 
           <View style={styles.footer}>
-            <FText style={styles.footerText}>Don&apos;t have an account? </FText>
+            <FText style={styles.footerText}>
+              Don&apos;t have an account?{" "}
+            </FText>
             <Link href="/sign-up" replace>
-              <FText style={styles.linkText}>
-                Sign Up
-              </FText>
+              <FText style={styles.linkText}>Sign Up</FText>
             </Link>
           </View>
         </BlurView>
@@ -129,29 +131,29 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "black",
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 24,
   },
   contentContainer: {
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 24,
     gap: 24,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: 8,
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subtitle: {
     color: Colors.gray300,
@@ -163,16 +165,16 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   errorText: {
-    color: '#ef4444',
+    color: "#ef4444",
     fontSize: 12,
   },
   submitButton: {
     marginTop: 8,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   footerText: {
     color: Colors.gray300,

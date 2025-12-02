@@ -8,11 +8,12 @@ import {
   type AuthContext,
 } from "./middlewares/auth.middleware";
 import { signUpDtoSchema } from "./dto/sign-up.dto";
+import { sValidator } from '@hono/standard-validator'
 
 const app = new Hono();
 
-app.post("/sign-in", async (c) => {
-  const payload = signInDtoSchema.parse(await c.req.json());
+app.post("/sign-in", sValidator('json', signInDtoSchema), async (c) => {
+  const payload = c.req.valid('json');
   try {
     const response = await authService.signIn(payload);
     return c.json(response);
@@ -21,8 +22,8 @@ app.post("/sign-in", async (c) => {
   }
 });
 
-app.post('/sign-up', async (c) => {
-    const payload = signUpDtoSchema.parse(await c.req.json());
+app.post('/sign-up', sValidator('json', signUpDtoSchema), async (c) => {
+  const payload = c.req.valid('json');
     const response = await authService.signUp(payload);
     return c.json(response);
 });
@@ -39,8 +40,8 @@ app.get("/me", authMiddleware, async (c) => {
   });
 });
 
-app.post("/refresh-token", async (c) => {
-  const { refreshToken } = refreshTokenDtoSchema.parse(await c.req.json());
+app.post("/refresh-token", sValidator('json', refreshTokenDtoSchema), async (c) => {
+  const { refreshToken } = c.req.valid('json');
   try {
     const response = await authService.refreshTokens(refreshToken);
     return c.json(response);

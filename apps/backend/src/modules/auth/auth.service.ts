@@ -25,7 +25,7 @@ export class AuthService extends DbService {
     const existingUser = await this.userService.findByEmailWithPassword(
       payload.email
     );
-    if (!existingUser || !existingUser.isAdmin) {
+    if (!existingUser) {
       throw new Error("User does not exists");
     }
 

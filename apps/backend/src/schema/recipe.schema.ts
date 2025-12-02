@@ -4,7 +4,6 @@ import {
   unique,
   primaryKey,
 } from "drizzle-orm/pg-core";
-import { files } from "./file.schema";
 import { measurements } from "./measurement.schema";
 import { ingredients } from "./ingredient.schema";
 import { relations } from "drizzle-orm";
@@ -19,27 +18,20 @@ export const recipes = pgTable(
     prepTime: t.integer(),
     servings: t.integer(),
     isPublished: t.boolean().notNull().default(false),
-    coverImageId: t.integer().references(() => files.id, {
-      onDelete: "set null",
-    }),
+    coverImage: t.text(),
     createdAt: t.timestamp({ withTimezone: true })
       .defaultNow()
       .notNull(),
     updatedAt: t.timestamp({ withTimezone: true })
       .defaultNow()
       .notNull(),
-  }),
-  (table) => [index().on(table.isPublished), index().on(table.coverImageId)]
+  })
 ).enableRLS();
 
-export const recipesRelations = relations(recipes, ({ many, one }) => ({
+export const recipesRelations = relations(recipes, ({ many }) => ({
   steps: many(recipeSteps),
   ingredients: many(recipeIngredients),
   nutritions: many(recipeNutritions),
-  coverImage: one(files, {
-    fields: [recipes.coverImageId],
-    references: [files.id],
-  }),
   recipeToRecipeBooks: many(recipesToRecipeBooks),
 }));
 

@@ -1,7 +1,6 @@
 import {
   pgTable,
 } from "drizzle-orm/pg-core";
-import { files } from "./file.schema";
 import { authRefreshTokens } from "./auth-refresh-token.schema";
 import { relations } from "drizzle-orm";
 
@@ -22,7 +21,6 @@ export const users = pgTable("users", t => ({
 })).enableRLS();
 
 export const usersRelations = relations(users, ({ many }) => ({
-  files: many(files),
   authRefreshTokens: many(authRefreshTokens),
 }));
 
