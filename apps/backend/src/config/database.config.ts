@@ -1,10 +1,10 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-const schema = z.object({
-    DATABASE_URL: z.string()
+const schema = type({
+    DATABASE_URL: 'string'
 });
 
-const parsedConfig = schema.parse(process.env);
+const parsedConfig = schema.assert(process.env);
 
 export const databaseConfig = {
     url: parsedConfig.DATABASE_URL,

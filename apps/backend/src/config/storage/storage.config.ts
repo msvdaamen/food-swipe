@@ -1,14 +1,14 @@
-import { z } from 'zod';
+import { type } from 'arktype';
 
-export const configSchema = z.object({
-  STORAGE_PUBLIC_URL: z.string().url(),
-  STORAGE_ACCESS_KEY_ID: z.string(),
-  STORAGE_SECRET_ACCESS_KEY: z.string(),
-  STORAGE_BUCKET: z.string(),
-  STORAGE_ENDPOINT: z.string().url()
+export const configSchema = type({
+  STORAGE_PUBLIC_URL: 'string.url',
+  STORAGE_ACCESS_KEY_ID: 'string',
+  STORAGE_SECRET_ACCESS_KEY: 'string',
+  STORAGE_BUCKET: 'string',
+  STORAGE_ENDPOINT: 'string.url'
 });
 
-const parsedConfig = configSchema.parse(process.env);
+const parsedConfig = configSchema.assert(process.env);
 export const storageConfig = {
   publicUrl: parsedConfig.STORAGE_PUBLIC_URL,
   accessKeyId: parsedConfig.STORAGE_ACCESS_KEY_ID,

@@ -10,9 +10,12 @@ export type GetUsersInput = {
   sort: string;
 };
 
-export const getUsers = (payload: GetUsersInput) => {
+export const getUsers = async (payload: GetUsersInput) => {
   const searchParams = objectToSearchParams(payload);
-  return api.get<PaginatedData<User>>(`/v1/users?${searchParams}`);
+  const response = await api.fetch(`/v1/users?${searchParams}`, {
+    method: 'GET'
+  });
+  return response.json() as Promise<PaginatedData<User>>;
 };
 
 export const getUsersQueryOptions = (payload: GetUsersInput) => {

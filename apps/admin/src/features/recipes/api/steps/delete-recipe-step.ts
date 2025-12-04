@@ -8,10 +8,14 @@ export type DeleteRecipeStepInput = {
   stepId: number;
 };
 
-export const deleteRecipeStep = (payload: DeleteRecipeStepInput) => {
-  return api.delete<void>(
-    `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`
+export const deleteRecipeStep = async (payload: DeleteRecipeStepInput) => {
+  const response = await api.fetch(
+    `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`,
+    {
+      method: "DELETE",
+    }
   );
+  return response.json() as Promise<void>;
 };
 
 export const useRecipeStepDelete = (recipeId: number) => {

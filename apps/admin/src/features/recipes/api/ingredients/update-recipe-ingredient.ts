@@ -12,13 +12,14 @@ export type UpdateRecipeIngredientInput = {
   };
 };
 
-export const updateRecipeIngredient = (
+export const updateRecipeIngredient = async (
   payload: UpdateRecipeIngredientInput
 ) => {
-  return api.put<RecipeIngredient>(
-    `/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`,
-    payload.data
-  );
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload.data)
+  });
+  return response.json() as Promise<RecipeIngredient>;
 };
 
 export const useRecipeIngredientUpdate = () => {

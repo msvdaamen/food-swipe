@@ -7,9 +7,10 @@ export type GetRecipesInput = {
     isPublished?: boolean;
 }
 
-export const getRecipes = (payload: GetRecipesInput = {}) => {
+export const getRecipes = async (payload: GetRecipesInput = {}) => {
     const params = objectToSearchParams(payload);
-    return api.get<Recipe[]>(`/v1/recipes?${params}`);
+    const response = await api.fetch(`/v1/recipes?${params}`);
+    return response.json() as Promise<Recipe[]>;
 }
 
 export const getRecipesQueryOptions = (payload: GetRecipesInput = {}) => {

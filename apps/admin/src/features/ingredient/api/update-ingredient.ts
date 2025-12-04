@@ -8,10 +8,14 @@ export type UpdateIngredientInput = {
     }
     ingredientId: number;
 };
-  
 
-export const updateIngredient = (payload: UpdateIngredientInput) => {
-    return api.put<Ingredient>(`/v1/ingredients/${payload.ingredientId}`, payload.data);
+
+export const updateIngredient = async (payload: UpdateIngredientInput) => {
+    const response = await api.fetch(`/v1/ingredients/${payload.ingredientId}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload.data),
+    });
+    return response.json() as Promise<Ingredient>;
 }
 
 export const useUpdateIngredient = () => {

@@ -3,22 +3,25 @@ import { cors } from "hono/cors";
 import { rateLimiter } from "hono-rate-limiter";
 import { getConnInfo } from "hono/bun";
 import { secureHeaders } from "hono/secure-headers";
-import { registerAuthController } from "./modules/auth/auth.controller.ts";
 import { registerRecipeController } from "./modules/recipe/recipe.controller.ts";
 import { registerUserController } from "./modules/user/user.controller.ts";
 import { registerMeasurementsController } from "./modules/measurement/measurement.controller.ts";
 import { registerIngredientController } from "./modules/ingredient/ingredient.controller.ts";
-import { ZodError } from "zod";
-import { FormatZodErrors } from "./common/format-zod-errors.ts";
-import { migrateDatabase } from "./providers/database.provider.ts";
 import { registerToolsController } from "./modules/tools/tools.controller.ts";
 import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller.ts";
-await migrateDatabase();
+import { auth } from "./lib/auth.ts";
 
 const app = new Hono();
 
 app.use(secureHeaders());
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  allowHeaders: ["Content-Type", "Authorization"],
+	allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+	exposeHeaders: ["Content-Length"],
+	maxAge: 600,
+	credentials: true,
+}));
 
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 minutes
@@ -36,7 +39,11 @@ app.use(limiter);
 
 app.get("/", (c) => c.text("Hello Bun!"));
 
-registerAuthController(app);
+app.on(["POST", "GET"], "/v1/auth/*", async (c) => {
+  return await auth.handler(c.req.raw);
+});
+
+// registerAuthController(app);
 registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);

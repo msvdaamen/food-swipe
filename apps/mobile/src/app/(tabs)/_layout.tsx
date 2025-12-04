@@ -1,10 +1,10 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { Colors } from '@/constants/theme';
-import { House, Plane, Utensils } from 'lucide-react-native';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { HapticTab } from "@/components/haptic-tab";
+import { Colors } from "@/constants/theme";
+import { House, Plane, Utensils } from "lucide-react-native";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 export default function TabLayout() {
   const tabBarActiveTintColor = useThemeColor({
@@ -18,25 +18,26 @@ export default function TabLayout() {
         tabBarActiveTintColor: tabBarActiveTintColor,
         headerShown: false,
         tabBarButton: HapticTab,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color }) => <House size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="recipes"
         options={{
-          title: 'Recipes',
+          title: "Recipes",
           tabBarIcon: ({ color }) => <Utensils size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: "Explore",
           tabBarIcon: ({ color }) => <Plane size={28} color={color} />,
         }}
       />

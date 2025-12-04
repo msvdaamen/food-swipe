@@ -8,8 +8,11 @@ export type DeleteRecipeIngredientInput = {
   ingredientId: number;
 }
 
-export const deleteRecipeIngredient = (payload: DeleteRecipeIngredientInput) => {
-  return api.delete<RecipeIngredient>(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`);
+export const deleteRecipeIngredient = async (payload: DeleteRecipeIngredientInput) => {
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`, {
+    method: "DELETE"
+  });
+  return response.json() as Promise<RecipeIngredient>;
 }
 
 export const useRecipeIngredientDelete = () => {
@@ -23,4 +26,4 @@ export const useRecipeIngredientDelete = () => {
       );
     },
   });
-}; 
+};

@@ -1,27 +1,36 @@
 import {
+    index,
   pgTable,
 } from "drizzle-orm/pg-core";
-import { authRefreshTokens } from "./auth-refresh-token.schema";
 import { relations } from "drizzle-orm";
+import { accounts, sessions } from "./auth.schema";
 
 export const users = pgTable("users", t => ({
-  id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
-  email: t.text().unique().notNull(),
-  username: t.text().unique().notNull(),
-  password: t.text().notNull(),
-  firstName: t.text().notNull(),
-  lastName: t.text().notNull(),
-  isAdmin: t.boolean().default(false).notNull(),
-  createdAt: t.timestamp({ withTimezone: true })
+  id: t.uuid("id").primaryKey(),
+  name: t.text("name").notNull(),
+  email: t.text("email").notNull().unique(),
+  emailVerified: t.boolean("email_verified").default(false).notNull(),
+  image: t.text("image"),
+  createdAt: t.timestamp("created_at").defaultNow().notNull(),
+  updatedAt: t.timestamp("updated_at")
     .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  updatedAt: t.timestamp({ withTimezone: true })
-    .defaultNow()
-    .notNull(),
-})).enableRLS();
+  username: t.text("username").unique(),
+  displayUsername: t.text("display_username"),
+  role: t.text("role"),
+  banned: t.boolean("banned").default(false),
+  banReason: t.text("ban_reason"),
+  banExpires: t.timestamp("ban_expires"),
+}),
+  t => ([
+    index().on(t.createdAt)
+  ])
+).enableRLS();
 
-export const usersRelations = relations(users, ({ many }) => ({
-  authRefreshTokens: many(authRefreshTokens),
+export const userRelations = relations(users, ({ many }) => ({
+  sessions: many(sessions),
+  accounts: many(accounts),
 }));
 
 export type UserEntity = typeof users.$inferSelect;

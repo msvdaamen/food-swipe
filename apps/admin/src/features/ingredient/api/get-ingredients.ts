@@ -16,10 +16,11 @@ export type GetIngredientsInput = {
   amount: number;
 };
 
-export const getIngredients = (payload: GetIngredientsInput) => {
+export const getIngredients = async (payload: GetIngredientsInput) => {
   const params = objectToSearchParams(payload);
 
-  return api.get<PaginatedData<Ingredient>>(`/v1/ingredients?${params}`);
+  const response = await api.fetch(`/v1/ingredients?${params}`);
+  return response.json() as Promise<PaginatedData<Ingredient>>;
 };
 
 export const getIngredientsQueryOptions = (payload: GetIngredientsInput) =>

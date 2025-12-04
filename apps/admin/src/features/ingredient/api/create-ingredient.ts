@@ -8,8 +8,12 @@ export type CreateIngredientInput = {
     }
 };
 
-export const createIngredient = (payload: CreateIngredientInput) => {
-    return api.post<Ingredient>("/v1/ingredients", payload.data);
+export const createIngredient = async (payload: CreateIngredientInput) => {
+    const response = await api.fetch("/v1/ingredients", {
+      body: JSON.stringify(payload.data),
+      method: "POST"
+    });
+    return response.json() as Promise<Ingredient>;
 }
 
 export const useCreateIngredient = () => {

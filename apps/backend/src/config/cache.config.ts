@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { type } from "arktype";
 
-const schema = z.object({
-  CACHE_URL: z.string().url(),
+const schema = type({
+  CACHE_URL: "string.url",
 });
 
-const parsed = schema.parse(process.env);
+const parsed = schema.assert(process.env);
 
 export const cacheConfig = {
   url: parsed.CACHE_URL,

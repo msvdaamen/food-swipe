@@ -3,8 +3,12 @@ import { Recipe } from "../types/recipe.type";
 import { api } from "@/lib/api";
 
 
-export const importRecipe = (url: string) => {
-  return api.post<Recipe>(`/v1/recipes/import`, { url });
+export const importRecipe = async (url: string) => {
+  const response = await api.fetch(`/v1/recipes/import`, {
+    method: "POST",
+    body: JSON.stringify({ url })
+  });
+  return response.json() as Promise<Recipe>;
 }
 
 export const useRecipeImport = () => {
@@ -18,4 +22,4 @@ export const useRecipeImport = () => {
       );
     },
   });
-}; 
+};

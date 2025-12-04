@@ -1,15 +1,15 @@
-import { Colors } from '@/constants/theme';
-import { useMemo, useState } from 'react';
+import { Colors } from "@/constants/theme";
+import { useMemo, useState } from "react";
 import {
   StyleSheet,
   TextInput,
   TextInputProps,
   View,
   useColorScheme,
-} from 'react-native';
-import { FText } from '../f-text';
+} from "react-native";
+import { FText } from "../f-text";
 
-type Color = 'transparent';
+type Color = "transparent";
 
 type Props = TextInputProps & {
   Icon?: React.ElementType;
@@ -21,25 +21,25 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
   const [focused, setFocused] = useState(false);
 
   const backgroundColor = useMemo(() => {
-    if (color === 'transparent') return 'rgba(255, 255, 255, 0.15)';
-    return theme === 'dark' ? '#424242' : 'white';
+    if (color === "transparent") return "rgba(255, 255, 255, 0.15)";
+    return theme === "dark" ? "#424242" : "white";
   }, [theme, color]);
 
   const placeholderColor = useMemo(() => {
-    if (color === 'transparent') return '#e2e8f0';
-    return theme === 'dark' ? '#a1a1aa' : '#4b5563';
+    if (color === "transparent") return "#e2e8f0";
+    return theme === "dark" ? "#a1a1aa" : "#4b5563";
   }, [theme, color]);
 
   const textColor = useMemo(() => {
-    if (color === 'transparent') return 'white';
-    return theme === 'dark' ? 'white' : 'black';
+    if (color === "transparent") return "white";
+    return theme === "dark" ? "white" : "black";
   }, [theme, color]);
 
   const borderColor = useMemo(() => {
     if (focused) return Colors.emerald500;
-    if (color === 'transparent') return 'rgba(255, 255, 255, 0.3)';
+    if (color === "transparent") return "rgba(255, 255, 255, 0.3)";
 
-    if (theme === 'dark') {
+    if (theme === "dark") {
       return Colors.stone400;
     }
     return Colors.gray300;
@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
     // textAlign: "left",
   },
   inputContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderWidth: 1,

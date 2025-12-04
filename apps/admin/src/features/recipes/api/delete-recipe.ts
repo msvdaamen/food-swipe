@@ -4,8 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getRecipesQueryOptions } from "./get-recipes";
 import { Recipe } from "../types/recipe.type";
 
-export const deleteRecipe = (recipeId: number) => {
-  return api.delete<void>(`/v1/recipes/${recipeId}`);
+export const deleteRecipe = async (recipeId: number) => {
+  const response = await api.fetch(`/v1/recipes/${recipeId}`, {
+    method: 'DELETE'
+  });
+  return response.json() as Promise<void>;
 };
 
 type UseDeleteRecipeOptions = MutationConfig<typeof deleteRecipe>;

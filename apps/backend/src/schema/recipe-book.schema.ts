@@ -8,7 +8,7 @@ export const recipeBooks = pgTable(
   (t) => ({
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     userId: t
-      .integer()
+      .uuid()
       .notNull()
       .references(() => users.id),
     coverImage: t.text(),

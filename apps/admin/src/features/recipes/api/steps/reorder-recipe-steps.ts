@@ -13,11 +13,15 @@ export type ReorderRecipeStepsInput = {
   };
 };
 
-export const reorderRecipeSteps = (payload: ReorderRecipeStepsInput) => {
-  return api.put<RecipeStep[]>(
+export const reorderRecipeSteps = async (payload: ReorderRecipeStepsInput) => {
+  const response = await api.fetch(
     `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}/reorder`,
-    payload.data
+    {
+      method: "PUT",
+      body: JSON.stringify(payload.data),
+    }
   );
+  return response.json() as Promise<RecipeStep[]>;
 };
 
 export const useRecipeStepsReorder = (recipeId: number) => {

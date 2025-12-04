@@ -5,13 +5,16 @@ type DeleteIngredientInput = {
     ingredientId: number;
 }
 
-export const deleteIngredient = (payload: DeleteIngredientInput) => {
-    return api.delete(`/v1/ingredients/${payload.ingredientId}`);
+export const deleteIngredient = async (payload: DeleteIngredientInput) => {
+  const response = await api.fetch(`/v1/ingredients/${payload.ingredientId}`, {
+    method: "DELETE"
+  });
+  return response.json();
 }
 
 export const useDeleteIngredient = () => {
     const queryClient = useQueryClient();
-    
+
     return useMutation({
         mutationFn: deleteIngredient,
         onSuccess: () => {

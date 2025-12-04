@@ -1,27 +1,13 @@
-import { api } from "@/lib/api-client";
-import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
-import { AuthResponse } from "../types/auth.response";
+import { useMutation } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth";
 
 export type SignInInput = {
   email: string;
   password: string;
 };
 
-export async function signIn(data: SignInInput): Promise<AuthResponse> {
-  const response = await api.fetch(`/v1/auth/sign-in`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.text();
-    throw new Error(errorData || "Sign in failed");
-  }
-
-  return response.json();
+export async function signIn(input: SignInInput) {
+  return authClient.signIn.email(input);
 }
 
 export const useSignIn = () =>

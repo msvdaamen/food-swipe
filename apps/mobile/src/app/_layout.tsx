@@ -9,9 +9,9 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useAuthStore } from "@/features/auth/stores/auth-store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { authClient } from "@/lib/auth";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,38 +23,26 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated, checkAuthentication } = useAuthStore();
-  const [isReady, setIsReady] = useState(false);
+  const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
-    async function doAsyncStuff() {
-      try {
-        await checkAuthentication();
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setIsReady(true);
-      }
-    }
-
-    doAsyncStuff();
-  }, [checkAuthentication]);
-
-  useEffect(() => {
-    if (isReady) {
+    if (!isPending) {
       SplashScreen.hide();
     }
-  }, [isReady]);
+  }, [isPending]);
 
-  if (!isReady) {
+  if (isPending) {
     return null;
   }
+
+  console.log(session);
+
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <QueryClientProvider client={queryClient}>
           <Stack>
-            <Stack.Protected guard={!!isAuthenticated}>
+            <Stack.Protected guard={!!session}>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="modal"
@@ -70,7 +58,7 @@ export default function RootLayout() {
               />
             </Stack.Protected>
 
-            <Stack.Protected guard={!isAuthenticated}>
+            <Stack.Protected guard={!session}>
               <Stack.Screen name="sign-in" options={{ headerShown: false }} />
               <Stack.Screen name="sign-up" options={{ headerShown: false }} />
             </Stack.Protected>

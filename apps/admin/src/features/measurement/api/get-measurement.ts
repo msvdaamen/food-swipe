@@ -3,8 +3,9 @@ import { Measurement } from "../types/measurement.type";
 import { api } from "@/lib/api";
 
 
-export const getMeasurement = (id: number) => {
-    return api.get<Measurement>(`/v1/measurements/${id}`);
+export const getMeasurement = async (id: number) => {
+    const response = await api.fetch(`/v1/measurements/${id}`);
+    return response.json() as Promise<Measurement>;
 }
 
 export const getMeasurementQueryOptions = (id: number) => {

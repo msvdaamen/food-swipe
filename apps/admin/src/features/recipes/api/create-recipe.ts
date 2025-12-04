@@ -8,7 +8,11 @@ type CreateRecipeInput = {
 }
 
 export const createRecipe = async (payload: CreateRecipeInput) => {
-  return api.post<Recipe>('/v1/recipes', payload);
+  const response = await api.fetch('/v1/recipes', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  return response.json() as Promise<Recipe>;
 };
 
 export const useCreateRecipe = () => {

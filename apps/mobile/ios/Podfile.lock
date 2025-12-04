@@ -75,6 +75,10 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - ExpoNetwork (8.0.7):
+    - ExpoModulesCore
+  - ExpoSecureStore (15.0.7):
+    - ExpoModulesCore
   - ExpoSplashScreen (31.0.11):
     - ExpoModulesCore
   - ExpoSymbols (1.0.7):
@@ -2088,6 +2092,8 @@ DEPENDENCIES:
   - "ExpoLinearGradient (from `../../../node_modules/.bun/expo-linear-gradient@15.0.7+90687794b8a8c6c9/node_modules/expo-linear-gradient/ios`)"
   - "ExpoLinking (from `../../../node_modules/.bun/expo-linking@8.0.9+90687794b8a8c6c9/node_modules/expo-linking/ios`)"
   - "ExpoModulesCore (from `../../../node_modules/.bun/expo-modules-core@3.0.26+87dd5a4c738f4c73/node_modules/expo-modules-core`)"
+  - "ExpoNetwork (from `../../../node_modules/.bun/expo-network@8.0.7+90687794b8a8c6c9/node_modules/expo-network/ios`)"
+  - "ExpoSecureStore (from `../../../node_modules/.bun/expo-secure-store@15.0.7+90687794b8a8c6c9/node_modules/expo-secure-store/ios`)"
   - "ExpoSplashScreen (from `../../../node_modules/.bun/expo-splash-screen@31.0.11+90687794b8a8c6c9/node_modules/expo-splash-screen/ios`)"
   - "ExpoSymbols (from `../../../node_modules/.bun/expo-symbols@1.0.7+90687794b8a8c6c9/node_modules/expo-symbols/ios`)"
   - "ExpoSystemUI (from `../../../node_modules/.bun/expo-system-ui@6.0.8+90687794b8a8c6c9/node_modules/expo-system-ui/ios`)"
@@ -2204,6 +2210,10 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.bun/expo-linking@8.0.9+90687794b8a8c6c9/node_modules/expo-linking/ios"
   ExpoModulesCore:
     :path: "../../../node_modules/.bun/expo-modules-core@3.0.26+87dd5a4c738f4c73/node_modules/expo-modules-core"
+  ExpoNetwork:
+    :path: "../../../node_modules/.bun/expo-network@8.0.7+90687794b8a8c6c9/node_modules/expo-network/ios"
+  ExpoSecureStore:
+    :path: "../../../node_modules/.bun/expo-secure-store@15.0.7+90687794b8a8c6c9/node_modules/expo-secure-store/ios"
   ExpoSplashScreen:
     :path: "../../../node_modules/.bun/expo-splash-screen@31.0.11+90687794b8a8c6c9/node_modules/expo-splash-screen/ios"
   ExpoSymbols:
@@ -2374,6 +2384,8 @@ SPEC CHECKSUMS:
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
   ExpoLinking: 77455aa013e9b6a3601de03ecfab09858ee1b031
   ExpoModulesCore: e8ec7f8727caf51a49d495598303dd420ca994bf
+  ExpoNetwork: b87392dcc24d49a595f186ca25cdcf7293d30275
+  ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
   ExpoSplashScreen: 268b2f128dc04284c21010540a6c4dd9f95003e3
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
   ExpoSystemUI: 2761aa6875849af83286364811d46e8ed8ea64c7

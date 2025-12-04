@@ -12,8 +12,12 @@ export type CreateRecipeIngredientInput = {
   }
 }
 
-export const createRecipeIngredient = (payload: CreateRecipeIngredientInput) => {
-  return api.post<RecipeIngredient>(`/v1/recipes/${payload.recipeId}/ingredients`, payload.data);
+export const createRecipeIngredient = async (payload: CreateRecipeIngredientInput) => {
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/ingredients`, {
+    method: "POST",
+    body: JSON.stringify(payload.data)
+  });
+  return response.json() as Promise<RecipeIngredient>;
 }
 
 export const useRecipeIngredientCreate = () => {
@@ -27,4 +31,4 @@ export const useRecipeIngredientCreate = () => {
       );
     },
   });
-}; 
+};

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
 import { useAuthStore } from "@/features/auth/auth.store";
 import { useSignIn } from "@/features/auth/api/sign-in";
+import { authClient } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent,
@@ -25,7 +26,7 @@ const validator = type({
 });
 
 function RouteComponent() {
-  const accessToken = useAuthStore((state) => state.accessToken);
+  const { data: session } = authClient.useSession();
 
   const signIn = useSignIn();
   const form = useForm({
@@ -41,7 +42,7 @@ function RouteComponent() {
     },
   });
 
-  if (accessToken) {
+  if (session) {
     return <Navigate to="/" />;
   }
 

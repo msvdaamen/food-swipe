@@ -13,11 +13,12 @@ export type UpdateRecipeNutritionInput = {
   };
 };
 
-export const updateRecipeNutrition = (payload: UpdateRecipeNutritionInput) => {
-  return api.put<RecipeNutrition>(
-    `/v1/recipes/${payload.recipeId}/nutritions/${payload.name}`,
-    payload.data
-  );
+export const updateRecipeNutrition = async (payload: UpdateRecipeNutritionInput) => {
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/nutritions/${payload.name}`, {
+    method: "PUT",
+    body: JSON.stringify(payload.data)
+  });
+  return response.json() as Promise<RecipeNutrition>;
 };
 
 export const useRecipeNutritionUpdate = () => {

@@ -1,4 +1,3 @@
-import { useAuthStore } from "@/features/auth/stores/auth-store";
 import { FText } from "@/components/f-text";
 import { AppButton } from "@/components/ui/button";
 import { AppInput } from "@/components/ui/input";
@@ -9,7 +8,6 @@ import { type } from "arktype";
 import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
-  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -28,7 +26,6 @@ const signUpSchema = type({
 });
 
 export default function SignUp() {
-  const { setTokens } = useAuthStore();
   const signUp = useSignUp();
   const router = useRouter();
 
@@ -45,9 +42,11 @@ export default function SignUp() {
       onSubmit: signUpSchema,
     },
     onSubmit: async ({ value }) => {
-      const { accessToken, refreshToken } = await signUp.mutateAsync(value);
-      setTokens(accessToken, refreshToken);
-      router.replace("/");
+      const response = await signUp.mutateAsync(value);
+      console.log(response);
+      if (!response.error) {
+        router.replace("/");
+      }
     },
   });
 

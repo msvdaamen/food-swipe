@@ -12,8 +12,15 @@ export type UpdateRecipeStepInput = {
   };
 }
 
-export const updateRecipeStep = (payload: UpdateRecipeStepInput) => {
-  return api.put<RecipeStep>(`/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`, payload.data);
+export const updateRecipeStep = async (payload: UpdateRecipeStepInput) => {
+  const response = await api.fetch(
+    `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(payload.data),
+    }
+  );
+  return response.json() as Promise<RecipeStep>;
 }
 
 export const useRecipeStepUpdate = () => {
@@ -26,4 +33,4 @@ export const useRecipeStepUpdate = () => {
       );
     },
   });
-}; 
+};

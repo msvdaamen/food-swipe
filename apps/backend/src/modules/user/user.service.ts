@@ -1,7 +1,6 @@
-import { and, count, eq, getTableColumns, gte, lte, sql } from "drizzle-orm";
+import { and, count, eq, gte, lte, sql } from "drizzle-orm";
 import { DbService } from "../../common/db.service";
 import {
-  authRefreshTokens,
   users,
   type NewUserEntity,
   type UserEntity,
@@ -15,16 +14,16 @@ import {
   type CacheProvider,
 } from "../../providers/cache.provider";
 import { format } from "date-fns";
-const { password: _, ...columns } = getTableColumns(users);
+import { sessions } from "../../schema/auth.schema";
 
 export class UserService extends DbService {
   constructor(private readonly cache: CacheProvider) {
     super();
   }
 
-  async findById(userId: number): Promise<UserModel | undefined> {
+  async findById(userId: string): Promise<UserModel | undefined> {
     const [user] = await this.database
-      .select(columns)
+      .select()
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
@@ -44,7 +43,7 @@ export class UserService extends DbService {
 
   async findByEmail(email: string): Promise<UserModel | undefined> {
     const [user] = await this.database
-      .select(columns)
+      .select()
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
@@ -56,7 +55,7 @@ export class UserService extends DbService {
     const sortColumn = this.getSortColumn(sort || "id");
     const [result, [{ total }]] = await Promise.all([
       this.database
-        .select(columns)
+        .select()
         .from(users)
         .orderBy(sortColumn)
         .limit(amount)
@@ -83,10 +82,10 @@ export class UserService extends DbService {
 
   async getTotal(from: Date, until: Date, cacheTimeSeconds = 60) {
     const cacheKey = `user-total:${format(from, "yyyy-MM-dd")}:${format(until, "yyyy-MM-dd")}`;
-    const cached = await this.cache.get<number>(cacheKey);
+    const cached = await this.cache.get(cacheKey);
 
     if (cached) {
-      return cached;
+      return Number(cached);
     }
     const [result] = await this.database
       .select({ count: count(users.id) })
@@ -94,37 +93,39 @@ export class UserService extends DbService {
       .where(and(gte(users.createdAt, from), lte(users.createdAt, until)))
       .limit(1);
 
-    await this.cache.set(cacheKey, result.count, 1000 * cacheTimeSeconds);
+    await this.cache.set(cacheKey, result.count.toString());
+    await this.cache.expire(cacheKey, cacheTimeSeconds);
     return result.count;
   }
 
   async getActive(from: Date, until: Date, cacheTimeSeconds = 60) {
     const cacheKey = `user-active:${format(from, "yyyy-MM-dd")}:${format(until, "yyyy-MM-dd")}`;
-    const cached = await this.cache.get<number>(cacheKey);
+    const cached = await this.cache.get(cacheKey);
     if (cached) {
-      return cached;
+      return Number(cached);
     }
     const [result] = await this.database
       .select({ count: sql`count(distinct ${users.id})`.mapWith(Number) })
       .from(users)
-      .innerJoin(authRefreshTokens, eq(users.id, authRefreshTokens.userId))
+      .innerJoin(sessions, eq(users.id, sessions.userId))
       .where(
         and(
-          gte(authRefreshTokens.createdAt, from),
-          lte(authRefreshTokens.createdAt, until)
+          gte(sessions.createdAt, from),
+          lte(sessions.createdAt, until)
         )
       )
       .limit(1);
 
-    await this.cache.set(cacheKey, result.count, 1000 * cacheTimeSeconds);
+    await this.cache.set(cacheKey, result.count.toString());
+    await this.cache.expire(cacheKey, cacheTimeSeconds);
     return result.count;
   }
 
   async getNew(from: Date, until: Date, cacheTimeSeconds = 60) {
     const cacheKey = `user-new:${format(from, "yyyy-MM-dd")}:${format(until, "yyyy-MM-dd")}`;
-    const cached = await this.cache.get<number>(cacheKey);
+    const cached = await this.cache.get(cacheKey);
     if (cached) {
-      return cached;
+      return Number(cached);
     }
     const [result] = await this.database
       .select({ count: count(users.id) })
@@ -132,7 +133,8 @@ export class UserService extends DbService {
       .where(and(gte(users.createdAt, from), lte(users.createdAt, until)))
       .limit(1);
 
-    await this.cache.set(cacheKey, result.count, 1000 * cacheTimeSeconds);
+    await this.cache.set(cacheKey, result.count.toString());
+    await this.cache.expire(cacheKey, cacheTimeSeconds);
     return result.count;
   }
 

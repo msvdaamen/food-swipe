@@ -1,67 +1,11 @@
-import { Hono } from "hono";
-import { signInDtoSchema } from "./dto/sign-in.dto";
-import { authService } from "./auth.service";
-import { refreshTokenDtoSchema } from "./dto/refresh-token.dto";
 import { createFactory } from "hono/factory";
 import {
   authMiddleware,
   type AuthContext,
-} from "./middlewares/auth.middleware";
-import { signUpDtoSchema } from "./dto/sign-up.dto";
-import { sValidator } from '@hono/standard-validator'
-
-const app = new Hono();
-
-app.post("/sign-in", sValidator('json', signInDtoSchema), async (c) => {
-  const payload = c.req.valid('json');
-  try {
-    const response = await authService.signIn(payload);
-    return c.json(response);
-  } catch (error) {
-    return c.json({}, 401);
-  }
-});
-
-app.post('/sign-up', sValidator('json', signUpDtoSchema), async (c) => {
-  const payload = c.req.valid('json');
-    const response = await authService.signUp(payload);
-    return c.json(response);
-});
-
-app.get("/me", authMiddleware, async (c) => {
-  const user = c.get("user");
-  return c.json({
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    createdAt: user.createdAt,
-  });
-});
-
-app.post("/refresh-token", sValidator('json', refreshTokenDtoSchema), async (c) => {
-  const { refreshToken } = c.req.valid('json');
-  try {
-    const response = await authService.refreshTokens(refreshToken);
-    return c.json(response);
-  } catch (error) {
-    return c.json({}, 401);
-  }
-});
-
-app.post("/sign-out", authMiddleware, async (c) => {
-  const user = c.get("user");
-  await authService.signOut(user.id);
-  return c.json({ message: "Sign out successfully" });
-});
+} from "./auth.middleware";
 
 export const authRouter = createFactory<AuthContext>({
   initApp: (app) => {
     app.use(authMiddleware);
   },
 });
-
-export const registerAuthController = (instance: Hono) => {
-  instance.route("/v1/auth", app);
-};

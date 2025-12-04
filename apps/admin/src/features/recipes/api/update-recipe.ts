@@ -17,8 +17,12 @@ export type UpdateRecipeInput = {
   };
 };
 
-export const updateRecipe = (payload: UpdateRecipeInput) => {
-  return api.put<Recipe>(`/v1/recipes/${payload.recipeId}`, payload.data);
+export const updateRecipe = async (payload: UpdateRecipeInput) => {
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}`, {
+    method: "PUT",
+    body: JSON.stringify(payload.data)
+  });
+  return response.json() as Promise<Recipe>;
 };
 
 type UseUpdateRecipeOptions = MutationConfig<typeof updateRecipe>;

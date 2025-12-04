@@ -9,13 +9,17 @@ export type CreateMeasurementInput = {
 }
 
 
-export const createMeasurement = (payload: CreateMeasurementInput) => {
-    return api.post<Measurement>("/v1/measurements", payload);
+export const createMeasurement = async (payload: CreateMeasurementInput) => {
+    const response = await api.fetch("/v1/measurements", {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return response.json() as Promise<Measurement>;
 }
 
 export const useCreateMeasurement = () => {
     const queryClient = useQueryClient();
-  
+
     return useMutation({
         mutationFn: createMeasurement,
         onSuccess: (data) => {

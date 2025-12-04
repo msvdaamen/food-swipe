@@ -12,8 +12,12 @@ export type UpdateMeasurementInput = {
     }
 }
 
-export const updateMeasurement = (payload: UpdateMeasurementInput) => {
-    return api.put<Measurement>(`/v1/measurements/${payload.measurementId}`, payload.data);
+export const updateMeasurement = async (payload: UpdateMeasurementInput) => {
+    const response = await api.fetch(`/v1/measurements/${payload.measurementId}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload.data)
+    });
+    return response.json() as Promise<Measurement>;
 }
 
 export const useUpdateMeasurement = () => {

@@ -1,7 +1,5 @@
-import { api } from "@/lib/api";
-import { AuthResponse } from "../types/auth.response";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthStore } from "../auth.store";
+import { authClient } from "@/lib/auth";
 
 export type SignInInput = {
   email: string;
@@ -9,17 +7,10 @@ export type SignInInput = {
 };
 
 export const signIn = (payload: SignInInput) => {
-  return api.post<AuthResponse>("/v1/auth/sign-in", payload);
+  return authClient.signIn.email(payload);
 };
 
-export const useSignIn = () => {
-  const authStore = useAuthStore();
-
-  return useMutation({
-    mutationFn: signIn,
-    onSuccess: (data) => {
-      authStore.setAccessToken(data.accessToken);
-      authStore.setRefreshToken(data.refreshToken);
-    },
-  });
-};
+export const useSignIn = () => useMutation({
+  mutationFn: signIn,
+  onSuccess: (data) => {},
+})

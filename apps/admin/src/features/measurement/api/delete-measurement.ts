@@ -4,8 +4,11 @@ import { api } from "@/lib/api";
 import { getMeasurementsQueryOptions } from "./get-measurements";
 
 
-export const deleteMeasurement = (id: number) => {
-    return api.delete(`/v1/measurements/${id}`);
+export const deleteMeasurement = async (id: number) => {
+    const response = await api.fetch(`/v1/measurements/${id}`, {
+        method: 'DELETE',
+    });
+    return response.json() as Promise<Measurement>;
 }
 
 export const useDeleteMeasurement = () => {
