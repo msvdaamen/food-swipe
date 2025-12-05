@@ -1,12 +1,12 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const createRecipeDto = z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    prepTime: z.number().min(1).optional(),
-    servings: z.number().min(1).optional(),
-    calories: z.number().min(1).optional(),
-    coverImageId: z.number().min(1).optional(),
-});
+export const createRecipeDto = type({
+  title: "string",
+  description: "string",
+  prepTime: "number >= 0",
+  servings: "number >= 0",
+  calories: "number >= 0",
+  coverImage: "string",
+})
 
-export type CreateRecipeDto = z.infer<typeof createRecipeDto>;
+export type CreateRecipeDto = typeof createRecipeDto.infer;

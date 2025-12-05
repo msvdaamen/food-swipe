@@ -14,6 +14,7 @@ import {
   type MeasurementEntity,
   type RecipeNutritionEntity,
   recipesToRecipeBooks,
+  type RecipeEntity,
 } from "../../schema";
 import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
 import type { RecipeStepModel } from "./models/recipe-step.model.ts";
@@ -57,41 +58,43 @@ export class RecipeService extends DbService {
 
   async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
     const results = await this.database
-      .select()
+      .select({
+        recipe: recipes,
+        nutrition: recipeNutritions,
+      })
       .from(recipes)
       .where(
         filters.isPublished !== undefined
           ? eq(recipes.isPublished, filters.isPublished)
           : undefined
       )
+      .leftJoin(recipeNutritions, eq(recipeNutritions.recipeId, recipes.id))
       .orderBy(asc(recipes.title))
       .execute();
 
-    return results.map((result) => ({
-      ...result,
-      coverImageUrl: result.coverImage
-        ? this.storage.getPublicUrl(result.coverImage)
-        : null,
-    }));
+    const recipesMap = this.mapRecipeToModel(results);
+
+    return Object.values(recipesMap);
   }
 
   async getById(id: number): Promise<RecipeModel> {
-    const [result] = await this.database
-      .select()
+    const results = await this.database
+      .select({
+        recipe: recipes,
+        nutrition: recipeNutritions,
+      })
       .from(recipes)
+      .leftJoin(recipeNutritions, eq(recipeNutritions.recipeId, recipes.id))
       .where(eq(recipes.id, id))
       .execute();
 
-    if (!result) {
+    if (!results.length) {
       throw new Error("Recipe not found");
     }
 
-    return {
-      ...result,
-      coverImageUrl: result.coverImage
-        ? this.storage.getPublicUrl(result.coverImage)
-        : null,
-    };
+    const recipesMap = this.mapRecipeToModel(results);
+
+    return recipesMap[id];
   }
 
   async create(payload: CreateRecipeDto): Promise<RecipeModel> {
@@ -490,7 +493,7 @@ export class RecipeService extends DbService {
     );
     const imageBuffer = await imageResponse.blob();
     const imageFile = new File([imageBuffer], recipe.title);
-    const { id: imageId } = await this.storage.upload(imageFile, true);
+    const coverImageUrl = await this.storage.upload(imageFile, true);
 
     const newRecipe = await this.create({
       title: translatedRecipeJson.title,
@@ -498,7 +501,7 @@ export class RecipeService extends DbService {
       calories: translatedRecipeJson.nutritions.energy && translatedRecipeJson.nutritions?.energy.value || 0,
       prepTime: translatedRecipeJson.cookTime,
       servings: translatedRecipeJson.servings.number,
-      coverImageId: imageId,
+      coverImage: coverImageUrl,
     });
     for (let i = 0; i < translatedRecipeJson.preparation.steps.length; i++) {
       const step = translatedRecipeJson.preparation.steps[i];
@@ -576,6 +579,24 @@ export class RecipeService extends DbService {
       .onConflictDoNothing()
       .execute();
     return this.getById(recipeId);
+  }
+
+  private mapRecipeToModel(results: { recipe: RecipeEntity, nutrition: RecipeNutritionEntity | null }[]): Record<number, RecipeModel> {
+    const recipesMap: Record<number, RecipeModel> = {};
+    for (const result of results) {
+      const recipe: RecipeModel = recipesMap[result.recipe.id] || {
+        ...result.recipe,
+        coverImageUrl: result.recipe.coverImage
+          ? this.storage.getPublicUrl(result.recipe.coverImage)
+          : null,
+          nutrition: {}
+      }
+      if (result.nutrition) {
+        recipe.nutrition[result.nutrition.name as Nutrition] = result.nutrition;
+      }
+      recipesMap[result.recipe.id] = recipe;
+    }
+    return recipesMap
   }
 }
 

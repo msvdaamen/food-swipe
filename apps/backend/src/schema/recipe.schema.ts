@@ -8,6 +8,7 @@ import { measurements } from "./measurement.schema";
 import { ingredients } from "./ingredient.schema";
 import { relations } from "drizzle-orm";
 import { recipeBooks } from "./recipe-book.schema";
+import type { Nutrition } from "../modules/recipe/constants/nutritions";
 
 export const recipes = pgTable(
   "recipes",

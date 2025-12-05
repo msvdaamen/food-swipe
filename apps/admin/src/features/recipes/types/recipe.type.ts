@@ -1,3 +1,6 @@
+import { Nutrition } from "../constants/nutritions";
+import { RecipeNutrition } from "./recipe-nutrition.type";
+
 export type Recipe = {
   id: number;
   title: string;
@@ -7,4 +10,5 @@ export type Recipe = {
   servings: number | null;
   isPublished: boolean;
   createdAt: string;
+  nutrition: Record<Nutrition, RecipeNutrition>
 };
