@@ -7,7 +7,6 @@ import { registerRecipeController } from "./modules/recipe/recipe.controller.ts"
 import { registerUserController } from "./modules/user/user.controller.ts";
 import { registerMeasurementsController } from "./modules/measurement/measurement.controller.ts";
 import { registerIngredientController } from "./modules/ingredient/ingredient.controller.ts";
-import { registerToolsController } from "./modules/tools/tools.controller.ts";
 import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller.ts";
 import { auth } from "./lib/auth.ts";
 
@@ -48,7 +47,6 @@ registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
-registerToolsController(app);
 registerRecipeBookController(app);
 
 export default {

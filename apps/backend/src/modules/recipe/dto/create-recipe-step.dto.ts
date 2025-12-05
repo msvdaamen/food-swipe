@@ -1,8 +1,8 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const createRecipeStepDto = z.object({
-    description: z.string(),
-    order: z.number(),
+export const createRecipeStepDto = type({
+    description: 'string',
+    order: 'number',
 });
 
-export type CreateRecipeStepDto = z.infer<typeof createRecipeStepDto>;
+export type CreateRecipeStepDto = typeof createRecipeStepDto.infer;

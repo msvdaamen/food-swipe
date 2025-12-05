@@ -5,7 +5,7 @@ import {
   type NewUserEntity,
   type UserEntity,
 } from "../../schema";
-import { getUsersDto, type GetUsersDto } from "./dto/get-users.dto";
+import type { GetUsersDto } from "./dto/get-users.dto";
 import { CreatePagination } from "../../common/create-pagination";
 import type { UserModel } from "./models/user.model";
 import type { PaginatedData } from "../../common/types/paginated-data";
@@ -51,7 +51,7 @@ export class UserService extends DbService {
   }
 
   async getUsers(dto: GetUsersDto): Promise<PaginatedData<UserModel>> {
-    const { page, amount, sort } = getUsersDto.parse(dto);
+    const { page, amount, sort } = dto;
     const sortColumn = this.getSortColumn(sort || "id");
     const [result, [{ total }]] = await Promise.all([
       this.database

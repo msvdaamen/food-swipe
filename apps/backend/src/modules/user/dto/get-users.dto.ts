@@ -1,12 +1,17 @@
-import { z } from "zod";
+import { type } from "arktype";
 
-export const getUsersDto = z.object({
-  page: z.preprocess((val) => Number(val), z.number().min(1).default(1)),
-  amount: z.preprocess(
-    (val) => Number(val),
-    z.number().min(1).max(100).default(20)
-  ),
-  sort: z.enum(["createdAt", "id"]).optional(),
+export const getUsersDto = type({
+  page: type("string | number").pipe((val) => {
+    const num = typeof val === "string" ? Number(val) : val;
+    return isNaN(num) || num < 1 ? 1 : num;
+  }),
+  amount: type("string | number").pipe((val) => {
+    const num = typeof val === "string" ? Number(val) : val;
+    if (isNaN(num) || num < 1) return 20;
+    if (num > 100) return 100;
+    return num;
+  }),
+  "sort?": "'createdAt' | 'id'",
 });
 
-export type GetUsersDto = z.infer<typeof getUsersDto>;
+export type GetUsersDto = typeof getUsersDto.infer;

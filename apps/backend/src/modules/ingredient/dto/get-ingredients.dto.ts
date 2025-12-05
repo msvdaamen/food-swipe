@@ -1,17 +1,20 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const getIngredientsDto = z.object({
-    search: z.string().optional(),
-    sort: z.union([z.literal('name'), z.literal('name')]).optional(),
-    order: z.union([z.literal('asc'), z.literal('desc')]).optional(),
-    page: z.preprocess((value) => {
-        const number = parseInt(value as string);
-        return isNaN(number) ? 1 : number
-    }, z.number().gte(1)),
-    amount: z.preprocess((value) => {
-        const number = parseInt(value as string);
-        return isNaN(number) ? 10 : number
-    }, z.number().gte(1).lte(100))
+export const getIngredientsDto = type({
+    "search?": "string",
+    "sort?": "'name'",
+    "order?": "'asc' | 'desc'",
+    page: type("string | number").pipe((value) => {
+        const number = typeof value === "string" ? parseInt(value) : value;
+        return isNaN(number) ? 1 : number;
+    }),
+    amount: type("string | number").pipe((value) => {
+        const number = typeof value === "string" ? parseInt(value) : value;
+        if (isNaN(number)) return 10;
+        if (number < 1) return 1;
+        if (number > 100) return 100;
+        return number;
+    }),
 });
 
-export type GetIngredientsDto = z.infer<typeof getIngredientsDto>;
+export type GetIngredientsDto = typeof getIngredientsDto.infer;

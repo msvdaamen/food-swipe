@@ -1,8 +1,8 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const reorderRecipeStepDto = z.object({
-    orderFrom: z.number().min(1),
-    orderTo: z.number().min(1),
+export const reorderRecipeStepDto = type({
+    orderFrom: "number >= 1",
+    orderTo: "number >= 1",
 });
 
-export type ReorderRecipeStepDto = z.infer<typeof reorderRecipeStepDto>;
+export type ReorderRecipeStepDto = typeof reorderRecipeStepDto.infer;

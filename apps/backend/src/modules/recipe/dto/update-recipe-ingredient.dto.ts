@@ -1,10 +1,9 @@
+import { type } from "arktype";
 
-import {z} from "zod";
-
-export const updateRecipeIngredientDto = z.object({
-    ingredientId: z.number().min(1).optional(),
-    amount: z.number().min(1).optional(),
-    measurementId: z.number().min(1).optional().nullable(),
+export const updateRecipeIngredientDto = type({
+    "ingredientId?": "number >= 1",
+    "amount?": "number >= 1",
+    "measurementId?": "number >= 1 | null",
 });
 
-export type UpdateRecipeIngredientDto = z.infer<typeof updateRecipeIngredientDto>;
+export type UpdateRecipeIngredientDto = typeof updateRecipeIngredientDto.infer;

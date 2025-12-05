@@ -1,8 +1,8 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const updateMeasurementDto = z.object({
-    name: z.string().optional(),
-    abbreviation: z.string().optional(),
+export const updateMeasurementDto = type({
+    "name?": "string",
+    "abbreviation?": "string",
 });
 
-export type UpdateMeasurementDto = z.infer<typeof updateMeasurementDto>;
+export type UpdateMeasurementDto = typeof updateMeasurementDto.infer;

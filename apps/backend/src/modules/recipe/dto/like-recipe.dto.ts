@@ -1,7 +1,6 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-
-export const likeRecipeDtoSchema = z.object({
-    like: z.boolean()
+export const likeRecipeDtoSchema = type({
+    like: 'boolean',
 });
-export type LikeRecipeDto = z.infer<typeof likeRecipeDtoSchema>;
+export type LikeRecipeDto = typeof likeRecipeDtoSchema.infer;

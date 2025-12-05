@@ -28,8 +28,8 @@ app.get('/:id', async (c) => {
     return c.json(recipe);
 });
 
-app.post('/', async (c) => {
-    const payload = createRecipeDto.parse(await c.req.json());
+app.post('/', sValidator('json', createRecipeDto), async (c) => {
+    const payload = c.req.valid('json');
     const recipe = await recipeService.create(payload);
     return c.json(recipe);
 });
@@ -42,19 +42,19 @@ app.post('/:id/image', async (c) => {
     if (!file || !(file instanceof File)) {
         throw new Error('File is required');
     }
-    const recipe = await recipeService.uploadImage(userId, id, file);
+    const recipe = await recipeService.uploadImage(id, file);
     return c.json(recipe);
 });
 
-app.put('/:id', async (c) => {
+app.put('/:id', sValidator('json', updateRecipeDto), async (c) => {
     const id = Number(c.req.param('id'));
-    const payload = updateRecipeDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const recipe = await recipeService.update(id, payload);
     return c.json(recipe);
 });
 
-app.post('/import', async (c) => {
-    const body = importRecipeDto.parse(await c.req.json());
+app.post('/import', sValidator('json', importRecipeDto), async (c) => {
+    const body = c.req.valid('json');
     const recipe = await recipeService.importRecipe(body.url);
     return c.json(recipe);
 });
@@ -70,17 +70,17 @@ app.get('/:id/steps', async (c) => {
     return c.json(steps);
 });
 
-app.post(':id/steps', async (c) => {
+app.post(':id/steps', sValidator('json', createRecipeStepDto), async (c) => {
     const id = Number(c.req.param('id'));
-    const payload = createRecipeStepDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const step = await recipeService.createStep(id, payload);
     return c.json(step);
 });
 
-app.put('/:id/steps/:stepId', async (c) => {
+app.put('/:id/steps/:stepId', sValidator('json', updateRecipeStepDto), async (c) => {
     const id = Number(c.req.param('id'));
     const stepId = Number(c.req.param('stepId'));
-    const payload = updateRecipeStepDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const step = await recipeService.updateStep(id, stepId, payload);
     return c.json(step);
 });
@@ -92,10 +92,10 @@ app.delete('/:id/steps/:stepId', async (c) => {
     return c.json({}, 201);
 });
 
-app.put('/:id/steps/:stepId/reorder', async (c) => {
+app.put('/:id/steps/:stepId/reorder', sValidator('json', reorderRecipeStepDto), async (c) => {
     const id = Number(c.req.param('id'));
     const stepId = Number(c.req.param('stepId'));
-    const payload = reorderRecipeStepDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const steps = await recipeService.reorderSteps(id, stepId, payload);
     return c.json(steps);
 });
@@ -105,17 +105,17 @@ app.get('/:id/ingredients', async (c) => {
     return c.json(ingredients);
 });
 
-app.post(':id/ingredients', async (c) => {
+app.post(':id/ingredients', sValidator('json', createRecipeIngredientDto), async (c) => {
     const id = Number(c.req.param('id'));
-    const payload = createRecipeIngredientDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const ingredient = await recipeService.createIngredient(id, payload);
     return c.json(ingredient);
 });
 
-app.put('/:id/ingredients/:ingredientId', async (c) => {
+app.put('/:id/ingredients/:ingredientId', sValidator('json', updateRecipeIngredientDto), async (c) => {
     const id = Number(c.req.param('id'));
     const ingredientId = Number(c.req.param('ingredientId'));
-    const payload = updateRecipeIngredientDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const ingredient = await recipeService.updateIngredient(id, ingredientId, payload);
     return c.json(ingredient);
 });
@@ -134,21 +134,21 @@ app.get('/:id/nutritions', async (c) => {
 
 
 const allowedNutritions = new Set<string>(nutritions);
-app.put('/:id/nutritions/:name', async (c) => {
+app.put('/:id/nutritions/:name', sValidator('json', updateRecipeNutritionDto), async (c) => {
     const id = Number(c.req.param('id'));
     const name = c.req.param('name');
     if (!name || !allowedNutritions.has(name)) {
         return c.json({}, 400);
     }
-    const payload = updateRecipeNutritionDto.parse(await c.req.json());
+    const payload = c.req.valid('json');
     const nutrition = await recipeService.updateNutrition(id, name as Nutrition, payload);
     return c.json(nutrition);
 });
 
-app.post('/:id/like', async (c) => {
+app.post('/:id/like', sValidator('json', likeRecipeDtoSchema), async (c) => {
     const id = Number(c.req.param('id'));
     const user = c.get('user');
-    const {like} = likeRecipeDtoSchema.parse(await c.req.json());
+    const {like} = c.req.valid('json');
     const {id: recipeId} = await recipeService.getById(id);
     const recipe = await recipeService.like(user.id, recipeId, like);
     return c.json(recipe);

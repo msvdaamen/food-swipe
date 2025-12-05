@@ -1,8 +1,7 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-
-export const importRecipeDto = z.object({
-    url: z.string().url(),
+export const importRecipeDto = type({
+    url: 'string.url',
 });
 
-export type ImportRecipeDto = z.infer<typeof importRecipeDto>;
+export type ImportRecipeDto = typeof importRecipeDto.infer;

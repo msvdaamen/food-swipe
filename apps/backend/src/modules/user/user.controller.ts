@@ -3,11 +3,12 @@ import { authRouter } from "../auth/auth.controller.ts";
 import { userService } from "./user.service.ts";
 import { endOfMonth, startOfMonth, sub } from "date-fns";
 import { getUsersDto } from "./dto/get-users.dto.ts";
+import { sValidator } from "@hono/standard-validator";
 
 const app = authRouter.createApp();
 
-app.get("/", async (c) => {
-  const payload = getUsersDto.parse(c.req.query());
+app.get("/", sValidator("query", getUsersDto), async (c) => {
+  const payload = c.req.valid("query");
   const result = await userService.getUsers(payload);
   return c.json(result);
 });

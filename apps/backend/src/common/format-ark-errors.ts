@@ -1,16 +1,13 @@
-import type {ZodError} from "zod";
-
-
+import type { ArkErrors } from "arktype";
 
 type ValidationError = {
     [prop: string]: string[];
 }
 
-export function FormatZodErrors(err: ZodError) {
-    const errors = err.errors;
+export function FormatArkErrors(err: ArkErrors) {
     const format: ValidationError = {};
 
-    for (const error of errors) {
+    for (const error of err) {
         const key = error.path.join('.');
         if (!format[key]) {
             format[key] = [];

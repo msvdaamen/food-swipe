@@ -4,7 +4,7 @@ import {startSpan} from "@sentry/bun";
 
 export type AuthContext = {
   Variables: {
-    user: typeof auth.$Infer.Session.user | null;
+    user: typeof auth.$Infer.Session.user;
   };
 };
 

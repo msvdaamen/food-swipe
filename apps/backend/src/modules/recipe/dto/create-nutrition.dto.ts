@@ -1,10 +1,9 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-
-export const createRecipeNutritionDto = z.object({
-    name: z.string(),
-    unit: z.string(),
-    value: z.number(),
+export const createRecipeNutritionDto = type({
+  name: 'string',
+  unit: 'string',
+  value: 'number',
 });
 
-export type CreateRecipeNutritionDto = z.infer<typeof createRecipeNutritionDto>;
+export type CreateRecipeNutritionDto = typeof createRecipeNutritionDto.infer

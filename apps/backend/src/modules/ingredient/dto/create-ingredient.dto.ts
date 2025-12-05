@@ -1,7 +1,7 @@
-import {z} from "zod";
+import { type } from "arktype";
 
-export const createIngredientDto = z.object({
-    name: z.string()
+export const createIngredientDto = type({
+    name: "string"
 });
 
-export type CreateIngredientDto = z.infer<typeof createIngredientDto>;
+export type CreateIngredientDto = typeof createIngredientDto.infer;

@@ -119,7 +119,6 @@ export class RecipeService extends DbService {
   }
 
   async uploadImage(
-    userId: number,
     recipeId: number,
     file: File
   ): Promise<RecipeModel> {
