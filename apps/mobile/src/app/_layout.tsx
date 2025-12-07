@@ -35,8 +35,6 @@ export default function RootLayout() {
     return null;
   }
 
-  console.log(session);
-
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

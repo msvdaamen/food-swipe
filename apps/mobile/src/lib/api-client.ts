@@ -1,15 +1,10 @@
 import { router } from "expo-router";
-import { TokenStorage } from "@/features/auth/types/token-storage";
-import { asyncTokenStorage } from "@/features/auth/async-token-storage";
 import { authClient } from "./auth";
 
 const url = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
 
 export class AuthApiClient {
-  constructor(
-    private readonly baseUrl: string,
-    private readonly tokenStorage: TokenStorage,
-  ) {}
+  constructor(private readonly baseUrl: string) {}
 
   async fetch(endpoint: string, options?: RequestInit): Promise<Response> {
     const cookies = authClient.getCookie();
@@ -41,4 +36,4 @@ export class AuthApiClient {
   }
 }
 
-export const api = new AuthApiClient(url, asyncTokenStorage);
+export const api = new AuthApiClient(url);

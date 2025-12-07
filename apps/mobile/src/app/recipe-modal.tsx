@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { StyleSheet, View, useColorScheme } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
 import Animated, {
   EntryAnimationsValues,
   ExitAnimationsValues,
-  interpolateColor,
   LayoutAnimation,
-  SharedValue,
   StyleProps,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -17,83 +13,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { AppButton } from "@/components/ui/button";
-import { ArrowLeft, Heart, Minus, Plus } from "lucide-react-native";
+import { Heart, Minus, Plus } from "lucide-react-native";
 import { AppCheckbox } from "@/components/ui/checkbox";
-import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/theme";
 import { FText } from "@/components/f-text";
 
-interface RecipeModalHeaderProps {
-  scrollY: SharedValue<number>;
-}
-
 const AnimatedHeardIcon = Animated.createAnimatedComponent(Heart);
 const AnimatedFText = Animated.createAnimatedComponent(FText);
-
-export function RecipeModalHeader({ scrollY }: RecipeModalHeaderProps) {
-  const insets = useSafeAreaInsets();
-  const router = useRouter();
-  const theme = useColorScheme();
-  const borderColor = theme === "dark" ? Colors.stone800 : Colors.stone200;
-  const backgroundColor = theme === "dark" ? Colors.stone900 : Colors.gray50;
-  const textColor = theme === "dark" ? "white" : "black";
-
-  const barStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: interpolateColor(
-        scrollY.value,
-        [195, 210],
-        ["transparent", backgroundColor],
-      ),
-      borderBottomColor: scrollY.value > 210 ? borderColor : "transparent",
-    };
-  });
-
-  return (
-    <View
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        zIndex: 2,
-      }}
-    >
-      <View style={{ position: "relative" }}>
-        <LinearGradient
-          colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
-          style={{
-            width: "100%",
-            height: 100,
-            position: "absolute",
-            inset: 0,
-          }}
-        />
-        <Animated.View
-          style={[
-            {
-              paddingTop: insets.top,
-              paddingHorizontal: 16,
-              paddingBottom: 8,
-              position: "absolute",
-              width: "100%",
-              borderBottomWidth: 1,
-            },
-            barStyle,
-          ]}
-        >
-          <AppButton
-            color="transparent"
-            type="icon"
-            onPress={() => router.back()}
-          >
-            <ArrowLeft color={textColor} />
-          </AppButton>
-        </Animated.View>
-      </View>
-    </View>
-  );
-}
 
 export default function RecipeModal() {
   const theme = useColorScheme();
@@ -107,7 +33,6 @@ export default function RecipeModal() {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {/*<RecipeModalHeader scrollY={scrollY} />*/}
       <Animated.ScrollView
         style={styles.scrollContainer}
         onScroll={onScroll}

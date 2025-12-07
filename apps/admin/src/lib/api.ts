@@ -15,6 +15,10 @@ export class AuthApiClient {
 
     let response = await fetch(url, {
       ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options?.headers || {}),
+      },
       credentials: "include",
     });
 

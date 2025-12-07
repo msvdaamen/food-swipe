@@ -42,7 +42,7 @@ import {
 import type { CreateRecipeNutritionDto } from "./dto/create-nutrition.dto.ts";
 import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto.ts";
 import type { Nutrition } from "./constants/nutritions.ts";
-import OpenAI from "openai";
+import OpenAI, { toFile } from "openai";
 import { RecipeBookService, recipeBookService } from "../recipe-book/recipe-book.service.ts";
 
 export class RecipeService extends DbService {
@@ -465,6 +465,7 @@ export class RecipeService extends DbService {
       throw new Error("Recipe already exists");
     }
     const openai = new OpenAI();
+    console.log('translating recipe');
     const translatedRecipe = await openai.chat.completions.create({
       model: "gpt-5-nano",
       messages: [
@@ -475,10 +476,12 @@ export class RecipeService extends DbService {
       ],
       store: false,
     });
+    console.log('translated recipe:');
     const translatedRecipeContent = translatedRecipe.choices[0].message.content;
     if (!translatedRecipeContent) {
       throw new Error("Failed to translate recipe");
     }
+    console.log(translatedRecipeContent)
     const jsonStartIndex = translatedRecipeContent.indexOf("{");
     const jsonEndIndex = translatedRecipeContent.lastIndexOf("}") + 1;
     const jsonString = translatedRecipeContent.substring(
@@ -486,11 +489,25 @@ export class RecipeService extends DbService {
       jsonEndIndex
     );
     const translatedRecipeJson = JSON.parse(jsonString) as AHRecipe;
-    const imageResponse = await fetch(
+    const imageUri = translatedRecipeJson.images[0].url;
+    const imageFileName = imageUri.split("/").pop()!;
+    const baseImageResponse = await fetch(
       recipe.images[recipe.images.length - 1].url,
       { method: "GET" }
     );
-    const imageBuffer = await imageResponse.blob();
+    const baseImageBuffer = await baseImageResponse.blob();
+    const baseImageFile = new File([baseImageBuffer], imageFileName);
+    console.log('Generate image');
+    const generatedImageResponse = await openai.images.edit({
+      model: 'gpt-image-1',
+      quality: 'auto',
+      prompt: `Generate an image of a ${translatedRecipeJson.title} recipe. use the input image as a reference. Only generate the actual dish. use a angled camera position as if it was taken from the side / above. Make sure the image is in a high quality and has a good resolution. so that i can use it as a cover image for the recipe`,
+      image: baseImageFile,
+      size: "1024x1024",
+    });
+    console.log('Generated image');
+    const imageBase64 = generatedImageResponse.data![0]?.b64_json;
+    const imageBuffer = imageBase64 ? Buffer.from(imageBase64!, "base64") : baseImageBuffer;
     const imageFile = new File([imageBuffer], recipe.title);
     const coverImageUrl = await this.storage.upload(imageFile, true);
 
@@ -558,7 +575,7 @@ export class RecipeService extends DbService {
     return await this.getById(newRecipe.id);
   }
 
-  async like(userId: number, recipeId: number, like: boolean) {
+  async like(userId: string, recipeId: number, like: boolean) {
     const recipeBook = await this.recipeBookService.getLikedRecipeBook(userId);
     if (!like) {
       await this.database

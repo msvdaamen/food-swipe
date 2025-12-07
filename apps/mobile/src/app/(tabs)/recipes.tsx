@@ -11,16 +11,38 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { FView } from "@/components/f-view";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getRecipesQueryOptions } from "@/features/recipe/api/get-recipes";
+import { Suspense } from "react";
+import { Recipe } from "@/features/recipe/types/recipe.type";
 
 export default function RecipesView() {
-  const data = [1, 2, 3, 4];
+  return (
+    <Suspense fallback={<Loading />}>
+      <RecipesList />
+    </Suspense>
+  );
+}
+
+function Loading() {
+  return <FText>🌀 Loading...</FText>;
+}
+
+function RecipesList() {
+  // const data = [{ id: 1 }];
+  const { data, isLoading, error } = useSuspenseQuery(getRecipesQueryOptions());
+
+  // if (isLoading) return <Loading />;
+
+  // if (error) return <FText>Error...</FText>;
+
   return (
     <SafeAreaView>
       <FlatList
         style={styles.recipesContainer}
         data={data}
-        renderItem={({ item }) => <Recipe />}
-        keyExtractor={(item) => String(item)}
+        renderItem={({ item }) => <RecipeItem recipe={item} />}
+        keyExtractor={(recipe) => recipe.id.toString()}
         contentContainerStyle={{
           gap: 16,
           marginBottom: 16,
@@ -30,7 +52,7 @@ export default function RecipesView() {
   );
 }
 
-function Recipe() {
+function RecipeItem({ recipe }: { recipe: Recipe }) {
   const router = useRouter();
 
   const handleRecipeCardPress = () => {
@@ -46,7 +68,7 @@ function Recipe() {
       <Image
         style={styles.recipeImage}
         source={{
-          uri: "https://static-dev.food-swipe.app/9c55494e-21f3-4d96-be6b-d423b7df02a3.jpeg",
+          uri: recipe.coverImageUrl,
         }}
       />
       <FView style={styles.recipeCardOverlay}>
