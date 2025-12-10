@@ -1,12 +1,12 @@
 import { type } from "arktype";
 
 export const loadRecipesDto = type({
-    "isPublished?": type("string | boolean").pipe((value) => {
+    "isPublished": type("string | boolean").pipe((value) => {
         if (typeof value === "string") {
             return value === "true";
         }
-        return false;
-    }),
+        return value;
+    }).default(true),
 });
 
 export type LoadRecipesDto = typeof loadRecipesDto.infer

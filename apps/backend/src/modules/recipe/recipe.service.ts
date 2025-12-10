@@ -44,6 +44,7 @@ import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto.ts";
 import type { Nutrition } from "./constants/nutritions.ts";
 import OpenAI, { toFile } from "openai";
 import { RecipeBookService, recipeBookService } from "../recipe-book/recipe-book.service.ts";
+import type { AuthUser } from "../auth/auth-user.ts";
 
 export class RecipeService extends DbService {
 
@@ -56,7 +57,10 @@ export class RecipeService extends DbService {
     super();
   }
 
-  async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
+  async getAll(user: AuthUser, filters: LoadRecipesDto): Promise<RecipeModel[]> {
+    if (user.role !== 'admin') {
+      filters.isPublished = true;
+    }
     const results = await this.database
       .select({
         recipe: recipes,

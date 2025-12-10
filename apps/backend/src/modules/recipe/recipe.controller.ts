@@ -19,7 +19,8 @@ const app = authRouter.createApp();
 
 app.get('/', sValidator('query', loadRecipesDto), async (c) => {
     const filters = c.req.valid('query');
-    const recipes = await recipeService.getAll(filters);
+    const user = c.get('user');
+    const recipes = await recipeService.getAll(user, filters);
     return c.json(recipes);
 });
 

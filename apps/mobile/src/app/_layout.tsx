@@ -12,6 +12,23 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth";
+import { Colors } from "@/constants/theme";
+
+const darkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: Colors.stone950,
+  },
+};
+
+const lightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: Colors.stone50,
+  },
+};
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,7 +54,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
         <QueryClientProvider client={queryClient}>
           <Stack>
             <Stack.Protected guard={!!session}>
@@ -47,7 +64,7 @@ export default function RootLayout() {
                 options={{ presentation: "modal", title: "Modal" }}
               />
               <Stack.Screen
-                name="recipe-modal"
+                name="recipe/[id]"
                 options={{
                   presentation: "pageSheet",
                   title: "Recipe",

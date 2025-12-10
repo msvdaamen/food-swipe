@@ -7,7 +7,7 @@ export type Recipe = {
   description: string;
   coverImageUrl: string;
   prepTime: number | null;
-  servings: number | null;
+  servings: number;
   isPublished: boolean;
   createdAt: string;
   nutrition: Record<Nutrition, RecipeNutrition>;

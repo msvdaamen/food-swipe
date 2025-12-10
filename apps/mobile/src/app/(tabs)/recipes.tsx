@@ -29,12 +29,7 @@ function Loading() {
 }
 
 function RecipesList() {
-  // const data = [{ id: 1 }];
-  const { data, isLoading, error } = useSuspenseQuery(getRecipesQueryOptions());
-
-  // if (isLoading) return <Loading />;
-
-  // if (error) return <FText>Error...</FText>;
+  const { data } = useSuspenseQuery(getRecipesQueryOptions());
 
   return (
     <SafeAreaView>
@@ -56,7 +51,10 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
   const router = useRouter();
 
   const handleRecipeCardPress = () => {
-    router.navigate("/recipe-modal");
+    router.navigate({
+      pathname: "/recipe/[id]",
+      params: { id: recipe.id, coverImageUrl: recipe.coverImageUrl },
+    });
   };
 
   return (
@@ -83,11 +81,13 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
           }}
         />
         <View style={styles.recipeCardOverlayContent}>
-          <FText style={styles.recipeCardText}>
-            Airfryer chicken 'tandoori' with rice and cucumber skyr
-          </FText>
+          <FText style={styles.recipeCardText}>{recipe.title}</FText>
           <View style={styles.recipeCardDetailsContainer}>
-            <FText style={styles.recipeCardDetailText}>1 cal</FText>
+            {recipe.nutrition.energy && (
+              <FText style={styles.recipeCardDetailText}>
+                {recipe.nutrition.energy.value} cal
+              </FText>
+            )}
             <View
               style={{
                 display: "flex",
@@ -98,7 +98,9 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
               }}
             >
               <Clock size={16} color="#d1d5db" />
-              <FText style={styles.recipeCardDetailText}>25 mins</FText>
+              <FText style={styles.recipeCardDetailText}>
+                {recipe.prepTime} mins
+              </FText>
             </View>
           </View>
         </View>
