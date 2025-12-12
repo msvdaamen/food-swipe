@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
-import { useAuthStore } from "@/features/auth/auth.store";
 import { useSignIn } from "@/features/auth/api/sign-in";
 import { authClient } from "@/lib/auth";
 

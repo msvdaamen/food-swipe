@@ -2,6 +2,6 @@
 export type RecipeStepModel = {
     id: number;
     description: string;
-    recipeId: number;
+    recipeId: string;
     stepNumber: number;
 };

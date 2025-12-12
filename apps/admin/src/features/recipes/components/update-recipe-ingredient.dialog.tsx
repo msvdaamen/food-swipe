@@ -31,7 +31,7 @@ import { useRecipeIngredientUpdate } from "../api/ingredients/update-recipe-ingr
 interface UpdateRecipeIngredientProps {
   isOpen: boolean;
   onClose: () => void;
-  recipeId: number;
+  recipeId: string;
   ingredient: RecipeIngredient;
 }
 

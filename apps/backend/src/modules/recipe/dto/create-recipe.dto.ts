@@ -1,6 +1,7 @@
 import { type } from "arktype";
 
 export const createRecipeDto = type({
+  id: "string.uuid",
   title: "string",
   description: "string",
   prepTime: "number >= 0",

@@ -5,7 +5,7 @@ import { NutritionUnit } from "../../constants/nutritions";
 import { getRecipeNutritionQueryOptions } from "./get-recipe-nutrition";
 
 export type UpdateRecipeNutritionInput = {
-  recipeId: number;
+  recipeId: string;
   name: string;
   data: {
     unit: NutritionUnit;

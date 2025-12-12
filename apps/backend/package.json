@@ -27,7 +27,7 @@
     "date-fns": "^4.1.0",
     "drizzle-kit": "^0.31.7",
     "drizzle-orm": "^0.44.7",
-    "hono": "^4.10.6",
+    "hono": "^4.10.8",
     "hono-rate-limiter": "^0.4.2",
     "jsonwebtoken": "^9.0.2",
     "openai": "^6.9.0",

@@ -4,7 +4,7 @@ import { RecipeStep } from "../../types/recipe-step.type";
 import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
 
 export type UpdateRecipeStepInput = {
-  recipeId: number;
+  recipeId: string;
   stepId: number;
   data: {
     description?: string;

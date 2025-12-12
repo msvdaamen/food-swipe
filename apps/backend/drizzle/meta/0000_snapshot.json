@@ -1,5 +1,5 @@
 {
-  "id": "0be84861-f44f-4b51-8d3c-ce8dd7fc794f",
+  "id": "a436abbe-4d77-40da-ad17-9a47105aef97",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -525,7 +525,7 @@
       "columns": {
         "recipe_id": {
           "name": "recipe_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -673,7 +673,7 @@
         },
         "recipe_id": {
           "name": "recipe_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -766,7 +766,7 @@
         },
         "recipe_id": {
           "name": "recipe_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -827,20 +827,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "recipes_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
+          "notNull": true
         },
         "title": {
           "name": "title",
@@ -914,7 +903,7 @@
         },
         "recipe_id": {
           "name": "recipe_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }

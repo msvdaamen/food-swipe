@@ -25,7 +25,7 @@ app.get('/', sValidator('query', loadRecipesDto), async (c) => {
 });
 
 app.get('/:id', async (c) => {
-    const recipe = await recipeService.getById(Number(c.req.param('id')));
+    const recipe = await recipeService.getById(c.req.param('id'));
     return c.json(recipe);
 });
 
@@ -37,7 +37,7 @@ app.post('/', sValidator('json', createRecipeDto), async (c) => {
 
 app.post('/:id/image', async (c) => {
     const userId = c.get('user').id;
-    const id = Number(c.req.param('id'));
+    const id = c.req.param('id');
     const body = await c.req.parseBody()
     const file = body['file'];
     if (!file || !(file instanceof File)) {
@@ -48,7 +48,7 @@ app.post('/:id/image', async (c) => {
 });
 
 app.put('/:id', sValidator('json', updateRecipeDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const payload = c.req.valid('json');
     const recipe = await recipeService.update(id, payload);
     return c.json(recipe);
@@ -56,30 +56,34 @@ app.put('/:id', sValidator('json', updateRecipeDto), async (c) => {
 
 app.post('/import', sValidator('json', importRecipeDto), async (c) => {
     const body = c.req.valid('json');
-    const recipe = await recipeService.importRecipe(body.url);
-    return c.json(recipe);
+    const user = c.get('user');
+    const recipeId = Bun.randomUUIDv7();
+    recipeService.importRecipe(user.id, recipeId, body.url);
+    return c.json({
+      recipeId
+    });
 });
 
 app.delete('/:id', async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     await recipeService.delete(id);
     return c.json({}, 201);
 });
 
 app.get('/:id/steps', async (c) => {
-    const steps = await recipeService.getSteps(Number(c.req.param('id')));
+    const steps = await recipeService.getSteps(c.req.param('id'));
     return c.json(steps);
 });
 
 app.post(':id/steps', sValidator('json', createRecipeStepDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const payload = c.req.valid('json');
     const step = await recipeService.createStep(id, payload);
     return c.json(step);
 });
 
 app.put('/:id/steps/:stepId', sValidator('json', updateRecipeStepDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const stepId = Number(c.req.param('stepId'));
     const payload = c.req.valid('json');
     const step = await recipeService.updateStep(id, stepId, payload);
@@ -87,14 +91,14 @@ app.put('/:id/steps/:stepId', sValidator('json', updateRecipeStepDto), async (c)
 });
 
 app.delete('/:id/steps/:stepId', async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const stepId = Number(c.req.param('stepId'));
     await recipeService.deleteStep(id, stepId);
     return c.json({}, 201);
 });
 
 app.put('/:id/steps/:stepId/reorder', sValidator('json', reorderRecipeStepDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const stepId = Number(c.req.param('stepId'));
     const payload = c.req.valid('json');
     const steps = await recipeService.reorderSteps(id, stepId, payload);
@@ -102,19 +106,19 @@ app.put('/:id/steps/:stepId/reorder', sValidator('json', reorderRecipeStepDto), 
 });
 
 app.get('/:id/ingredients', async (c) => {
-    const ingredients = await recipeService.getIngredients(Number(c.req.param('id')));
+    const ingredients = await recipeService.getIngredients(c.req.param('id'));
     return c.json(ingredients);
 });
 
 app.post(':id/ingredients', sValidator('json', createRecipeIngredientDto), async (c) => {
-    const id = Number(c.req.param('id'));
-    const payload = c.req.valid('json');
+  const id = c.req.param('id');
+  const payload = c.req.valid('json');
     const ingredient = await recipeService.createIngredient(id, payload);
     return c.json(ingredient);
 });
 
 app.put('/:id/ingredients/:ingredientId', sValidator('json', updateRecipeIngredientDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const ingredientId = Number(c.req.param('ingredientId'));
     const payload = c.req.valid('json');
     const ingredient = await recipeService.updateIngredient(id, ingredientId, payload);
@@ -122,21 +126,21 @@ app.put('/:id/ingredients/:ingredientId', sValidator('json', updateRecipeIngredi
 });
 
 app.delete('/:id/ingredients/:ingredientId', async (c) => {
-    const id = Number(c.req.param('id'));
+    const id = c.req.param('id');
     const ingredientId = Number(c.req.param('ingredientId'));
     await recipeService.deleteIngredient(id, ingredientId);
     return c.json({}, 201);
 });
 
 app.get('/:id/nutritions', async (c) => {
-    const nutritions = await recipeService.getNutrition(Number(c.req.param('id')));
+    const nutritions = await recipeService.getNutrition(c.req.param('id'));
     return c.json(nutritions);
 });
 
 
 const allowedNutritions = new Set<string>(nutritions);
 app.put('/:id/nutritions/:name', sValidator('json', updateRecipeNutritionDto), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const name = c.req.param('name');
     if (!name || !allowedNutritions.has(name)) {
         return c.json({}, 400);
@@ -147,7 +151,7 @@ app.put('/:id/nutritions/:name', sValidator('json', updateRecipeNutritionDto), a
 });
 
 app.post('/:id/like', sValidator('json', likeRecipeDtoSchema), async (c) => {
-    const id = Number(c.req.param('id'));
+  const id = c.req.param('id');
     const user = c.get('user');
     const {like} = c.req.valid('json');
     const {id: recipeId} = await recipeService.getById(id);

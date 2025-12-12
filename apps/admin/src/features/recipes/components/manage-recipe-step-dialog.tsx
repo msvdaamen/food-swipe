@@ -19,7 +19,7 @@ import { useRecipeStepCreate } from "../api/steps/create-recipe-step";
 import { useRecipeStepUpdate } from "../api/steps/update-recipe-step";
 
 interface ManageRecipeStepDialogProps {
-  recipeId: number;
+  recipeId: string;
   stepId?: number;
   isOpen: boolean;
   onClose: () => void;

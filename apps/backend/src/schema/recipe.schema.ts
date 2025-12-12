@@ -13,7 +13,7 @@ import type { Nutrition } from "../modules/recipe/constants/nutritions";
 export const recipes = pgTable(
   "recipes",
   t => ({
-    id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
+    id: t.uuid().primaryKey(),
     title: t.text().notNull(),
     description: t.text(),
     prepTime: t.integer(),
@@ -43,7 +43,7 @@ export const recipeSteps = pgTable(
   "recipe_steps",
   t => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
-    recipeId: t.integer()
+    recipeId: t.uuid()
       .notNull()
       .references(() => recipes.id, { onDelete: "cascade" }),
     stepNumber: t.integer().notNull(),
@@ -65,7 +65,7 @@ export type NewRecipeStepEntity = typeof recipeSteps.$inferInsert;
 export const recipeIngredients = pgTable(
   "recipe_ingredients",
   t => ({
-    recipeId: t.integer()
+    recipeId: t.uuid()
       .notNull()
       .references(() => recipes.id, { onDelete: "cascade" }),
     ingredientId: t.integer()
@@ -110,7 +110,7 @@ export const recipeNutritions = pgTable(
   "recipe_nutritions",
   t => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
-    recipeId: t.integer()
+    recipeId: t.uuid()
       .notNull()
       .references(() => recipes.id, { onDelete: "cascade" }),
     name: t.text().notNull(),
@@ -144,7 +144,7 @@ export const recipesToRecipeBooks = pgTable(
       .notNull()
       .references(() => recipeBooks.id),
     recipeId: t
-      .integer()
+      .uuid()
       .notNull()
       .references(() => recipes.id),
   }),

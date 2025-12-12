@@ -4,7 +4,7 @@ import { RecipeStep } from "../../types/recipe-step.type";
 import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
 
 export type DeleteRecipeStepInput = {
-  recipeId: number;
+  recipeId: string;
   stepId: number;
 };
 
@@ -18,7 +18,7 @@ export const deleteRecipeStep = async (payload: DeleteRecipeStepInput) => {
   return response.json() as Promise<void>;
 };
 
-export const useRecipeStepDelete = (recipeId: number) => {
+export const useRecipeStepDelete = (recipeId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteRecipeStep,

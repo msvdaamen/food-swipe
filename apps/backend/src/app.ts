@@ -9,6 +9,9 @@ import { registerMeasurementsController } from "./modules/measurement/measuremen
 import { registerIngredientController } from "./modules/ingredient/ingredient.controller.ts";
 import { registerRecipeBookController } from "./modules/recipe-book/recipe-book.controller.ts";
 import { auth } from "./lib/auth.ts";
+import type { Context } from "hono";
+import { testWebsocket } from "./modules/test.websocket.ts";
+import { websocketServer } from "./lib/websocket/server.ts";
 
 const app = new Hono();
 
@@ -42,14 +45,54 @@ app.on(["POST", "GET"], "/v1/auth/*", async (c) => {
   return await auth.handler(c.req.raw);
 });
 
-// registerAuthController(app);
+export const getBunServer = (c: Context) =>
+  ('server' in c.env ? c.env.server : c.env) as Bun.Server<{userId: string}> | undefined;
+
+app.get('/ws',async c => {
+  const server = getBunServer(c)
+  if (!server) {
+    return new Response("Server not found", { status: 500 });
+  }
+
+
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  server.upgrade(c.req.raw, {
+    data: {
+      userId: session.user.id
+    }
+  });
+  return new Response(null);
+})
+
 registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
 registerRecipeBookController(app);
 
-export default {
+const server = Bun.serve({
   port: process.env.APP_PORT || 3000,
   fetch: app.fetch,
-};
+  websocket: {
+    data: {} as {userId: string},
+    maxPayloadLength: 1024 * 1024, // 1 MB
+    perMessageDeflate: true,
+    message(ws, message) {
+      websocketServer.onMessage(ws, message);
+    },
+    open(ws) {
+      const { userId } = ws.data;
+      ws.subscribe(`user-${userId}`)
+    },
+    close(ws, code, message) {},
+    drain(ws) {}
+  }
+});
+await websocketServer.start(server);
+websocketServer.registerHandler(testWebsocket);
+
+console.log(`Server started url: ${server.url}`);

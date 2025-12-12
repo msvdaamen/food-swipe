@@ -4,7 +4,7 @@ import { RecipeIngredient } from "../../types/recipe-ingredient.type";
 import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
 
 export type DeleteRecipeIngredientInput = {
-  recipeId: number;
+  recipeId: string;
   ingredientId: number;
 }
 

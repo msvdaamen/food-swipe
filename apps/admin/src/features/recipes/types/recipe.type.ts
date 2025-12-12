@@ -2,7 +2,7 @@ import { Nutrition } from "../constants/nutritions";
 import { RecipeNutrition } from "./recipe-nutrition.type";
 
 export type Recipe = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   coverImageUrl: string;

@@ -1,6 +1,6 @@
 export type RecipeStep = {
   id: number;
   description: string;
-  recipeId: number;
+  recipeId: string;
   stepNumber: number;
 };

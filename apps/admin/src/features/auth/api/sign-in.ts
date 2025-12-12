@@ -12,5 +12,5 @@ export const signIn = (payload: SignInInput) => {
 
 export const useSignIn = () => useMutation({
   mutationFn: signIn,
-  onSuccess: (data) => {},
+  onSuccess: () => {},
 })
