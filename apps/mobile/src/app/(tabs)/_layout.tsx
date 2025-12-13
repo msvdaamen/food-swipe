@@ -3,19 +3,13 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/theme";
-import { House, Plane, Utensils } from "lucide-react-native";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { House, Utensils, User } from "lucide-react-native";
 
 export default function TabLayout() {
-  const tabBarActiveTintColor = useThemeColor({
-    dark: Colors.emerald600,
-    light: Colors.emerald600,
-  });
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: tabBarActiveTintColor,
+        tabBarActiveTintColor: Colors.emerald600,
         headerShown: false,
         tabBarButton: HapticTab,
       }}
@@ -35,10 +29,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => <Plane size={28} color={color} />,
+          title: "Profile",
+          tabBarIcon: ({ color }) => <User size={28} color={color} />,
         }}
       />
     </Tabs>

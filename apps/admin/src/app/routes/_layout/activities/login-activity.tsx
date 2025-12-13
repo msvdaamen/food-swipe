@@ -98,7 +98,7 @@ function UsersTable() {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.username}</TableCell>
                     <TableCell>
-                      {user.firstName} {user.lastName}
+                      {user.name}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       {format(new Date(user.createdAt), "MM/dd/yyyy")}

@@ -1,8 +1,3 @@
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  createdAt: string;
-};
+import { authClient } from "@/lib/auth";
+
+export type User = typeof authClient.$Infer.Session.user;

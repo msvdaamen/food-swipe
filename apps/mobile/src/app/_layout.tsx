@@ -60,10 +60,6 @@ export default function RootLayout() {
             <Stack.Protected guard={!!session}>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-              <Stack.Screen
                 name="recipe/[id]"
                 options={{
                   presentation: "pageSheet",
@@ -71,6 +67,22 @@ export default function RootLayout() {
                   headerShown: false,
                 }}
               />
+              <Stack.Screen
+                name="user/[id]"
+                options={{
+                  presentation: "card",
+                  title: "User",
+                  headerShown: false,
+                }}
+              />
+              {/*<Stack.Screen
+                name="user/[id]/follows"
+                options={{
+                  presentation: "card",
+                  title: "Follows",
+                  headerShown: false,
+                }}
+              />*/}
             </Stack.Protected>
 
             <Stack.Protected guard={!session}>

@@ -3,7 +3,7 @@ import { Recipe } from "../types/recipe.type";
 import { api } from "@/lib/api-client";
 
 export async function getRecipes() {
-  const response = await api.fetch(`/v1/recipes?isPublished=false`);
+  const response = await api.fetch(`/v1/recipes`);
   return response.json() as Promise<Recipe[]>;
 }
 

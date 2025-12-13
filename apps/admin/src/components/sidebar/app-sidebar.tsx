@@ -6,7 +6,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { User, Utensils, Egg, Ruler, Activity, Library } from "lucide-react";
+import { User, Utensils, Egg, Ruler, Activity, Library, Users } from "lucide-react";
 import SidebarLogo from "./sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -21,7 +21,6 @@ const data = {
   navMain: [
     {
       title: "Activity",
-      url: "#",
       icon: Activity,
       isActive: true,
       items: [
@@ -39,7 +38,6 @@ const data = {
     },
     {
       title: "Recipes",
-      url: "#",
       icon: Library,
       items: [
         {
@@ -59,6 +57,11 @@ const data = {
         },
       ],
     },
+    {
+      title: "Users",
+      icon: Users,
+      url: "/users"
+    }
   ],
 };
 

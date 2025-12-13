@@ -22,11 +22,10 @@ import { getRecipeNutritionOptions } from "@/features/recipe/api/get-recipe-nutr
 import { Skeleton } from "@/components/skeleton";
 
 export default function RecipeModal() {
-  const { id: routeRecipeId, coverImageUrl } = useLocalSearchParams<{
+  const { id: recipeId, coverImageUrl } = useLocalSearchParams<{
     id: string;
     coverImageUrl?: string;
   }>();
-  const recipeId = Number(routeRecipeId);
   const { data: recipe } = useRecipe(recipeId);
   const theme = useColorScheme();
   const backgroundColor = theme === "dark" ? Colors.stone950 : Colors.gray50;
@@ -65,7 +64,7 @@ export default function RecipeModal() {
   );
 }
 
-const Ingredients = ({ id, servings }: { id: number; servings: number }) => {
+const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
   const { data: ingredients } = useSuspenseQuery(
     getRecipeIngredientsOptions(id),
   );
@@ -105,7 +104,7 @@ const Ingredients = ({ id, servings }: { id: number; servings: number }) => {
   );
 };
 
-const Steps = ({ id }: { id: number }) => {
+const Steps = ({ id }: { id: string }) => {
   const { data: steps } = useSuspenseQuery(getRecipeStepsOptions(id));
 
   const theme = useColorScheme();
@@ -128,7 +127,7 @@ const Steps = ({ id }: { id: number }) => {
   );
 };
 
-const Nutritions = ({ id }: { id: number }) => {
+const Nutritions = ({ id }: { id: string }) => {
   const { data: recipeNutrition } = useSuspenseQuery(
     getRecipeNutritionOptions(id),
   );

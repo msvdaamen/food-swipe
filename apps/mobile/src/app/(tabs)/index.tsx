@@ -4,7 +4,6 @@ import { Platform, StyleSheet, View } from "react-native";
 import { HelloWave } from "@/components/hello-wave";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { FText } from "@/components/f-text";
-import { Link } from "expo-router";
 
 export default function HomeScreen() {
   return (
@@ -33,38 +32,6 @@ export default function HomeScreen() {
             })}
           </FText>{" "}
           to open developer tools.
-        </FText>
-      </View>
-      <View style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <FText>Step 2: Explore</FText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction
-              title="Action"
-              icon="cube"
-              onPress={() => alert("Action pressed")}
-            />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert("Share pressed")}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert("Delete pressed")}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <FText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </FText>
       </View>
       <View style={styles.stepContainer}>

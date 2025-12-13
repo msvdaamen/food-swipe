@@ -8,6 +8,7 @@ export type GetUsersInput = {
   amount: number;
   page: number;
   sort: string;
+
 };
 
 export const getUsers = async (payload: GetUsersInput) => {

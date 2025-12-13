@@ -12,6 +12,7 @@ export type SignUpInput = {
 export async function signUp(input: SignUpInput) {
   return authClient.signUp.email({
     ...input,
+    username: input.username,
     name: `${input.firstName} ${input.lastName}`,
   });
 }

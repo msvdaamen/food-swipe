@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getWebsocketClient } from "@/lib/websocket";
 import { useRouter } from "@tanstack/react-router";
+import { useSignOut } from "@/features/auth/api/sign-out";
 
 export function NavUser({
   user,
@@ -42,19 +43,20 @@ export function NavUser({
   };
 }) {
   const router = useRouter();
+  const signOut = useSignOut();
   const { isMobile } = useSidebar();
   const shortName = user.name
     .split(" ")
     .map((name) => name[0])
     .join("");
 
-  function logout() {
+  async function logout() {
     const websocketClient = getWebsocketClient();
     if (websocketClient) {
       websocketClient.disconnect();
-      router.navigate({ to: "/auth/sign-in" });
     }
-    // Implement logout logic here
+    await signOut.mutateAsync();
+    router.navigate({ to: "/auth/sign-in" });
   }
 
   return (

@@ -19,7 +19,7 @@ import { useSignUp } from "@/features/auth/api/sign-up";
 
 const signUpSchema = type({
   email: "string.email",
-  username: "string >= 3",
+  username: "/^[a-z0-9_-]{3,30}$/",
   password: "string >= 6",
   firstName: "string >= 1",
   lastName: "string >= 1",

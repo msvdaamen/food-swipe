@@ -13,6 +13,7 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as LayoutUsersRouteImport } from './routes/_layout/users'
 import { Route as LayoutActivitiesRouteRouteImport } from './routes/_layout/activities/route'
 import { Route as LayoutRecipesRecipesRouteImport } from './routes/_layout/recipes/recipes'
 import { Route as LayoutRecipesMeasurementsRouteImport } from './routes/_layout/recipes/measurements'
@@ -39,6 +40,11 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutUsersRoute = LayoutUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutActivitiesRouteRoute = LayoutActivitiesRouteRouteImport.update({
   id: '/activities',
@@ -83,6 +89,7 @@ const LayoutActivitiesLoginActivityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/users': typeof LayoutUsersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth': typeof AuthIndexRoute
   '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/users': typeof LayoutUsersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth': typeof AuthIndexRoute
   '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/activities': typeof LayoutActivitiesRouteRouteWithChildren
+  '/_layout/users': typeof LayoutUsersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/': typeof AuthIndexRoute
   '/_layout/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/activities'
+    | '/users'
     | '/auth/sign-in'
     | '/auth'
     | '/activities/login-activity'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/activities'
+    | '/users'
     | '/auth/sign-in'
     | '/auth'
     | '/activities/login-activity'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_layout'
     | '/_layout/activities'
+    | '/_layout/users'
     | '/auth/sign-in'
     | '/auth/'
     | '/_layout/activities/login-activity'
@@ -194,6 +206,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/sign-in'
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_layout/users': {
+      id: '/_layout/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof LayoutUsersRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/activities': {
       id: '/_layout/activities'
@@ -264,6 +283,7 @@ const LayoutActivitiesRouteRouteWithChildren =
 
 interface LayoutRouteChildren {
   LayoutActivitiesRouteRoute: typeof LayoutActivitiesRouteRouteWithChildren
+  LayoutUsersRoute: typeof LayoutUsersRoute
   LayoutRecipesRecipeIdRoute: typeof LayoutRecipesRecipeIdRoute
   LayoutRecipesIngredientsRoute: typeof LayoutRecipesIngredientsRoute
   LayoutRecipesMeasurementsRoute: typeof LayoutRecipesMeasurementsRoute
@@ -272,6 +292,7 @@ interface LayoutRouteChildren {
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutActivitiesRouteRoute: LayoutActivitiesRouteRouteWithChildren,
+  LayoutUsersRoute: LayoutUsersRoute,
   LayoutRecipesRecipeIdRoute: LayoutRecipesRecipeIdRoute,
   LayoutRecipesIngredientsRoute: LayoutRecipesIngredientsRoute,
   LayoutRecipesMeasurementsRoute: LayoutRecipesMeasurementsRoute,
