@@ -4,7 +4,7 @@ import { api } from "@/lib/api";
 import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
 
 export type CreateRecipeIngredientInput = {
-  recipeId: number;
+  recipeId: string;
   data: {
     ingredientId: number;
     amount: number;

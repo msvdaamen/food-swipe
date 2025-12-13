@@ -65,11 +65,6 @@ export const Route = createFileRoute("/_layout/recipes/$recipeId")({
   context: () => ({
     breadcrumb: "Recipes",
   }),
-  params: {
-    parse: (params) => ({
-      recipeId: Number(params.recipeId),
-    }),
-  },
 });
 
 function RouteComponent() {
@@ -87,7 +82,7 @@ function RouteComponent() {
   const [isChangingImage, setIsChangingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDeleteRecipe = (id: number) => {
+  const handleDeleteRecipe = (id: string) => {
     deleteRecipe.mutate(id);
   };
 
@@ -218,7 +213,7 @@ function RouteComponent() {
   );
 }
 
-function Ingredients({ recipeId }: { recipeId: number }) {
+function Ingredients({ recipeId }: { recipeId: string }) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] =
@@ -311,7 +306,7 @@ function Ingredients({ recipeId }: { recipeId: number }) {
   );
 }
 
-function Steps({ recipeId }: { recipeId: number }) {
+function Steps({ recipeId }: { recipeId: string }) {
   const { data: steps, isLoading } = useRecipeSteps(recipeId);
   const reorderSteps = useRecipeStepsReorder(recipeId);
   const deleteStep = useRecipeStepDelete(recipeId);
@@ -456,7 +451,7 @@ function SortableStep({
   );
 }
 
-function Nutritions({ recipeId }: { recipeId: number }) {
+function Nutritions({ recipeId }: { recipeId: string }) {
   const { data, isFetching } = useRecipeNutrition(recipeId);
 
   const nutritions = useMemo(() => {

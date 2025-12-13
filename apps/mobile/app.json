@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.msvdaamen.food-swipe"
+      "package": "com.msvdaamen.foodswipe"
     },
     "web": {
       "output": "static",

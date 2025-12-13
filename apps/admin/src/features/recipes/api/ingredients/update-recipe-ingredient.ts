@@ -4,7 +4,7 @@ import { RecipeIngredient } from "../../types/recipe-ingredient.type";
 import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
 
 export type UpdateRecipeIngredientInput = {
-  recipeId: number;
+  recipeId: string;
   ingredientId: number;
   data: {
     amount?: number;

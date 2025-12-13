@@ -29,6 +29,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { getWebsocketClient } from "@/lib/websocket";
+import { useRouter } from "@tanstack/react-router";
 
 export function NavUser({
   user,
@@ -39,11 +41,21 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const router = useRouter();
   const { isMobile } = useSidebar();
   const shortName = user.name
     .split(" ")
     .map((name) => name[0])
     .join("");
+
+  function logout() {
+    const websocketClient = getWebsocketClient();
+    if (websocketClient) {
+      websocketClient.disconnect();
+      router.navigate({ to: "/auth/sign-in" });
+    }
+    // Implement logout logic here
+  }
 
   return (
     <SidebarMenu>
@@ -110,7 +122,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

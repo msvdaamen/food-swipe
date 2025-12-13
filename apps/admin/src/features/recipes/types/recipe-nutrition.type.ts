@@ -5,7 +5,7 @@ import {
 
 export type RecipeNutrition = {
   id: number;
-  recipeId: number;
+  recipeId: string;
   name: Nutrition;
   unit: NutritionUnit;
   value: number;

@@ -30,7 +30,7 @@ import { useRecipeIngredientCreate } from "../api/ingredients/create-recipe-ingr
 interface CreateRecipeIngredientProps {
   isOpen: boolean;
   onClose: () => void;
-  recipeId: number;
+  recipeId: string;
 }
 
 const validator = type({

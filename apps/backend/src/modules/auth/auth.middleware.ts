@@ -1,10 +1,11 @@
 import { createMiddleware } from "hono/factory";
 import { auth } from "../../lib/auth";
 import {startSpan} from "@sentry/bun";
+import type { AuthUser } from "./auth-user";
 
 export type AuthContext = {
   Variables: {
-    user: typeof auth.$Infer.Session.user;
+    user: AuthUser;
   };
 };
 

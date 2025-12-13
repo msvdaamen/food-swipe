@@ -31,19 +31,18 @@ export default function SignUp() {
 
   const form = useForm({
     defaultValues: {
-      email: "msv.daamen@outlook.com",
-      username: "msvdaamen",
-      password: "Gymshark98!",
-      passwordConfirmation: "Gymshark98!",
-      firstName: "Mischa",
-      lastName: "Daamen",
+      email: "",
+      username: "",
+      password: "",
+      passwordConfirmation: "",
+      firstName: "",
+      lastName: "",
     },
     validators: {
       onSubmit: signUpSchema,
     },
     onSubmit: async ({ value }) => {
       const response = await signUp.mutateAsync(value);
-      console.log(response);
       if (!response.error) {
         router.replace("/");
       }

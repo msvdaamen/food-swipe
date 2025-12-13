@@ -2,7 +2,7 @@ import type { RecipeNutritionEntity } from "../../../schema";
 import type { Nutrition } from "../constants/nutritions";
 
 export type RecipeModel = {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   prepTime: number | null;

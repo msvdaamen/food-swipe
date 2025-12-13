@@ -27,8 +27,8 @@ export default function SignIn() {
 
   const form = useForm({
     defaultValues: {
-      email: "msv.daamen@outlook.com",
-      password: "Gymshark98!",
+      email: "",
+      password: "",
     },
     validators: {
       onSubmit: signInSchema,

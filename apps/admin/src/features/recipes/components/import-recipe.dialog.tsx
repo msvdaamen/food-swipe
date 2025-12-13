@@ -17,7 +17,7 @@ import { useRecipeImport } from "../api/import-recipe";
 
 interface ImportRecipeDialogProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (recipeId?: string) => void;
 }
 
 const validator = type({
@@ -38,14 +38,14 @@ export const ImportRecipeDialog: FC<ImportRecipeDialogProps> = ({
       onChange: validator,
     },
     onSubmit: async ({ value, formApi }) => {
-      await importRecipe.mutateAsync(value.url);
+      const {recipeId} = await importRecipe.mutateAsync(value.url);
       formApi.reset();
-      onClose();
+      onClose(recipeId);
     },
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Import recipe</DialogTitle>
@@ -70,7 +70,7 @@ export const ImportRecipeDialog: FC<ImportRecipeDialogProps> = ({
           />
         </form>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={() => onClose()}>
             Close
           </Button>
           <form.Subscribe

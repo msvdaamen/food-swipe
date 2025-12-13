@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.msvdaamen.mobile'
+    namespace 'com.msvdaamen.foodswipe'
     defaultConfig {
-        applicationId 'com.msvdaamen.mobile'
+        applicationId 'com.msvdaamen.foodswipe'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

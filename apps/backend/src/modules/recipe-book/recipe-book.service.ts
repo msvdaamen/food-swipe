@@ -3,7 +3,7 @@ import { recipeBooks, type RecipeBookEntity } from "../../schema";
 import type { CreateRecipeBookDto } from "./dto/create-recipe-book.dto";
 import { eq, and } from "drizzle-orm";
 export class RecipeBookService extends DbService {
-  async getRecipeBooks(userId: number): Promise<RecipeBookEntity[]> {
+  async getRecipeBooks(userId: string): Promise<RecipeBookEntity[]> {
     const result = await this.database
       .select()
       .from(recipeBooks)
@@ -12,7 +12,7 @@ export class RecipeBookService extends DbService {
   }
 
   async getRecipeBook(
-    userId: number,
+    userId: string,
     recipeBookId: number
   ): Promise<RecipeBookEntity> {
     const [result] = await this.database
@@ -24,7 +24,7 @@ export class RecipeBookService extends DbService {
     return result;
   }
 
-  async getLikedRecipeBook(userId: number): Promise<RecipeBookEntity> {
+  async getLikedRecipeBook(userId: string): Promise<RecipeBookEntity> {
     const [result] = await this.database
       .select()
       .from(recipeBooks)
@@ -38,7 +38,7 @@ export class RecipeBookService extends DbService {
   }
 
   async createLikedRecipeBook(
-    userId: number,
+    userId: string,
     payload: CreateRecipeBookDto
   ): Promise<RecipeBookEntity> {
     const [result] = await this.database
@@ -53,7 +53,7 @@ export class RecipeBookService extends DbService {
   }
 
   async createRecipeBook(
-    userId: number,
+    userId: string,
     payload: CreateRecipeBookDto
   ): Promise<RecipeBookEntity> {
     const [result] = await this.database

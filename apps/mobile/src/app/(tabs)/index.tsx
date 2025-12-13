@@ -1,10 +1,9 @@
 import { Image } from "expo-image";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { HelloWave } from "@/components/hello-wave";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { FText } from "@/components/f-text";
-import { FView } from "@/components/f-view";
 import { Link } from "expo-router";
 
 export default function HomeScreen() {
@@ -18,16 +17,15 @@ export default function HomeScreen() {
         />
       }
     >
-      <FView style={styles.titleContainer}>
-        <FText type="title">Welcome!</FText>
+      <View style={styles.titleContainer}>
+        <FText>Welcome!</FText>
         <HelloWave />
-      </FView>
-      <FView style={styles.stepContainer}>
-        <FText type="subtitle">Step 1: Try it</FText>
+      </View>
+      <View style={styles.stepContainer}>
+        <FText>Step 1: Try it</FText>
         <FText>
-          Edit <FText type="defaultSemiBold">app/(tabs)/index.tsx</FText> to see
-          changes. Press{" "}
-          <FText type="defaultSemiBold">
+          Edit <FText>app/(tabs)/index.tsx</FText> to see changes. Press{" "}
+          <FText>
             {Platform.select({
               ios: "cmd + d",
               android: "cmd + m",
@@ -36,11 +34,11 @@ export default function HomeScreen() {
           </FText>{" "}
           to open developer tools.
         </FText>
-      </FView>
-      <FView style={styles.stepContainer}>
+      </View>
+      <View style={styles.stepContainer}>
         <Link href="/modal">
           <Link.Trigger>
-            <FText type="subtitle">Step 2: Explore</FText>
+            <FText>Step 2: Explore</FText>
           </Link.Trigger>
           <Link.Preview />
           <Link.Menu>
@@ -68,17 +66,16 @@ export default function HomeScreen() {
         <FText>
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </FText>
-      </FView>
-      <FView style={styles.stepContainer}>
-        <FText type="subtitle">Step 3: Get a fresh start</FText>
+      </View>
+      <View style={styles.stepContainer}>
+        <FText>Step 3: Get a fresh start</FText>
         <FText>
           {`When you're ready, run `}
-          <FText type="defaultSemiBold">npm run reset-project</FText> to get a
-          fresh <FText type="defaultSemiBold">app</FText> directory. This will
-          move the current <FText type="defaultSemiBold">app</FText> to{" "}
-          <FText type="defaultSemiBold">app-example</FText>.
+          <FText>npm run reset-project</FText> to get a fresh <FText>app</FText>{" "}
+          directory. This will move the current <FText>app</FText> to{" "}
+          <FText>app-example</FText>.
         </FText>
-      </FView>
+      </View>
     </ParallaxScrollView>
   );
 }

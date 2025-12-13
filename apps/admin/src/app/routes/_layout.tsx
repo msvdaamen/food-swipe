@@ -4,12 +4,15 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Separator } from "@/components/ui/separator";
 import AppBreadcrumbs from "@/components/app-breadcrumbs";
+import { useWebsocket } from "@/lib/websocket";
 
 export const Route = createFileRoute("/_layout")({
   component: Layout,
 });
 
 function Layout() {
+  const websocketClient = useWebsocket();
+  websocketClient.connect();
   return (
     <SidebarProvider>
       <AppSidebar />

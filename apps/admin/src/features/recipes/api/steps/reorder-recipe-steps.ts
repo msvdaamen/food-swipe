@@ -5,7 +5,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
 
 export type ReorderRecipeStepsInput = {
-  recipeId: number;
+  recipeId: string;
   stepId: number;
   data: {
     orderFrom: number;
@@ -24,7 +24,7 @@ export const reorderRecipeSteps = async (payload: ReorderRecipeStepsInput) => {
   return response.json() as Promise<RecipeStep[]>;
 };
 
-export const useRecipeStepsReorder = (recipeId: number) => {
+export const useRecipeStepsReorder = (recipeId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: reorderRecipeSteps,

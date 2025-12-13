@@ -1,5 +1,5 @@
 export type RecipeIngredientModel = {
-    recipeId: number;
+    recipeId: string;
     ingredientId: number;
     ingredient: string;
     measurementId: number | null;

@@ -44,6 +44,9 @@ import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto.ts";
 import type { Nutrition } from "./constants/nutritions.ts";
 import OpenAI from "openai";
 import { RecipeBookService, recipeBookService } from "../recipe-book/recipe-book.service.ts";
+import type { AuthUser } from "../auth/auth-user.ts";
+import type { IWebsocketServer } from "../../lib/websocket/types.ts";
+import { websocketServer } from "../../lib/websocket/server.ts";
 
 export class RecipeService extends DbService {
 
@@ -52,11 +55,16 @@ export class RecipeService extends DbService {
     private readonly measurementService: MeasurementService,
     private readonly ingredientService: IngredientService,
     private readonly recipeBookService: RecipeBookService,
+    private readonly websocketServer: IWebsocketServer
   ) {
     super();
   }
 
-  async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
+  async getAll(user: AuthUser, filters: LoadRecipesDto): Promise<RecipeModel[]> {
+    if (user.role !== 'admin') {
+      filters.isPublished = true;
+    }
+
     const results = await this.database
       .select({
         recipe: recipes,
@@ -77,7 +85,7 @@ export class RecipeService extends DbService {
     return Object.values(recipesMap);
   }
 
-  async getById(id: number): Promise<RecipeModel> {
+  async getById(id: string): Promise<RecipeModel> {
     const results = await this.database
       .select({
         recipe: recipes,
@@ -107,7 +115,7 @@ export class RecipeService extends DbService {
   }
 
   async update(
-    recipeId: number,
+    recipeId: string,
     payload: UpdateRecipeDto
   ): Promise<RecipeModel> {
     await this.database
@@ -119,7 +127,7 @@ export class RecipeService extends DbService {
   }
 
   async uploadImage(
-    recipeId: number,
+    recipeId: string,
     file: File
   ): Promise<RecipeModel> {
     const [recipe] = await this.database
@@ -141,14 +149,14 @@ export class RecipeService extends DbService {
     return await this.getById(recipe.id);
   }
 
-  async delete(recipeId: number) {
+  async delete(recipeId: string) {
     await this.database
       .delete(recipes)
       .where(eq(recipes.id, recipeId))
       .execute();
   }
 
-  async getSteps(recipeId: number): Promise<RecipeStepModel[]> {
+  async getSteps(recipeId: string): Promise<RecipeStepModel[]> {
     const steps = await this.database
       .select()
       .from(recipeSteps)
@@ -159,7 +167,7 @@ export class RecipeService extends DbService {
   }
 
   async createStep(
-    recipeId: number,
+    recipeId: string,
     payload: CreateRecipeStepDto
   ): Promise<RecipeStepModel> {
     return await this.transaction(async () => {
@@ -188,7 +196,7 @@ export class RecipeService extends DbService {
   }
 
   async updateStep(
-    recipeId: number,
+    recipeId: string,
     stepId: number,
     payload: UpdateRecipeStepDto
   ): Promise<RecipeStepModel> {
@@ -202,7 +210,7 @@ export class RecipeService extends DbService {
     return step;
   }
 
-  async deleteStep(recipeId: number, stepId: number) {
+  async deleteStep(recipeId: string, stepId: number) {
     await this.transaction(async () => {
       const [step] = await this.database
         .delete(recipeSteps)
@@ -225,7 +233,7 @@ export class RecipeService extends DbService {
   }
 
   async reorderSteps(
-    recipeId: number,
+    recipeId: string,
     stepId: number,
     { orderTo, orderFrom }: ReorderRecipeStepDto
   ) {
@@ -279,7 +287,7 @@ export class RecipeService extends DbService {
     return this.getSteps(recipeId);
   }
 
-  async getIngredients(recipeId: number): Promise<RecipeIngredientModel[]> {
+  async getIngredients(recipeId: string): Promise<RecipeIngredientModel[]> {
     const result = await this.database
       .select({
         recipeIngredient: recipeIngredients,
@@ -306,7 +314,7 @@ export class RecipeService extends DbService {
   }
 
   async getIngredient(
-    recipeId: number,
+    recipeId: string,
     ingredientId: number
   ): Promise<RecipeIngredientModel> {
     const [recipeIngredient] = await this.database
@@ -339,7 +347,7 @@ export class RecipeService extends DbService {
   }
 
   async createIngredient(
-    recipeId: number,
+    recipeId: string,
     payload: CreateRecipeIngredientDto
   ): Promise<RecipeIngredientModel> {
     const [{ ingredientId }] = await this.database
@@ -353,7 +361,7 @@ export class RecipeService extends DbService {
   }
 
   async updateIngredient(
-    recipeId: number,
+    recipeId: string,
     ingredientId: number,
     payload: UpdateRecipeIngredientDto
   ): Promise<RecipeIngredientModel> {
@@ -371,7 +379,7 @@ export class RecipeService extends DbService {
     return await this.getIngredient(recipeId, updatedIngredientId);
   }
 
-  async deleteIngredient(recipeId: number, ingredientId: number) {
+  async deleteIngredient(recipeId: string, ingredientId: number) {
     await this.database
       .delete(recipeIngredients)
       .where(
@@ -383,7 +391,7 @@ export class RecipeService extends DbService {
       .execute();
   }
 
-  async getNutrition(recipeId: number): Promise<RecipeNutritionEntity[]> {
+  async getNutrition(recipeId: string): Promise<RecipeNutritionEntity[]> {
     const nutritions = await this.database
       .select()
       .from(recipeNutritions)
@@ -394,7 +402,7 @@ export class RecipeService extends DbService {
   }
 
   async updateNutrition(
-    recipeId: number,
+    recipeId: string,
     name: Nutrition,
     payload: UpdateRecipeNutritionDto
   ): Promise<RecipeNutritionEntity> {
@@ -414,7 +422,7 @@ export class RecipeService extends DbService {
   }
 
   async createNutrition(
-    recipeId: number,
+    recipeId: string,
     payload: CreateRecipeNutritionDto
   ): Promise<RecipeNutritionEntity> {
     const [nutrition] = await this.database
@@ -430,7 +438,7 @@ export class RecipeService extends DbService {
   }
 
   async createManyNutritions(
-    recipeId: number,
+    recipeId: string,
     payload: CreateRecipeNutritionDto[]
   ) {
     const inserts = payload.map((nutrition) => ({
@@ -446,7 +454,7 @@ export class RecipeService extends DbService {
     return nutritions;
   }
 
-  async importRecipe(url: string) {
+  async importRecipe(userId: string, recipeId: string, url: string) {
     const idPart = url.split("/").find((part) => part.startsWith("R-R"));
     if (!idPart) {
       throw new Error("Invalid URL");
@@ -465,6 +473,13 @@ export class RecipeService extends DbService {
       throw new Error("Recipe already exists");
     }
     const openai = new OpenAI();
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "translating"
+      },
+    });
     const translatedRecipe = await openai.chat.completions.create({
       model: "gpt-5-nano",
       messages: [
@@ -474,6 +489,13 @@ export class RecipeService extends DbService {
         },
       ],
       store: false,
+    });
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "translated"
+      },
     });
     const translatedRecipeContent = translatedRecipe.choices[0].message.content;
     if (!translatedRecipeContent) {
@@ -486,15 +508,48 @@ export class RecipeService extends DbService {
       jsonEndIndex
     );
     const translatedRecipeJson = JSON.parse(jsonString) as AHRecipe;
-    const imageResponse = await fetch(
+    const imageUri = translatedRecipeJson.images[0].url;
+    const imageFileName = imageUri.split("/").pop()!;
+    const baseImageResponse = await fetch(
       recipe.images[recipe.images.length - 1].url,
       { method: "GET" }
     );
-    const imageBuffer = await imageResponse.blob();
+    const baseImageBuffer = await baseImageResponse.blob();
+    const baseImageFile = new File([baseImageBuffer], imageFileName);
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "generating-image"
+      },
+    });
+    const generatedImageResponse = await openai.images.edit({
+      model: 'gpt-image-1',
+      quality: 'auto',
+      prompt: `Generate an image of a ${translatedRecipeJson.title} recipe. use the input image as a reference. Only generate the actual dish. use a angled camera position as if it was taken from the side / above. Make sure the image is in a high quality and has a good resolution. so that i can use it as a cover image for the recipe`,
+      image: baseImageFile,
+      size: "1024x1024",
+    });
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "image-generated"
+      },
+    });
+    const imageBase64 = generatedImageResponse.data![0]?.b64_json;
+    const imageBuffer = imageBase64 ? Buffer.from(imageBase64!, "base64") : baseImageBuffer;
     const imageFile = new File([imageBuffer], recipe.title);
     const coverImageUrl = await this.storage.upload(imageFile, true);
-
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "saving"
+      },
+    });
     const newRecipe = await this.create({
+      id: recipeId,
       title: translatedRecipeJson.title,
       description: translatedRecipeJson.description,
       calories: translatedRecipeJson.nutritions.energy && translatedRecipeJson.nutritions?.energy.value || 0,
@@ -555,10 +610,17 @@ export class RecipeService extends DbService {
     if (nutritions.length) {
       await this.createManyNutritions(newRecipe.id, nutritions);
     }
+    this.websocketServer.send(userId, {
+      type: "recipe-import-updated",
+      data: {
+        recipeId,
+        status: "done"
+      },
+    });
     return await this.getById(newRecipe.id);
   }
 
-  async like(userId: number, recipeId: number, like: boolean) {
+  async like(userId: string, recipeId: string, like: boolean) {
     const recipeBook = await this.recipeBookService.getLikedRecipeBook(userId);
     if (!like) {
       await this.database
@@ -580,8 +642,8 @@ export class RecipeService extends DbService {
     return this.getById(recipeId);
   }
 
-  private mapRecipeToModel(results: { recipe: RecipeEntity, nutrition: RecipeNutritionEntity | null }[]): Record<number, RecipeModel> {
-    const recipesMap: Record<number, RecipeModel> = {};
+  private mapRecipeToModel(results: { recipe: RecipeEntity, nutrition: RecipeNutritionEntity | null }[]): Record<string, RecipeModel> {
+    const recipesMap: Record<string, RecipeModel> = {};
     for (const result of results) {
       const recipe: RecipeModel = recipesMap[result.recipe.id] || {
         ...result.recipe,
@@ -603,5 +665,6 @@ export const recipeService = new RecipeService(
   storageService,
   measurementService,
   ingredientService,
-  recipeBookService
+  recipeBookService,
+  websocketServer
 );

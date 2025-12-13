@@ -4,7 +4,7 @@ import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
 import { RecipeStep } from "../../types/recipe-step.type";
 
 export type CreateRecipeStepInput = {
-  recipeId: number;
+  recipeId: string;
   data: {
     description: string;
     order: number;

@@ -6,7 +6,7 @@ import { getRecipeQueryOptions } from "./get-recipe";
 import { getRecipesQueryOptions } from "./get-recipes";
 
 export type UpdateRecipeInput = {
-  recipeId: number;
+  recipeId: string;
   data: {
     title?: string;
     description?: string;

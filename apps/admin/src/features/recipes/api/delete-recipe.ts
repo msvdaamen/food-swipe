@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getRecipesQueryOptions } from "./get-recipes";
 import { Recipe } from "../types/recipe.type";
 
-export const deleteRecipe = async (recipeId: number) => {
+export const deleteRecipe = async (recipeId: string) => {
   const response = await api.fetch(`/v1/recipes/${recipeId}`, {
     method: 'DELETE'
   });

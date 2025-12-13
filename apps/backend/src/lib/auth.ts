@@ -5,7 +5,6 @@ import { username, admin } from "better-auth/plugins"
 import { expo } from "@better-auth/expo";
 import { cacheProvider } from "../providers/cache.provider";
 
-
 export const auth = betterAuth({
   basePath: "/v1/auth",
   database: drizzleAdapter(databaseProvider, {
