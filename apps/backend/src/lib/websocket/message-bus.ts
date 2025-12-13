@@ -1,6 +1,5 @@
 import type { RedisClient } from "bun";
 import type { WebsocketEvent } from "./types";
-import { cacheProvider } from "../../providers/cache.provider";
 
 type Message = {
   room: string;
