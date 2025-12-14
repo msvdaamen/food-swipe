@@ -1,43 +1,30 @@
-import { eq } from "drizzle-orm";
-import { DbService } from "../../common/db.service";
-import { storageService, type StorageService } from "../../providers/storage/storage.service";
-import { users } from "../../schema";
-import type { AuthUser } from "./auth-user";
+import {
+  storageService,
+  type StorageService,
+} from "../../providers/storage/storage.service";
+import { userService, type UserService } from "../user/user.service";
 
-
-
-export class AuthService extends DbService {
-
+export class AuthService {
   constructor(
     private readonly storageService: StorageService,
-  ) {
-    super();
-  }
+    private readonly userService: UserService,
+  ) {}
 
   async getAuthUser(userId: string) {
-    const [user] = await this.database.select().from(users).where(eq(users.id, userId)).execute();
-    user.image = this.getProfileImageUrl(user.image);
-    return user;
-  }
-
-  getProfileImageUrl(filename: string | null): string | null {
-    return filename ? storageService.getPublicUrl(filename) : null;
+    return await this.userService.findById(userId);
   }
 
   async uploadProfilePicture(userId: string, file: File): Promise<string> {
-    const [user] = await this.database.select().from(users).where(eq(users.id, userId)).execute();
+    const user = await this.userService.findById(userId);
     if (!user) throw new Error("User not found");
 
     const filename = await this.storageService.upload(file, {
       isPublic: true,
-      path: "profiles"
+      path: "profiles",
     });
 
     try {
-      await this.database.update(users)
-        .set({ image: filename })
-        .where(eq(users.id, user.id))
-        .execute();
+      await this.userService.updateUser(userId, { image: filename });
     } catch (error) {
       await this.storageService.delete(filename, {
         isPublic: true,
@@ -53,7 +40,6 @@ export class AuthService extends DbService {
 
     return filename;
   }
-
 }
 
-export const authService = new AuthService(storageService);
+export const authService = new AuthService(storageService, userService);

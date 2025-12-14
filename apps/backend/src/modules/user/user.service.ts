@@ -1,10 +1,6 @@
 import { and, count, eq, gte, lte, sql } from "drizzle-orm";
 import { DbService } from "../../common/db.service";
-import {
-  users,
-  type NewUserEntity,
-  type UserEntity,
-} from "../../schema";
+import { users, type NewUserEntity, type UserEntity } from "../../schema";
 import type { GetUsersDto } from "./dto/get-users.dto";
 import { CreatePagination } from "../../common/create-pagination";
 import type { UserModel } from "./models/user.model";
@@ -15,9 +11,16 @@ import {
 } from "../../providers/cache.provider";
 import { format } from "date-fns";
 import { sessions } from "../../schema/auth.schema";
+import {
+  storageService,
+  type StorageService,
+} from "../../providers/storage/storage.service";
 
 export class UserService extends DbService {
-  constructor(private readonly cache: CacheProvider) {
+  constructor(
+    private readonly cache: CacheProvider,
+    private readonly storageService: StorageService,
+  ) {
     super();
   }
 
@@ -27,11 +30,17 @@ export class UserService extends DbService {
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
-    return user;
+    if (!user) return undefined;
+    const profileImageUrl = this.getProfileImageUrl(user.image);
+    return { ...user, image: profileImageUrl };
+  }
+
+  getProfileImageUrl(filename: string | null): string | null {
+    return filename ? this.storageService.getPublicUrl(filename) : null;
   }
 
   async findByEmailWithPassword(
-    email: string
+    email: string,
   ): Promise<UserEntity | undefined> {
     const [user] = await this.database
       .select()
@@ -48,6 +57,14 @@ export class UserService extends DbService {
       .where(eq(users.email, email))
       .limit(1);
     return user;
+  }
+
+  async updateUser(userId: string, payload: Partial<UserEntity>) {
+    await this.database
+      .update(users)
+      .set(payload)
+      .where(eq(users.id, userId))
+      .execute();
   }
 
   async getUsers(dto: GetUsersDto): Promise<PaginatedData<UserModel>> {
@@ -108,12 +125,7 @@ export class UserService extends DbService {
       .select({ count: sql`count(distinct ${users.id})`.mapWith(Number) })
       .from(users)
       .innerJoin(sessions, eq(users.id, sessions.userId))
-      .where(
-        and(
-          gte(sessions.createdAt, from),
-          lte(sessions.createdAt, until)
-        )
-      )
+      .where(and(gte(sessions.createdAt, from), lte(sessions.createdAt, until)))
       .limit(1);
 
     await this.cache.set(cacheKey, result.count.toString());
@@ -139,12 +151,15 @@ export class UserService extends DbService {
   }
 
   async create(user: NewUserEntity): Promise<UserEntity> {
-      const [newUser] = await this.database.insert(users).values(user).returning();
-      if (!newUser) {
-        throw new Error('User not created');
-      }
-      return newUser;
+    const [newUser] = await this.database
+      .insert(users)
+      .values(user)
+      .returning();
+    if (!newUser) {
+      throw new Error("User not created");
     }
+    return newUser;
+  }
 }
 
-export const userService = new UserService(cacheProvider);
+export const userService = new UserService(cacheProvider, storageService);
