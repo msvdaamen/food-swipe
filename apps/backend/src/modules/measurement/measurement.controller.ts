@@ -2,10 +2,10 @@ import { Hono } from "hono";
 import { measurementService } from "./measurement.service.ts";
 import { createMeasurementDto } from "./dto/create-measurement.dto.ts";
 import { updateMeasurementDto } from "./dto/update-measurement.dto.ts";
-import { authRouter } from "../auth/auth.controller.ts";
+import { authRouterFactory } from "../auth/auth.controller.ts";
 import { sValidator } from "@hono/standard-validator";
 
-const app = authRouter.createApp();
+const app = authRouterFactory.createApp();
 
 app.get("/", async (c) => {
   const measurements = await measurementService.all();

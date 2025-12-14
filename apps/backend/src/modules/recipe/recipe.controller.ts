@@ -1,5 +1,5 @@
     import type { Hono } from "hono";
-import { authRouter } from "../auth/auth.controller";
+import { authRouterFactory } from "../auth/auth.controller";
 import { recipeService } from "./recipe.service";
 import {createRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import {createRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
@@ -15,7 +15,7 @@ import {importRecipeDto} from "./dto/import-recipe.dto.ts";
 import { likeRecipeDtoSchema } from "./dto/like-recipe.dto.ts";
 import { sValidator } from "@hono/standard-validator";
 
-const app = authRouter.createApp();
+const app = authRouterFactory.createApp();
 
 app.get('/', sValidator('query', loadRecipesDto), async (c) => {
     const filters = c.req.valid('query');

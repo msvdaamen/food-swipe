@@ -4,7 +4,7 @@ import {
   type AuthContext,
 } from "./auth.middleware";
 
-export const authRouter = createFactory<AuthContext>({
+export const authRouterFactory = createFactory<AuthContext>({
   initApp: (app) => {
     app.use(authMiddleware);
   },

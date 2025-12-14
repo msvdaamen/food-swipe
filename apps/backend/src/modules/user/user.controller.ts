@@ -1,11 +1,11 @@
 import type { Hono } from "hono";
-import { authRouter } from "../auth/auth.controller.ts";
+import { authRouterFactory } from "../auth/auth.controller.ts";
 import { userService } from "./user.service.ts";
 import { endOfMonth, startOfMonth, sub } from "date-fns";
 import { getUsersDto } from "./dto/get-users.dto.ts";
 import { sValidator } from "@hono/standard-validator";
 
-const app = authRouter.createApp();
+const app = authRouterFactory.createApp();
 
 app.get("/", sValidator("query", getUsersDto), async (c) => {
   const payload = c.req.valid("query");

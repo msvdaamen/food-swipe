@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import { sValidator } from "@hono/standard-validator";
-import { authRouter } from "../auth/auth.controller.ts";
+import { authRouterFactory } from "../auth/auth.controller.ts";
 import { getIngredientsDto } from "./dto/get-ingredients.dto.ts";
 import { ingredientService } from "./ingredient.service.ts";
 import { updateIngredientDto } from "./dto/update-ingredient.dto.ts";
 import { createIngredientDto } from "./dto/create-ingredient.dto.ts";
 
-const app = authRouter.createApp();
+const app = authRouterFactory.createApp();
 
 app.get('/', sValidator('query', getIngredientsDto), async (c) => {
     const params = c.req.valid('query');
