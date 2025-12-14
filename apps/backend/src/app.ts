@@ -12,6 +12,7 @@ import { auth } from "./lib/auth.ts";
 import type { Context } from "hono";
 import { testWebsocket } from "./modules/test.websocket.ts";
 import { websocketServer } from "./lib/websocket/server.ts";
+import { authRouter } from "./modules/auth/auth.controller.ts";
 
 const app = new Hono();
 
@@ -73,6 +74,7 @@ registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
 registerRecipeBookController(app);
+app.route("/v1/me", authRouter)
 
 const server = Bun.serve({
   port: process.env.APP_PORT || 3000,

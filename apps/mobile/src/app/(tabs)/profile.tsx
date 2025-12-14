@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { FText } from "@/components/f-text";
@@ -10,21 +10,45 @@ import {
   EditProfileButton,
   FeedPlaceholder,
 } from "@/features/user/components";
-import { authClient } from "@/lib/auth";
+import * as ImagePicker from "expo-image-picker";
+import { useUploadProfilePicture } from "@/features/auth/api/upload-profile-picture";
+import { useMe } from "@/features/auth/api/me";
 
 export default function ProfileScreen() {
-  const { data: session } = authClient.useSession();
+  const { data: user, isPending, error } = useMe();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const uploadProfilePicture = useUploadProfilePicture();
 
   const headerBorderColor = useThemeColor({
     light: Colors.stone200,
     dark: Colors.stone800,
   });
 
-  const handleAvatarPress = () => {
-    // TODO: Implement image picker for profile photo upload
-    console.log("Open image picker");
+  if (isPending || error) {
+    return null;
+  }
+
+  const handleAvatarPress = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission required",
+        "Permission to access the media library is required.",
+      );
+      return;
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (result.canceled) {
+      return;
+    }
+    await uploadProfilePicture.mutateAsync(result.assets[0].uri);
   };
 
   const handleEditProfile = () => {
@@ -36,8 +60,8 @@ export default function ProfileScreen() {
     router.push({
       pathname: "/user/[id]/follows",
       params: {
-        id: session!.user.id,
-        username: session!.user.username!,
+        id: user.id,
+        username: user.username!,
         tab: "followers",
       },
     });
@@ -47,8 +71,8 @@ export default function ProfileScreen() {
     router.push({
       pathname: "/user/[id]/follows",
       params: {
-        id: session!.user.id,
-        username: session!.user.username!,
+        id: user.id,
+        username: user.username!,
         tab: "following",
       },
     });
@@ -57,7 +81,7 @@ export default function ProfileScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={[styles.header, { borderBottomColor: headerBorderColor }]}>
-        <FText style={styles.headerTitle}>{session!.user.username}</FText>
+        <FText style={styles.headerTitle}>{user.username}</FText>
       </View>
 
       <ScrollView
@@ -66,9 +90,9 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader
-          avatarUrl={""}
-          name={session!.user.name}
-          username={session!.user.username!}
+          avatarUrl={user.image}
+          name={user.name}
+          username={user.username!}
           bio={""}
           isOwnProfile={true}
           onAvatarPress={handleAvatarPress}

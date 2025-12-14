@@ -136,7 +136,10 @@ export class RecipeService extends DbService {
       .where(eq(recipes.id, recipeId))
       .execute();
     await this.transaction(async (tx) => {
-      const fileName = await this.storage.upload(file, true);
+      const fileName = await this.storage.upload(file, {
+        isPublic: true,
+        path: "recipes"
+      });
       await tx
         .update(recipes)
         .set({ coverImage: fileName })
@@ -540,7 +543,10 @@ export class RecipeService extends DbService {
     const imageBase64 = generatedImageResponse.data![0]?.b64_json;
     const imageBuffer = imageBase64 ? Buffer.from(imageBase64!, "base64") : baseImageBuffer;
     const imageFile = new File([imageBuffer], recipe.title);
-    const coverImageUrl = await this.storage.upload(imageFile, true);
+    const coverImageUrl = await this.storage.upload(imageFile, {
+      isPublic: true,
+      path: "recipes"
+    });
     this.websocketServer.send(userId, {
       type: "recipe-import-updated",
       data: {

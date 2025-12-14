@@ -19,17 +19,21 @@ export const auth = betterAuth({
   secondaryStorage: {
       get: async (key) => await cacheProvider.get(key),
       set: async (key, value, ttl) => {
+        console.log("Setting secondary storage value:", key, value, 5 * 60);
         await cacheProvider.set(key, value);
-        await cacheProvider.expire(key, ttl!);
+        await cacheProvider.expire(key, 5 * 60);
       },
       delete: async (key) => await cacheProvider.del(key).then(() => Promise.resolve())
   },
   session: {
     cookieCache: {
-      enabled: true,
       maxAge: 5 * 60, // Cache duration in seconds
       refreshCache: false,
     },
+  },
+  account: {
+      storeStateStrategy: "cookie",
+      storeAccountCookie: true,
   },
   emailAndPassword: {
     enabled: true,

@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
   },
   infoContainer: {
     alignItems: "center",

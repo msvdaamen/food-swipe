@@ -1,5 +1,5 @@
 import { S3Client } from "bun";
-import type { Storage } from "./storage";
+import type { Storage, StorageOptions } from "./storage";
 import mime from 'mime/lite';
 
 export class ObjStorage implements Storage {
@@ -19,18 +19,22 @@ export class ObjStorage implements Storage {
           });
     }
 
-    async upload<T extends Blob>(file: T, isPublic: boolean): Promise<string> {
-        const filename = crypto.randomUUID() + '.' + this.getExtension(file.type);
+    async upload<T extends Blob>(file: T, options?: StorageOptions): Promise<string> {
+        const { isPublic = false, path = "", filename: customFilename } = options || {};
+
+        const filename = this.formatPath(path) + (customFilename || crypto.randomUUID() + '.' + this.getExtension(file.type));
 
         await this.client.write(filename, await file.arrayBuffer(), {bucket: this.getBucket(isPublic)})
         return filename;
     }
 
-    async get<T extends Blob>(file: string, isPublic: boolean): Promise<T> {
+    async get<T extends Blob>(file: string, options?: StorageOptions): Promise<T> {
+      const { isPublic = false } = options || {};
         return await this.client.file(file, {bucket: this.getBucket(isPublic)}) as unknown as T;
     }
 
-    async delete(file: string, isPublic: boolean): Promise<void> {
+    async delete(file: string, options?: StorageOptions): Promise<void> {
+      const { isPublic = false } = options || {};
         await this.client.delete(file, {bucket: this.getBucket(isPublic)});
     }
 
@@ -40,5 +44,20 @@ export class ObjStorage implements Storage {
 
     private getExtension(type: string) {
         return mime.getExtension(type);
+    }
+
+    private formatPath(path: string) {
+      if (!path) {
+        return '/';
+      }
+      if (path.startsWith('/')) {
+        path = path.substring(1);
+      }
+
+      if (!path.endsWith('/')) {
+        path += '/';
+      }
+
+      return path;
     }
 }
