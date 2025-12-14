@@ -1,0 +1,17 @@
+{
+  "name": "@food-swipe/grpc",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    "followers": "./followers/v1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.10.2"
+  }
+}

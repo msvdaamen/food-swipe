@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package followers.v1;
+
+import "buf/validate/validate.proto";
+
+message FollowRequest {
+    string user_id = 1 [(buf.validate.field).string.uuid = true];
+    string follower_id = 2 [(buf.validate.field).string.uuid = true];
+}
+
+message FollowResponse {}
+
+message GetFollowersRequest {
+    string user_id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message GetFollowersResponse {
+    repeated string followers = 1;
+}
+
+message GetFollowingRequest {
+    string user_id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message GetFollowingResponse {
+    repeated string following = 1;
+}
+
+service FollowerService {
+    rpc Follow(FollowRequest) returns (FollowResponse) {}
+    rpc GetFollowers(GetFollowersRequest) returns (GetFollowersResponse) {}
+    rpc GetFollowing(GetFollowingRequest) returns (GetFollowingResponse) {}
+}
