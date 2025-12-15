@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	followv1 "github.com/food-swipe/gen/followers/v1"
+	followv1 "github.com/food-swipe/gen/grpc/followers/v1"
 )
 
 func (a *Adapter) GetFollowing(ctx context.Context, req *followv1.GetFollowingRequest) (*followv1.GetFollowingResponse, error) {

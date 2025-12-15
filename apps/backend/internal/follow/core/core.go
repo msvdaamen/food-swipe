@@ -1,6 +1,6 @@
 package core
 
-import "github.com/food-swipe/follow/core/ports"
+import "github.com/food-swipe/internal/follow/core/ports"
 
 type Core struct {
 	storage ports.Storage

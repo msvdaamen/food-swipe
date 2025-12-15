@@ -1,8 +1,8 @@
 package grpc
 
 import (
-	"github.com/food-swipe/follow/core/ports"
-	"github.com/food-swipe/gen/followers/v1/followersv1connect"
+	"github.com/food-swipe/gen/grpc/followers/v1/followersv1connect"
+	"github.com/food-swipe/internal/follow/core/ports"
 )
 
 type Adapter struct {
