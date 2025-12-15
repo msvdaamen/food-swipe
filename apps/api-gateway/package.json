@@ -16,7 +16,10 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.4.5",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-node": "^2.1.1",
     "@food-swipe/file-storage": "workspace:*",
+    "@food-swipe/grpc": "workspace:*",
     "@hono/standard-validator": "^0.2.0",
     "@imgly/background-removal-node": "^1.4.5",
     "@kubiks/otel-drizzle": "^2.1.0",
@@ -29,10 +32,12 @@
     "drizzle-orm": "^0.44.7",
     "hono": "^4.10.8",
     "hono-rate-limiter": "^0.4.2",
+    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "openai": "^6.9.0",
     "pg": "^8.16.3",
     "typescript": "^5.7.3",
+    "uninstall": "^0.0.0",
     "zod": "^4.1.13"
   }
 }

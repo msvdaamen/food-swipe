@@ -3,8 +3,8 @@ import type { WebsocketEvent } from "./types";
 
 type Message = {
   room: string;
-  event: WebsocketEvent
-}
+  event: WebsocketEvent;
+};
 
 type MessageBusSubscriber = (message: Message) => void | Promise<void>;
 
@@ -18,8 +18,8 @@ export class RedisMessageBus implements MessageBus {
 
   constructor(
     private readonly client: RedisClient,
-    private readonly subscriber: RedisClient
-  ) { }
+    private readonly subscriber: RedisClient,
+  ) {}
 
   publish(message: Message): void {
     this.client.publish(this.WEBSOCKET_BUS_CHANNEL, JSON.stringify(message));

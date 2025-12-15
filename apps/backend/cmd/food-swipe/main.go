@@ -11,16 +11,20 @@ import (
 	"time"
 
 	"github.com/food-swipe/internal/follow"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	DatabaseURL string
+	DatabaseURL string `env:"DATABASE_URL"`
 }
 
 func main() {
-	cfg := Config{
-		DatabaseURL: "postgres://user:password@localhost:5432/dbname",
+	var cfg Config
+	err := cleanenv.ReadConfig(".env", &cfg)
+	if err != nil {
+		log.Fatalf("Failed to read environment variables: %v", err)
 	}
+	log.Print(cfg)
 
 	err, pool := setupDatabaseConnection(cfg.DatabaseURL)
 	if err != nil {
@@ -28,7 +32,7 @@ func main() {
 	}
 	defer pool.Close()
 
-	mux, server := setupGrpcServer("3000")
+	mux, server := setupGrpcServer("3001")
 
 	follow.Register(mux, pool)
 

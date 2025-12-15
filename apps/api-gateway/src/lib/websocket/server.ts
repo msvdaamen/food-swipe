@@ -1,26 +1,31 @@
 import type { ServerWebSocket } from "bun";
 import { type } from "arktype";
-import type { IWebsocketHandler, IWebsocketServer, WebsocketEvent, WebsocketHandlerFn, WebsocketServerData } from "./types";
+import type {
+  IWebsocketHandler,
+  IWebsocketServer,
+  WebsocketEvent,
+  WebsocketHandlerFn,
+  WebsocketServerData,
+} from "./types";
 import { WebsocketMessageContext } from "./context";
 import { RedisMessageBus, type MessageBus } from "./message-bus";
 import { cacheProvider } from "../../providers/cache.provider";
+import { natsProvider } from "../../providers/nats.provider";
 
 const messageValidator = type({
   type: "string",
-  "data?": "unknown"
+  "data?": "unknown",
 });
 
 export class WebSocketServer implements IWebsocketServer {
   private readonly listeners = new Map<string, WebsocketHandlerFn[]>();
   private _server!: Bun.Server<WebsocketServerData>;
 
-  constructor(
-    private readonly messageBus: MessageBus
-  ) { }
+  constructor(private readonly messageBus: MessageBus) {}
 
   async start(server: Bun.Server<WebsocketServerData>): Promise<void> {
     this._server = server;
-    await this.messageBus.subscribe(message => {
+    await this.messageBus.subscribe((message) => {
       this.server.publish(message.room, JSON.stringify(message.event));
     });
   }
@@ -50,7 +55,10 @@ export class WebSocketServer implements IWebsocketServer {
     ws.unsubscribe(`user-${userId}`);
   }
 
-  onMessage(ws: ServerWebSocket<WebsocketServerData>, data: string | Buffer<ArrayBuffer>) {
+  onMessage(
+    ws: ServerWebSocket<WebsocketServerData>,
+    data: string | Buffer<ArrayBuffer>,
+  ) {
     if (Buffer.isBuffer(data)) {
       return;
     }
@@ -81,7 +89,6 @@ export class WebSocketServer implements IWebsocketServer {
     });
   }
 
-
   send(userId: string, event: WebsocketEvent) {
     this.messageBus.publish({
       room: `user-${userId}`,
@@ -90,5 +97,8 @@ export class WebSocketServer implements IWebsocketServer {
   }
 }
 
-export const websocketMessageBus = new RedisMessageBus(cacheProvider, await cacheProvider.duplicate());
+const websocketMessageBus = new RedisMessageBus(
+  cacheProvider,
+  await cacheProvider.duplicate(),
+);
 export const websocketServer = new WebSocketServer(websocketMessageBus);

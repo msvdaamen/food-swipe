@@ -2,9 +2,7 @@
   "name": "@food-swipe/grpc",
   "module": "index.ts",
   "type": "module",
-  "exports": {
-    "followers": "./followers/v1"
-  },
+  "main": "index.ts",
   "devDependencies": {
     "@types/bun": "latest"
   },

@@ -13,18 +13,21 @@ import type { Context } from "hono";
 import { testWebsocket } from "./modules/test.websocket.ts";
 import { websocketServer } from "./lib/websocket/server.ts";
 import { authRouter } from "./modules/auth/auth.controller.ts";
+import { followersRouter } from "./router/followers.ts";
 
 const app = new Hono();
 
 app.use(secureHeaders());
-app.use(cors({
-  origin: ["http://localhost:5173"],
-  allowHeaders: ["Content-Type", "Authorization"],
-	allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
-	exposeHeaders: ["Content-Length"],
-	maxAge: 600,
-	credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
 
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 minutes
@@ -47,14 +50,15 @@ app.on(["POST", "GET"], "/v1/auth/*", async (c) => {
 });
 
 export const getBunServer = (c: Context) =>
-  ('server' in c.env ? c.env.server : c.env) as Bun.Server<{userId: string}> | undefined;
+  ("server" in c.env ? c.env.server : c.env) as
+    | Bun.Server<{ userId: string }>
+    | undefined;
 
-app.get('/ws',async c => {
-  const server = getBunServer(c)
+app.get("/ws", async (c) => {
+  const server = getBunServer(c);
   if (!server) {
     return new Response("Server not found", { status: 500 });
   }
-
 
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session) {
@@ -63,24 +67,25 @@ app.get('/ws',async c => {
 
   server.upgrade(c.req.raw, {
     data: {
-      userId: session.user.id
-    }
+      userId: session.user.id,
+    },
   });
   return new Response(null);
-})
+});
 
 registerUserController(app);
 registerRecipeController(app);
 registerMeasurementsController(app);
 registerIngredientController(app);
 registerRecipeBookController(app);
-app.route("/v1/me", authRouter)
+app.route("/v1/me", authRouter);
+app.route("/v1/followers", followersRouter);
 
 const server = Bun.serve({
   port: process.env.APP_PORT || 3000,
   fetch: app.fetch,
   websocket: {
-    data: {} as {userId: string},
+    data: {} as { userId: string },
     maxPayloadLength: 1024 * 1024, // 1 MB
     perMessageDeflate: true,
     message(ws, message) {
@@ -88,11 +93,11 @@ const server = Bun.serve({
     },
     open(ws) {
       const { userId } = ws.data;
-      ws.subscribe(`user-${userId}`)
+      ws.subscribe(`user-${userId}`);
     },
     close(ws, code, message) {},
-    drain(ws) {}
-  }
+    drain(ws) {},
+  },
 });
 await websocketServer.start(server);
 websocketServer.registerHandler(testWebsocket);

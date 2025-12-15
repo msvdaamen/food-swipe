@@ -3,17 +3,17 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/food-swipe/gen
+      value: github.com/food-swipe/gen/grpc
   disable:
     - file_option: go_package
       module: buf.build/bufbuild/protovalidate
 
 plugins:
   - remote: buf.build/protocolbuffers/go
-    out: apps/services/gen/grpc
+    out: apps/backend/gen/grpc
     opt: paths=source_relative
   - remote: buf.build/connectrpc/gosimple
-    out: apps/services/gen/grpc
+    out: apps/backend/gen/grpc
     opt:
       - paths=source_relative
       - simple
