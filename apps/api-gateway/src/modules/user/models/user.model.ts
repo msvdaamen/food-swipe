@@ -1,3 +1,3 @@
-import type { UserEntity } from "@food-swipe/database";
+import type { UserEntity } from "../../../schema";
 
 export type UserModel = Omit<UserEntity, "password">;

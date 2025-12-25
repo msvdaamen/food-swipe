@@ -10,6 +10,7 @@ func setupGrpcServer(port string) (*http.ServeMux, *http.Server) {
 	mux := http.NewServeMux()
 	reflector := grpcreflect.NewStaticReflector(
 		"followers.v1.FollowerService",
+		"user.v1.UserService",
 	)
 	mux.Handle(grpcreflect.NewHandlerV1(reflector))
 	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))

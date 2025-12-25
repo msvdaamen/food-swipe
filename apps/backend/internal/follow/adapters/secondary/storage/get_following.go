@@ -9,7 +9,7 @@ import (
 func (s *Adapter) GetFollowing(ctx context.Context, userID string) ([]string, error) {
 	rows, err := s.db.Query(ctx, "SELECT follower_id FROM followers WHERE user_id = $1", userID)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to retrieve following: %w", err)
+		return nil, fmt.Errorf("failed to retrieve following: %w", err)
 	}
 	defer rows.Close()
 
@@ -17,12 +17,12 @@ func (s *Adapter) GetFollowing(ctx context.Context, userID string) ([]string, er
 	for rows.Next() {
 		var followerID string
 		if err := rows.Scan(&followerID); err != nil {
-			return nil, fmt.Errorf("Failed to scan following ID: %w", err)
+			return nil, fmt.Errorf("failed to scan following ID: %w", err)
 		}
 		following = append(following, followerID)
 	}
 	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("Failed to iterate over rows: %w", err)
+		return nil, fmt.Errorf("failed to iterate over rows: %w", err)
 	}
 	return following, nil
 }

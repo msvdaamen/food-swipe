@@ -11,11 +11,13 @@ import (
 	"time"
 
 	"github.com/food-swipe/internal/follow"
+	"github.com/food-swipe/internal/user"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
 	DatabaseURL string `env:"DATABASE_URL"`
+	NatsURL     string `env:"NATS_URL"`
 }
 
 func main() {
@@ -24,17 +26,23 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to read environment variables: %v", err)
 	}
-	log.Print(cfg)
 
-	err, pool := setupDatabaseConnection(cfg.DatabaseURL)
+	pool, err := setupDatabaseConnection(cfg.DatabaseURL)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer pool.Close()
 
+	nc, err := setupNatsConnection(cfg.NatsURL)
+	if err != nil {
+		log.Fatalf("Failed to connect to NATS: %v", err)
+	}
+	defer nc.Close()
+
 	mux, server := setupGrpcServer("3001")
 
 	follow.Register(mux, pool)
+	user.Register(mux, pool)
 
 	shutdownChan := make(chan bool, 1)
 

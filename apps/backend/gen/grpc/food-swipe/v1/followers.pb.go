@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: followers/v1/followers.proto
+// source: food-swipe/v1/followers.proto
 
-package followersv1
+package foodswipev1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
@@ -32,7 +32,7 @@ type FollowRequest struct {
 
 func (x *FollowRequest) Reset() {
 	*x = FollowRequest{}
-	mi := &file_followers_v1_followers_proto_msgTypes[0]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *FollowRequest) String() string {
 func (*FollowRequest) ProtoMessage() {}
 
 func (x *FollowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[0]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *FollowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FollowRequest.ProtoReflect.Descriptor instead.
 func (*FollowRequest) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{0}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *FollowRequest) GetUserId() string {
@@ -82,7 +82,7 @@ type FollowResponse struct {
 
 func (x *FollowResponse) Reset() {
 	*x = FollowResponse{}
-	mi := &file_followers_v1_followers_proto_msgTypes[1]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -94,7 +94,7 @@ func (x *FollowResponse) String() string {
 func (*FollowResponse) ProtoMessage() {}
 
 func (x *FollowResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[1]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,7 +107,7 @@ func (x *FollowResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FollowResponse.ProtoReflect.Descriptor instead.
 func (*FollowResponse) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{1}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{1}
 }
 
 type GetFollowersRequest struct {
@@ -119,7 +119,7 @@ type GetFollowersRequest struct {
 
 func (x *GetFollowersRequest) Reset() {
 	*x = GetFollowersRequest{}
-	mi := &file_followers_v1_followers_proto_msgTypes[2]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -131,7 +131,7 @@ func (x *GetFollowersRequest) String() string {
 func (*GetFollowersRequest) ProtoMessage() {}
 
 func (x *GetFollowersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[2]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -144,7 +144,7 @@ func (x *GetFollowersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowersRequest.ProtoReflect.Descriptor instead.
 func (*GetFollowersRequest) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{2}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetFollowersRequest) GetUserId() string {
@@ -163,7 +163,7 @@ type GetFollowersResponse struct {
 
 func (x *GetFollowersResponse) Reset() {
 	*x = GetFollowersResponse{}
-	mi := &file_followers_v1_followers_proto_msgTypes[3]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -175,7 +175,7 @@ func (x *GetFollowersResponse) String() string {
 func (*GetFollowersResponse) ProtoMessage() {}
 
 func (x *GetFollowersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[3]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -188,7 +188,7 @@ func (x *GetFollowersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowersResponse.ProtoReflect.Descriptor instead.
 func (*GetFollowersResponse) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{3}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetFollowersResponse) GetFollowers() []string {
@@ -207,7 +207,7 @@ type GetFollowingRequest struct {
 
 func (x *GetFollowingRequest) Reset() {
 	*x = GetFollowingRequest{}
-	mi := &file_followers_v1_followers_proto_msgTypes[4]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -219,7 +219,7 @@ func (x *GetFollowingRequest) String() string {
 func (*GetFollowingRequest) ProtoMessage() {}
 
 func (x *GetFollowingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[4]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -232,7 +232,7 @@ func (x *GetFollowingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowingRequest.ProtoReflect.Descriptor instead.
 func (*GetFollowingRequest) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{4}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetFollowingRequest) GetUserId() string {
@@ -251,7 +251,7 @@ type GetFollowingResponse struct {
 
 func (x *GetFollowingResponse) Reset() {
 	*x = GetFollowingResponse{}
-	mi := &file_followers_v1_followers_proto_msgTypes[5]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -263,7 +263,7 @@ func (x *GetFollowingResponse) String() string {
 func (*GetFollowingResponse) ProtoMessage() {}
 
 func (x *GetFollowingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_followers_v1_followers_proto_msgTypes[5]
+	mi := &file_food_swipe_v1_followers_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +276,7 @@ func (x *GetFollowingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowingResponse.ProtoReflect.Descriptor instead.
 func (*GetFollowingResponse) Descriptor() ([]byte, []int) {
-	return file_followers_v1_followers_proto_rawDescGZIP(), []int{5}
+	return file_food_swipe_v1_followers_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetFollowingResponse) GetFollowing() []string {
@@ -286,11 +286,11 @@ func (x *GetFollowingResponse) GetFollowing() []string {
 	return nil
 }
 
-var File_followers_v1_followers_proto protoreflect.FileDescriptor
+var File_food_swipe_v1_followers_proto protoreflect.FileDescriptor
 
-const file_followers_v1_followers_proto_rawDesc = "" +
+const file_food_swipe_v1_followers_proto_rawDesc = "" +
 	"\n" +
-	"\x1cfollowers/v1/followers.proto\x12\ffollowers.v1\x1a\x1bbuf/validate/validate.proto\"]\n" +
+	"\x1dfood-swipe/v1/followers.proto\x12\ffoodswipe.v1\x1a\x1bbuf/validate/validate.proto\"]\n" +
 	"\rFollowRequest\x12!\n" +
 	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x12)\n" +
 	"\vfollower_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\n" +
@@ -305,39 +305,39 @@ const file_followers_v1_followers_proto_rawDesc = "" +
 	"\x14GetFollowingResponse\x12\x1c\n" +
 	"\tfollowing\x18\x01 \x03(\tR\tfollowing2\x8a\x02\n" +
 	"\x0fFollowerService\x12E\n" +
-	"\x06Follow\x12\x1b.followers.v1.FollowRequest\x1a\x1c.followers.v1.FollowResponse\"\x00\x12W\n" +
-	"\fGetFollowers\x12!.followers.v1.GetFollowersRequest\x1a\".followers.v1.GetFollowersResponse\"\x00\x12W\n" +
-	"\fGetFollowing\x12!.followers.v1.GetFollowingRequest\x1a\".followers.v1.GetFollowingResponse\"\x00B\xac\x01\n" +
-	"\x10com.followers.v1B\x0eFollowersProtoP\x01Z7github.com/food-swipe/gen/grpc/followers/v1;followersv1\xa2\x02\x03FXX\xaa\x02\fFollowers.V1\xca\x02\fFollowers\\V1\xe2\x02\x18Followers\\V1\\GPBMetadata\xea\x02\rFollowers::V1b\x06proto3"
+	"\x06Follow\x12\x1b.foodswipe.v1.FollowRequest\x1a\x1c.foodswipe.v1.FollowResponse\"\x00\x12W\n" +
+	"\fGetFollowers\x12!.foodswipe.v1.GetFollowersRequest\x1a\".foodswipe.v1.GetFollowersResponse\"\x00\x12W\n" +
+	"\fGetFollowing\x12!.foodswipe.v1.GetFollowingRequest\x1a\".foodswipe.v1.GetFollowingResponse\"\x00B\xad\x01\n" +
+	"\x10com.foodswipe.v1B\x0eFollowersProtoP\x01Z8github.com/food-swipe/gen/grpc/food-swipe/v1;foodswipev1\xa2\x02\x03FXX\xaa\x02\fFoodswipe.V1\xca\x02\fFoodswipe\\V1\xe2\x02\x18Foodswipe\\V1\\GPBMetadata\xea\x02\rFoodswipe::V1b\x06proto3"
 
 var (
-	file_followers_v1_followers_proto_rawDescOnce sync.Once
-	file_followers_v1_followers_proto_rawDescData []byte
+	file_food_swipe_v1_followers_proto_rawDescOnce sync.Once
+	file_food_swipe_v1_followers_proto_rawDescData []byte
 )
 
-func file_followers_v1_followers_proto_rawDescGZIP() []byte {
-	file_followers_v1_followers_proto_rawDescOnce.Do(func() {
-		file_followers_v1_followers_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_followers_v1_followers_proto_rawDesc), len(file_followers_v1_followers_proto_rawDesc)))
+func file_food_swipe_v1_followers_proto_rawDescGZIP() []byte {
+	file_food_swipe_v1_followers_proto_rawDescOnce.Do(func() {
+		file_food_swipe_v1_followers_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_food_swipe_v1_followers_proto_rawDesc), len(file_food_swipe_v1_followers_proto_rawDesc)))
 	})
-	return file_followers_v1_followers_proto_rawDescData
+	return file_food_swipe_v1_followers_proto_rawDescData
 }
 
-var file_followers_v1_followers_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_followers_v1_followers_proto_goTypes = []any{
-	(*FollowRequest)(nil),        // 0: followers.v1.FollowRequest
-	(*FollowResponse)(nil),       // 1: followers.v1.FollowResponse
-	(*GetFollowersRequest)(nil),  // 2: followers.v1.GetFollowersRequest
-	(*GetFollowersResponse)(nil), // 3: followers.v1.GetFollowersResponse
-	(*GetFollowingRequest)(nil),  // 4: followers.v1.GetFollowingRequest
-	(*GetFollowingResponse)(nil), // 5: followers.v1.GetFollowingResponse
+var file_food_swipe_v1_followers_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_food_swipe_v1_followers_proto_goTypes = []any{
+	(*FollowRequest)(nil),        // 0: foodswipe.v1.FollowRequest
+	(*FollowResponse)(nil),       // 1: foodswipe.v1.FollowResponse
+	(*GetFollowersRequest)(nil),  // 2: foodswipe.v1.GetFollowersRequest
+	(*GetFollowersResponse)(nil), // 3: foodswipe.v1.GetFollowersResponse
+	(*GetFollowingRequest)(nil),  // 4: foodswipe.v1.GetFollowingRequest
+	(*GetFollowingResponse)(nil), // 5: foodswipe.v1.GetFollowingResponse
 }
-var file_followers_v1_followers_proto_depIdxs = []int32{
-	0, // 0: followers.v1.FollowerService.Follow:input_type -> followers.v1.FollowRequest
-	2, // 1: followers.v1.FollowerService.GetFollowers:input_type -> followers.v1.GetFollowersRequest
-	4, // 2: followers.v1.FollowerService.GetFollowing:input_type -> followers.v1.GetFollowingRequest
-	1, // 3: followers.v1.FollowerService.Follow:output_type -> followers.v1.FollowResponse
-	3, // 4: followers.v1.FollowerService.GetFollowers:output_type -> followers.v1.GetFollowersResponse
-	5, // 5: followers.v1.FollowerService.GetFollowing:output_type -> followers.v1.GetFollowingResponse
+var file_food_swipe_v1_followers_proto_depIdxs = []int32{
+	0, // 0: foodswipe.v1.FollowerService.Follow:input_type -> foodswipe.v1.FollowRequest
+	2, // 1: foodswipe.v1.FollowerService.GetFollowers:input_type -> foodswipe.v1.GetFollowersRequest
+	4, // 2: foodswipe.v1.FollowerService.GetFollowing:input_type -> foodswipe.v1.GetFollowingRequest
+	1, // 3: foodswipe.v1.FollowerService.Follow:output_type -> foodswipe.v1.FollowResponse
+	3, // 4: foodswipe.v1.FollowerService.GetFollowers:output_type -> foodswipe.v1.GetFollowersResponse
+	5, // 5: foodswipe.v1.FollowerService.GetFollowing:output_type -> foodswipe.v1.GetFollowingResponse
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -345,26 +345,26 @@ var file_followers_v1_followers_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_followers_v1_followers_proto_init() }
-func file_followers_v1_followers_proto_init() {
-	if File_followers_v1_followers_proto != nil {
+func init() { file_food_swipe_v1_followers_proto_init() }
+func file_food_swipe_v1_followers_proto_init() {
+	if File_food_swipe_v1_followers_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_followers_v1_followers_proto_rawDesc), len(file_followers_v1_followers_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_food_swipe_v1_followers_proto_rawDesc), len(file_food_swipe_v1_followers_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_followers_v1_followers_proto_goTypes,
-		DependencyIndexes: file_followers_v1_followers_proto_depIdxs,
-		MessageInfos:      file_followers_v1_followers_proto_msgTypes,
+		GoTypes:           file_food_swipe_v1_followers_proto_goTypes,
+		DependencyIndexes: file_food_swipe_v1_followers_proto_depIdxs,
+		MessageInfos:      file_food_swipe_v1_followers_proto_msgTypes,
 	}.Build()
-	File_followers_v1_followers_proto = out.File
-	file_followers_v1_followers_proto_goTypes = nil
-	file_followers_v1_followers_proto_depIdxs = nil
+	File_food_swipe_v1_followers_proto = out.File
+	file_food_swipe_v1_followers_proto_goTypes = nil
+	file_food_swipe_v1_followers_proto_depIdxs = nil
 }

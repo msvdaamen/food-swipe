@@ -1,4 +1,4 @@
-package follow
+package user
 
 import (
 	"net/http"
@@ -6,17 +6,19 @@ import (
 	"connectrpc.com/connect"
 	"connectrpc.com/validate"
 	"github.com/food-swipe/gen/grpc/food-swipe/v1/foodswipev1connect"
-	"github.com/food-swipe/internal/follow/adapters/primary/grpc"
-	"github.com/food-swipe/internal/follow/adapters/secondary/storage"
-	"github.com/food-swipe/internal/follow/core"
+	"github.com/food-swipe/internal/user/adapters/primary/grpc"
+	"github.com/food-swipe/internal/user/adapters/secondary/storage"
+	"github.com/food-swipe/internal/user/core"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func Register(mux *http.ServeMux, pool *pgxpool.Pool) {
 	storageAdapter := storage.New(pool)
-	core := core.New(storageAdapter)
-	grpcAdapter := grpc.New(core)
-	path, handler := foodswipev1connect.NewFollowerServiceHandler(
+	coreInstance := core.New(storageAdapter)
+
+	grpcAdapter := grpc.New(coreInstance)
+
+	path, handler := foodswipev1connect.NewUserServiceHandler(
 		grpcAdapter,
 		connect.WithInterceptors(validate.NewInterceptor()),
 	)

@@ -9,7 +9,7 @@ import (
 func (c *Core) GetFollowers(ctx context.Context, userID string) ([]string, error) {
 	followers, err := c.storage.GetFollowers(ctx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to retrieve followers: %w", err)
+		return nil, fmt.Errorf("failed to retrieve followers: %w", err)
 	}
 	return followers, nil
 }
