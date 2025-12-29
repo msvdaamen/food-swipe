@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/food-swipe/internal/follow"
+	"github.com/food-swipe/internal/recipe"
 	"github.com/food-swipe/internal/user"
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -43,6 +44,7 @@ func main() {
 
 	follow.Register(mux, pool)
 	user.Register(mux, pool)
+	recipe.Register(mux, pool)
 
 	shutdownChan := make(chan bool, 1)
 

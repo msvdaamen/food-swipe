@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package foodswipe.v1;
+
+import "buf/validate/validate.proto";
+
+message Ingredient {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Measurement {
+  int32 id = 1;
+  string name = 2;
+  string abbreviation = 3;
+}
+
+message GetMeasurementRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+}
+
+message GetMeasurementResponse {
+  Measurement measurement = 1;
+}
+
+message CreateMeasurementRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string abbreviation = 2 [(buf.validate.field).string.min_len = 1];
+}
+
+message CreateMeasurementResponse {
+  Measurement measurement = 1;
+}
+
+message UpdateMeasurementRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string abbreviation = 3 [(buf.validate.field).string.min_len = 1];
+}
+
+message UpdateMeasurementResponse {
+  Measurement measurement = 1;
+}
+
+message DeleteMeasurementRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+}
+
+message DeleteMeasurementResponse {}
+
+message GetIngredientRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+}
+
+message GetIngredientResponse {
+  Ingredient ingredient = 1;
+}
+
+message CreateIngredientRequest {
+  string name = 1 [(buf.validate.field).int32.gte = 1];
+}
+
+message CreateIngredientResponse {
+  Ingredient ingredient = 1;
+}
+
+message UpdateIngredientRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+}
+
+message UpdateIngredientResponse {
+  Ingredient ingredient = 1;
+}
+
+message DeleteIngredientRequest {
+  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+}
+
+message DeleteIngredientResponse {}
+
+service RecipeService {
+  rpc GetMeasurement(GetMeasurementRequest) returns (GetMeasurementResponse);
+  rpc CreateMeasurement(CreateMeasurementRequest) returns (CreateMeasurementResponse);
+  rpc UpdateMeasurement(UpdateMeasurementRequest) returns (UpdateMeasurementResponse);
+  rpc DeleteMeasurement(DeleteMeasurementRequest) returns (DeleteMeasurementResponse);
+
+  rpc GetIngredient(GetIngredientRequest) returns (GetIngredientResponse);
+  rpc CreateIngredient(CreateIngredientRequest) returns (CreateIngredientResponse);
+  rpc UpdateIngredient(UpdateIngredientRequest) returns (UpdateIngredientResponse);
+  rpc DeleteIngredient(DeleteIngredientRequest) returns (DeleteIngredientResponse);
+}
