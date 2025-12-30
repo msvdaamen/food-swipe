@@ -8,7 +8,7 @@ import (
 )
 
 func (a *Measurement) GetMeasurement(ctx context.Context, req *v1.GetMeasurementRequest) (*v1.GetMeasurementResponse, error) {
-	measurement, err := a.core.GetMeasurement(ctx, int16(req.Id))
+	measurement, err := a.core.GetMeasurement(ctx, uint16(req.Id))
 	if err != nil {
 		return nil, connect.NewError(connect.CodeUnknown, err)
 	}

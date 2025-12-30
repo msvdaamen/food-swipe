@@ -5,20 +5,22 @@
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import { file_buf_validate_validate } from "../../buf/validate/validate_pb";
+import type { Pagination } from "./common_pb";
+import { file_food_swipe_v1_common } from "./common_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file food-swipe/v1/recipe.proto.
  */
 export const file_food_swipe_v1_recipe: GenFile = /*@__PURE__*/
-  fileDesc("Chpmb29kLXN3aXBlL3YxL3JlY2lwZS5wcm90bxIMZm9vZHN3aXBlLnYxIiYKCkluZ3JlZGllbnQSCgoCaWQYASABKAUSDAoEbmFtZRgCIAEoCSI9CgtNZWFzdXJlbWVudBIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEhQKDGFiYnJldmlhdGlvbhgDIAEoCSIsChVHZXRNZWFzdXJlbWVudFJlcXVlc3QSEwoCaWQYASABKAVCB7pIBBoCKAEiSAoWR2V0TWVhc3VyZW1lbnRSZXNwb25zZRIuCgttZWFzdXJlbWVudBgBIAEoCzIZLmZvb2Rzd2lwZS52MS5NZWFzdXJlbWVudCJQChhDcmVhdGVNZWFzdXJlbWVudFJlcXVlc3QSFQoEbmFtZRgBIAEoCUIHukgEcgIQARIdCgxhYmJyZXZpYXRpb24YAiABKAlCB7pIBHICEAEiSwoZQ3JlYXRlTWVhc3VyZW1lbnRSZXNwb25zZRIuCgttZWFzdXJlbWVudBgBIAEoCzIZLmZvb2Rzd2lwZS52MS5NZWFzdXJlbWVudCJlChhVcGRhdGVNZWFzdXJlbWVudFJlcXVlc3QSEwoCaWQYASABKAVCB7pIBBoCKAESFQoEbmFtZRgCIAEoCUIHukgEcgIQARIdCgxhYmJyZXZpYXRpb24YAyABKAlCB7pIBHICEAEiSwoZVXBkYXRlTWVhc3VyZW1lbnRSZXNwb25zZRIuCgttZWFzdXJlbWVudBgBIAEoCzIZLmZvb2Rzd2lwZS52MS5NZWFzdXJlbWVudCIvChhEZWxldGVNZWFzdXJlbWVudFJlcXVlc3QSEwoCaWQYASABKAVCB7pIBBoCKAEiGwoZRGVsZXRlTWVhc3VyZW1lbnRSZXNwb25zZSIrChRHZXRJbmdyZWRpZW50UmVxdWVzdBITCgJpZBgBIAEoBUIHukgEGgIoASJFChVHZXRJbmdyZWRpZW50UmVzcG9uc2USLAoKaW5ncmVkaWVudBgBIAEoCzIYLmZvb2Rzd2lwZS52MS5JbmdyZWRpZW50IjAKF0NyZWF0ZUluZ3JlZGllbnRSZXF1ZXN0EhUKBG5hbWUYASABKAlCB7pIBBoCKAEiSAoYQ3JlYXRlSW5ncmVkaWVudFJlc3BvbnNlEiwKCmluZ3JlZGllbnQYASABKAsyGC5mb29kc3dpcGUudjEuSW5ncmVkaWVudCJFChdVcGRhdGVJbmdyZWRpZW50UmVxdWVzdBITCgJpZBgBIAEoBUIHukgEGgIoARIVCgRuYW1lGAIgASgJQge6SARyAhABIkgKGFVwZGF0ZUluZ3JlZGllbnRSZXNwb25zZRIsCgppbmdyZWRpZW50GAEgASgLMhguZm9vZHN3aXBlLnYxLkluZ3JlZGllbnQiLgoXRGVsZXRlSW5ncmVkaWVudFJlcXVlc3QSEwoCaWQYASABKAVCB7pIBBoCKAEiGgoYRGVsZXRlSW5ncmVkaWVudFJlc3BvbnNlMqEGCg1SZWNpcGVTZXJ2aWNlElsKDkdldE1lYXN1cmVtZW50EiMuZm9vZHN3aXBlLnYxLkdldE1lYXN1cmVtZW50UmVxdWVzdBokLmZvb2Rzd2lwZS52MS5HZXRNZWFzdXJlbWVudFJlc3BvbnNlEmQKEUNyZWF0ZU1lYXN1cmVtZW50EiYuZm9vZHN3aXBlLnYxLkNyZWF0ZU1lYXN1cmVtZW50UmVxdWVzdBonLmZvb2Rzd2lwZS52MS5DcmVhdGVNZWFzdXJlbWVudFJlc3BvbnNlEmQKEVVwZGF0ZU1lYXN1cmVtZW50EiYuZm9vZHN3aXBlLnYxLlVwZGF0ZU1lYXN1cmVtZW50UmVxdWVzdBonLmZvb2Rzd2lwZS52MS5VcGRhdGVNZWFzdXJlbWVudFJlc3BvbnNlEmQKEURlbGV0ZU1lYXN1cmVtZW50EiYuZm9vZHN3aXBlLnYxLkRlbGV0ZU1lYXN1cmVtZW50UmVxdWVzdBonLmZvb2Rzd2lwZS52MS5EZWxldGVNZWFzdXJlbWVudFJlc3BvbnNlElgKDUdldEluZ3JlZGllbnQSIi5mb29kc3dpcGUudjEuR2V0SW5ncmVkaWVudFJlcXVlc3QaIy5mb29kc3dpcGUudjEuR2V0SW5ncmVkaWVudFJlc3BvbnNlEmEKEENyZWF0ZUluZ3JlZGllbnQSJS5mb29kc3dpcGUudjEuQ3JlYXRlSW5ncmVkaWVudFJlcXVlc3QaJi5mb29kc3dpcGUudjEuQ3JlYXRlSW5ncmVkaWVudFJlc3BvbnNlEmEKEFVwZGF0ZUluZ3JlZGllbnQSJS5mb29kc3dpcGUudjEuVXBkYXRlSW5ncmVkaWVudFJlcXVlc3QaJi5mb29kc3dpcGUudjEuVXBkYXRlSW5ncmVkaWVudFJlc3BvbnNlEmEKEERlbGV0ZUluZ3JlZGllbnQSJS5mb29kc3dpcGUudjEuRGVsZXRlSW5ncmVkaWVudFJlcXVlc3QaJi5mb29kc3dpcGUudjEuRGVsZXRlSW5ncmVkaWVudFJlc3BvbnNlQqoBChBjb20uZm9vZHN3aXBlLnYxQgtSZWNpcGVQcm90b1ABWjhnaXRodWIuY29tL2Zvb2Qtc3dpcGUvZ2VuL2dycGMvZm9vZC1zd2lwZS92MTtmb29kc3dpcGV2MaICA0ZYWKoCDEZvb2Rzd2lwZS5WMcoCDEZvb2Rzd2lwZVxWMeICGEZvb2Rzd2lwZVxWMVxHUEJNZXRhZGF0YeoCDUZvb2Rzd2lwZTo6VjFiBnByb3RvMw", [file_buf_validate_validate]);
+  fileDesc("Chpmb29kLXN3aXBlL3YxL3JlY2lwZS5wcm90bxIMZm9vZHN3aXBlLnYxIiYKCkluZ3JlZGllbnQSCgoCaWQYASABKA0SDAoEbmFtZRgCIAEoCSI9CgtNZWFzdXJlbWVudBIKCgJpZBgBIAEoDRIMCgRuYW1lGAIgASgJEhQKDGFiYnJldmlhdGlvbhgDIAEoCSJqChdMaXN0TWVhc3VyZW1lbnRzUmVxdWVzdBIVCgRwYWdlGAEgASgNQge6SAQqAigBEhgKBWxpbWl0GAIgASgNQgm6SAYqBBhkKAESEwoGc2VhcmNoGAMgASgJSACIAQFCCQoHX3NlYXJjaCJxChhMaXN0TWVhc3VyZW1lbnRzUmVzcG9uc2USLAoKcGFnaW5hdGlvbhgBIAEoCzIYLmZvb2Rzd2lwZS52MS5QYWdpbmF0aW9uEicKBGRhdGEYAiADKAsyGS5mb29kc3dpcGUudjEuTWVhc3VyZW1lbnQiLAoVR2V0TWVhc3VyZW1lbnRSZXF1ZXN0EhMKAmlkGAEgASgNQge6SAQqAigBIkgKFkdldE1lYXN1cmVtZW50UmVzcG9uc2USLgoLbWVhc3VyZW1lbnQYASABKAsyGS5mb29kc3dpcGUudjEuTWVhc3VyZW1lbnQiUAoYQ3JlYXRlTWVhc3VyZW1lbnRSZXF1ZXN0EhUKBG5hbWUYASABKAlCB7pIBHICEAESHQoMYWJicmV2aWF0aW9uGAIgASgJQge6SARyAhABIksKGUNyZWF0ZU1lYXN1cmVtZW50UmVzcG9uc2USLgoLbWVhc3VyZW1lbnQYASABKAsyGS5mb29kc3dpcGUudjEuTWVhc3VyZW1lbnQiZQoYVXBkYXRlTWVhc3VyZW1lbnRSZXF1ZXN0EhMKAmlkGAEgASgNQge6SAQqAigBEhUKBG5hbWUYAiABKAlCB7pIBHICEAESHQoMYWJicmV2aWF0aW9uGAMgASgJQge6SARyAhABIksKGVVwZGF0ZU1lYXN1cmVtZW50UmVzcG9uc2USLgoLbWVhc3VyZW1lbnQYASABKAsyGS5mb29kc3dpcGUudjEuTWVhc3VyZW1lbnQiLwoYRGVsZXRlTWVhc3VyZW1lbnRSZXF1ZXN0EhMKAmlkGAEgASgNQge6SAQqAigBIhsKGURlbGV0ZU1lYXN1cmVtZW50UmVzcG9uc2UiaQoWTGlzdEluZ3JlZGllbnRzUmVxdWVzdBIVCgRwYWdlGAEgASgNQge6SAQqAigBEhgKBWxpbWl0GAIgASgNQgm6SAYqBBhkKAESEwoGc2VhcmNoGAMgASgJSACIAQFCCQoHX3NlYXJjaCJvChdMaXN0SW5ncmVkaWVudHNSZXNwb25zZRIsCgpwYWdpbmF0aW9uGAEgASgLMhguZm9vZHN3aXBlLnYxLlBhZ2luYXRpb24SJgoEZGF0YRgCIAMoCzIYLmZvb2Rzd2lwZS52MS5JbmdyZWRpZW50IisKFEdldEluZ3JlZGllbnRSZXF1ZXN0EhMKAmlkGAEgASgNQge6SAQqAigBIkUKFUdldEluZ3JlZGllbnRSZXNwb25zZRIsCgppbmdyZWRpZW50GAEgASgLMhguZm9vZHN3aXBlLnYxLkluZ3JlZGllbnQiMAoXQ3JlYXRlSW5ncmVkaWVudFJlcXVlc3QSFQoEbmFtZRgBIAEoCUIHukgEcgIQASJIChhDcmVhdGVJbmdyZWRpZW50UmVzcG9uc2USLAoKaW5ncmVkaWVudBgBIAEoCzIYLmZvb2Rzd2lwZS52MS5JbmdyZWRpZW50IkUKF1VwZGF0ZUluZ3JlZGllbnRSZXF1ZXN0EhMKAmlkGAEgASgNQge6SAQqAigBEhUKBG5hbWUYAiABKAlCB7pIBHICEAEiSAoYVXBkYXRlSW5ncmVkaWVudFJlc3BvbnNlEiwKCmluZ3JlZGllbnQYASABKAsyGC5mb29kc3dpcGUudjEuSW5ncmVkaWVudCIuChdEZWxldGVJbmdyZWRpZW50UmVxdWVzdBITCgJpZBgBIAEoDUIHukgEKgIoASIaChhEZWxldGVJbmdyZWRpZW50UmVzcG9uc2Uy5AcKDVJlY2lwZVNlcnZpY2USYQoQTGlzdE1lYXN1cmVtZW50cxIlLmZvb2Rzd2lwZS52MS5MaXN0TWVhc3VyZW1lbnRzUmVxdWVzdBomLmZvb2Rzd2lwZS52MS5MaXN0TWVhc3VyZW1lbnRzUmVzcG9uc2USWwoOR2V0TWVhc3VyZW1lbnQSIy5mb29kc3dpcGUudjEuR2V0TWVhc3VyZW1lbnRSZXF1ZXN0GiQuZm9vZHN3aXBlLnYxLkdldE1lYXN1cmVtZW50UmVzcG9uc2USZAoRQ3JlYXRlTWVhc3VyZW1lbnQSJi5mb29kc3dpcGUudjEuQ3JlYXRlTWVhc3VyZW1lbnRSZXF1ZXN0GicuZm9vZHN3aXBlLnYxLkNyZWF0ZU1lYXN1cmVtZW50UmVzcG9uc2USZAoRVXBkYXRlTWVhc3VyZW1lbnQSJi5mb29kc3dpcGUudjEuVXBkYXRlTWVhc3VyZW1lbnRSZXF1ZXN0GicuZm9vZHN3aXBlLnYxLlVwZGF0ZU1lYXN1cmVtZW50UmVzcG9uc2USZAoRRGVsZXRlTWVhc3VyZW1lbnQSJi5mb29kc3dpcGUudjEuRGVsZXRlTWVhc3VyZW1lbnRSZXF1ZXN0GicuZm9vZHN3aXBlLnYxLkRlbGV0ZU1lYXN1cmVtZW50UmVzcG9uc2USXgoPTGlzdEluZ3JlZGllbnRzEiQuZm9vZHN3aXBlLnYxLkxpc3RJbmdyZWRpZW50c1JlcXVlc3QaJS5mb29kc3dpcGUudjEuTGlzdEluZ3JlZGllbnRzUmVzcG9uc2USWAoNR2V0SW5ncmVkaWVudBIiLmZvb2Rzd2lwZS52MS5HZXRJbmdyZWRpZW50UmVxdWVzdBojLmZvb2Rzd2lwZS52MS5HZXRJbmdyZWRpZW50UmVzcG9uc2USYQoQQ3JlYXRlSW5ncmVkaWVudBIlLmZvb2Rzd2lwZS52MS5DcmVhdGVJbmdyZWRpZW50UmVxdWVzdBomLmZvb2Rzd2lwZS52MS5DcmVhdGVJbmdyZWRpZW50UmVzcG9uc2USYQoQVXBkYXRlSW5ncmVkaWVudBIlLmZvb2Rzd2lwZS52MS5VcGRhdGVJbmdyZWRpZW50UmVxdWVzdBomLmZvb2Rzd2lwZS52MS5VcGRhdGVJbmdyZWRpZW50UmVzcG9uc2USYQoQRGVsZXRlSW5ncmVkaWVudBIlLmZvb2Rzd2lwZS52MS5EZWxldGVJbmdyZWRpZW50UmVxdWVzdBomLmZvb2Rzd2lwZS52MS5EZWxldGVJbmdyZWRpZW50UmVzcG9uc2VCqgEKEGNvbS5mb29kc3dpcGUudjFCC1JlY2lwZVByb3RvUAFaOGdpdGh1Yi5jb20vZm9vZC1zd2lwZS9nZW4vZ3JwYy9mb29kLXN3aXBlL3YxO2Zvb2Rzd2lwZXYxogIDRlhYqgIMRm9vZHN3aXBlLlYxygIMRm9vZHN3aXBlXFYx4gIYRm9vZHN3aXBlXFYxXEdQQk1ldGFkYXRh6gINRm9vZHN3aXBlOjpWMWIGcHJvdG8z", [file_buf_validate_validate, file_food_swipe_v1_common]);
 
 /**
  * @generated from message foodswipe.v1.Ingredient
  */
 export type Ingredient = Message<"foodswipe.v1.Ingredient"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 
@@ -40,7 +42,7 @@ export const IngredientSchema: GenMessage<Ingredient> = /*@__PURE__*/
  */
 export type Measurement = Message<"foodswipe.v1.Measurement"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 
@@ -63,11 +65,60 @@ export const MeasurementSchema: GenMessage<Measurement> = /*@__PURE__*/
   messageDesc(file_food_swipe_v1_recipe, 1);
 
 /**
+ * @generated from message foodswipe.v1.ListMeasurementsRequest
+ */
+export type ListMeasurementsRequest = Message<"foodswipe.v1.ListMeasurementsRequest"> & {
+  /**
+   * @generated from field: uint32 page = 1;
+   */
+  page: number;
+
+  /**
+   * @generated from field: uint32 limit = 2;
+   */
+  limit: number;
+
+  /**
+   * @generated from field: optional string search = 3;
+   */
+  search?: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.ListMeasurementsRequest.
+ * Use `create(ListMeasurementsRequestSchema)` to create a new message.
+ */
+export const ListMeasurementsRequestSchema: GenMessage<ListMeasurementsRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_recipe, 2);
+
+/**
+ * @generated from message foodswipe.v1.ListMeasurementsResponse
+ */
+export type ListMeasurementsResponse = Message<"foodswipe.v1.ListMeasurementsResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.Pagination pagination = 1;
+   */
+  pagination?: Pagination;
+
+  /**
+   * @generated from field: repeated foodswipe.v1.Measurement data = 2;
+   */
+  data: Measurement[];
+};
+
+/**
+ * Describes the message foodswipe.v1.ListMeasurementsResponse.
+ * Use `create(ListMeasurementsResponseSchema)` to create a new message.
+ */
+export const ListMeasurementsResponseSchema: GenMessage<ListMeasurementsResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_recipe, 3);
+
+/**
  * @generated from message foodswipe.v1.GetMeasurementRequest
  */
 export type GetMeasurementRequest = Message<"foodswipe.v1.GetMeasurementRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 };
@@ -77,7 +128,7 @@ export type GetMeasurementRequest = Message<"foodswipe.v1.GetMeasurementRequest"
  * Use `create(GetMeasurementRequestSchema)` to create a new message.
  */
 export const GetMeasurementRequestSchema: GenMessage<GetMeasurementRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 2);
+  messageDesc(file_food_swipe_v1_recipe, 4);
 
 /**
  * @generated from message foodswipe.v1.GetMeasurementResponse
@@ -94,7 +145,7 @@ export type GetMeasurementResponse = Message<"foodswipe.v1.GetMeasurementRespons
  * Use `create(GetMeasurementResponseSchema)` to create a new message.
  */
 export const GetMeasurementResponseSchema: GenMessage<GetMeasurementResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 3);
+  messageDesc(file_food_swipe_v1_recipe, 5);
 
 /**
  * @generated from message foodswipe.v1.CreateMeasurementRequest
@@ -116,7 +167,7 @@ export type CreateMeasurementRequest = Message<"foodswipe.v1.CreateMeasurementRe
  * Use `create(CreateMeasurementRequestSchema)` to create a new message.
  */
 export const CreateMeasurementRequestSchema: GenMessage<CreateMeasurementRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 4);
+  messageDesc(file_food_swipe_v1_recipe, 6);
 
 /**
  * @generated from message foodswipe.v1.CreateMeasurementResponse
@@ -133,14 +184,14 @@ export type CreateMeasurementResponse = Message<"foodswipe.v1.CreateMeasurementR
  * Use `create(CreateMeasurementResponseSchema)` to create a new message.
  */
 export const CreateMeasurementResponseSchema: GenMessage<CreateMeasurementResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 5);
+  messageDesc(file_food_swipe_v1_recipe, 7);
 
 /**
  * @generated from message foodswipe.v1.UpdateMeasurementRequest
  */
 export type UpdateMeasurementRequest = Message<"foodswipe.v1.UpdateMeasurementRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 
@@ -160,7 +211,7 @@ export type UpdateMeasurementRequest = Message<"foodswipe.v1.UpdateMeasurementRe
  * Use `create(UpdateMeasurementRequestSchema)` to create a new message.
  */
 export const UpdateMeasurementRequestSchema: GenMessage<UpdateMeasurementRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 6);
+  messageDesc(file_food_swipe_v1_recipe, 8);
 
 /**
  * @generated from message foodswipe.v1.UpdateMeasurementResponse
@@ -177,14 +228,14 @@ export type UpdateMeasurementResponse = Message<"foodswipe.v1.UpdateMeasurementR
  * Use `create(UpdateMeasurementResponseSchema)` to create a new message.
  */
 export const UpdateMeasurementResponseSchema: GenMessage<UpdateMeasurementResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 7);
+  messageDesc(file_food_swipe_v1_recipe, 9);
 
 /**
  * @generated from message foodswipe.v1.DeleteMeasurementRequest
  */
 export type DeleteMeasurementRequest = Message<"foodswipe.v1.DeleteMeasurementRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 };
@@ -194,7 +245,7 @@ export type DeleteMeasurementRequest = Message<"foodswipe.v1.DeleteMeasurementRe
  * Use `create(DeleteMeasurementRequestSchema)` to create a new message.
  */
 export const DeleteMeasurementRequestSchema: GenMessage<DeleteMeasurementRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 8);
+  messageDesc(file_food_swipe_v1_recipe, 10);
 
 /**
  * @generated from message foodswipe.v1.DeleteMeasurementResponse
@@ -207,14 +258,63 @@ export type DeleteMeasurementResponse = Message<"foodswipe.v1.DeleteMeasurementR
  * Use `create(DeleteMeasurementResponseSchema)` to create a new message.
  */
 export const DeleteMeasurementResponseSchema: GenMessage<DeleteMeasurementResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 9);
+  messageDesc(file_food_swipe_v1_recipe, 11);
+
+/**
+ * @generated from message foodswipe.v1.ListIngredientsRequest
+ */
+export type ListIngredientsRequest = Message<"foodswipe.v1.ListIngredientsRequest"> & {
+  /**
+   * @generated from field: uint32 page = 1;
+   */
+  page: number;
+
+  /**
+   * @generated from field: uint32 limit = 2;
+   */
+  limit: number;
+
+  /**
+   * @generated from field: optional string search = 3;
+   */
+  search?: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.ListIngredientsRequest.
+ * Use `create(ListIngredientsRequestSchema)` to create a new message.
+ */
+export const ListIngredientsRequestSchema: GenMessage<ListIngredientsRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_recipe, 12);
+
+/**
+ * @generated from message foodswipe.v1.ListIngredientsResponse
+ */
+export type ListIngredientsResponse = Message<"foodswipe.v1.ListIngredientsResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.Pagination pagination = 1;
+   */
+  pagination?: Pagination;
+
+  /**
+   * @generated from field: repeated foodswipe.v1.Ingredient data = 2;
+   */
+  data: Ingredient[];
+};
+
+/**
+ * Describes the message foodswipe.v1.ListIngredientsResponse.
+ * Use `create(ListIngredientsResponseSchema)` to create a new message.
+ */
+export const ListIngredientsResponseSchema: GenMessage<ListIngredientsResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_recipe, 13);
 
 /**
  * @generated from message foodswipe.v1.GetIngredientRequest
  */
 export type GetIngredientRequest = Message<"foodswipe.v1.GetIngredientRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 };
@@ -224,7 +324,7 @@ export type GetIngredientRequest = Message<"foodswipe.v1.GetIngredientRequest"> 
  * Use `create(GetIngredientRequestSchema)` to create a new message.
  */
 export const GetIngredientRequestSchema: GenMessage<GetIngredientRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 10);
+  messageDesc(file_food_swipe_v1_recipe, 14);
 
 /**
  * @generated from message foodswipe.v1.GetIngredientResponse
@@ -241,7 +341,7 @@ export type GetIngredientResponse = Message<"foodswipe.v1.GetIngredientResponse"
  * Use `create(GetIngredientResponseSchema)` to create a new message.
  */
 export const GetIngredientResponseSchema: GenMessage<GetIngredientResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 11);
+  messageDesc(file_food_swipe_v1_recipe, 15);
 
 /**
  * @generated from message foodswipe.v1.CreateIngredientRequest
@@ -258,7 +358,7 @@ export type CreateIngredientRequest = Message<"foodswipe.v1.CreateIngredientRequ
  * Use `create(CreateIngredientRequestSchema)` to create a new message.
  */
 export const CreateIngredientRequestSchema: GenMessage<CreateIngredientRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 12);
+  messageDesc(file_food_swipe_v1_recipe, 16);
 
 /**
  * @generated from message foodswipe.v1.CreateIngredientResponse
@@ -275,14 +375,14 @@ export type CreateIngredientResponse = Message<"foodswipe.v1.CreateIngredientRes
  * Use `create(CreateIngredientResponseSchema)` to create a new message.
  */
 export const CreateIngredientResponseSchema: GenMessage<CreateIngredientResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 13);
+  messageDesc(file_food_swipe_v1_recipe, 17);
 
 /**
  * @generated from message foodswipe.v1.UpdateIngredientRequest
  */
 export type UpdateIngredientRequest = Message<"foodswipe.v1.UpdateIngredientRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 
@@ -297,7 +397,7 @@ export type UpdateIngredientRequest = Message<"foodswipe.v1.UpdateIngredientRequ
  * Use `create(UpdateIngredientRequestSchema)` to create a new message.
  */
 export const UpdateIngredientRequestSchema: GenMessage<UpdateIngredientRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 14);
+  messageDesc(file_food_swipe_v1_recipe, 18);
 
 /**
  * @generated from message foodswipe.v1.UpdateIngredientResponse
@@ -314,14 +414,14 @@ export type UpdateIngredientResponse = Message<"foodswipe.v1.UpdateIngredientRes
  * Use `create(UpdateIngredientResponseSchema)` to create a new message.
  */
 export const UpdateIngredientResponseSchema: GenMessage<UpdateIngredientResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 15);
+  messageDesc(file_food_swipe_v1_recipe, 19);
 
 /**
  * @generated from message foodswipe.v1.DeleteIngredientRequest
  */
 export type DeleteIngredientRequest = Message<"foodswipe.v1.DeleteIngredientRequest"> & {
   /**
-   * @generated from field: int32 id = 1;
+   * @generated from field: uint32 id = 1;
    */
   id: number;
 };
@@ -331,7 +431,7 @@ export type DeleteIngredientRequest = Message<"foodswipe.v1.DeleteIngredientRequ
  * Use `create(DeleteIngredientRequestSchema)` to create a new message.
  */
 export const DeleteIngredientRequestSchema: GenMessage<DeleteIngredientRequest> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 16);
+  messageDesc(file_food_swipe_v1_recipe, 20);
 
 /**
  * @generated from message foodswipe.v1.DeleteIngredientResponse
@@ -344,12 +444,20 @@ export type DeleteIngredientResponse = Message<"foodswipe.v1.DeleteIngredientRes
  * Use `create(DeleteIngredientResponseSchema)` to create a new message.
  */
 export const DeleteIngredientResponseSchema: GenMessage<DeleteIngredientResponse> = /*@__PURE__*/
-  messageDesc(file_food_swipe_v1_recipe, 17);
+  messageDesc(file_food_swipe_v1_recipe, 21);
 
 /**
  * @generated from service foodswipe.v1.RecipeService
  */
 export const RecipeService: GenService<{
+  /**
+   * @generated from rpc foodswipe.v1.RecipeService.ListMeasurements
+   */
+  listMeasurements: {
+    methodKind: "unary";
+    input: typeof ListMeasurementsRequestSchema;
+    output: typeof ListMeasurementsResponseSchema;
+  },
   /**
    * @generated from rpc foodswipe.v1.RecipeService.GetMeasurement
    */
@@ -381,6 +489,14 @@ export const RecipeService: GenService<{
     methodKind: "unary";
     input: typeof DeleteMeasurementRequestSchema;
     output: typeof DeleteMeasurementResponseSchema;
+  },
+  /**
+   * @generated from rpc foodswipe.v1.RecipeService.ListIngredients
+   */
+  listIngredients: {
+    methodKind: "unary";
+    input: typeof ListIngredientsRequestSchema;
+    output: typeof ListIngredientsResponseSchema;
   },
   /**
    * @generated from rpc foodswipe.v1.RecipeService.GetIngredient

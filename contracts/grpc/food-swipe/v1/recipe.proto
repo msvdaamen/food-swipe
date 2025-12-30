@@ -3,20 +3,32 @@ syntax = "proto3";
 package foodswipe.v1;
 
 import "buf/validate/validate.proto";
+import "food-swipe/v1/common.proto";
 
 message Ingredient {
-  int32 id = 1;
+  uint32 id = 1;
   string name = 2;
 }
 
 message Measurement {
-  int32 id = 1;
+  uint32 id = 1;
   string name = 2;
   string abbreviation = 3;
 }
 
+message ListMeasurementsRequest {
+  uint32 page = 1 [(buf.validate.field).uint32.gte = 1];
+  uint32 limit = 2 [(buf.validate.field).uint32.gte = 1, (buf.validate.field).uint32.lte = 100];
+  optional string search = 3;
+}
+
+message ListMeasurementsResponse {
+    foodswipe.v1.Pagination pagination = 1;
+    repeated Measurement data = 2;
+}
+
 message GetMeasurementRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
 }
 
 message GetMeasurementResponse {
@@ -33,7 +45,7 @@ message CreateMeasurementResponse {
 }
 
 message UpdateMeasurementRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string abbreviation = 3 [(buf.validate.field).string.min_len = 1];
 }
@@ -43,13 +55,24 @@ message UpdateMeasurementResponse {
 }
 
 message DeleteMeasurementRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
 }
 
 message DeleteMeasurementResponse {}
 
+message ListIngredientsRequest {
+  uint32 page = 1 [(buf.validate.field).uint32.gte = 1];
+  uint32 limit = 2 [(buf.validate.field).uint32.gte = 1, (buf.validate.field).uint32.lte = 100];
+  optional string search = 3;
+}
+
+message ListIngredientsResponse {
+    foodswipe.v1.Pagination pagination = 1;
+  repeated Ingredient data = 2;
+}
+
 message GetIngredientRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
 }
 
 message GetIngredientResponse {
@@ -57,7 +80,7 @@ message GetIngredientResponse {
 }
 
 message CreateIngredientRequest {
-  string name = 1 [(buf.validate.field).int32.gte = 1];
+  string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 
 message CreateIngredientResponse {
@@ -65,7 +88,7 @@ message CreateIngredientResponse {
 }
 
 message UpdateIngredientRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
@@ -74,17 +97,19 @@ message UpdateIngredientResponse {
 }
 
 message DeleteIngredientRequest {
-  int32 id = 1 [(buf.validate.field).int32.gte = 1];
+  uint32 id = 1 [(buf.validate.field).uint32.gte = 1];
 }
 
 message DeleteIngredientResponse {}
 
 service RecipeService {
+  rpc ListMeasurements(ListMeasurementsRequest) returns (ListMeasurementsResponse);
   rpc GetMeasurement(GetMeasurementRequest) returns (GetMeasurementResponse);
   rpc CreateMeasurement(CreateMeasurementRequest) returns (CreateMeasurementResponse);
   rpc UpdateMeasurement(UpdateMeasurementRequest) returns (UpdateMeasurementResponse);
   rpc DeleteMeasurement(DeleteMeasurementRequest) returns (DeleteMeasurementResponse);
 
+  rpc ListIngredients(ListIngredientsRequest) returns (ListIngredientsResponse);
   rpc GetIngredient(GetIngredientRequest) returns (GetIngredientResponse);
   rpc CreateIngredient(CreateIngredientRequest) returns (CreateIngredientResponse);
   rpc UpdateIngredient(UpdateIngredientRequest) returns (UpdateIngredientResponse);

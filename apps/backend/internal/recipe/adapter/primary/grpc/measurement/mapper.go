@@ -7,7 +7,7 @@ import (
 
 func modelMeasurementToGrpcMeasurement(measurement models.Measurement) *v1.Measurement {
 	return &v1.Measurement{
-		Id:           int32(measurement.ID),
+		Id:           uint32(measurement.ID),
 		Name:         measurement.Name,
 		Abbreviation: measurement.Abbreviation,
 	}

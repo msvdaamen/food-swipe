@@ -9,7 +9,7 @@ import (
 )
 
 func (a *Measurement) UpdateMeasurement(ctx context.Context, req *v1.UpdateMeasurementRequest) (*v1.UpdateMeasurementResponse, error) {
-	measurement, err := a.core.UpdateMeasurement(ctx, int16(req.Id), models.UpdateMeasurement{
+	measurement, err := a.core.UpdateMeasurement(ctx, uint16(req.Id), models.UpdateMeasurement{
 		Name:         req.Name,
 		Abbreviation: req.Abbreviation,
 	})

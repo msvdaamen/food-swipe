@@ -9,7 +9,7 @@ import (
 
 const updateIngredientSql = `UPDATE ingredients SET name = $2 WHERE id = $1 RETURNING id, name`
 
-func (a *Ingredient) UpdateIngredient(ctx context.Context, id int32, payload models.UpdateIngredient) (models.Ingredient, error) {
+func (a *Ingredient) UpdateIngredient(ctx context.Context, id uint32, payload models.UpdateIngredient) (models.Ingredient, error) {
 	row := a.db.QueryRow(ctx, updateIngredientSql, id, payload.Name)
 
 	var ingredient models.Ingredient

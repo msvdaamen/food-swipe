@@ -1,6 +1,6 @@
 import { type } from "arktype";
 
-export const getIngredientsDto = type({
+export const getMeasurementsDto = type({
   "search?": "string",
   "sort?": "'name'",
   "order?": "'asc' | 'desc'",
@@ -17,4 +17,4 @@ export const getIngredientsDto = type({
   }),
 });
 
-export type GetIngredientsDto = typeof getIngredientsDto.infer;
+export type GetMeasurementsDto = typeof getMeasurementsDto.infer;

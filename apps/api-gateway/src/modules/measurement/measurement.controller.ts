@@ -1,33 +1,42 @@
 import { Hono } from "hono";
-import { measurementService } from "./measurement.service.ts";
 import { createMeasurementDto } from "./dto/create-measurement.dto.ts";
 import { updateMeasurementDto } from "./dto/update-measurement.dto.ts";
 import { authRouterFactory } from "../auth/auth.controller.ts";
 import { sValidator } from "@hono/standard-validator";
+import { grpcTransport } from "../../lib/grpc-transport.ts";
+import { Recipe } from "@food-swipe/grpc";
+import { createClient } from "@connectrpc/connect";
+import { getMeasurementsDto } from "./dto/get-ingredients.dto.ts";
 
 const app = authRouterFactory.createApp();
 
-app.get("/", async (c) => {
-  const measurements = await measurementService.all();
+const client = createClient(Recipe.RecipeService, grpcTransport);
+
+app.get("/", sValidator("json", getMeasurementsDto), async (c) => {
+  const payload = c.req.valid("json");
+  const measurements = await client.listMeasurements(payload);
   return c.json(measurements);
 });
 
 app.post("/", sValidator("json", createMeasurementDto), async (c) => {
   const payload = c.req.valid("json");
-  const measurement = await measurementService.create(payload);
-  return c.json(measurement);
+  const response = await client.createMeasurement(payload);
+  return c.json(response.measurement);
 });
 
 app.put("/:id", sValidator("json", updateMeasurementDto), async (c) => {
   const payload = c.req.valid("json");
   const id = Number(c.req.param("id"));
-  const measurement = await measurementService.update(id, payload);
-  return c.json(measurement);
+  const response = await client.updateMeasurement({
+    id,
+    ...payload,
+  });
+  return c.json(response.measurement);
 });
 
 app.delete("/:id", async (c) => {
   const id = Number(c.req.param("id"));
-  await measurementService.delete(id);
+  await client.deleteMeasurement({ id });
   return c.json({ message: "Measurement deleted" });
 });
 

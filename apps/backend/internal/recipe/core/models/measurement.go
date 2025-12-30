@@ -1,9 +1,15 @@
 package models
 
 type Measurement struct {
-	ID           int16
+	ID           uint16
 	Name         string
 	Abbreviation string
+}
+
+type ListMeasurements struct {
+	Limit  uint32
+	Page   uint32
+	Search *string
 }
 
 type CreateMeasurement struct {

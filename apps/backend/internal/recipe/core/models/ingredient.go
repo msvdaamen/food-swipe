@@ -1,8 +1,14 @@
 package models
 
 type Ingredient struct {
-	ID   int32
+	ID   uint32
 	Name string
+}
+
+type ListIngredients struct {
+	Limit  uint32
+	Page   uint32
+	Search *string
 }
 
 type CreateIngredient struct {

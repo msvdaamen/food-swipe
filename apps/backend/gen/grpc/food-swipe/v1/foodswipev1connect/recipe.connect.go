@@ -33,6 +33,9 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// RecipeServiceListMeasurementsProcedure is the fully-qualified name of the RecipeService's
+	// ListMeasurements RPC.
+	RecipeServiceListMeasurementsProcedure = "/foodswipe.v1.RecipeService/ListMeasurements"
 	// RecipeServiceGetMeasurementProcedure is the fully-qualified name of the RecipeService's
 	// GetMeasurement RPC.
 	RecipeServiceGetMeasurementProcedure = "/foodswipe.v1.RecipeService/GetMeasurement"
@@ -45,6 +48,9 @@ const (
 	// RecipeServiceDeleteMeasurementProcedure is the fully-qualified name of the RecipeService's
 	// DeleteMeasurement RPC.
 	RecipeServiceDeleteMeasurementProcedure = "/foodswipe.v1.RecipeService/DeleteMeasurement"
+	// RecipeServiceListIngredientsProcedure is the fully-qualified name of the RecipeService's
+	// ListIngredients RPC.
+	RecipeServiceListIngredientsProcedure = "/foodswipe.v1.RecipeService/ListIngredients"
 	// RecipeServiceGetIngredientProcedure is the fully-qualified name of the RecipeService's
 	// GetIngredient RPC.
 	RecipeServiceGetIngredientProcedure = "/foodswipe.v1.RecipeService/GetIngredient"
@@ -61,10 +67,12 @@ const (
 
 // RecipeServiceClient is a client for the foodswipe.v1.RecipeService service.
 type RecipeServiceClient interface {
+	ListMeasurements(context.Context, *v1.ListMeasurementsRequest) (*v1.ListMeasurementsResponse, error)
 	GetMeasurement(context.Context, *v1.GetMeasurementRequest) (*v1.GetMeasurementResponse, error)
 	CreateMeasurement(context.Context, *v1.CreateMeasurementRequest) (*v1.CreateMeasurementResponse, error)
 	UpdateMeasurement(context.Context, *v1.UpdateMeasurementRequest) (*v1.UpdateMeasurementResponse, error)
 	DeleteMeasurement(context.Context, *v1.DeleteMeasurementRequest) (*v1.DeleteMeasurementResponse, error)
+	ListIngredients(context.Context, *v1.ListIngredientsRequest) (*v1.ListIngredientsResponse, error)
 	GetIngredient(context.Context, *v1.GetIngredientRequest) (*v1.GetIngredientResponse, error)
 	CreateIngredient(context.Context, *v1.CreateIngredientRequest) (*v1.CreateIngredientResponse, error)
 	UpdateIngredient(context.Context, *v1.UpdateIngredientRequest) (*v1.UpdateIngredientResponse, error)
@@ -82,6 +90,12 @@ func NewRecipeServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 	baseURL = strings.TrimRight(baseURL, "/")
 	recipeServiceMethods := v1.File_food_swipe_v1_recipe_proto.Services().ByName("RecipeService").Methods()
 	return &recipeServiceClient{
+		listMeasurements: connect.NewClient[v1.ListMeasurementsRequest, v1.ListMeasurementsResponse](
+			httpClient,
+			baseURL+RecipeServiceListMeasurementsProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListMeasurements")),
+			connect.WithClientOptions(opts...),
+		),
 		getMeasurement: connect.NewClient[v1.GetMeasurementRequest, v1.GetMeasurementResponse](
 			httpClient,
 			baseURL+RecipeServiceGetMeasurementProcedure,
@@ -104,6 +118,12 @@ func NewRecipeServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			httpClient,
 			baseURL+RecipeServiceDeleteMeasurementProcedure,
 			connect.WithSchema(recipeServiceMethods.ByName("DeleteMeasurement")),
+			connect.WithClientOptions(opts...),
+		),
+		listIngredients: connect.NewClient[v1.ListIngredientsRequest, v1.ListIngredientsResponse](
+			httpClient,
+			baseURL+RecipeServiceListIngredientsProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListIngredients")),
 			connect.WithClientOptions(opts...),
 		),
 		getIngredient: connect.NewClient[v1.GetIngredientRequest, v1.GetIngredientResponse](
@@ -135,14 +155,25 @@ func NewRecipeServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 
 // recipeServiceClient implements RecipeServiceClient.
 type recipeServiceClient struct {
+	listMeasurements  *connect.Client[v1.ListMeasurementsRequest, v1.ListMeasurementsResponse]
 	getMeasurement    *connect.Client[v1.GetMeasurementRequest, v1.GetMeasurementResponse]
 	createMeasurement *connect.Client[v1.CreateMeasurementRequest, v1.CreateMeasurementResponse]
 	updateMeasurement *connect.Client[v1.UpdateMeasurementRequest, v1.UpdateMeasurementResponse]
 	deleteMeasurement *connect.Client[v1.DeleteMeasurementRequest, v1.DeleteMeasurementResponse]
+	listIngredients   *connect.Client[v1.ListIngredientsRequest, v1.ListIngredientsResponse]
 	getIngredient     *connect.Client[v1.GetIngredientRequest, v1.GetIngredientResponse]
 	createIngredient  *connect.Client[v1.CreateIngredientRequest, v1.CreateIngredientResponse]
 	updateIngredient  *connect.Client[v1.UpdateIngredientRequest, v1.UpdateIngredientResponse]
 	deleteIngredient  *connect.Client[v1.DeleteIngredientRequest, v1.DeleteIngredientResponse]
+}
+
+// ListMeasurements calls foodswipe.v1.RecipeService.ListMeasurements.
+func (c *recipeServiceClient) ListMeasurements(ctx context.Context, req *v1.ListMeasurementsRequest) (*v1.ListMeasurementsResponse, error) {
+	response, err := c.listMeasurements.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
 }
 
 // GetMeasurement calls foodswipe.v1.RecipeService.GetMeasurement.
@@ -175,6 +206,15 @@ func (c *recipeServiceClient) UpdateMeasurement(ctx context.Context, req *v1.Upd
 // DeleteMeasurement calls foodswipe.v1.RecipeService.DeleteMeasurement.
 func (c *recipeServiceClient) DeleteMeasurement(ctx context.Context, req *v1.DeleteMeasurementRequest) (*v1.DeleteMeasurementResponse, error) {
 	response, err := c.deleteMeasurement.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ListIngredients calls foodswipe.v1.RecipeService.ListIngredients.
+func (c *recipeServiceClient) ListIngredients(ctx context.Context, req *v1.ListIngredientsRequest) (*v1.ListIngredientsResponse, error) {
+	response, err := c.listIngredients.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -219,10 +259,12 @@ func (c *recipeServiceClient) DeleteIngredient(ctx context.Context, req *v1.Dele
 
 // RecipeServiceHandler is an implementation of the foodswipe.v1.RecipeService service.
 type RecipeServiceHandler interface {
+	ListMeasurements(context.Context, *v1.ListMeasurementsRequest) (*v1.ListMeasurementsResponse, error)
 	GetMeasurement(context.Context, *v1.GetMeasurementRequest) (*v1.GetMeasurementResponse, error)
 	CreateMeasurement(context.Context, *v1.CreateMeasurementRequest) (*v1.CreateMeasurementResponse, error)
 	UpdateMeasurement(context.Context, *v1.UpdateMeasurementRequest) (*v1.UpdateMeasurementResponse, error)
 	DeleteMeasurement(context.Context, *v1.DeleteMeasurementRequest) (*v1.DeleteMeasurementResponse, error)
+	ListIngredients(context.Context, *v1.ListIngredientsRequest) (*v1.ListIngredientsResponse, error)
 	GetIngredient(context.Context, *v1.GetIngredientRequest) (*v1.GetIngredientResponse, error)
 	CreateIngredient(context.Context, *v1.CreateIngredientRequest) (*v1.CreateIngredientResponse, error)
 	UpdateIngredient(context.Context, *v1.UpdateIngredientRequest) (*v1.UpdateIngredientResponse, error)
@@ -236,6 +278,12 @@ type RecipeServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	recipeServiceMethods := v1.File_food_swipe_v1_recipe_proto.Services().ByName("RecipeService").Methods()
+	recipeServiceListMeasurementsHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListMeasurementsProcedure,
+		svc.ListMeasurements,
+		connect.WithSchema(recipeServiceMethods.ByName("ListMeasurements")),
+		connect.WithHandlerOptions(opts...),
+	)
 	recipeServiceGetMeasurementHandler := connect.NewUnaryHandlerSimple(
 		RecipeServiceGetMeasurementProcedure,
 		svc.GetMeasurement,
@@ -258,6 +306,12 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 		RecipeServiceDeleteMeasurementProcedure,
 		svc.DeleteMeasurement,
 		connect.WithSchema(recipeServiceMethods.ByName("DeleteMeasurement")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceListIngredientsHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListIngredientsProcedure,
+		svc.ListIngredients,
+		connect.WithSchema(recipeServiceMethods.ByName("ListIngredients")),
 		connect.WithHandlerOptions(opts...),
 	)
 	recipeServiceGetIngredientHandler := connect.NewUnaryHandlerSimple(
@@ -286,6 +340,8 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 	)
 	return "/foodswipe.v1.RecipeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case RecipeServiceListMeasurementsProcedure:
+			recipeServiceListMeasurementsHandler.ServeHTTP(w, r)
 		case RecipeServiceGetMeasurementProcedure:
 			recipeServiceGetMeasurementHandler.ServeHTTP(w, r)
 		case RecipeServiceCreateMeasurementProcedure:
@@ -294,6 +350,8 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 			recipeServiceUpdateMeasurementHandler.ServeHTTP(w, r)
 		case RecipeServiceDeleteMeasurementProcedure:
 			recipeServiceDeleteMeasurementHandler.ServeHTTP(w, r)
+		case RecipeServiceListIngredientsProcedure:
+			recipeServiceListIngredientsHandler.ServeHTTP(w, r)
 		case RecipeServiceGetIngredientProcedure:
 			recipeServiceGetIngredientHandler.ServeHTTP(w, r)
 		case RecipeServiceCreateIngredientProcedure:
@@ -311,6 +369,10 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 // UnimplementedRecipeServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedRecipeServiceHandler struct{}
 
+func (UnimplementedRecipeServiceHandler) ListMeasurements(context.Context, *v1.ListMeasurementsRequest) (*v1.ListMeasurementsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListMeasurements is not implemented"))
+}
+
 func (UnimplementedRecipeServiceHandler) GetMeasurement(context.Context, *v1.GetMeasurementRequest) (*v1.GetMeasurementResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.GetMeasurement is not implemented"))
 }
@@ -325,6 +387,10 @@ func (UnimplementedRecipeServiceHandler) UpdateMeasurement(context.Context, *v1.
 
 func (UnimplementedRecipeServiceHandler) DeleteMeasurement(context.Context, *v1.DeleteMeasurementRequest) (*v1.DeleteMeasurementResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteMeasurement is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ListIngredients(context.Context, *v1.ListIngredientsRequest) (*v1.ListIngredientsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListIngredients is not implemented"))
 }
 
 func (UnimplementedRecipeServiceHandler) GetIngredient(context.Context, *v1.GetIngredientRequest) (*v1.GetIngredientResponse, error) {

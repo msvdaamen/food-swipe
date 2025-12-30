@@ -9,7 +9,7 @@ import (
 
 const getIngredientSql = "SELECT id, name FROM ingredients WHERE id = $1"
 
-func (a *Ingredient) GetIngredient(ctx context.Context, id int32) (models.Ingredient, error) {
+func (a *Ingredient) GetIngredient(ctx context.Context, id uint32) (models.Ingredient, error) {
 
 	row := a.db.QueryRow(ctx, getIngredientSql, id)
 	var ingredient models.Ingredient
