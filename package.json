@@ -2,6 +2,9 @@
   "name": "food-swipe",
   "type": "module",
   "private": true,
+  "scripts": {
+    "generate": "buf generate"
+  },
   "devDependencies": {
     "@types/aws-lambda": "8.10.148",
     "@types/bun": "latest"
@@ -10,6 +13,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@bufbuild/protoc-gen-es": "^2.10.2",
     "sst": "3.11.11"
   },
   "workspaces": [

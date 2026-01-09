@@ -88,7 +88,7 @@ function RouteComponent() {
 
   const handleUpdateRecipe = async (
     field: string,
-    value: string | number | boolean
+    value: string | number | boolean,
   ) => {
     updateRecipe.mutate({
       recipeId,
@@ -259,14 +259,14 @@ function Ingredients({ recipeId }: { recipeId: string }) {
               key={ingredient.ingredientId}
               className="t-row flex items-center px-2 py-1 border-t"
             >
-              <div className="name flex-grow">{ingredient.ingredient}</div>
-              <div className="amount min-w-20 flex-shrink">
+              <div className="name grow">{ingredient.ingredient}</div>
+              <div className="amount min-w-20 shrink">
                 {ingredient.amount}
                 {ingredient.measurement}
               </div>
-              <div className="flex min-w-28 flex-shrink gap-1">
+              <div className="flex min-w-28 shrink gap-1">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   onClick={() => openUpdateDialog(ingredient)}
                 >
@@ -313,13 +313,13 @@ function Steps({ recipeId }: { recipeId: string }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStepId, setActiveStepId] = useState<number | undefined>(
-    undefined
+    undefined,
   );
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   if (isLoading) {
@@ -372,9 +372,9 @@ function Steps({ recipeId }: { recipeId: string }) {
         <div className="table-container">
           <div className="ingredients mt-2 rounded border">
             <div className="flex px-2 py-2 bg-muted">
-              <div className="step min-w-20 flex-shrink">Step</div>
-              <div className="description flex-grow">Description</div>
-              <div className="min-w-28 flex-shrink"></div>
+              <div className="step min-w-20 shrink">Step</div>
+              <div className="description grow">Description</div>
+              <div className="min-w-28 shrink"></div>
             </div>
             <div>
               <DndContext
@@ -434,9 +434,9 @@ function SortableStep({
       style={style}
       className="t-row flex items-center px-2 py-1 border-t"
     >
-      <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
-      <div className="description flex-grow">{step.description}</div>
-      <div className="flex min-w-28 flex-shrink gap-1">
+      <div className="step min-w-20 shrink">{step.stepNumber}</div>
+      <div className="description grow">{step.description}</div>
+      <div className="flex min-w-28 shrink gap-1">
         <Button variant="outline" size="sm" onClick={() => update(step.id)}>
           <Pencil />
         </Button>
@@ -483,7 +483,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
   const updateNutritionValue = (
     name: Nutrition,
     unit: NutritionUnit,
-    value: number
+    value: number,
   ) => {
     updateNutrition(name, unit, Number(value));
   };
@@ -491,7 +491,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
   const updateNutrition = (
     name: Nutrition,
     unit: NutritionUnit,
-    value: number
+    value: number,
   ) => {
     updateNutritionMutation.mutate({
       recipeId,
@@ -534,7 +534,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                       updateNutritionValue(
                         nutrition.name,
                         nutrition.unit,
-                        e.target.valueAsNumber
+                        e.target.valueAsNumber,
                       )
                     }
                   />
@@ -546,7 +546,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                       updateNutritionValue(
                         nutrition.name,
                         value as NutritionUnit,
-                        nutrition.value
+                        nutrition.value,
                       )
                     }
                   >

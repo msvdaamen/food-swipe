@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message User {
+    string id = 1 [(buf.validate.field).string.uuid = true];
+    string name = 2;
+    string email = 3;
+    bool email_verified = 4;
+    optional string image = 5;
+    string username = 6;
+    optional string display_username = 7;
+    string role = 8;
+    bool banned = 9;
+    optional string ban_reason = 10;
+    optional google.protobuf.Timestamp ban_expires = 11;
+    google.protobuf.Timestamp created_at = 12;
+    google.protobuf.Timestamp updated_at = 13;
+}
+
+
+message GetUserByIdRequest {
+    string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message GetUserByIdResponse {
+    User user = 1;
+}
+
+service UserService {
+    rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+}
