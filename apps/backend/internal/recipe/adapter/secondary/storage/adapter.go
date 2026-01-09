@@ -3,12 +3,14 @@ package storage
 import (
 	"github.com/food-swipe/internal/recipe/adapter/secondary/storage/ingredient"
 	"github.com/food-swipe/internal/recipe/adapter/secondary/storage/measurement"
+	"github.com/food-swipe/internal/recipe/adapter/secondary/storage/recipe"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Adapter struct {
 	*ingredient.Ingredient
 	*measurement.Measurement
+	*recipe.Recipe
 
 	db *pgxpool.Pool
 }
@@ -18,5 +20,6 @@ func New(pool *pgxpool.Pool) *Adapter {
 		db:          pool,
 		Ingredient:  ingredient.New(pool),
 		Measurement: measurement.New(pool),
+		Recipe:      recipe.New(pool),
 	}
 }

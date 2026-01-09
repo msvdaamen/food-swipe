@@ -63,6 +63,56 @@ const (
 	// RecipeServiceDeleteIngredientProcedure is the fully-qualified name of the RecipeService's
 	// DeleteIngredient RPC.
 	RecipeServiceDeleteIngredientProcedure = "/foodswipe.v1.RecipeService/DeleteIngredient"
+	// RecipeServiceListRecipesProcedure is the fully-qualified name of the RecipeService's ListRecipes
+	// RPC.
+	RecipeServiceListRecipesProcedure = "/foodswipe.v1.RecipeService/ListRecipes"
+	// RecipeServiceGetRecipeProcedure is the fully-qualified name of the RecipeService's GetRecipe RPC.
+	RecipeServiceGetRecipeProcedure = "/foodswipe.v1.RecipeService/GetRecipe"
+	// RecipeServiceCreateRecipeProcedure is the fully-qualified name of the RecipeService's
+	// CreateRecipe RPC.
+	RecipeServiceCreateRecipeProcedure = "/foodswipe.v1.RecipeService/CreateRecipe"
+	// RecipeServiceUpdateRecipeProcedure is the fully-qualified name of the RecipeService's
+	// UpdateRecipe RPC.
+	RecipeServiceUpdateRecipeProcedure = "/foodswipe.v1.RecipeService/UpdateRecipe"
+	// RecipeServiceDeleteRecipeProcedure is the fully-qualified name of the RecipeService's
+	// DeleteRecipe RPC.
+	RecipeServiceDeleteRecipeProcedure = "/foodswipe.v1.RecipeService/DeleteRecipe"
+	// RecipeServiceListRecipeStepsProcedure is the fully-qualified name of the RecipeService's
+	// ListRecipeSteps RPC.
+	RecipeServiceListRecipeStepsProcedure = "/foodswipe.v1.RecipeService/ListRecipeSteps"
+	// RecipeServiceCreateRecipeStepProcedure is the fully-qualified name of the RecipeService's
+	// CreateRecipeStep RPC.
+	RecipeServiceCreateRecipeStepProcedure = "/foodswipe.v1.RecipeService/CreateRecipeStep"
+	// RecipeServiceUpdateRecipeStepProcedure is the fully-qualified name of the RecipeService's
+	// UpdateRecipeStep RPC.
+	RecipeServiceUpdateRecipeStepProcedure = "/foodswipe.v1.RecipeService/UpdateRecipeStep"
+	// RecipeServiceDeleteRecipeStepProcedure is the fully-qualified name of the RecipeService's
+	// DeleteRecipeStep RPC.
+	RecipeServiceDeleteRecipeStepProcedure = "/foodswipe.v1.RecipeService/DeleteRecipeStep"
+	// RecipeServiceReorderRecipeStepProcedure is the fully-qualified name of the RecipeService's
+	// ReorderRecipeStep RPC.
+	RecipeServiceReorderRecipeStepProcedure = "/foodswipe.v1.RecipeService/ReorderRecipeStep"
+	// RecipeServiceListRecipeIngredientsProcedure is the fully-qualified name of the RecipeService's
+	// ListRecipeIngredients RPC.
+	RecipeServiceListRecipeIngredientsProcedure = "/foodswipe.v1.RecipeService/ListRecipeIngredients"
+	// RecipeServiceCreateRecipeIngredientProcedure is the fully-qualified name of the RecipeService's
+	// CreateRecipeIngredient RPC.
+	RecipeServiceCreateRecipeIngredientProcedure = "/foodswipe.v1.RecipeService/CreateRecipeIngredient"
+	// RecipeServiceUpdateRecipeIngredientProcedure is the fully-qualified name of the RecipeService's
+	// UpdateRecipeIngredient RPC.
+	RecipeServiceUpdateRecipeIngredientProcedure = "/foodswipe.v1.RecipeService/UpdateRecipeIngredient"
+	// RecipeServiceDeleteRecipeIngredientProcedure is the fully-qualified name of the RecipeService's
+	// DeleteRecipeIngredient RPC.
+	RecipeServiceDeleteRecipeIngredientProcedure = "/foodswipe.v1.RecipeService/DeleteRecipeIngredient"
+	// RecipeServiceListRecipeNutritionsProcedure is the fully-qualified name of the RecipeService's
+	// ListRecipeNutritions RPC.
+	RecipeServiceListRecipeNutritionsProcedure = "/foodswipe.v1.RecipeService/ListRecipeNutritions"
+	// RecipeServiceUpdateRecipeNutritionProcedure is the fully-qualified name of the RecipeService's
+	// UpdateRecipeNutrition RPC.
+	RecipeServiceUpdateRecipeNutritionProcedure = "/foodswipe.v1.RecipeService/UpdateRecipeNutrition"
+	// RecipeServiceLikeRecipeProcedure is the fully-qualified name of the RecipeService's LikeRecipe
+	// RPC.
+	RecipeServiceLikeRecipeProcedure = "/foodswipe.v1.RecipeService/LikeRecipe"
 )
 
 // RecipeServiceClient is a client for the foodswipe.v1.RecipeService service.
@@ -77,6 +127,23 @@ type RecipeServiceClient interface {
 	CreateIngredient(context.Context, *v1.CreateIngredientRequest) (*v1.CreateIngredientResponse, error)
 	UpdateIngredient(context.Context, *v1.UpdateIngredientRequest) (*v1.UpdateIngredientResponse, error)
 	DeleteIngredient(context.Context, *v1.DeleteIngredientRequest) (*v1.DeleteIngredientResponse, error)
+	ListRecipes(context.Context, *v1.ListRecipesRequest) (*v1.ListRecipesResponse, error)
+	GetRecipe(context.Context, *v1.GetRecipeRequest) (*v1.GetRecipeResponse, error)
+	CreateRecipe(context.Context, *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error)
+	UpdateRecipe(context.Context, *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error)
+	DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error)
+	ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error)
+	CreateRecipeStep(context.Context, *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error)
+	UpdateRecipeStep(context.Context, *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error)
+	DeleteRecipeStep(context.Context, *v1.DeleteRecipeStepRequest) (*v1.DeleteRecipeStepResponse, error)
+	ReorderRecipeStep(context.Context, *v1.ReorderRecipeStepRequest) (*v1.ReorderRecipeStepResponse, error)
+	ListRecipeIngredients(context.Context, *v1.ListRecipeIngredientsRequest) (*v1.ListRecipeIngredientsResponse, error)
+	CreateRecipeIngredient(context.Context, *v1.CreateRecipeIngredientRequest) (*v1.CreateRecipeIngredientResponse, error)
+	UpdateRecipeIngredient(context.Context, *v1.UpdateRecipeIngredientRequest) (*v1.UpdateRecipeIngredientResponse, error)
+	DeleteRecipeIngredient(context.Context, *v1.DeleteRecipeIngredientRequest) (*v1.DeleteRecipeIngredientResponse, error)
+	ListRecipeNutritions(context.Context, *v1.ListRecipeNutritionsRequest) (*v1.ListRecipeNutritionsResponse, error)
+	UpdateRecipeNutrition(context.Context, *v1.UpdateRecipeNutritionRequest) (*v1.UpdateRecipeNutritionResponse, error)
+	LikeRecipe(context.Context, *v1.LikeRecipeRequest) (*v1.LikeRecipeResponse, error)
 }
 
 // NewRecipeServiceClient constructs a client for the foodswipe.v1.RecipeService service. By
@@ -150,21 +217,140 @@ func NewRecipeServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(recipeServiceMethods.ByName("DeleteIngredient")),
 			connect.WithClientOptions(opts...),
 		),
+		listRecipes: connect.NewClient[v1.ListRecipesRequest, v1.ListRecipesResponse](
+			httpClient,
+			baseURL+RecipeServiceListRecipesProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListRecipes")),
+			connect.WithClientOptions(opts...),
+		),
+		getRecipe: connect.NewClient[v1.GetRecipeRequest, v1.GetRecipeResponse](
+			httpClient,
+			baseURL+RecipeServiceGetRecipeProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("GetRecipe")),
+			connect.WithClientOptions(opts...),
+		),
+		createRecipe: connect.NewClient[v1.CreateRecipeRequest, v1.CreateRecipeResponse](
+			httpClient,
+			baseURL+RecipeServiceCreateRecipeProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("CreateRecipe")),
+			connect.WithClientOptions(opts...),
+		),
+		updateRecipe: connect.NewClient[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse](
+			httpClient,
+			baseURL+RecipeServiceUpdateRecipeProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipe")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteRecipe: connect.NewClient[v1.DeleteRecipeRequest, v1.DeleteRecipeResponse](
+			httpClient,
+			baseURL+RecipeServiceDeleteRecipeProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipe")),
+			connect.WithClientOptions(opts...),
+		),
+		listRecipeSteps: connect.NewClient[v1.ListRecipeStepsRequest, v1.ListRecipeStepsResponse](
+			httpClient,
+			baseURL+RecipeServiceListRecipeStepsProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListRecipeSteps")),
+			connect.WithClientOptions(opts...),
+		),
+		createRecipeStep: connect.NewClient[v1.CreateRecipeStepRequest, v1.CreateRecipeStepResponse](
+			httpClient,
+			baseURL+RecipeServiceCreateRecipeStepProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("CreateRecipeStep")),
+			connect.WithClientOptions(opts...),
+		),
+		updateRecipeStep: connect.NewClient[v1.UpdateRecipeStepRequest, v1.UpdateRecipeStepResponse](
+			httpClient,
+			baseURL+RecipeServiceUpdateRecipeStepProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeStep")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteRecipeStep: connect.NewClient[v1.DeleteRecipeStepRequest, v1.DeleteRecipeStepResponse](
+			httpClient,
+			baseURL+RecipeServiceDeleteRecipeStepProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipeStep")),
+			connect.WithClientOptions(opts...),
+		),
+		reorderRecipeStep: connect.NewClient[v1.ReorderRecipeStepRequest, v1.ReorderRecipeStepResponse](
+			httpClient,
+			baseURL+RecipeServiceReorderRecipeStepProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ReorderRecipeStep")),
+			connect.WithClientOptions(opts...),
+		),
+		listRecipeIngredients: connect.NewClient[v1.ListRecipeIngredientsRequest, v1.ListRecipeIngredientsResponse](
+			httpClient,
+			baseURL+RecipeServiceListRecipeIngredientsProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListRecipeIngredients")),
+			connect.WithClientOptions(opts...),
+		),
+		createRecipeIngredient: connect.NewClient[v1.CreateRecipeIngredientRequest, v1.CreateRecipeIngredientResponse](
+			httpClient,
+			baseURL+RecipeServiceCreateRecipeIngredientProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("CreateRecipeIngredient")),
+			connect.WithClientOptions(opts...),
+		),
+		updateRecipeIngredient: connect.NewClient[v1.UpdateRecipeIngredientRequest, v1.UpdateRecipeIngredientResponse](
+			httpClient,
+			baseURL+RecipeServiceUpdateRecipeIngredientProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeIngredient")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteRecipeIngredient: connect.NewClient[v1.DeleteRecipeIngredientRequest, v1.DeleteRecipeIngredientResponse](
+			httpClient,
+			baseURL+RecipeServiceDeleteRecipeIngredientProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipeIngredient")),
+			connect.WithClientOptions(opts...),
+		),
+		listRecipeNutritions: connect.NewClient[v1.ListRecipeNutritionsRequest, v1.ListRecipeNutritionsResponse](
+			httpClient,
+			baseURL+RecipeServiceListRecipeNutritionsProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("ListRecipeNutritions")),
+			connect.WithClientOptions(opts...),
+		),
+		updateRecipeNutrition: connect.NewClient[v1.UpdateRecipeNutritionRequest, v1.UpdateRecipeNutritionResponse](
+			httpClient,
+			baseURL+RecipeServiceUpdateRecipeNutritionProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeNutrition")),
+			connect.WithClientOptions(opts...),
+		),
+		likeRecipe: connect.NewClient[v1.LikeRecipeRequest, v1.LikeRecipeResponse](
+			httpClient,
+			baseURL+RecipeServiceLikeRecipeProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("LikeRecipe")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // recipeServiceClient implements RecipeServiceClient.
 type recipeServiceClient struct {
-	listMeasurements  *connect.Client[v1.ListMeasurementsRequest, v1.ListMeasurementsResponse]
-	getMeasurement    *connect.Client[v1.GetMeasurementRequest, v1.GetMeasurementResponse]
-	createMeasurement *connect.Client[v1.CreateMeasurementRequest, v1.CreateMeasurementResponse]
-	updateMeasurement *connect.Client[v1.UpdateMeasurementRequest, v1.UpdateMeasurementResponse]
-	deleteMeasurement *connect.Client[v1.DeleteMeasurementRequest, v1.DeleteMeasurementResponse]
-	listIngredients   *connect.Client[v1.ListIngredientsRequest, v1.ListIngredientsResponse]
-	getIngredient     *connect.Client[v1.GetIngredientRequest, v1.GetIngredientResponse]
-	createIngredient  *connect.Client[v1.CreateIngredientRequest, v1.CreateIngredientResponse]
-	updateIngredient  *connect.Client[v1.UpdateIngredientRequest, v1.UpdateIngredientResponse]
-	deleteIngredient  *connect.Client[v1.DeleteIngredientRequest, v1.DeleteIngredientResponse]
+	listMeasurements       *connect.Client[v1.ListMeasurementsRequest, v1.ListMeasurementsResponse]
+	getMeasurement         *connect.Client[v1.GetMeasurementRequest, v1.GetMeasurementResponse]
+	createMeasurement      *connect.Client[v1.CreateMeasurementRequest, v1.CreateMeasurementResponse]
+	updateMeasurement      *connect.Client[v1.UpdateMeasurementRequest, v1.UpdateMeasurementResponse]
+	deleteMeasurement      *connect.Client[v1.DeleteMeasurementRequest, v1.DeleteMeasurementResponse]
+	listIngredients        *connect.Client[v1.ListIngredientsRequest, v1.ListIngredientsResponse]
+	getIngredient          *connect.Client[v1.GetIngredientRequest, v1.GetIngredientResponse]
+	createIngredient       *connect.Client[v1.CreateIngredientRequest, v1.CreateIngredientResponse]
+	updateIngredient       *connect.Client[v1.UpdateIngredientRequest, v1.UpdateIngredientResponse]
+	deleteIngredient       *connect.Client[v1.DeleteIngredientRequest, v1.DeleteIngredientResponse]
+	listRecipes            *connect.Client[v1.ListRecipesRequest, v1.ListRecipesResponse]
+	getRecipe              *connect.Client[v1.GetRecipeRequest, v1.GetRecipeResponse]
+	createRecipe           *connect.Client[v1.CreateRecipeRequest, v1.CreateRecipeResponse]
+	updateRecipe           *connect.Client[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse]
+	deleteRecipe           *connect.Client[v1.DeleteRecipeRequest, v1.DeleteRecipeResponse]
+	listRecipeSteps        *connect.Client[v1.ListRecipeStepsRequest, v1.ListRecipeStepsResponse]
+	createRecipeStep       *connect.Client[v1.CreateRecipeStepRequest, v1.CreateRecipeStepResponse]
+	updateRecipeStep       *connect.Client[v1.UpdateRecipeStepRequest, v1.UpdateRecipeStepResponse]
+	deleteRecipeStep       *connect.Client[v1.DeleteRecipeStepRequest, v1.DeleteRecipeStepResponse]
+	reorderRecipeStep      *connect.Client[v1.ReorderRecipeStepRequest, v1.ReorderRecipeStepResponse]
+	listRecipeIngredients  *connect.Client[v1.ListRecipeIngredientsRequest, v1.ListRecipeIngredientsResponse]
+	createRecipeIngredient *connect.Client[v1.CreateRecipeIngredientRequest, v1.CreateRecipeIngredientResponse]
+	updateRecipeIngredient *connect.Client[v1.UpdateRecipeIngredientRequest, v1.UpdateRecipeIngredientResponse]
+	deleteRecipeIngredient *connect.Client[v1.DeleteRecipeIngredientRequest, v1.DeleteRecipeIngredientResponse]
+	listRecipeNutritions   *connect.Client[v1.ListRecipeNutritionsRequest, v1.ListRecipeNutritionsResponse]
+	updateRecipeNutrition  *connect.Client[v1.UpdateRecipeNutritionRequest, v1.UpdateRecipeNutritionResponse]
+	likeRecipe             *connect.Client[v1.LikeRecipeRequest, v1.LikeRecipeResponse]
 }
 
 // ListMeasurements calls foodswipe.v1.RecipeService.ListMeasurements.
@@ -257,6 +443,159 @@ func (c *recipeServiceClient) DeleteIngredient(ctx context.Context, req *v1.Dele
 	return nil, err
 }
 
+// ListRecipes calls foodswipe.v1.RecipeService.ListRecipes.
+func (c *recipeServiceClient) ListRecipes(ctx context.Context, req *v1.ListRecipesRequest) (*v1.ListRecipesResponse, error) {
+	response, err := c.listRecipes.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// GetRecipe calls foodswipe.v1.RecipeService.GetRecipe.
+func (c *recipeServiceClient) GetRecipe(ctx context.Context, req *v1.GetRecipeRequest) (*v1.GetRecipeResponse, error) {
+	response, err := c.getRecipe.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CreateRecipe calls foodswipe.v1.RecipeService.CreateRecipe.
+func (c *recipeServiceClient) CreateRecipe(ctx context.Context, req *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error) {
+	response, err := c.createRecipe.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UpdateRecipe calls foodswipe.v1.RecipeService.UpdateRecipe.
+func (c *recipeServiceClient) UpdateRecipe(ctx context.Context, req *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error) {
+	response, err := c.updateRecipe.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// DeleteRecipe calls foodswipe.v1.RecipeService.DeleteRecipe.
+func (c *recipeServiceClient) DeleteRecipe(ctx context.Context, req *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error) {
+	response, err := c.deleteRecipe.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ListRecipeSteps calls foodswipe.v1.RecipeService.ListRecipeSteps.
+func (c *recipeServiceClient) ListRecipeSteps(ctx context.Context, req *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error) {
+	response, err := c.listRecipeSteps.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CreateRecipeStep calls foodswipe.v1.RecipeService.CreateRecipeStep.
+func (c *recipeServiceClient) CreateRecipeStep(ctx context.Context, req *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error) {
+	response, err := c.createRecipeStep.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UpdateRecipeStep calls foodswipe.v1.RecipeService.UpdateRecipeStep.
+func (c *recipeServiceClient) UpdateRecipeStep(ctx context.Context, req *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error) {
+	response, err := c.updateRecipeStep.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// DeleteRecipeStep calls foodswipe.v1.RecipeService.DeleteRecipeStep.
+func (c *recipeServiceClient) DeleteRecipeStep(ctx context.Context, req *v1.DeleteRecipeStepRequest) (*v1.DeleteRecipeStepResponse, error) {
+	response, err := c.deleteRecipeStep.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ReorderRecipeStep calls foodswipe.v1.RecipeService.ReorderRecipeStep.
+func (c *recipeServiceClient) ReorderRecipeStep(ctx context.Context, req *v1.ReorderRecipeStepRequest) (*v1.ReorderRecipeStepResponse, error) {
+	response, err := c.reorderRecipeStep.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ListRecipeIngredients calls foodswipe.v1.RecipeService.ListRecipeIngredients.
+func (c *recipeServiceClient) ListRecipeIngredients(ctx context.Context, req *v1.ListRecipeIngredientsRequest) (*v1.ListRecipeIngredientsResponse, error) {
+	response, err := c.listRecipeIngredients.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CreateRecipeIngredient calls foodswipe.v1.RecipeService.CreateRecipeIngredient.
+func (c *recipeServiceClient) CreateRecipeIngredient(ctx context.Context, req *v1.CreateRecipeIngredientRequest) (*v1.CreateRecipeIngredientResponse, error) {
+	response, err := c.createRecipeIngredient.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UpdateRecipeIngredient calls foodswipe.v1.RecipeService.UpdateRecipeIngredient.
+func (c *recipeServiceClient) UpdateRecipeIngredient(ctx context.Context, req *v1.UpdateRecipeIngredientRequest) (*v1.UpdateRecipeIngredientResponse, error) {
+	response, err := c.updateRecipeIngredient.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// DeleteRecipeIngredient calls foodswipe.v1.RecipeService.DeleteRecipeIngredient.
+func (c *recipeServiceClient) DeleteRecipeIngredient(ctx context.Context, req *v1.DeleteRecipeIngredientRequest) (*v1.DeleteRecipeIngredientResponse, error) {
+	response, err := c.deleteRecipeIngredient.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ListRecipeNutritions calls foodswipe.v1.RecipeService.ListRecipeNutritions.
+func (c *recipeServiceClient) ListRecipeNutritions(ctx context.Context, req *v1.ListRecipeNutritionsRequest) (*v1.ListRecipeNutritionsResponse, error) {
+	response, err := c.listRecipeNutritions.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UpdateRecipeNutrition calls foodswipe.v1.RecipeService.UpdateRecipeNutrition.
+func (c *recipeServiceClient) UpdateRecipeNutrition(ctx context.Context, req *v1.UpdateRecipeNutritionRequest) (*v1.UpdateRecipeNutritionResponse, error) {
+	response, err := c.updateRecipeNutrition.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// LikeRecipe calls foodswipe.v1.RecipeService.LikeRecipe.
+func (c *recipeServiceClient) LikeRecipe(ctx context.Context, req *v1.LikeRecipeRequest) (*v1.LikeRecipeResponse, error) {
+	response, err := c.likeRecipe.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // RecipeServiceHandler is an implementation of the foodswipe.v1.RecipeService service.
 type RecipeServiceHandler interface {
 	ListMeasurements(context.Context, *v1.ListMeasurementsRequest) (*v1.ListMeasurementsResponse, error)
@@ -269,6 +608,23 @@ type RecipeServiceHandler interface {
 	CreateIngredient(context.Context, *v1.CreateIngredientRequest) (*v1.CreateIngredientResponse, error)
 	UpdateIngredient(context.Context, *v1.UpdateIngredientRequest) (*v1.UpdateIngredientResponse, error)
 	DeleteIngredient(context.Context, *v1.DeleteIngredientRequest) (*v1.DeleteIngredientResponse, error)
+	ListRecipes(context.Context, *v1.ListRecipesRequest) (*v1.ListRecipesResponse, error)
+	GetRecipe(context.Context, *v1.GetRecipeRequest) (*v1.GetRecipeResponse, error)
+	CreateRecipe(context.Context, *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error)
+	UpdateRecipe(context.Context, *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error)
+	DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error)
+	ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error)
+	CreateRecipeStep(context.Context, *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error)
+	UpdateRecipeStep(context.Context, *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error)
+	DeleteRecipeStep(context.Context, *v1.DeleteRecipeStepRequest) (*v1.DeleteRecipeStepResponse, error)
+	ReorderRecipeStep(context.Context, *v1.ReorderRecipeStepRequest) (*v1.ReorderRecipeStepResponse, error)
+	ListRecipeIngredients(context.Context, *v1.ListRecipeIngredientsRequest) (*v1.ListRecipeIngredientsResponse, error)
+	CreateRecipeIngredient(context.Context, *v1.CreateRecipeIngredientRequest) (*v1.CreateRecipeIngredientResponse, error)
+	UpdateRecipeIngredient(context.Context, *v1.UpdateRecipeIngredientRequest) (*v1.UpdateRecipeIngredientResponse, error)
+	DeleteRecipeIngredient(context.Context, *v1.DeleteRecipeIngredientRequest) (*v1.DeleteRecipeIngredientResponse, error)
+	ListRecipeNutritions(context.Context, *v1.ListRecipeNutritionsRequest) (*v1.ListRecipeNutritionsResponse, error)
+	UpdateRecipeNutrition(context.Context, *v1.UpdateRecipeNutritionRequest) (*v1.UpdateRecipeNutritionResponse, error)
+	LikeRecipe(context.Context, *v1.LikeRecipeRequest) (*v1.LikeRecipeResponse, error)
 }
 
 // NewRecipeServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -338,6 +694,108 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(recipeServiceMethods.ByName("DeleteIngredient")),
 		connect.WithHandlerOptions(opts...),
 	)
+	recipeServiceListRecipesHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListRecipesProcedure,
+		svc.ListRecipes,
+		connect.WithSchema(recipeServiceMethods.ByName("ListRecipes")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceGetRecipeHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceGetRecipeProcedure,
+		svc.GetRecipe,
+		connect.WithSchema(recipeServiceMethods.ByName("GetRecipe")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceCreateRecipeHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceCreateRecipeProcedure,
+		svc.CreateRecipe,
+		connect.WithSchema(recipeServiceMethods.ByName("CreateRecipe")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceUpdateRecipeHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceUpdateRecipeProcedure,
+		svc.UpdateRecipe,
+		connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipe")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceDeleteRecipeHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceDeleteRecipeProcedure,
+		svc.DeleteRecipe,
+		connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipe")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceListRecipeStepsHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListRecipeStepsProcedure,
+		svc.ListRecipeSteps,
+		connect.WithSchema(recipeServiceMethods.ByName("ListRecipeSteps")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceCreateRecipeStepHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceCreateRecipeStepProcedure,
+		svc.CreateRecipeStep,
+		connect.WithSchema(recipeServiceMethods.ByName("CreateRecipeStep")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceUpdateRecipeStepHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceUpdateRecipeStepProcedure,
+		svc.UpdateRecipeStep,
+		connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeStep")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceDeleteRecipeStepHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceDeleteRecipeStepProcedure,
+		svc.DeleteRecipeStep,
+		connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipeStep")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceReorderRecipeStepHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceReorderRecipeStepProcedure,
+		svc.ReorderRecipeStep,
+		connect.WithSchema(recipeServiceMethods.ByName("ReorderRecipeStep")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceListRecipeIngredientsHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListRecipeIngredientsProcedure,
+		svc.ListRecipeIngredients,
+		connect.WithSchema(recipeServiceMethods.ByName("ListRecipeIngredients")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceCreateRecipeIngredientHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceCreateRecipeIngredientProcedure,
+		svc.CreateRecipeIngredient,
+		connect.WithSchema(recipeServiceMethods.ByName("CreateRecipeIngredient")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceUpdateRecipeIngredientHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceUpdateRecipeIngredientProcedure,
+		svc.UpdateRecipeIngredient,
+		connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeIngredient")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceDeleteRecipeIngredientHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceDeleteRecipeIngredientProcedure,
+		svc.DeleteRecipeIngredient,
+		connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipeIngredient")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceListRecipeNutritionsHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceListRecipeNutritionsProcedure,
+		svc.ListRecipeNutritions,
+		connect.WithSchema(recipeServiceMethods.ByName("ListRecipeNutritions")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceUpdateRecipeNutritionHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceUpdateRecipeNutritionProcedure,
+		svc.UpdateRecipeNutrition,
+		connect.WithSchema(recipeServiceMethods.ByName("UpdateRecipeNutrition")),
+		connect.WithHandlerOptions(opts...),
+	)
+	recipeServiceLikeRecipeHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceLikeRecipeProcedure,
+		svc.LikeRecipe,
+		connect.WithSchema(recipeServiceMethods.ByName("LikeRecipe")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/foodswipe.v1.RecipeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case RecipeServiceListMeasurementsProcedure:
@@ -360,6 +818,40 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 			recipeServiceUpdateIngredientHandler.ServeHTTP(w, r)
 		case RecipeServiceDeleteIngredientProcedure:
 			recipeServiceDeleteIngredientHandler.ServeHTTP(w, r)
+		case RecipeServiceListRecipesProcedure:
+			recipeServiceListRecipesHandler.ServeHTTP(w, r)
+		case RecipeServiceGetRecipeProcedure:
+			recipeServiceGetRecipeHandler.ServeHTTP(w, r)
+		case RecipeServiceCreateRecipeProcedure:
+			recipeServiceCreateRecipeHandler.ServeHTTP(w, r)
+		case RecipeServiceUpdateRecipeProcedure:
+			recipeServiceUpdateRecipeHandler.ServeHTTP(w, r)
+		case RecipeServiceDeleteRecipeProcedure:
+			recipeServiceDeleteRecipeHandler.ServeHTTP(w, r)
+		case RecipeServiceListRecipeStepsProcedure:
+			recipeServiceListRecipeStepsHandler.ServeHTTP(w, r)
+		case RecipeServiceCreateRecipeStepProcedure:
+			recipeServiceCreateRecipeStepHandler.ServeHTTP(w, r)
+		case RecipeServiceUpdateRecipeStepProcedure:
+			recipeServiceUpdateRecipeStepHandler.ServeHTTP(w, r)
+		case RecipeServiceDeleteRecipeStepProcedure:
+			recipeServiceDeleteRecipeStepHandler.ServeHTTP(w, r)
+		case RecipeServiceReorderRecipeStepProcedure:
+			recipeServiceReorderRecipeStepHandler.ServeHTTP(w, r)
+		case RecipeServiceListRecipeIngredientsProcedure:
+			recipeServiceListRecipeIngredientsHandler.ServeHTTP(w, r)
+		case RecipeServiceCreateRecipeIngredientProcedure:
+			recipeServiceCreateRecipeIngredientHandler.ServeHTTP(w, r)
+		case RecipeServiceUpdateRecipeIngredientProcedure:
+			recipeServiceUpdateRecipeIngredientHandler.ServeHTTP(w, r)
+		case RecipeServiceDeleteRecipeIngredientProcedure:
+			recipeServiceDeleteRecipeIngredientHandler.ServeHTTP(w, r)
+		case RecipeServiceListRecipeNutritionsProcedure:
+			recipeServiceListRecipeNutritionsHandler.ServeHTTP(w, r)
+		case RecipeServiceUpdateRecipeNutritionProcedure:
+			recipeServiceUpdateRecipeNutritionHandler.ServeHTTP(w, r)
+		case RecipeServiceLikeRecipeProcedure:
+			recipeServiceLikeRecipeHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -407,4 +899,72 @@ func (UnimplementedRecipeServiceHandler) UpdateIngredient(context.Context, *v1.U
 
 func (UnimplementedRecipeServiceHandler) DeleteIngredient(context.Context, *v1.DeleteIngredientRequest) (*v1.DeleteIngredientResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteIngredient is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ListRecipes(context.Context, *v1.ListRecipesRequest) (*v1.ListRecipesResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListRecipes is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) GetRecipe(context.Context, *v1.GetRecipeRequest) (*v1.GetRecipeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.GetRecipe is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) CreateRecipe(context.Context, *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.CreateRecipe is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) UpdateRecipe(context.Context, *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.UpdateRecipe is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteRecipe is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListRecipeSteps is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) CreateRecipeStep(context.Context, *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.CreateRecipeStep is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) UpdateRecipeStep(context.Context, *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.UpdateRecipeStep is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) DeleteRecipeStep(context.Context, *v1.DeleteRecipeStepRequest) (*v1.DeleteRecipeStepResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteRecipeStep is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ReorderRecipeStep(context.Context, *v1.ReorderRecipeStepRequest) (*v1.ReorderRecipeStepResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ReorderRecipeStep is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ListRecipeIngredients(context.Context, *v1.ListRecipeIngredientsRequest) (*v1.ListRecipeIngredientsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListRecipeIngredients is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) CreateRecipeIngredient(context.Context, *v1.CreateRecipeIngredientRequest) (*v1.CreateRecipeIngredientResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.CreateRecipeIngredient is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) UpdateRecipeIngredient(context.Context, *v1.UpdateRecipeIngredientRequest) (*v1.UpdateRecipeIngredientResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.UpdateRecipeIngredient is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) DeleteRecipeIngredient(context.Context, *v1.DeleteRecipeIngredientRequest) (*v1.DeleteRecipeIngredientResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteRecipeIngredient is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) ListRecipeNutritions(context.Context, *v1.ListRecipeNutritionsRequest) (*v1.ListRecipeNutritionsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.ListRecipeNutritions is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) UpdateRecipeNutrition(context.Context, *v1.UpdateRecipeNutritionRequest) (*v1.UpdateRecipeNutritionResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.UpdateRecipeNutrition is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) LikeRecipe(context.Context, *v1.LikeRecipeRequest) (*v1.LikeRecipeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.LikeRecipe is not implemented"))
 }

@@ -102,6 +102,204 @@ message DeleteIngredientRequest {
 
 message DeleteIngredientResponse {}
 
+message Nutrition {
+  uint32 id = 1;
+  string name = 2;
+  string unit = 3;
+  uint32 value = 4;
+}
+
+message Recipe {
+  string id = 1;
+  string title = 2;
+  optional string description = 3;
+  optional uint32 prep_time = 4;
+  optional uint32 servings = 5;
+  bool is_published = 6;
+  optional string cover_image = 7;
+  string created_at = 8;
+  string updated_at = 9;
+  repeated Nutrition nutritions = 10;
+}
+
+message RecipeStep {
+  uint32 id = 1;
+  string recipe_id = 2;
+  uint32 step_number = 3;
+  string description = 4;
+}
+
+message RecipeIngredient {
+  string recipe_id = 1;
+  uint32 ingredient_id = 2;
+  optional uint32 measurement_id = 3;
+  uint32 amount = 4;
+  string ingredient = 5;
+  optional string measurement = 6;
+}
+
+message ListRecipesRequest {
+  uint32 page = 1 [(buf.validate.field).uint32.gte = 1];
+  uint32 limit = 2 [(buf.validate.field).uint32.gte = 1, (buf.validate.field).uint32.lte = 100];
+  optional bool is_published = 3;
+}
+
+message ListRecipesResponse {
+  foodswipe.v1.Pagination pagination = 1;
+  repeated Recipe data = 2;
+}
+
+message GetRecipeRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message GetRecipeResponse {
+  Recipe recipe = 1;
+}
+
+message CreateRecipeRequest {
+  string title = 1 [(buf.validate.field).string.min_len = 1];
+  optional string description = 2;
+  optional uint32 prep_time = 3;
+  optional uint32 servings = 4;
+  optional bool is_published = 5;
+}
+
+message CreateRecipeResponse {
+  Recipe recipe = 1;
+}
+
+message UpdateRecipeRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  optional string title = 2;
+  optional string description = 3;
+  optional uint32 prep_time = 4;
+  optional uint32 servings = 5;
+  optional bool is_published = 6;
+}
+
+message UpdateRecipeResponse {
+  Recipe recipe = 1;
+}
+
+message DeleteRecipeRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message DeleteRecipeResponse {}
+
+message ListRecipeStepsRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message ListRecipeStepsResponse {
+  repeated RecipeStep steps = 1;
+}
+
+message CreateRecipeStepRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 order = 2 [(buf.validate.field).uint32.gte = 1];
+  string description = 3 [(buf.validate.field).string.min_len = 1];
+}
+
+message CreateRecipeStepResponse {
+  RecipeStep step = 1;
+}
+
+message UpdateRecipeStepRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 step_id = 2 [(buf.validate.field).uint32.gte = 1];
+  string description = 3 [(buf.validate.field).string.min_len = 1];
+}
+
+message UpdateRecipeStepResponse {
+  RecipeStep step = 1;
+}
+
+message DeleteRecipeStepRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 step_id = 2 [(buf.validate.field).uint32.gte = 1];
+}
+
+message DeleteRecipeStepResponse {}
+
+message ReorderRecipeStepRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 step_id = 2 [(buf.validate.field).uint32.gte = 1];
+  uint32 order_from = 3 [(buf.validate.field).uint32.gte = 1];
+  uint32 order_to = 4 [(buf.validate.field).uint32.gte = 1];
+}
+
+message ReorderRecipeStepResponse {
+  repeated RecipeStep steps = 1;
+}
+
+message ListRecipeIngredientsRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message ListRecipeIngredientsResponse {
+  repeated RecipeIngredient ingredients = 1;
+}
+
+message CreateRecipeIngredientRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 ingredient_id = 2 [(buf.validate.field).uint32.gte = 1];
+  optional uint32 measurement_id = 3;
+  uint32 amount = 4 [(buf.validate.field).uint32.gte = 1];
+}
+
+message CreateRecipeIngredientResponse {
+  RecipeIngredient ingredient = 1;
+}
+
+message UpdateRecipeIngredientRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 ingredient_id = 2 [(buf.validate.field).uint32.gte = 1];
+  optional uint32 measurement_id = 3;
+  uint32 amount = 4 [(buf.validate.field).uint32.gte = 1];
+}
+
+message UpdateRecipeIngredientResponse {
+  RecipeIngredient ingredient = 1;
+}
+
+message DeleteRecipeIngredientRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  uint32 ingredient_id = 2 [(buf.validate.field).uint32.gte = 1];
+}
+
+message DeleteRecipeIngredientResponse {}
+
+message ListRecipeNutritionsRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+message ListRecipeNutritionsResponse {
+  repeated Nutrition nutritions = 1;
+}
+
+message UpdateRecipeNutritionRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string unit = 3 [(buf.validate.field).string.min_len = 1];
+  uint32 value = 4;
+}
+
+message UpdateRecipeNutritionResponse {
+  Nutrition nutrition = 1;
+}
+
+message LikeRecipeRequest {
+  string recipe_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  bool like = 3;
+}
+
+message LikeRecipeResponse {
+  Recipe recipe = 1;
+}
+
 service RecipeService {
   rpc ListMeasurements(ListMeasurementsRequest) returns (ListMeasurementsResponse);
   rpc GetMeasurement(GetMeasurementRequest) returns (GetMeasurementResponse);
@@ -114,4 +312,26 @@ service RecipeService {
   rpc CreateIngredient(CreateIngredientRequest) returns (CreateIngredientResponse);
   rpc UpdateIngredient(UpdateIngredientRequest) returns (UpdateIngredientResponse);
   rpc DeleteIngredient(DeleteIngredientRequest) returns (DeleteIngredientResponse);
+
+  rpc ListRecipes(ListRecipesRequest) returns (ListRecipesResponse);
+  rpc GetRecipe(GetRecipeRequest) returns (GetRecipeResponse);
+  rpc CreateRecipe(CreateRecipeRequest) returns (CreateRecipeResponse);
+  rpc UpdateRecipe(UpdateRecipeRequest) returns (UpdateRecipeResponse);
+  rpc DeleteRecipe(DeleteRecipeRequest) returns (DeleteRecipeResponse);
+
+  rpc ListRecipeSteps(ListRecipeStepsRequest) returns (ListRecipeStepsResponse);
+  rpc CreateRecipeStep(CreateRecipeStepRequest) returns (CreateRecipeStepResponse);
+  rpc UpdateRecipeStep(UpdateRecipeStepRequest) returns (UpdateRecipeStepResponse);
+  rpc DeleteRecipeStep(DeleteRecipeStepRequest) returns (DeleteRecipeStepResponse);
+  rpc ReorderRecipeStep(ReorderRecipeStepRequest) returns (ReorderRecipeStepResponse);
+
+  rpc ListRecipeIngredients(ListRecipeIngredientsRequest) returns (ListRecipeIngredientsResponse);
+  rpc CreateRecipeIngredient(CreateRecipeIngredientRequest) returns (CreateRecipeIngredientResponse);
+  rpc UpdateRecipeIngredient(UpdateRecipeIngredientRequest) returns (UpdateRecipeIngredientResponse);
+  rpc DeleteRecipeIngredient(DeleteRecipeIngredientRequest) returns (DeleteRecipeIngredientResponse);
+
+  rpc ListRecipeNutritions(ListRecipeNutritionsRequest) returns (ListRecipeNutritionsResponse);
+  rpc UpdateRecipeNutrition(UpdateRecipeNutritionRequest) returns (UpdateRecipeNutritionResponse);
+
+  rpc LikeRecipe(LikeRecipeRequest) returns (LikeRecipeResponse);
 }

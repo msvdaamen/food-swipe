@@ -11,14 +11,16 @@ import (
 	"time"
 
 	"github.com/food-swipe/internal/follow"
+	"github.com/food-swipe/internal/pkg/logger"
 	"github.com/food-swipe/internal/recipe"
 	"github.com/food-swipe/internal/user"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	DatabaseURL string `env:"DATABASE_URL"`
-	NatsURL     string `env:"NATS_URL"`
+	LogMode     logger.LogMode `env:"LOG_MODE" env-default:"0"`
+	DatabaseURL string         `env:"DATABASE_URL"`
+	NatsURL     string         `env:"NATS_URL"`
 }
 
 func main() {
@@ -26,6 +28,11 @@ func main() {
 	err := cleanenv.ReadConfig(".env", &cfg)
 	if err != nil {
 		log.Fatalf("Failed to read environment variables: %v", err)
+	}
+
+	logger, err := logger.Setup(cfg.LogMode)
+	if err != nil {
+		panic(err)
 	}
 
 	pool, err := setupDatabaseConnection(cfg.DatabaseURL)
@@ -42,9 +49,9 @@ func main() {
 
 	mux, server := setupGrpcServer("3001")
 
-	follow.Register(mux, pool)
-	user.Register(mux, pool)
-	recipe.Register(mux, pool)
+	follow.Register(mux, pool, logger)
+	user.Register(mux, pool, logger)
+	recipe.Register(mux, pool, logger)
 
 	shutdownChan := make(chan bool, 1)
 

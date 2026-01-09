@@ -23,7 +23,38 @@ type MeasurementHandler interface {
 	DeleteMeasurement(ctx context.Context, id uint16) error
 }
 
+type RecipeHandler interface {
+	// Recipe operations
+	ListRecipes(ctx context.Context, filter models.ListRecipesFilter) (*pagination.PaginationResponse[models.Recipe], error)
+	GetRecipe(ctx context.Context, id string) (*models.Recipe, error)
+	CreateRecipe(ctx context.Context, payload models.CreateRecipeInput) (*models.Recipe, error)
+	UpdateRecipe(ctx context.Context, id string, payload models.UpdateRecipeInput) (*models.Recipe, error)
+	DeleteRecipe(ctx context.Context, id string) error
+
+	// Recipe Steps operations
+	ListRecipeSteps(ctx context.Context, recipeID string) ([]models.RecipeStep, error)
+	CreateRecipeStep(ctx context.Context, recipeID string, payload models.CreateRecipeStepInput) (*models.RecipeStep, error)
+	UpdateRecipeStep(ctx context.Context, recipeID string, stepID uint32, payload models.UpdateRecipeStepInput) (*models.RecipeStep, error)
+	DeleteRecipeStep(ctx context.Context, recipeID string, stepID uint32) error
+	ReorderRecipeStep(ctx context.Context, recipeID string, stepID uint32, payload models.ReorderRecipeStepInput) ([]models.RecipeStep, error)
+
+	// Recipe Ingredients operations
+	ListRecipeIngredients(ctx context.Context, recipeID string) ([]models.RecipeIngredient, error)
+	GetRecipeIngredient(ctx context.Context, recipeID string, ingredientID uint32) (*models.RecipeIngredient, error)
+	CreateRecipeIngredient(ctx context.Context, recipeID string, payload models.CreateRecipeIngredientInput) (*models.RecipeIngredient, error)
+	UpdateRecipeIngredient(ctx context.Context, recipeID string, ingredientID uint32, payload models.UpdateRecipeIngredientInput) (*models.RecipeIngredient, error)
+	DeleteRecipeIngredient(ctx context.Context, recipeID string, ingredientID uint32) error
+
+	// Recipe Nutritions operations
+	ListRecipeNutritions(ctx context.Context, recipeID string) ([]models.Nutrition, error)
+	UpdateRecipeNutrition(ctx context.Context, recipeID string, payload models.UpdateNutritionInput) (*models.Nutrition, error)
+
+	// Like operations
+	LikeRecipe(ctx context.Context, userID string, recipeID string, like bool) (*models.Recipe, error)
+}
+
 type Handler interface {
 	IngredientHandler
 	MeasurementHandler
+	RecipeHandler
 }

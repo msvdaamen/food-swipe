@@ -1078,6 +1078,2070 @@ func (*DeleteIngredientResponse) Descriptor() ([]byte, []int) {
 	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{21}
 }
 
+type Nutrition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Unit          string                 `protobuf:"bytes,3,opt,name=unit,proto3" json:"unit,omitempty"`
+	Value         uint32                 `protobuf:"varint,4,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Nutrition) Reset() {
+	*x = Nutrition{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Nutrition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Nutrition) ProtoMessage() {}
+
+func (x *Nutrition) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Nutrition.ProtoReflect.Descriptor instead.
+func (*Nutrition) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *Nutrition) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Nutrition) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Nutrition) GetUnit() string {
+	if x != nil {
+		return x.Unit
+	}
+	return ""
+}
+
+func (x *Nutrition) GetValue() uint32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+type Recipe struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	PrepTime      *uint32                `protobuf:"varint,4,opt,name=prep_time,json=prepTime,proto3,oneof" json:"prep_time,omitempty"`
+	Servings      *uint32                `protobuf:"varint,5,opt,name=servings,proto3,oneof" json:"servings,omitempty"`
+	IsPublished   bool                   `protobuf:"varint,6,opt,name=is_published,json=isPublished,proto3" json:"is_published,omitempty"`
+	CoverImage    *string                `protobuf:"bytes,7,opt,name=cover_image,json=coverImage,proto3,oneof" json:"cover_image,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     string                 `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Nutritions    []*Nutrition           `protobuf:"bytes,10,rep,name=nutritions,proto3" json:"nutritions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Recipe) Reset() {
+	*x = Recipe{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Recipe) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Recipe) ProtoMessage() {}
+
+func (x *Recipe) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Recipe.ProtoReflect.Descriptor instead.
+func (*Recipe) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *Recipe) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Recipe) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Recipe) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *Recipe) GetPrepTime() uint32 {
+	if x != nil && x.PrepTime != nil {
+		return *x.PrepTime
+	}
+	return 0
+}
+
+func (x *Recipe) GetServings() uint32 {
+	if x != nil && x.Servings != nil {
+		return *x.Servings
+	}
+	return 0
+}
+
+func (x *Recipe) GetIsPublished() bool {
+	if x != nil {
+		return x.IsPublished
+	}
+	return false
+}
+
+func (x *Recipe) GetCoverImage() string {
+	if x != nil && x.CoverImage != nil {
+		return *x.CoverImage
+	}
+	return ""
+}
+
+func (x *Recipe) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+func (x *Recipe) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *Recipe) GetNutritions() []*Nutrition {
+	if x != nil {
+		return x.Nutritions
+	}
+	return nil
+}
+
+type RecipeStep struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	RecipeId      string                 `protobuf:"bytes,2,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	StepNumber    uint32                 `protobuf:"varint,3,opt,name=step_number,json=stepNumber,proto3" json:"step_number,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RecipeStep) Reset() {
+	*x = RecipeStep{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecipeStep) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecipeStep) ProtoMessage() {}
+
+func (x *RecipeStep) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecipeStep.ProtoReflect.Descriptor instead.
+func (*RecipeStep) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *RecipeStep) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *RecipeStep) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *RecipeStep) GetStepNumber() uint32 {
+	if x != nil {
+		return x.StepNumber
+	}
+	return 0
+}
+
+func (x *RecipeStep) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type RecipeIngredient struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	IngredientId  uint32                 `protobuf:"varint,2,opt,name=ingredient_id,json=ingredientId,proto3" json:"ingredient_id,omitempty"`
+	MeasurementId *uint32                `protobuf:"varint,3,opt,name=measurement_id,json=measurementId,proto3,oneof" json:"measurement_id,omitempty"`
+	Amount        uint32                 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Ingredient    string                 `protobuf:"bytes,5,opt,name=ingredient,proto3" json:"ingredient,omitempty"`
+	Measurement   *string                `protobuf:"bytes,6,opt,name=measurement,proto3,oneof" json:"measurement,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RecipeIngredient) Reset() {
+	*x = RecipeIngredient{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecipeIngredient) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecipeIngredient) ProtoMessage() {}
+
+func (x *RecipeIngredient) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecipeIngredient.ProtoReflect.Descriptor instead.
+func (*RecipeIngredient) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *RecipeIngredient) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *RecipeIngredient) GetIngredientId() uint32 {
+	if x != nil {
+		return x.IngredientId
+	}
+	return 0
+}
+
+func (x *RecipeIngredient) GetMeasurementId() uint32 {
+	if x != nil && x.MeasurementId != nil {
+		return *x.MeasurementId
+	}
+	return 0
+}
+
+func (x *RecipeIngredient) GetAmount() uint32 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *RecipeIngredient) GetIngredient() string {
+	if x != nil {
+		return x.Ingredient
+	}
+	return ""
+}
+
+func (x *RecipeIngredient) GetMeasurement() string {
+	if x != nil && x.Measurement != nil {
+		return *x.Measurement
+	}
+	return ""
+}
+
+type ListRecipesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          uint32                 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	Limit         uint32                 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	IsPublished   *bool                  `protobuf:"varint,3,opt,name=is_published,json=isPublished,proto3,oneof" json:"is_published,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipesRequest) Reset() {
+	*x = ListRecipesRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipesRequest) ProtoMessage() {}
+
+func (x *ListRecipesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipesRequest.ProtoReflect.Descriptor instead.
+func (*ListRecipesRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ListRecipesRequest) GetPage() uint32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListRecipesRequest) GetLimit() uint32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListRecipesRequest) GetIsPublished() bool {
+	if x != nil && x.IsPublished != nil {
+		return *x.IsPublished
+	}
+	return false
+}
+
+type ListRecipesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Pagination    *Pagination            `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Data          []*Recipe              `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipesResponse) Reset() {
+	*x = ListRecipesResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipesResponse) ProtoMessage() {}
+
+func (x *ListRecipesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipesResponse.ProtoReflect.Descriptor instead.
+func (*ListRecipesResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ListRecipesResponse) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *ListRecipesResponse) GetData() []*Recipe {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetRecipeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRecipeRequest) Reset() {
+	*x = GetRecipeRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRecipeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRecipeRequest) ProtoMessage() {}
+
+func (x *GetRecipeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRecipeRequest.ProtoReflect.Descriptor instead.
+func (*GetRecipeRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *GetRecipeRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetRecipeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Recipe        *Recipe                `protobuf:"bytes,1,opt,name=recipe,proto3" json:"recipe,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRecipeResponse) Reset() {
+	*x = GetRecipeResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRecipeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRecipeResponse) ProtoMessage() {}
+
+func (x *GetRecipeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRecipeResponse.ProtoReflect.Descriptor instead.
+func (*GetRecipeResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *GetRecipeResponse) GetRecipe() *Recipe {
+	if x != nil {
+		return x.Recipe
+	}
+	return nil
+}
+
+type CreateRecipeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Description   *string                `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	PrepTime      *uint32                `protobuf:"varint,3,opt,name=prep_time,json=prepTime,proto3,oneof" json:"prep_time,omitempty"`
+	Servings      *uint32                `protobuf:"varint,4,opt,name=servings,proto3,oneof" json:"servings,omitempty"`
+	IsPublished   *bool                  `protobuf:"varint,5,opt,name=is_published,json=isPublished,proto3,oneof" json:"is_published,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeRequest) Reset() {
+	*x = CreateRecipeRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeRequest) ProtoMessage() {}
+
+func (x *CreateRecipeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeRequest.ProtoReflect.Descriptor instead.
+func (*CreateRecipeRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *CreateRecipeRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *CreateRecipeRequest) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *CreateRecipeRequest) GetPrepTime() uint32 {
+	if x != nil && x.PrepTime != nil {
+		return *x.PrepTime
+	}
+	return 0
+}
+
+func (x *CreateRecipeRequest) GetServings() uint32 {
+	if x != nil && x.Servings != nil {
+		return *x.Servings
+	}
+	return 0
+}
+
+func (x *CreateRecipeRequest) GetIsPublished() bool {
+	if x != nil && x.IsPublished != nil {
+		return *x.IsPublished
+	}
+	return false
+}
+
+type CreateRecipeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Recipe        *Recipe                `protobuf:"bytes,1,opt,name=recipe,proto3" json:"recipe,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeResponse) Reset() {
+	*x = CreateRecipeResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeResponse) ProtoMessage() {}
+
+func (x *CreateRecipeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeResponse.ProtoReflect.Descriptor instead.
+func (*CreateRecipeResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *CreateRecipeResponse) GetRecipe() *Recipe {
+	if x != nil {
+		return x.Recipe
+	}
+	return nil
+}
+
+type UpdateRecipeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         *string                `protobuf:"bytes,2,opt,name=title,proto3,oneof" json:"title,omitempty"`
+	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	PrepTime      *uint32                `protobuf:"varint,4,opt,name=prep_time,json=prepTime,proto3,oneof" json:"prep_time,omitempty"`
+	Servings      *uint32                `protobuf:"varint,5,opt,name=servings,proto3,oneof" json:"servings,omitempty"`
+	IsPublished   *bool                  `protobuf:"varint,6,opt,name=is_published,json=isPublished,proto3,oneof" json:"is_published,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeRequest) Reset() {
+	*x = UpdateRecipeRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeRequest) ProtoMessage() {}
+
+func (x *UpdateRecipeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *UpdateRecipeRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdateRecipeRequest) GetTitle() string {
+	if x != nil && x.Title != nil {
+		return *x.Title
+	}
+	return ""
+}
+
+func (x *UpdateRecipeRequest) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *UpdateRecipeRequest) GetPrepTime() uint32 {
+	if x != nil && x.PrepTime != nil {
+		return *x.PrepTime
+	}
+	return 0
+}
+
+func (x *UpdateRecipeRequest) GetServings() uint32 {
+	if x != nil && x.Servings != nil {
+		return *x.Servings
+	}
+	return 0
+}
+
+func (x *UpdateRecipeRequest) GetIsPublished() bool {
+	if x != nil && x.IsPublished != nil {
+		return *x.IsPublished
+	}
+	return false
+}
+
+type UpdateRecipeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Recipe        *Recipe                `protobuf:"bytes,1,opt,name=recipe,proto3" json:"recipe,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeResponse) Reset() {
+	*x = UpdateRecipeResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeResponse) ProtoMessage() {}
+
+func (x *UpdateRecipeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeResponse.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *UpdateRecipeResponse) GetRecipe() *Recipe {
+	if x != nil {
+		return x.Recipe
+	}
+	return nil
+}
+
+type DeleteRecipeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeRequest) Reset() {
+	*x = DeleteRecipeRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeRequest) ProtoMessage() {}
+
+func (x *DeleteRecipeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeRequest.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *DeleteRecipeRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type DeleteRecipeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeResponse) Reset() {
+	*x = DeleteRecipeResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeResponse) ProtoMessage() {}
+
+func (x *DeleteRecipeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeResponse.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{35}
+}
+
+type ListRecipeStepsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeStepsRequest) Reset() {
+	*x = ListRecipeStepsRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeStepsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeStepsRequest) ProtoMessage() {}
+
+func (x *ListRecipeStepsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeStepsRequest.ProtoReflect.Descriptor instead.
+func (*ListRecipeStepsRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *ListRecipeStepsRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+type ListRecipeStepsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Steps         []*RecipeStep          `protobuf:"bytes,1,rep,name=steps,proto3" json:"steps,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeStepsResponse) Reset() {
+	*x = ListRecipeStepsResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeStepsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeStepsResponse) ProtoMessage() {}
+
+func (x *ListRecipeStepsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeStepsResponse.ProtoReflect.Descriptor instead.
+func (*ListRecipeStepsResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *ListRecipeStepsResponse) GetSteps() []*RecipeStep {
+	if x != nil {
+		return x.Steps
+	}
+	return nil
+}
+
+type CreateRecipeStepRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	Order         uint32                 `protobuf:"varint,2,opt,name=order,proto3" json:"order,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeStepRequest) Reset() {
+	*x = CreateRecipeStepRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeStepRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeStepRequest) ProtoMessage() {}
+
+func (x *CreateRecipeStepRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeStepRequest.ProtoReflect.Descriptor instead.
+func (*CreateRecipeStepRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *CreateRecipeStepRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *CreateRecipeStepRequest) GetOrder() uint32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *CreateRecipeStepRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type CreateRecipeStepResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Step          *RecipeStep            `protobuf:"bytes,1,opt,name=step,proto3" json:"step,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeStepResponse) Reset() {
+	*x = CreateRecipeStepResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeStepResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeStepResponse) ProtoMessage() {}
+
+func (x *CreateRecipeStepResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeStepResponse.ProtoReflect.Descriptor instead.
+func (*CreateRecipeStepResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *CreateRecipeStepResponse) GetStep() *RecipeStep {
+	if x != nil {
+		return x.Step
+	}
+	return nil
+}
+
+type UpdateRecipeStepRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	StepId        uint32                 `protobuf:"varint,2,opt,name=step_id,json=stepId,proto3" json:"step_id,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeStepRequest) Reset() {
+	*x = UpdateRecipeStepRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeStepRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeStepRequest) ProtoMessage() {}
+
+func (x *UpdateRecipeStepRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeStepRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeStepRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *UpdateRecipeStepRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *UpdateRecipeStepRequest) GetStepId() uint32 {
+	if x != nil {
+		return x.StepId
+	}
+	return 0
+}
+
+func (x *UpdateRecipeStepRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type UpdateRecipeStepResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Step          *RecipeStep            `protobuf:"bytes,1,opt,name=step,proto3" json:"step,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeStepResponse) Reset() {
+	*x = UpdateRecipeStepResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeStepResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeStepResponse) ProtoMessage() {}
+
+func (x *UpdateRecipeStepResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeStepResponse.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeStepResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *UpdateRecipeStepResponse) GetStep() *RecipeStep {
+	if x != nil {
+		return x.Step
+	}
+	return nil
+}
+
+type DeleteRecipeStepRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	StepId        uint32                 `protobuf:"varint,2,opt,name=step_id,json=stepId,proto3" json:"step_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeStepRequest) Reset() {
+	*x = DeleteRecipeStepRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeStepRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeStepRequest) ProtoMessage() {}
+
+func (x *DeleteRecipeStepRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeStepRequest.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeStepRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *DeleteRecipeStepRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *DeleteRecipeStepRequest) GetStepId() uint32 {
+	if x != nil {
+		return x.StepId
+	}
+	return 0
+}
+
+type DeleteRecipeStepResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeStepResponse) Reset() {
+	*x = DeleteRecipeStepResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeStepResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeStepResponse) ProtoMessage() {}
+
+func (x *DeleteRecipeStepResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeStepResponse.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeStepResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{43}
+}
+
+type ReorderRecipeStepRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	StepId        uint32                 `protobuf:"varint,2,opt,name=step_id,json=stepId,proto3" json:"step_id,omitempty"`
+	OrderFrom     uint32                 `protobuf:"varint,3,opt,name=order_from,json=orderFrom,proto3" json:"order_from,omitempty"`
+	OrderTo       uint32                 `protobuf:"varint,4,opt,name=order_to,json=orderTo,proto3" json:"order_to,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReorderRecipeStepRequest) Reset() {
+	*x = ReorderRecipeStepRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReorderRecipeStepRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReorderRecipeStepRequest) ProtoMessage() {}
+
+func (x *ReorderRecipeStepRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReorderRecipeStepRequest.ProtoReflect.Descriptor instead.
+func (*ReorderRecipeStepRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *ReorderRecipeStepRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *ReorderRecipeStepRequest) GetStepId() uint32 {
+	if x != nil {
+		return x.StepId
+	}
+	return 0
+}
+
+func (x *ReorderRecipeStepRequest) GetOrderFrom() uint32 {
+	if x != nil {
+		return x.OrderFrom
+	}
+	return 0
+}
+
+func (x *ReorderRecipeStepRequest) GetOrderTo() uint32 {
+	if x != nil {
+		return x.OrderTo
+	}
+	return 0
+}
+
+type ReorderRecipeStepResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Steps         []*RecipeStep          `protobuf:"bytes,1,rep,name=steps,proto3" json:"steps,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReorderRecipeStepResponse) Reset() {
+	*x = ReorderRecipeStepResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReorderRecipeStepResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReorderRecipeStepResponse) ProtoMessage() {}
+
+func (x *ReorderRecipeStepResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReorderRecipeStepResponse.ProtoReflect.Descriptor instead.
+func (*ReorderRecipeStepResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *ReorderRecipeStepResponse) GetSteps() []*RecipeStep {
+	if x != nil {
+		return x.Steps
+	}
+	return nil
+}
+
+type ListRecipeIngredientsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeIngredientsRequest) Reset() {
+	*x = ListRecipeIngredientsRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeIngredientsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeIngredientsRequest) ProtoMessage() {}
+
+func (x *ListRecipeIngredientsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeIngredientsRequest.ProtoReflect.Descriptor instead.
+func (*ListRecipeIngredientsRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *ListRecipeIngredientsRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+type ListRecipeIngredientsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ingredients   []*RecipeIngredient    `protobuf:"bytes,1,rep,name=ingredients,proto3" json:"ingredients,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeIngredientsResponse) Reset() {
+	*x = ListRecipeIngredientsResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeIngredientsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeIngredientsResponse) ProtoMessage() {}
+
+func (x *ListRecipeIngredientsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeIngredientsResponse.ProtoReflect.Descriptor instead.
+func (*ListRecipeIngredientsResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *ListRecipeIngredientsResponse) GetIngredients() []*RecipeIngredient {
+	if x != nil {
+		return x.Ingredients
+	}
+	return nil
+}
+
+type CreateRecipeIngredientRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	IngredientId  uint32                 `protobuf:"varint,2,opt,name=ingredient_id,json=ingredientId,proto3" json:"ingredient_id,omitempty"`
+	MeasurementId *uint32                `protobuf:"varint,3,opt,name=measurement_id,json=measurementId,proto3,oneof" json:"measurement_id,omitempty"`
+	Amount        uint32                 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeIngredientRequest) Reset() {
+	*x = CreateRecipeIngredientRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[48]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeIngredientRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeIngredientRequest) ProtoMessage() {}
+
+func (x *CreateRecipeIngredientRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[48]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeIngredientRequest.ProtoReflect.Descriptor instead.
+func (*CreateRecipeIngredientRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *CreateRecipeIngredientRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *CreateRecipeIngredientRequest) GetIngredientId() uint32 {
+	if x != nil {
+		return x.IngredientId
+	}
+	return 0
+}
+
+func (x *CreateRecipeIngredientRequest) GetMeasurementId() uint32 {
+	if x != nil && x.MeasurementId != nil {
+		return *x.MeasurementId
+	}
+	return 0
+}
+
+func (x *CreateRecipeIngredientRequest) GetAmount() uint32 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+type CreateRecipeIngredientResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ingredient    *RecipeIngredient      `protobuf:"bytes,1,opt,name=ingredient,proto3" json:"ingredient,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecipeIngredientResponse) Reset() {
+	*x = CreateRecipeIngredientResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecipeIngredientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecipeIngredientResponse) ProtoMessage() {}
+
+func (x *CreateRecipeIngredientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecipeIngredientResponse.ProtoReflect.Descriptor instead.
+func (*CreateRecipeIngredientResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *CreateRecipeIngredientResponse) GetIngredient() *RecipeIngredient {
+	if x != nil {
+		return x.Ingredient
+	}
+	return nil
+}
+
+type UpdateRecipeIngredientRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	IngredientId  uint32                 `protobuf:"varint,2,opt,name=ingredient_id,json=ingredientId,proto3" json:"ingredient_id,omitempty"`
+	MeasurementId *uint32                `protobuf:"varint,3,opt,name=measurement_id,json=measurementId,proto3,oneof" json:"measurement_id,omitempty"`
+	Amount        uint32                 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeIngredientRequest) Reset() {
+	*x = UpdateRecipeIngredientRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeIngredientRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeIngredientRequest) ProtoMessage() {}
+
+func (x *UpdateRecipeIngredientRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeIngredientRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeIngredientRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *UpdateRecipeIngredientRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *UpdateRecipeIngredientRequest) GetIngredientId() uint32 {
+	if x != nil {
+		return x.IngredientId
+	}
+	return 0
+}
+
+func (x *UpdateRecipeIngredientRequest) GetMeasurementId() uint32 {
+	if x != nil && x.MeasurementId != nil {
+		return *x.MeasurementId
+	}
+	return 0
+}
+
+func (x *UpdateRecipeIngredientRequest) GetAmount() uint32 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+type UpdateRecipeIngredientResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ingredient    *RecipeIngredient      `protobuf:"bytes,1,opt,name=ingredient,proto3" json:"ingredient,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeIngredientResponse) Reset() {
+	*x = UpdateRecipeIngredientResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[51]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeIngredientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeIngredientResponse) ProtoMessage() {}
+
+func (x *UpdateRecipeIngredientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[51]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeIngredientResponse.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeIngredientResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *UpdateRecipeIngredientResponse) GetIngredient() *RecipeIngredient {
+	if x != nil {
+		return x.Ingredient
+	}
+	return nil
+}
+
+type DeleteRecipeIngredientRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	IngredientId  uint32                 `protobuf:"varint,2,opt,name=ingredient_id,json=ingredientId,proto3" json:"ingredient_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeIngredientRequest) Reset() {
+	*x = DeleteRecipeIngredientRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[52]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeIngredientRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeIngredientRequest) ProtoMessage() {}
+
+func (x *DeleteRecipeIngredientRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[52]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeIngredientRequest.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeIngredientRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *DeleteRecipeIngredientRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *DeleteRecipeIngredientRequest) GetIngredientId() uint32 {
+	if x != nil {
+		return x.IngredientId
+	}
+	return 0
+}
+
+type DeleteRecipeIngredientResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRecipeIngredientResponse) Reset() {
+	*x = DeleteRecipeIngredientResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRecipeIngredientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRecipeIngredientResponse) ProtoMessage() {}
+
+func (x *DeleteRecipeIngredientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRecipeIngredientResponse.ProtoReflect.Descriptor instead.
+func (*DeleteRecipeIngredientResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{53}
+}
+
+type ListRecipeNutritionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeNutritionsRequest) Reset() {
+	*x = ListRecipeNutritionsRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeNutritionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeNutritionsRequest) ProtoMessage() {}
+
+func (x *ListRecipeNutritionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeNutritionsRequest.ProtoReflect.Descriptor instead.
+func (*ListRecipeNutritionsRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *ListRecipeNutritionsRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+type ListRecipeNutritionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Nutritions    []*Nutrition           `protobuf:"bytes,1,rep,name=nutritions,proto3" json:"nutritions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecipeNutritionsResponse) Reset() {
+	*x = ListRecipeNutritionsResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecipeNutritionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecipeNutritionsResponse) ProtoMessage() {}
+
+func (x *ListRecipeNutritionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecipeNutritionsResponse.ProtoReflect.Descriptor instead.
+func (*ListRecipeNutritionsResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *ListRecipeNutritionsResponse) GetNutritions() []*Nutrition {
+	if x != nil {
+		return x.Nutritions
+	}
+	return nil
+}
+
+type UpdateRecipeNutritionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Unit          string                 `protobuf:"bytes,3,opt,name=unit,proto3" json:"unit,omitempty"`
+	Value         uint32                 `protobuf:"varint,4,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeNutritionRequest) Reset() {
+	*x = UpdateRecipeNutritionRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeNutritionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeNutritionRequest) ProtoMessage() {}
+
+func (x *UpdateRecipeNutritionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeNutritionRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeNutritionRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *UpdateRecipeNutritionRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *UpdateRecipeNutritionRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateRecipeNutritionRequest) GetUnit() string {
+	if x != nil {
+		return x.Unit
+	}
+	return ""
+}
+
+func (x *UpdateRecipeNutritionRequest) GetValue() uint32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+type UpdateRecipeNutritionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Nutrition     *Nutrition             `protobuf:"bytes,1,opt,name=nutrition,proto3" json:"nutrition,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRecipeNutritionResponse) Reset() {
+	*x = UpdateRecipeNutritionResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRecipeNutritionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRecipeNutritionResponse) ProtoMessage() {}
+
+func (x *UpdateRecipeNutritionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRecipeNutritionResponse.ProtoReflect.Descriptor instead.
+func (*UpdateRecipeNutritionResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *UpdateRecipeNutritionResponse) GetNutrition() *Nutrition {
+	if x != nil {
+		return x.Nutrition
+	}
+	return nil
+}
+
+type LikeRecipeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecipeId      string                 `protobuf:"bytes,1,opt,name=recipe_id,json=recipeId,proto3" json:"recipe_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Like          bool                   `protobuf:"varint,3,opt,name=like,proto3" json:"like,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LikeRecipeRequest) Reset() {
+	*x = LikeRecipeRequest{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LikeRecipeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LikeRecipeRequest) ProtoMessage() {}
+
+func (x *LikeRecipeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LikeRecipeRequest.ProtoReflect.Descriptor instead.
+func (*LikeRecipeRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *LikeRecipeRequest) GetRecipeId() string {
+	if x != nil {
+		return x.RecipeId
+	}
+	return ""
+}
+
+func (x *LikeRecipeRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *LikeRecipeRequest) GetLike() bool {
+	if x != nil {
+		return x.Like
+	}
+	return false
+}
+
+type LikeRecipeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Recipe        *Recipe                `protobuf:"bytes,1,opt,name=recipe,proto3" json:"recipe,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LikeRecipeResponse) Reset() {
+	*x = LikeRecipeResponse{}
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LikeRecipeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LikeRecipeResponse) ProtoMessage() {}
+
+func (x *LikeRecipeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_recipe_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LikeRecipeResponse.ProtoReflect.Descriptor instead.
+func (*LikeRecipeResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_recipe_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *LikeRecipeResponse) GetRecipe() *Recipe {
+	if x != nil {
+		return x.Recipe
+	}
+	return nil
+}
+
 var File_food_swipe_v1_recipe_proto protoreflect.FileDescriptor
 
 const file_food_swipe_v1_recipe_proto_rawDesc = "" +
@@ -1150,7 +3214,172 @@ const file_food_swipe_v1_recipe_proto_rawDesc = "" +
 	"ingredient\"2\n" +
 	"\x17DeleteIngredientRequest\x12\x17\n" +
 	"\x02id\x18\x01 \x01(\rB\a\xbaH\x04*\x02(\x01R\x02id\"\x1a\n" +
-	"\x18DeleteIngredientResponse2\xe4\a\n" +
+	"\x18DeleteIngredientResponse\"Y\n" +
+	"\tNutrition\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
+	"\x04unit\x18\x03 \x01(\tR\x04unit\x12\x14\n" +
+	"\x05value\x18\x04 \x01(\rR\x05value\"\x93\x03\n" +
+	"\x06Recipe\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12 \n" +
+	"\tprep_time\x18\x04 \x01(\rH\x01R\bprepTime\x88\x01\x01\x12\x1f\n" +
+	"\bservings\x18\x05 \x01(\rH\x02R\bservings\x88\x01\x01\x12!\n" +
+	"\fis_published\x18\x06 \x01(\bR\visPublished\x12$\n" +
+	"\vcover_image\x18\a \x01(\tH\x03R\n" +
+	"coverImage\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\b \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\t \x01(\tR\tupdatedAt\x127\n" +
+	"\n" +
+	"nutritions\x18\n" +
+	" \x03(\v2\x17.foodswipe.v1.NutritionR\n" +
+	"nutritionsB\x0e\n" +
+	"\f_descriptionB\f\n" +
+	"\n" +
+	"_prep_timeB\v\n" +
+	"\t_servingsB\x0e\n" +
+	"\f_cover_image\"|\n" +
+	"\n" +
+	"RecipeStep\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1b\n" +
+	"\trecipe_id\x18\x02 \x01(\tR\brecipeId\x12\x1f\n" +
+	"\vstep_number\x18\x03 \x01(\rR\n" +
+	"stepNumber\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\x82\x02\n" +
+	"\x10RecipeIngredient\x12\x1b\n" +
+	"\trecipe_id\x18\x01 \x01(\tR\brecipeId\x12#\n" +
+	"\ringredient_id\x18\x02 \x01(\rR\fingredientId\x12*\n" +
+	"\x0emeasurement_id\x18\x03 \x01(\rH\x00R\rmeasurementId\x88\x01\x01\x12\x16\n" +
+	"\x06amount\x18\x04 \x01(\rR\x06amount\x12\x1e\n" +
+	"\n" +
+	"ingredient\x18\x05 \x01(\tR\n" +
+	"ingredient\x12%\n" +
+	"\vmeasurement\x18\x06 \x01(\tH\x01R\vmeasurement\x88\x01\x01B\x11\n" +
+	"\x0f_measurement_idB\x0e\n" +
+	"\f_measurement\"\x8b\x01\n" +
+	"\x12ListRecipesRequest\x12\x1b\n" +
+	"\x04page\x18\x01 \x01(\rB\a\xbaH\x04*\x02(\x01R\x04page\x12\x1f\n" +
+	"\x05limit\x18\x02 \x01(\rB\t\xbaH\x06*\x04\x18d(\x01R\x05limit\x12&\n" +
+	"\fis_published\x18\x03 \x01(\bH\x00R\visPublished\x88\x01\x01B\x0f\n" +
+	"\r_is_published\"y\n" +
+	"\x13ListRecipesResponse\x128\n" +
+	"\n" +
+	"pagination\x18\x01 \x01(\v2\x18.foodswipe.v1.PaginationR\n" +
+	"pagination\x12(\n" +
+	"\x04data\x18\x02 \x03(\v2\x14.foodswipe.v1.RecipeR\x04data\",\n" +
+	"\x10GetRecipeRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"A\n" +
+	"\x11GetRecipeResponse\x12,\n" +
+	"\x06recipe\x18\x01 \x01(\v2\x14.foodswipe.v1.RecipeR\x06recipe\"\x82\x02\n" +
+	"\x13CreateRecipeRequest\x12\x1d\n" +
+	"\x05title\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05title\x12%\n" +
+	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01\x12 \n" +
+	"\tprep_time\x18\x03 \x01(\rH\x01R\bprepTime\x88\x01\x01\x12\x1f\n" +
+	"\bservings\x18\x04 \x01(\rH\x02R\bservings\x88\x01\x01\x12&\n" +
+	"\fis_published\x18\x05 \x01(\bH\x03R\visPublished\x88\x01\x01B\x0e\n" +
+	"\f_descriptionB\f\n" +
+	"\n" +
+	"_prep_timeB\v\n" +
+	"\t_servingsB\x0f\n" +
+	"\r_is_published\"D\n" +
+	"\x14CreateRecipeResponse\x12,\n" +
+	"\x06recipe\x18\x01 \x01(\v2\x14.foodswipe.v1.RecipeR\x06recipe\"\xa2\x02\n" +
+	"\x13UpdateRecipeRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x19\n" +
+	"\x05title\x18\x02 \x01(\tH\x00R\x05title\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x12 \n" +
+	"\tprep_time\x18\x04 \x01(\rH\x02R\bprepTime\x88\x01\x01\x12\x1f\n" +
+	"\bservings\x18\x05 \x01(\rH\x03R\bservings\x88\x01\x01\x12&\n" +
+	"\fis_published\x18\x06 \x01(\bH\x04R\visPublished\x88\x01\x01B\b\n" +
+	"\x06_titleB\x0e\n" +
+	"\f_descriptionB\f\n" +
+	"\n" +
+	"_prep_timeB\v\n" +
+	"\t_servingsB\x0f\n" +
+	"\r_is_published\"D\n" +
+	"\x14UpdateRecipeResponse\x12,\n" +
+	"\x06recipe\x18\x01 \x01(\v2\x14.foodswipe.v1.RecipeR\x06recipe\"/\n" +
+	"\x13DeleteRecipeRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x16\n" +
+	"\x14DeleteRecipeResponse\"?\n" +
+	"\x16ListRecipeStepsRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\"I\n" +
+	"\x17ListRecipeStepsResponse\x12.\n" +
+	"\x05steps\x18\x01 \x03(\v2\x18.foodswipe.v1.RecipeStepR\x05steps\"\x8a\x01\n" +
+	"\x17CreateRecipeStepRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12\x1d\n" +
+	"\x05order\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\x05order\x12)\n" +
+	"\vdescription\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\vdescription\"H\n" +
+	"\x18CreateRecipeStepResponse\x12,\n" +
+	"\x04step\x18\x01 \x01(\v2\x18.foodswipe.v1.RecipeStepR\x04step\"\x8d\x01\n" +
+	"\x17UpdateRecipeStepRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12 \n" +
+	"\astep_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\x06stepId\x12)\n" +
+	"\vdescription\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\vdescription\"H\n" +
+	"\x18UpdateRecipeStepResponse\x12,\n" +
+	"\x04step\x18\x01 \x01(\v2\x18.foodswipe.v1.RecipeStepR\x04step\"b\n" +
+	"\x17DeleteRecipeStepRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12 \n" +
+	"\astep_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\x06stepId\"\x1a\n" +
+	"\x18DeleteRecipeStepResponse\"\xaf\x01\n" +
+	"\x18ReorderRecipeStepRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12 \n" +
+	"\astep_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\x06stepId\x12&\n" +
+	"\n" +
+	"order_from\x18\x03 \x01(\rB\a\xbaH\x04*\x02(\x01R\torderFrom\x12\"\n" +
+	"\border_to\x18\x04 \x01(\rB\a\xbaH\x04*\x02(\x01R\aorderTo\"K\n" +
+	"\x19ReorderRecipeStepResponse\x12.\n" +
+	"\x05steps\x18\x01 \x03(\v2\x18.foodswipe.v1.RecipeStepR\x05steps\"E\n" +
+	"\x1cListRecipeIngredientsRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\"a\n" +
+	"\x1dListRecipeIngredientsResponse\x12@\n" +
+	"\vingredients\x18\x01 \x03(\v2\x1e.foodswipe.v1.RecipeIngredientR\vingredients\"\xd4\x01\n" +
+	"\x1dCreateRecipeIngredientRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12,\n" +
+	"\ringredient_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\fingredientId\x12*\n" +
+	"\x0emeasurement_id\x18\x03 \x01(\rH\x00R\rmeasurementId\x88\x01\x01\x12\x1f\n" +
+	"\x06amount\x18\x04 \x01(\rB\a\xbaH\x04*\x02(\x01R\x06amountB\x11\n" +
+	"\x0f_measurement_id\"`\n" +
+	"\x1eCreateRecipeIngredientResponse\x12>\n" +
+	"\n" +
+	"ingredient\x18\x01 \x01(\v2\x1e.foodswipe.v1.RecipeIngredientR\n" +
+	"ingredient\"\xd4\x01\n" +
+	"\x1dUpdateRecipeIngredientRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12,\n" +
+	"\ringredient_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\fingredientId\x12*\n" +
+	"\x0emeasurement_id\x18\x03 \x01(\rH\x00R\rmeasurementId\x88\x01\x01\x12\x1f\n" +
+	"\x06amount\x18\x04 \x01(\rB\a\xbaH\x04*\x02(\x01R\x06amountB\x11\n" +
+	"\x0f_measurement_id\"`\n" +
+	"\x1eUpdateRecipeIngredientResponse\x12>\n" +
+	"\n" +
+	"ingredient\x18\x01 \x01(\v2\x1e.foodswipe.v1.RecipeIngredientR\n" +
+	"ingredient\"t\n" +
+	"\x1dDeleteRecipeIngredientRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12,\n" +
+	"\ringredient_id\x18\x02 \x01(\rB\a\xbaH\x04*\x02(\x01R\fingredientId\" \n" +
+	"\x1eDeleteRecipeIngredientResponse\"D\n" +
+	"\x1bListRecipeNutritionsRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\"W\n" +
+	"\x1cListRecipeNutritionsResponse\x127\n" +
+	"\n" +
+	"nutritions\x18\x01 \x03(\v2\x17.foodswipe.v1.NutritionR\n" +
+	"nutritions\"\x95\x01\n" +
+	"\x1cUpdateRecipeNutritionRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12\x1b\n" +
+	"\x04name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12\x1b\n" +
+	"\x04unit\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04unit\x12\x14\n" +
+	"\x05value\x18\x04 \x01(\rR\x05value\"V\n" +
+	"\x1dUpdateRecipeNutritionResponse\x125\n" +
+	"\tnutrition\x18\x01 \x01(\v2\x17.foodswipe.v1.NutritionR\tnutrition\"q\n" +
+	"\x11LikeRecipeRequest\x12%\n" +
+	"\trecipe_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\brecipeId\x12!\n" +
+	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x12\x12\n" +
+	"\x04like\x18\x03 \x01(\bR\x04like\"B\n" +
+	"\x12LikeRecipeResponse\x12,\n" +
+	"\x06recipe\x18\x01 \x01(\v2\x14.foodswipe.v1.RecipeR\x06recipe2\xfd\x14\n" +
 	"\rRecipeService\x12a\n" +
 	"\x10ListMeasurements\x12%.foodswipe.v1.ListMeasurementsRequest\x1a&.foodswipe.v1.ListMeasurementsResponse\x12[\n" +
 	"\x0eGetMeasurement\x12#.foodswipe.v1.GetMeasurementRequest\x1a$.foodswipe.v1.GetMeasurementResponse\x12d\n" +
@@ -1161,7 +3390,25 @@ const file_food_swipe_v1_recipe_proto_rawDesc = "" +
 	"\rGetIngredient\x12\".foodswipe.v1.GetIngredientRequest\x1a#.foodswipe.v1.GetIngredientResponse\x12a\n" +
 	"\x10CreateIngredient\x12%.foodswipe.v1.CreateIngredientRequest\x1a&.foodswipe.v1.CreateIngredientResponse\x12a\n" +
 	"\x10UpdateIngredient\x12%.foodswipe.v1.UpdateIngredientRequest\x1a&.foodswipe.v1.UpdateIngredientResponse\x12a\n" +
-	"\x10DeleteIngredient\x12%.foodswipe.v1.DeleteIngredientRequest\x1a&.foodswipe.v1.DeleteIngredientResponseB\xaa\x01\n" +
+	"\x10DeleteIngredient\x12%.foodswipe.v1.DeleteIngredientRequest\x1a&.foodswipe.v1.DeleteIngredientResponse\x12R\n" +
+	"\vListRecipes\x12 .foodswipe.v1.ListRecipesRequest\x1a!.foodswipe.v1.ListRecipesResponse\x12L\n" +
+	"\tGetRecipe\x12\x1e.foodswipe.v1.GetRecipeRequest\x1a\x1f.foodswipe.v1.GetRecipeResponse\x12U\n" +
+	"\fCreateRecipe\x12!.foodswipe.v1.CreateRecipeRequest\x1a\".foodswipe.v1.CreateRecipeResponse\x12U\n" +
+	"\fUpdateRecipe\x12!.foodswipe.v1.UpdateRecipeRequest\x1a\".foodswipe.v1.UpdateRecipeResponse\x12U\n" +
+	"\fDeleteRecipe\x12!.foodswipe.v1.DeleteRecipeRequest\x1a\".foodswipe.v1.DeleteRecipeResponse\x12^\n" +
+	"\x0fListRecipeSteps\x12$.foodswipe.v1.ListRecipeStepsRequest\x1a%.foodswipe.v1.ListRecipeStepsResponse\x12a\n" +
+	"\x10CreateRecipeStep\x12%.foodswipe.v1.CreateRecipeStepRequest\x1a&.foodswipe.v1.CreateRecipeStepResponse\x12a\n" +
+	"\x10UpdateRecipeStep\x12%.foodswipe.v1.UpdateRecipeStepRequest\x1a&.foodswipe.v1.UpdateRecipeStepResponse\x12a\n" +
+	"\x10DeleteRecipeStep\x12%.foodswipe.v1.DeleteRecipeStepRequest\x1a&.foodswipe.v1.DeleteRecipeStepResponse\x12d\n" +
+	"\x11ReorderRecipeStep\x12&.foodswipe.v1.ReorderRecipeStepRequest\x1a'.foodswipe.v1.ReorderRecipeStepResponse\x12p\n" +
+	"\x15ListRecipeIngredients\x12*.foodswipe.v1.ListRecipeIngredientsRequest\x1a+.foodswipe.v1.ListRecipeIngredientsResponse\x12s\n" +
+	"\x16CreateRecipeIngredient\x12+.foodswipe.v1.CreateRecipeIngredientRequest\x1a,.foodswipe.v1.CreateRecipeIngredientResponse\x12s\n" +
+	"\x16UpdateRecipeIngredient\x12+.foodswipe.v1.UpdateRecipeIngredientRequest\x1a,.foodswipe.v1.UpdateRecipeIngredientResponse\x12s\n" +
+	"\x16DeleteRecipeIngredient\x12+.foodswipe.v1.DeleteRecipeIngredientRequest\x1a,.foodswipe.v1.DeleteRecipeIngredientResponse\x12m\n" +
+	"\x14ListRecipeNutritions\x12).foodswipe.v1.ListRecipeNutritionsRequest\x1a*.foodswipe.v1.ListRecipeNutritionsResponse\x12p\n" +
+	"\x15UpdateRecipeNutrition\x12*.foodswipe.v1.UpdateRecipeNutritionRequest\x1a+.foodswipe.v1.UpdateRecipeNutritionResponse\x12O\n" +
+	"\n" +
+	"LikeRecipe\x12\x1f.foodswipe.v1.LikeRecipeRequest\x1a .foodswipe.v1.LikeRecipeResponseB\xaa\x01\n" +
 	"\x10com.foodswipe.v1B\vRecipeProtoP\x01Z8github.com/food-swipe/gen/grpc/food-swipe/v1;foodswipev1\xa2\x02\x03FXX\xaa\x02\fFoodswipe.V1\xca\x02\fFoodswipe\\V1\xe2\x02\x18Foodswipe\\V1\\GPBMetadata\xea\x02\rFoodswipe::V1b\x06proto3"
 
 var (
@@ -1176,68 +3423,156 @@ func file_food_swipe_v1_recipe_proto_rawDescGZIP() []byte {
 	return file_food_swipe_v1_recipe_proto_rawDescData
 }
 
-var file_food_swipe_v1_recipe_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_food_swipe_v1_recipe_proto_msgTypes = make([]protoimpl.MessageInfo, 60)
 var file_food_swipe_v1_recipe_proto_goTypes = []any{
-	(*Ingredient)(nil),                // 0: foodswipe.v1.Ingredient
-	(*Measurement)(nil),               // 1: foodswipe.v1.Measurement
-	(*ListMeasurementsRequest)(nil),   // 2: foodswipe.v1.ListMeasurementsRequest
-	(*ListMeasurementsResponse)(nil),  // 3: foodswipe.v1.ListMeasurementsResponse
-	(*GetMeasurementRequest)(nil),     // 4: foodswipe.v1.GetMeasurementRequest
-	(*GetMeasurementResponse)(nil),    // 5: foodswipe.v1.GetMeasurementResponse
-	(*CreateMeasurementRequest)(nil),  // 6: foodswipe.v1.CreateMeasurementRequest
-	(*CreateMeasurementResponse)(nil), // 7: foodswipe.v1.CreateMeasurementResponse
-	(*UpdateMeasurementRequest)(nil),  // 8: foodswipe.v1.UpdateMeasurementRequest
-	(*UpdateMeasurementResponse)(nil), // 9: foodswipe.v1.UpdateMeasurementResponse
-	(*DeleteMeasurementRequest)(nil),  // 10: foodswipe.v1.DeleteMeasurementRequest
-	(*DeleteMeasurementResponse)(nil), // 11: foodswipe.v1.DeleteMeasurementResponse
-	(*ListIngredientsRequest)(nil),    // 12: foodswipe.v1.ListIngredientsRequest
-	(*ListIngredientsResponse)(nil),   // 13: foodswipe.v1.ListIngredientsResponse
-	(*GetIngredientRequest)(nil),      // 14: foodswipe.v1.GetIngredientRequest
-	(*GetIngredientResponse)(nil),     // 15: foodswipe.v1.GetIngredientResponse
-	(*CreateIngredientRequest)(nil),   // 16: foodswipe.v1.CreateIngredientRequest
-	(*CreateIngredientResponse)(nil),  // 17: foodswipe.v1.CreateIngredientResponse
-	(*UpdateIngredientRequest)(nil),   // 18: foodswipe.v1.UpdateIngredientRequest
-	(*UpdateIngredientResponse)(nil),  // 19: foodswipe.v1.UpdateIngredientResponse
-	(*DeleteIngredientRequest)(nil),   // 20: foodswipe.v1.DeleteIngredientRequest
-	(*DeleteIngredientResponse)(nil),  // 21: foodswipe.v1.DeleteIngredientResponse
-	(*Pagination)(nil),                // 22: foodswipe.v1.Pagination
+	(*Ingredient)(nil),                     // 0: foodswipe.v1.Ingredient
+	(*Measurement)(nil),                    // 1: foodswipe.v1.Measurement
+	(*ListMeasurementsRequest)(nil),        // 2: foodswipe.v1.ListMeasurementsRequest
+	(*ListMeasurementsResponse)(nil),       // 3: foodswipe.v1.ListMeasurementsResponse
+	(*GetMeasurementRequest)(nil),          // 4: foodswipe.v1.GetMeasurementRequest
+	(*GetMeasurementResponse)(nil),         // 5: foodswipe.v1.GetMeasurementResponse
+	(*CreateMeasurementRequest)(nil),       // 6: foodswipe.v1.CreateMeasurementRequest
+	(*CreateMeasurementResponse)(nil),      // 7: foodswipe.v1.CreateMeasurementResponse
+	(*UpdateMeasurementRequest)(nil),       // 8: foodswipe.v1.UpdateMeasurementRequest
+	(*UpdateMeasurementResponse)(nil),      // 9: foodswipe.v1.UpdateMeasurementResponse
+	(*DeleteMeasurementRequest)(nil),       // 10: foodswipe.v1.DeleteMeasurementRequest
+	(*DeleteMeasurementResponse)(nil),      // 11: foodswipe.v1.DeleteMeasurementResponse
+	(*ListIngredientsRequest)(nil),         // 12: foodswipe.v1.ListIngredientsRequest
+	(*ListIngredientsResponse)(nil),        // 13: foodswipe.v1.ListIngredientsResponse
+	(*GetIngredientRequest)(nil),           // 14: foodswipe.v1.GetIngredientRequest
+	(*GetIngredientResponse)(nil),          // 15: foodswipe.v1.GetIngredientResponse
+	(*CreateIngredientRequest)(nil),        // 16: foodswipe.v1.CreateIngredientRequest
+	(*CreateIngredientResponse)(nil),       // 17: foodswipe.v1.CreateIngredientResponse
+	(*UpdateIngredientRequest)(nil),        // 18: foodswipe.v1.UpdateIngredientRequest
+	(*UpdateIngredientResponse)(nil),       // 19: foodswipe.v1.UpdateIngredientResponse
+	(*DeleteIngredientRequest)(nil),        // 20: foodswipe.v1.DeleteIngredientRequest
+	(*DeleteIngredientResponse)(nil),       // 21: foodswipe.v1.DeleteIngredientResponse
+	(*Nutrition)(nil),                      // 22: foodswipe.v1.Nutrition
+	(*Recipe)(nil),                         // 23: foodswipe.v1.Recipe
+	(*RecipeStep)(nil),                     // 24: foodswipe.v1.RecipeStep
+	(*RecipeIngredient)(nil),               // 25: foodswipe.v1.RecipeIngredient
+	(*ListRecipesRequest)(nil),             // 26: foodswipe.v1.ListRecipesRequest
+	(*ListRecipesResponse)(nil),            // 27: foodswipe.v1.ListRecipesResponse
+	(*GetRecipeRequest)(nil),               // 28: foodswipe.v1.GetRecipeRequest
+	(*GetRecipeResponse)(nil),              // 29: foodswipe.v1.GetRecipeResponse
+	(*CreateRecipeRequest)(nil),            // 30: foodswipe.v1.CreateRecipeRequest
+	(*CreateRecipeResponse)(nil),           // 31: foodswipe.v1.CreateRecipeResponse
+	(*UpdateRecipeRequest)(nil),            // 32: foodswipe.v1.UpdateRecipeRequest
+	(*UpdateRecipeResponse)(nil),           // 33: foodswipe.v1.UpdateRecipeResponse
+	(*DeleteRecipeRequest)(nil),            // 34: foodswipe.v1.DeleteRecipeRequest
+	(*DeleteRecipeResponse)(nil),           // 35: foodswipe.v1.DeleteRecipeResponse
+	(*ListRecipeStepsRequest)(nil),         // 36: foodswipe.v1.ListRecipeStepsRequest
+	(*ListRecipeStepsResponse)(nil),        // 37: foodswipe.v1.ListRecipeStepsResponse
+	(*CreateRecipeStepRequest)(nil),        // 38: foodswipe.v1.CreateRecipeStepRequest
+	(*CreateRecipeStepResponse)(nil),       // 39: foodswipe.v1.CreateRecipeStepResponse
+	(*UpdateRecipeStepRequest)(nil),        // 40: foodswipe.v1.UpdateRecipeStepRequest
+	(*UpdateRecipeStepResponse)(nil),       // 41: foodswipe.v1.UpdateRecipeStepResponse
+	(*DeleteRecipeStepRequest)(nil),        // 42: foodswipe.v1.DeleteRecipeStepRequest
+	(*DeleteRecipeStepResponse)(nil),       // 43: foodswipe.v1.DeleteRecipeStepResponse
+	(*ReorderRecipeStepRequest)(nil),       // 44: foodswipe.v1.ReorderRecipeStepRequest
+	(*ReorderRecipeStepResponse)(nil),      // 45: foodswipe.v1.ReorderRecipeStepResponse
+	(*ListRecipeIngredientsRequest)(nil),   // 46: foodswipe.v1.ListRecipeIngredientsRequest
+	(*ListRecipeIngredientsResponse)(nil),  // 47: foodswipe.v1.ListRecipeIngredientsResponse
+	(*CreateRecipeIngredientRequest)(nil),  // 48: foodswipe.v1.CreateRecipeIngredientRequest
+	(*CreateRecipeIngredientResponse)(nil), // 49: foodswipe.v1.CreateRecipeIngredientResponse
+	(*UpdateRecipeIngredientRequest)(nil),  // 50: foodswipe.v1.UpdateRecipeIngredientRequest
+	(*UpdateRecipeIngredientResponse)(nil), // 51: foodswipe.v1.UpdateRecipeIngredientResponse
+	(*DeleteRecipeIngredientRequest)(nil),  // 52: foodswipe.v1.DeleteRecipeIngredientRequest
+	(*DeleteRecipeIngredientResponse)(nil), // 53: foodswipe.v1.DeleteRecipeIngredientResponse
+	(*ListRecipeNutritionsRequest)(nil),    // 54: foodswipe.v1.ListRecipeNutritionsRequest
+	(*ListRecipeNutritionsResponse)(nil),   // 55: foodswipe.v1.ListRecipeNutritionsResponse
+	(*UpdateRecipeNutritionRequest)(nil),   // 56: foodswipe.v1.UpdateRecipeNutritionRequest
+	(*UpdateRecipeNutritionResponse)(nil),  // 57: foodswipe.v1.UpdateRecipeNutritionResponse
+	(*LikeRecipeRequest)(nil),              // 58: foodswipe.v1.LikeRecipeRequest
+	(*LikeRecipeResponse)(nil),             // 59: foodswipe.v1.LikeRecipeResponse
+	(*Pagination)(nil),                     // 60: foodswipe.v1.Pagination
 }
 var file_food_swipe_v1_recipe_proto_depIdxs = []int32{
-	22, // 0: foodswipe.v1.ListMeasurementsResponse.pagination:type_name -> foodswipe.v1.Pagination
+	60, // 0: foodswipe.v1.ListMeasurementsResponse.pagination:type_name -> foodswipe.v1.Pagination
 	1,  // 1: foodswipe.v1.ListMeasurementsResponse.data:type_name -> foodswipe.v1.Measurement
 	1,  // 2: foodswipe.v1.GetMeasurementResponse.measurement:type_name -> foodswipe.v1.Measurement
 	1,  // 3: foodswipe.v1.CreateMeasurementResponse.measurement:type_name -> foodswipe.v1.Measurement
 	1,  // 4: foodswipe.v1.UpdateMeasurementResponse.measurement:type_name -> foodswipe.v1.Measurement
-	22, // 5: foodswipe.v1.ListIngredientsResponse.pagination:type_name -> foodswipe.v1.Pagination
+	60, // 5: foodswipe.v1.ListIngredientsResponse.pagination:type_name -> foodswipe.v1.Pagination
 	0,  // 6: foodswipe.v1.ListIngredientsResponse.data:type_name -> foodswipe.v1.Ingredient
 	0,  // 7: foodswipe.v1.GetIngredientResponse.ingredient:type_name -> foodswipe.v1.Ingredient
 	0,  // 8: foodswipe.v1.CreateIngredientResponse.ingredient:type_name -> foodswipe.v1.Ingredient
 	0,  // 9: foodswipe.v1.UpdateIngredientResponse.ingredient:type_name -> foodswipe.v1.Ingredient
-	2,  // 10: foodswipe.v1.RecipeService.ListMeasurements:input_type -> foodswipe.v1.ListMeasurementsRequest
-	4,  // 11: foodswipe.v1.RecipeService.GetMeasurement:input_type -> foodswipe.v1.GetMeasurementRequest
-	6,  // 12: foodswipe.v1.RecipeService.CreateMeasurement:input_type -> foodswipe.v1.CreateMeasurementRequest
-	8,  // 13: foodswipe.v1.RecipeService.UpdateMeasurement:input_type -> foodswipe.v1.UpdateMeasurementRequest
-	10, // 14: foodswipe.v1.RecipeService.DeleteMeasurement:input_type -> foodswipe.v1.DeleteMeasurementRequest
-	12, // 15: foodswipe.v1.RecipeService.ListIngredients:input_type -> foodswipe.v1.ListIngredientsRequest
-	14, // 16: foodswipe.v1.RecipeService.GetIngredient:input_type -> foodswipe.v1.GetIngredientRequest
-	16, // 17: foodswipe.v1.RecipeService.CreateIngredient:input_type -> foodswipe.v1.CreateIngredientRequest
-	18, // 18: foodswipe.v1.RecipeService.UpdateIngredient:input_type -> foodswipe.v1.UpdateIngredientRequest
-	20, // 19: foodswipe.v1.RecipeService.DeleteIngredient:input_type -> foodswipe.v1.DeleteIngredientRequest
-	3,  // 20: foodswipe.v1.RecipeService.ListMeasurements:output_type -> foodswipe.v1.ListMeasurementsResponse
-	5,  // 21: foodswipe.v1.RecipeService.GetMeasurement:output_type -> foodswipe.v1.GetMeasurementResponse
-	7,  // 22: foodswipe.v1.RecipeService.CreateMeasurement:output_type -> foodswipe.v1.CreateMeasurementResponse
-	9,  // 23: foodswipe.v1.RecipeService.UpdateMeasurement:output_type -> foodswipe.v1.UpdateMeasurementResponse
-	11, // 24: foodswipe.v1.RecipeService.DeleteMeasurement:output_type -> foodswipe.v1.DeleteMeasurementResponse
-	13, // 25: foodswipe.v1.RecipeService.ListIngredients:output_type -> foodswipe.v1.ListIngredientsResponse
-	15, // 26: foodswipe.v1.RecipeService.GetIngredient:output_type -> foodswipe.v1.GetIngredientResponse
-	17, // 27: foodswipe.v1.RecipeService.CreateIngredient:output_type -> foodswipe.v1.CreateIngredientResponse
-	19, // 28: foodswipe.v1.RecipeService.UpdateIngredient:output_type -> foodswipe.v1.UpdateIngredientResponse
-	21, // 29: foodswipe.v1.RecipeService.DeleteIngredient:output_type -> foodswipe.v1.DeleteIngredientResponse
-	20, // [20:30] is the sub-list for method output_type
-	10, // [10:20] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	22, // 10: foodswipe.v1.Recipe.nutritions:type_name -> foodswipe.v1.Nutrition
+	60, // 11: foodswipe.v1.ListRecipesResponse.pagination:type_name -> foodswipe.v1.Pagination
+	23, // 12: foodswipe.v1.ListRecipesResponse.data:type_name -> foodswipe.v1.Recipe
+	23, // 13: foodswipe.v1.GetRecipeResponse.recipe:type_name -> foodswipe.v1.Recipe
+	23, // 14: foodswipe.v1.CreateRecipeResponse.recipe:type_name -> foodswipe.v1.Recipe
+	23, // 15: foodswipe.v1.UpdateRecipeResponse.recipe:type_name -> foodswipe.v1.Recipe
+	24, // 16: foodswipe.v1.ListRecipeStepsResponse.steps:type_name -> foodswipe.v1.RecipeStep
+	24, // 17: foodswipe.v1.CreateRecipeStepResponse.step:type_name -> foodswipe.v1.RecipeStep
+	24, // 18: foodswipe.v1.UpdateRecipeStepResponse.step:type_name -> foodswipe.v1.RecipeStep
+	24, // 19: foodswipe.v1.ReorderRecipeStepResponse.steps:type_name -> foodswipe.v1.RecipeStep
+	25, // 20: foodswipe.v1.ListRecipeIngredientsResponse.ingredients:type_name -> foodswipe.v1.RecipeIngredient
+	25, // 21: foodswipe.v1.CreateRecipeIngredientResponse.ingredient:type_name -> foodswipe.v1.RecipeIngredient
+	25, // 22: foodswipe.v1.UpdateRecipeIngredientResponse.ingredient:type_name -> foodswipe.v1.RecipeIngredient
+	22, // 23: foodswipe.v1.ListRecipeNutritionsResponse.nutritions:type_name -> foodswipe.v1.Nutrition
+	22, // 24: foodswipe.v1.UpdateRecipeNutritionResponse.nutrition:type_name -> foodswipe.v1.Nutrition
+	23, // 25: foodswipe.v1.LikeRecipeResponse.recipe:type_name -> foodswipe.v1.Recipe
+	2,  // 26: foodswipe.v1.RecipeService.ListMeasurements:input_type -> foodswipe.v1.ListMeasurementsRequest
+	4,  // 27: foodswipe.v1.RecipeService.GetMeasurement:input_type -> foodswipe.v1.GetMeasurementRequest
+	6,  // 28: foodswipe.v1.RecipeService.CreateMeasurement:input_type -> foodswipe.v1.CreateMeasurementRequest
+	8,  // 29: foodswipe.v1.RecipeService.UpdateMeasurement:input_type -> foodswipe.v1.UpdateMeasurementRequest
+	10, // 30: foodswipe.v1.RecipeService.DeleteMeasurement:input_type -> foodswipe.v1.DeleteMeasurementRequest
+	12, // 31: foodswipe.v1.RecipeService.ListIngredients:input_type -> foodswipe.v1.ListIngredientsRequest
+	14, // 32: foodswipe.v1.RecipeService.GetIngredient:input_type -> foodswipe.v1.GetIngredientRequest
+	16, // 33: foodswipe.v1.RecipeService.CreateIngredient:input_type -> foodswipe.v1.CreateIngredientRequest
+	18, // 34: foodswipe.v1.RecipeService.UpdateIngredient:input_type -> foodswipe.v1.UpdateIngredientRequest
+	20, // 35: foodswipe.v1.RecipeService.DeleteIngredient:input_type -> foodswipe.v1.DeleteIngredientRequest
+	26, // 36: foodswipe.v1.RecipeService.ListRecipes:input_type -> foodswipe.v1.ListRecipesRequest
+	28, // 37: foodswipe.v1.RecipeService.GetRecipe:input_type -> foodswipe.v1.GetRecipeRequest
+	30, // 38: foodswipe.v1.RecipeService.CreateRecipe:input_type -> foodswipe.v1.CreateRecipeRequest
+	32, // 39: foodswipe.v1.RecipeService.UpdateRecipe:input_type -> foodswipe.v1.UpdateRecipeRequest
+	34, // 40: foodswipe.v1.RecipeService.DeleteRecipe:input_type -> foodswipe.v1.DeleteRecipeRequest
+	36, // 41: foodswipe.v1.RecipeService.ListRecipeSteps:input_type -> foodswipe.v1.ListRecipeStepsRequest
+	38, // 42: foodswipe.v1.RecipeService.CreateRecipeStep:input_type -> foodswipe.v1.CreateRecipeStepRequest
+	40, // 43: foodswipe.v1.RecipeService.UpdateRecipeStep:input_type -> foodswipe.v1.UpdateRecipeStepRequest
+	42, // 44: foodswipe.v1.RecipeService.DeleteRecipeStep:input_type -> foodswipe.v1.DeleteRecipeStepRequest
+	44, // 45: foodswipe.v1.RecipeService.ReorderRecipeStep:input_type -> foodswipe.v1.ReorderRecipeStepRequest
+	46, // 46: foodswipe.v1.RecipeService.ListRecipeIngredients:input_type -> foodswipe.v1.ListRecipeIngredientsRequest
+	48, // 47: foodswipe.v1.RecipeService.CreateRecipeIngredient:input_type -> foodswipe.v1.CreateRecipeIngredientRequest
+	50, // 48: foodswipe.v1.RecipeService.UpdateRecipeIngredient:input_type -> foodswipe.v1.UpdateRecipeIngredientRequest
+	52, // 49: foodswipe.v1.RecipeService.DeleteRecipeIngredient:input_type -> foodswipe.v1.DeleteRecipeIngredientRequest
+	54, // 50: foodswipe.v1.RecipeService.ListRecipeNutritions:input_type -> foodswipe.v1.ListRecipeNutritionsRequest
+	56, // 51: foodswipe.v1.RecipeService.UpdateRecipeNutrition:input_type -> foodswipe.v1.UpdateRecipeNutritionRequest
+	58, // 52: foodswipe.v1.RecipeService.LikeRecipe:input_type -> foodswipe.v1.LikeRecipeRequest
+	3,  // 53: foodswipe.v1.RecipeService.ListMeasurements:output_type -> foodswipe.v1.ListMeasurementsResponse
+	5,  // 54: foodswipe.v1.RecipeService.GetMeasurement:output_type -> foodswipe.v1.GetMeasurementResponse
+	7,  // 55: foodswipe.v1.RecipeService.CreateMeasurement:output_type -> foodswipe.v1.CreateMeasurementResponse
+	9,  // 56: foodswipe.v1.RecipeService.UpdateMeasurement:output_type -> foodswipe.v1.UpdateMeasurementResponse
+	11, // 57: foodswipe.v1.RecipeService.DeleteMeasurement:output_type -> foodswipe.v1.DeleteMeasurementResponse
+	13, // 58: foodswipe.v1.RecipeService.ListIngredients:output_type -> foodswipe.v1.ListIngredientsResponse
+	15, // 59: foodswipe.v1.RecipeService.GetIngredient:output_type -> foodswipe.v1.GetIngredientResponse
+	17, // 60: foodswipe.v1.RecipeService.CreateIngredient:output_type -> foodswipe.v1.CreateIngredientResponse
+	19, // 61: foodswipe.v1.RecipeService.UpdateIngredient:output_type -> foodswipe.v1.UpdateIngredientResponse
+	21, // 62: foodswipe.v1.RecipeService.DeleteIngredient:output_type -> foodswipe.v1.DeleteIngredientResponse
+	27, // 63: foodswipe.v1.RecipeService.ListRecipes:output_type -> foodswipe.v1.ListRecipesResponse
+	29, // 64: foodswipe.v1.RecipeService.GetRecipe:output_type -> foodswipe.v1.GetRecipeResponse
+	31, // 65: foodswipe.v1.RecipeService.CreateRecipe:output_type -> foodswipe.v1.CreateRecipeResponse
+	33, // 66: foodswipe.v1.RecipeService.UpdateRecipe:output_type -> foodswipe.v1.UpdateRecipeResponse
+	35, // 67: foodswipe.v1.RecipeService.DeleteRecipe:output_type -> foodswipe.v1.DeleteRecipeResponse
+	37, // 68: foodswipe.v1.RecipeService.ListRecipeSteps:output_type -> foodswipe.v1.ListRecipeStepsResponse
+	39, // 69: foodswipe.v1.RecipeService.CreateRecipeStep:output_type -> foodswipe.v1.CreateRecipeStepResponse
+	41, // 70: foodswipe.v1.RecipeService.UpdateRecipeStep:output_type -> foodswipe.v1.UpdateRecipeStepResponse
+	43, // 71: foodswipe.v1.RecipeService.DeleteRecipeStep:output_type -> foodswipe.v1.DeleteRecipeStepResponse
+	45, // 72: foodswipe.v1.RecipeService.ReorderRecipeStep:output_type -> foodswipe.v1.ReorderRecipeStepResponse
+	47, // 73: foodswipe.v1.RecipeService.ListRecipeIngredients:output_type -> foodswipe.v1.ListRecipeIngredientsResponse
+	49, // 74: foodswipe.v1.RecipeService.CreateRecipeIngredient:output_type -> foodswipe.v1.CreateRecipeIngredientResponse
+	51, // 75: foodswipe.v1.RecipeService.UpdateRecipeIngredient:output_type -> foodswipe.v1.UpdateRecipeIngredientResponse
+	53, // 76: foodswipe.v1.RecipeService.DeleteRecipeIngredient:output_type -> foodswipe.v1.DeleteRecipeIngredientResponse
+	55, // 77: foodswipe.v1.RecipeService.ListRecipeNutritions:output_type -> foodswipe.v1.ListRecipeNutritionsResponse
+	57, // 78: foodswipe.v1.RecipeService.UpdateRecipeNutrition:output_type -> foodswipe.v1.UpdateRecipeNutritionResponse
+	59, // 79: foodswipe.v1.RecipeService.LikeRecipe:output_type -> foodswipe.v1.LikeRecipeResponse
+	53, // [53:80] is the sub-list for method output_type
+	26, // [26:53] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_food_swipe_v1_recipe_proto_init() }
@@ -1248,13 +3583,20 @@ func file_food_swipe_v1_recipe_proto_init() {
 	file_food_swipe_v1_common_proto_init()
 	file_food_swipe_v1_recipe_proto_msgTypes[2].OneofWrappers = []any{}
 	file_food_swipe_v1_recipe_proto_msgTypes[12].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[23].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[25].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[26].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[30].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[32].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[48].OneofWrappers = []any{}
+	file_food_swipe_v1_recipe_proto_msgTypes[50].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_food_swipe_v1_recipe_proto_rawDesc), len(file_food_swipe_v1_recipe_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   60,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

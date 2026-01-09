@@ -25,19 +25,23 @@ const client = createClient(Recipe.RecipeService, grpcTransport);
 app.get("/", sValidator("query", loadRecipesDto), async (c) => {
   const filters = c.req.valid("query");
   const user = c.get("user");
-  const recipes = await recipeService.getAll(user, filters);
-  return c.json(recipes);
+  const response = await client.listRecipes({
+    page: 1,
+    limit: 100,
+    isPublished: user.role !== "admin" ? true : filters.isPublished,
+  });
+  return c.json(response.data);
 });
 
 app.get("/:id", async (c) => {
-  const recipe = await recipeService.getById(c.req.param("id"));
-  return c.json(recipe);
+  const response = await client.getRecipe({ id: c.req.param("id") });
+  return c.json(response.recipe);
 });
 
 app.post("/", sValidator("json", createRecipeDto), async (c) => {
   const payload = c.req.valid("json");
-  const recipe = await recipeService.create(payload);
-  return c.json(recipe);
+  const response = await client.createRecipe(payload);
+  return c.json(response.recipe);
 });
 
 app.post("/:id/image", async (c) => {
@@ -54,8 +58,8 @@ app.post("/:id/image", async (c) => {
 app.put("/:id", sValidator("json", updateRecipeDto), async (c) => {
   const id = c.req.param("id");
   const payload = c.req.valid("json");
-  const recipe = await recipeService.update(id, payload);
-  return c.json(recipe);
+  const response = await client.updateRecipe({ id, ...payload });
+  return c.json(response.recipe);
 });
 
 app.post("/import", sValidator("json", importRecipeDto), async (c) => {
@@ -70,20 +74,22 @@ app.post("/import", sValidator("json", importRecipeDto), async (c) => {
 
 app.delete("/:id", async (c) => {
   const id = c.req.param("id");
-  await recipeService.delete(id);
+  await client.deleteRecipe({ id });
   return c.json({}, 201);
 });
 
 app.get("/:id/steps", async (c) => {
-  const steps = await recipeService.getSteps(c.req.param("id"));
-  return c.json(steps);
+  const response = await client.listRecipeSteps({
+    recipeId: c.req.param("id"),
+  });
+  return c.json(response.steps);
 });
 
 app.post(":id/steps", sValidator("json", createRecipeStepDto), async (c) => {
   const id = c.req.param("id");
   const payload = c.req.valid("json");
-  const step = await recipeService.createStep(id, payload);
-  return c.json(step);
+  const response = await client.createRecipeStep({ recipeId: id, ...payload });
+  return c.json(response.step);
 });
 
 app.put(
@@ -93,15 +99,19 @@ app.put(
     const id = c.req.param("id");
     const stepId = Number(c.req.param("stepId"));
     const payload = c.req.valid("json");
-    const step = await recipeService.updateStep(id, stepId, payload);
-    return c.json(step);
+    const response = await client.updateRecipeStep({
+      recipeId: id,
+      stepId,
+      ...payload,
+    });
+    return c.json(response.step);
   },
 );
 
 app.delete("/:id/steps/:stepId", async (c) => {
   const id = c.req.param("id");
   const stepId = Number(c.req.param("stepId"));
-  await recipeService.deleteStep(id, stepId);
+  await client.deleteRecipeStep({ recipeId: id, stepId });
   return c.json({}, 201);
 });
 
@@ -112,14 +122,20 @@ app.put(
     const id = c.req.param("id");
     const stepId = Number(c.req.param("stepId"));
     const payload = c.req.valid("json");
-    const steps = await recipeService.reorderSteps(id, stepId, payload);
-    return c.json(steps);
+    const response = await client.reorderRecipeStep({
+      recipeId: id,
+      stepId,
+      ...payload,
+    });
+    return c.json(response.steps);
   },
 );
 
 app.get("/:id/ingredients", async (c) => {
-  const ingredients = await recipeService.getIngredients(c.req.param("id"));
-  return c.json(ingredients);
+  const response = await client.listRecipeIngredients({
+    recipeId: c.req.param("id"),
+  });
+  return c.json(response.ingredients);
 });
 
 app.post(
@@ -128,8 +144,11 @@ app.post(
   async (c) => {
     const id = c.req.param("id");
     const payload = c.req.valid("json");
-    const ingredient = await recipeService.createIngredient(id, payload);
-    return c.json(ingredient);
+    const response = await client.createRecipeIngredient({
+      recipeId: id,
+      ...payload,
+    });
+    return c.json(response.ingredient);
   },
 );
 
@@ -140,25 +159,27 @@ app.put(
     const id = c.req.param("id");
     const ingredientId = Number(c.req.param("ingredientId"));
     const payload = c.req.valid("json");
-    const ingredient = await recipeService.updateIngredient(
-      id,
+    const response = await client.updateRecipeIngredient({
+      recipeId: id,
       ingredientId,
-      payload,
-    );
-    return c.json(ingredient);
+      ...payload,
+    });
+    return c.json(response.ingredient);
   },
 );
 
 app.delete("/:id/ingredients/:ingredientId", async (c) => {
   const id = c.req.param("id");
   const ingredientId = Number(c.req.param("ingredientId"));
-  await recipeService.deleteIngredient(id, ingredientId);
+  await client.deleteRecipeIngredient({ recipeId: id, ingredientId });
   return c.json({}, 201);
 });
 
 app.get("/:id/nutritions", async (c) => {
-  const nutritions = await recipeService.getNutrition(c.req.param("id"));
-  return c.json(nutritions);
+  const response = await client.listRecipeNutritions({
+    recipeId: c.req.param("id"),
+  });
+  return c.json(response.nutritions);
 });
 
 const allowedNutritions = new Set<string>(nutritions);
@@ -172,12 +193,12 @@ app.put(
       return c.json({}, 400);
     }
     const payload = c.req.valid("json");
-    const nutrition = await recipeService.updateNutrition(
-      id,
-      name as Nutrition,
-      payload,
-    );
-    return c.json(nutrition);
+    const response = await client.updateRecipeNutrition({
+      recipeId: id,
+      name,
+      ...payload,
+    });
+    return c.json(response.nutrition);
   },
 );
 
@@ -185,9 +206,12 @@ app.post("/:id/like", sValidator("json", likeRecipeDtoSchema), async (c) => {
   const id = c.req.param("id");
   const user = c.get("user");
   const { like } = c.req.valid("json");
-  const { id: recipeId } = await recipeService.getById(id);
-  const recipe = await recipeService.like(user.id, recipeId, like);
-  return c.json(recipe);
+  const response = await client.likeRecipe({
+    userId: user.id,
+    recipeId: id,
+    like,
+  });
+  return c.json(response.recipe);
 });
 
 export const registerRecipeController = (instance: Hono) => {
