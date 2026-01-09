@@ -30,6 +30,7 @@ type RecipeHandler interface {
 	CreateRecipe(ctx context.Context, payload models.CreateRecipeInput) (*models.Recipe, error)
 	UpdateRecipe(ctx context.Context, id string, payload models.UpdateRecipeInput) (*models.Recipe, error)
 	DeleteRecipe(ctx context.Context, id string) error
+	UploadRecipeImage(ctx context.Context, id string, data []byte) (*models.Recipe, error)
 
 	// Recipe Steps operations
 	ListRecipeSteps(ctx context.Context, recipeID string) ([]models.RecipeStep, error)

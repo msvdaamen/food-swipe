@@ -49,11 +49,13 @@ func main() {
 	}
 	defer nc.Close()
 
+	fileStorage := filestorage.New(&cfg.FileStorage)
+
 	mux, server := setupGrpcServer("3001")
 
 	follow.Register(mux, pool, logger)
 	user.Register(mux, pool, logger)
-	recipe.Register(mux, pool, logger)
+	recipe.Register(mux, pool, fileStorage, logger)
 
 	shutdownChan := make(chan bool, 1)
 

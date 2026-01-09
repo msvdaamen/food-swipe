@@ -10,13 +10,14 @@ import (
 	"github.com/food-swipe/internal/recipe/adapter/primary/grpc"
 	"github.com/food-swipe/internal/recipe/adapter/secondary/storage"
 	"github.com/food-swipe/internal/recipe/core"
+	"github.com/food-swipe/internal/recipe/core/port"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
 
-func Register(mux *http.ServeMux, pool *pgxpool.Pool, logger *zap.Logger) {
+func Register(mux *http.ServeMux, pool *pgxpool.Pool, fileStorage port.FileStorage, logger *zap.Logger) {
 	storageAdapter := storage.New(pool)
-	core := core.New(storageAdapter)
+	core := core.New(storageAdapter, fileStorage)
 	grpcAdapter := grpc.New(core)
 
 	path, handler := foodswipev1connect.NewRecipeServiceHandler(

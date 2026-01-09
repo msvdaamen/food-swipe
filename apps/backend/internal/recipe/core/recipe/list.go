@@ -13,5 +13,11 @@ func (r *Recipe) ListRecipes(ctx context.Context, filter models.ListRecipesFilte
 	if err != nil {
 		return nil, fmt.Errorf("failed to list recipes: %w", err)
 	}
+	for i := range recipes.Data {
+		if recipes.Data[i].CoverImage != nil {
+			coverImageURL := r.fileStorage.PublicURL(*recipes.Data[i].CoverImage)
+			recipes.Data[i].CoverImageUrl = &coverImageURL
+		}
+	}
 	return recipes, nil
 }

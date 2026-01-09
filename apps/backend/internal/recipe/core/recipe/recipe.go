@@ -5,9 +5,10 @@ import (
 )
 
 type Recipe struct {
-	storage port.Storage
+	storage     port.Storage
+	fileStorage port.FileStorage
 }
 
-func New(storage port.Storage) *Recipe {
-	return &Recipe{storage: storage}
+func New(storage port.Storage, fileStorage port.FileStorage) *Recipe {
+	return &Recipe{storage: storage, fileStorage: fileStorage}
 }

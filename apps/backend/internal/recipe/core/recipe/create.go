@@ -12,5 +12,9 @@ func (r *Recipe) CreateRecipe(ctx context.Context, payload models.CreateRecipeIn
 	if err != nil {
 		return nil, fmt.Errorf("failed to create recipe: %w", err)
 	}
+	if recipe.CoverImage != nil {
+		coverImageURL := r.fileStorage.PublicURL(*recipe.CoverImage)
+		recipe.CoverImageUrl = &coverImageURL
+	}
 	return recipe, nil
 }

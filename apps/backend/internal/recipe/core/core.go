@@ -15,11 +15,11 @@ type Core struct {
 	storage port.Storage
 }
 
-func New(storage port.Storage) *Core {
+func New(storage port.Storage, fileStorage port.FileStorage) *Core {
 	return &Core{
 		Ingredient:  ingredient.New(storage),
 		Measurement: measurement.New(storage),
-		Recipe:      recipe.New(storage),
+		Recipe:      recipe.New(storage, fileStorage),
 		storage:     storage,
 	}
 }
