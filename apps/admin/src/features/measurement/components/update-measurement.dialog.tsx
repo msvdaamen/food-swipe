@@ -16,6 +16,7 @@ import { FC, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Measurement } from "../types/measurement.type";
 import { useUpdateMeasurement } from "../api/update-measurement";
+import { PaginatedData } from "@/types/paginated-data";
 
 interface UpdateMeasurementProps {
   isOpen: boolean;
@@ -55,13 +56,13 @@ export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
   });
 
   useEffect(() => {
-    const measurements = queryClient.getQueryData<Measurement[]>([
+    const measurements = queryClient.getQueryData<PaginatedData<Measurement>>([
       "measurements",
     ]);
     if (!measurements) return;
 
-    const measurement = measurements.find(
-      (measurement) => measurement.id === measurementId
+    const measurement = measurements?.data.find(
+      (measurement) => measurement.id === measurementId,
     );
     form.setFieldValue("name", measurement?.name || "");
     form.setFieldValue("abbreviation", measurement?.abbreviation || "");

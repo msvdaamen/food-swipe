@@ -12,8 +12,8 @@ const app = authRouterFactory.createApp();
 
 const client = createClient(Recipe.RecipeService, grpcTransport);
 
-app.get("/", sValidator("json", getMeasurementsDto), async (c) => {
-  const payload = c.req.valid("json");
+app.get("/", sValidator("query", getMeasurementsDto), async (c) => {
+  const payload = c.req.valid("query");
   const measurements = await client.listMeasurements(payload);
   return c.json(measurements);
 });

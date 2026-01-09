@@ -13,7 +13,7 @@ export type GetIngredientsInput = {
   sort?: string;
   order?: "asc" | "desc";
   page: number;
-  amount: number;
+  limit: number;
 };
 
 export const getIngredients = async (payload: GetIngredientsInput) => {

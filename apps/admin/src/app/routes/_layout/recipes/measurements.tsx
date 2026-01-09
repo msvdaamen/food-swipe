@@ -31,9 +31,12 @@ function RouteComponent() {
     number | null
   >(null);
 
-  const { data, isError, error, isPending } = useMeasurements();
+  const { data, isError, error, isPending } = useMeasurements({
+    page: 1,
+    limit: 100,
+  });
   const deleteMeasurement = useDeleteMeasurement();
-  
+
   const openCreateMeasurementDialog = () => {
     setIsCreateOpen(true);
   };
@@ -56,8 +59,8 @@ function RouteComponent() {
     return <div>Error: {error.message}</div>;
   }
 
-  const filteredMeasurements = data.filter((measurement) =>
-    measurement.name.toLowerCase().includes(search.toLowerCase())
+  const filteredMeasurements = data.data.filter((measurement) =>
+    measurement.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (

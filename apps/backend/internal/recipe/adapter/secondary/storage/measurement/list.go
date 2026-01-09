@@ -26,7 +26,7 @@ func (a *Measurement) ListMeasurements(ctx context.Context, payload models.ListM
 	limitSql := fmt.Sprintf(" LIMIT $%d OFFSET $%d", len(params)+1, len(params)+2)
 	params = append(params, payload.Limit, (payload.Page-1)*payload.Limit)
 
-	rows, err := a.db.Query(ctx, listMeasurementsSql+filterSql+limitSql, params...)
+	rows, err := a.db.Query(ctx, listMeasurementsSql+filterSql+" ORDER BY id"+limitSql, params...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read rows: %w", err)
 	}

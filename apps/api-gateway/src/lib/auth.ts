@@ -1,48 +1,29 @@
 import { betterAuth } from "better-auth/minimal";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { databaseProvider } from "../providers/database.provider";
-import { username, admin } from "better-auth/plugins"
+import { username, admin } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
 import { cacheProvider } from "../providers/cache.provider";
 
 export const auth = betterAuth({
   basePath: "/v1/auth",
   database: drizzleAdapter(databaseProvider, {
-      provider: "pg",
-      usePlural: true,
+    provider: "pg",
+    usePlural: true,
   }),
   advanced: {
     database: {
       generateId: () => Bun.randomUUIDv7(),
-    }
-  },
-  secondaryStorage: {
-      get: async (key) => await cacheProvider.get(key),
-      set: async (key, value, ttl) => {
-        console.log("Setting secondary storage value:", key, value, 5 * 60);
-        await cacheProvider.set(key, value);
-        await cacheProvider.expire(key, 5 * 60);
-      },
-      delete: async (key) => await cacheProvider.del(key).then(() => Promise.resolve())
-  },
-  session: {
-    cookieCache: {
-      maxAge: 5 * 60, // Cache duration in seconds
-      refreshCache: false,
     },
-  },
-  account: {
-      storeStateStrategy: "cookie",
-      storeAccountCookie: true,
   },
   emailAndPassword: {
     enabled: true,
     password: {
       hash: async (password) => {
-        return await Bun.password.hash(password)
+        return await Bun.password.hash(password);
       },
       verify: async ({ password, hash }) => {
-        return await Bun.password.verify(password, hash)
+        return await Bun.password.verify(password, hash);
       },
     },
   },
@@ -53,7 +34,7 @@ export const auth = betterAuth({
     // Development mode - Expo's exp:// scheme with local IP ranges
     ...(import.meta.env.ENVIREMENT !== "production"
       ? [
-          'http://localhost:5173',
+          "http://localhost:5173",
 
           "exp://*/*", // Trust all Expo development URLs
           "exp://10.0.0.*:*/*", // Trust 10.0.0.x IP range

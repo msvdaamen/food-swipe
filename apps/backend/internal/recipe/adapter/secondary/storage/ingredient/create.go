@@ -14,7 +14,7 @@ func (a *Ingredient) CreateIngredient(ctx context.Context, payload models.Create
 	row := a.db.QueryRow(ctx, insertIngredientSql, payload.Name)
 
 	var ingredient models.Ingredient
-	err := row.Scan(ingredient.ID, ingredient.Name)
+	err := row.Scan(&ingredient.ID, &ingredient.Name)
 	if err != nil {
 		return models.Ingredient{}, fmt.Errorf("failed to scan row: %w", err)
 	}

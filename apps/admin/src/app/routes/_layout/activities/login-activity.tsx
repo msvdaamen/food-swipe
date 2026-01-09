@@ -93,13 +93,11 @@ function UsersTable() {
                     </TableCell>
                   </TableRow>
                 ))
-              : data.data.map((user) => (
+              : data?.data.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.username}</TableCell>
-                    <TableCell>
-                      {user.name}
-                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
                     <TableCell className="whitespace-nowrap">
                       {format(new Date(user.createdAt), "MM/dd/yyyy")}
                     </TableCell>

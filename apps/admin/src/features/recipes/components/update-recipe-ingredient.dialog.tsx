@@ -51,9 +51,12 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
   const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
-    amount: 100,
+    limit: 100,
   });
-  const { data: measurements = [] as Measurement[] } = useMeasurements();
+  const { data: measurements } = useMeasurements({
+    page: 1,
+    limit: 100,
+  });
 
   const form = useForm({
     defaultValues: {
@@ -145,7 +148,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
                       <SelectValue placeholder="Select measurement" />
                     </SelectTrigger>
                     <SelectContent>
-                      {measurements.map((m: Measurement) => (
+                      {measurements?.data.map((m: Measurement) => (
                         <SelectItem key={m.id} value={m.id.toString()}>
                           {m.name}
                         </SelectItem>
