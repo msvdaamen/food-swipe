@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/food-swipe/internal/follow"
+	filestorage "github.com/food-swipe/internal/pkg/file-storage"
 	"github.com/food-swipe/internal/pkg/logger"
 	"github.com/food-swipe/internal/recipe"
 	"github.com/food-swipe/internal/user"
@@ -21,6 +22,7 @@ type Config struct {
 	LogMode     logger.LogMode `env:"LOG_MODE" env-default:"0"`
 	DatabaseURL string         `env:"DATABASE_URL"`
 	NatsURL     string         `env:"NATS_URL"`
+	FileStorage filestorage.Config
 }
 
 func main() {
