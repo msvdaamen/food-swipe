@@ -3,16 +3,17 @@ package models
 import "time"
 
 type Recipe struct {
-	ID          string
-	Title       string
-	Description *string
-	PrepTime    *uint32
-	Servings    *uint32
-	IsPublished bool
-	CoverImage  *string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Nutritions  []Nutrition
+	ID            string
+	Title         string
+	Description   *string
+	PrepTime      *uint32
+	Servings      *uint32
+	IsPublished   bool
+	CoverImage    *string
+	CoverImageUrl *string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	Nutritions    []Nutrition
 }
 
 type RecipeStep struct {
@@ -53,6 +54,8 @@ type UpdateRecipeInput struct {
 	PrepTime    *uint32
 	Servings    *uint32
 	IsPublished *bool
+	CoverImage  *string
+	FieldMask   []string
 }
 
 type ListRecipesFilter struct {

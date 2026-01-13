@@ -12,16 +12,17 @@ func toProtoRecipe(recipe *models.Recipe) *v1.Recipe {
 	}
 
 	return &v1.Recipe{
-		Id:          recipe.ID,
-		Title:       recipe.Title,
-		Description: recipe.Description,
-		PrepTime:    recipe.PrepTime,
-		Servings:    recipe.Servings,
-		IsPublished: recipe.IsPublished,
-		CoverImage:  recipe.CoverImage,
-		CreatedAt:   recipe.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
-		UpdatedAt:   recipe.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
-		Nutritions:  nutritions,
+		Id:            recipe.ID,
+		Title:         recipe.Title,
+		Description:   recipe.Description,
+		PrepTime:      recipe.PrepTime,
+		Servings:      recipe.Servings,
+		IsPublished:   recipe.IsPublished,
+		CoverImage:    recipe.CoverImage,
+		CoverImageUrl: recipe.CoverImageUrl,
+		CreatedAt:     recipe.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:     recipe.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		Nutritions:    nutritions,
 	}
 }
 
@@ -66,16 +67,6 @@ func toListRecipesFilter(req *v1.ListRecipesRequest) models.ListRecipesFilter {
 
 func toCreateRecipeInput(req *v1.CreateRecipeRequest) models.CreateRecipeInput {
 	return models.CreateRecipeInput{
-		Title:       req.Title,
-		Description: req.Description,
-		PrepTime:    req.PrepTime,
-		Servings:    req.Servings,
-		IsPublished: req.IsPublished,
-	}
-}
-
-func toUpdateRecipeInput(req *v1.UpdateRecipeRequest) models.UpdateRecipeInput {
-	return models.UpdateRecipeInput{
 		Title:       req.Title,
 		Description: req.Description,
 		PrepTime:    req.PrepTime,

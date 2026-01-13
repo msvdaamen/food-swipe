@@ -77,6 +77,9 @@ const (
 	// RecipeServiceDeleteRecipeProcedure is the fully-qualified name of the RecipeService's
 	// DeleteRecipe RPC.
 	RecipeServiceDeleteRecipeProcedure = "/foodswipe.v1.RecipeService/DeleteRecipe"
+	// RecipeServiceUploadRecipeImageProcedure is the fully-qualified name of the RecipeService's
+	// UploadRecipeImage RPC.
+	RecipeServiceUploadRecipeImageProcedure = "/foodswipe.v1.RecipeService/UploadRecipeImage"
 	// RecipeServiceListRecipeStepsProcedure is the fully-qualified name of the RecipeService's
 	// ListRecipeSteps RPC.
 	RecipeServiceListRecipeStepsProcedure = "/foodswipe.v1.RecipeService/ListRecipeSteps"
@@ -132,6 +135,7 @@ type RecipeServiceClient interface {
 	CreateRecipe(context.Context, *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error)
 	UpdateRecipe(context.Context, *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error)
 	DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error)
+	UploadRecipeImage(context.Context, *v1.UploadRecipeImageRequest) (*v1.UploadRecipeImageResponse, error)
 	ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error)
 	CreateRecipeStep(context.Context, *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error)
 	UpdateRecipeStep(context.Context, *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error)
@@ -247,6 +251,12 @@ func NewRecipeServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipe")),
 			connect.WithClientOptions(opts...),
 		),
+		uploadRecipeImage: connect.NewClient[v1.UploadRecipeImageRequest, v1.UploadRecipeImageResponse](
+			httpClient,
+			baseURL+RecipeServiceUploadRecipeImageProcedure,
+			connect.WithSchema(recipeServiceMethods.ByName("UploadRecipeImage")),
+			connect.WithClientOptions(opts...),
+		),
 		listRecipeSteps: connect.NewClient[v1.ListRecipeStepsRequest, v1.ListRecipeStepsResponse](
 			httpClient,
 			baseURL+RecipeServiceListRecipeStepsProcedure,
@@ -339,6 +349,7 @@ type recipeServiceClient struct {
 	createRecipe           *connect.Client[v1.CreateRecipeRequest, v1.CreateRecipeResponse]
 	updateRecipe           *connect.Client[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse]
 	deleteRecipe           *connect.Client[v1.DeleteRecipeRequest, v1.DeleteRecipeResponse]
+	uploadRecipeImage      *connect.Client[v1.UploadRecipeImageRequest, v1.UploadRecipeImageResponse]
 	listRecipeSteps        *connect.Client[v1.ListRecipeStepsRequest, v1.ListRecipeStepsResponse]
 	createRecipeStep       *connect.Client[v1.CreateRecipeStepRequest, v1.CreateRecipeStepResponse]
 	updateRecipeStep       *connect.Client[v1.UpdateRecipeStepRequest, v1.UpdateRecipeStepResponse]
@@ -488,6 +499,15 @@ func (c *recipeServiceClient) DeleteRecipe(ctx context.Context, req *v1.DeleteRe
 	return nil, err
 }
 
+// UploadRecipeImage calls foodswipe.v1.RecipeService.UploadRecipeImage.
+func (c *recipeServiceClient) UploadRecipeImage(ctx context.Context, req *v1.UploadRecipeImageRequest) (*v1.UploadRecipeImageResponse, error) {
+	response, err := c.uploadRecipeImage.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // ListRecipeSteps calls foodswipe.v1.RecipeService.ListRecipeSteps.
 func (c *recipeServiceClient) ListRecipeSteps(ctx context.Context, req *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error) {
 	response, err := c.listRecipeSteps.CallUnary(ctx, connect.NewRequest(req))
@@ -613,6 +633,7 @@ type RecipeServiceHandler interface {
 	CreateRecipe(context.Context, *v1.CreateRecipeRequest) (*v1.CreateRecipeResponse, error)
 	UpdateRecipe(context.Context, *v1.UpdateRecipeRequest) (*v1.UpdateRecipeResponse, error)
 	DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error)
+	UploadRecipeImage(context.Context, *v1.UploadRecipeImageRequest) (*v1.UploadRecipeImageResponse, error)
 	ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error)
 	CreateRecipeStep(context.Context, *v1.CreateRecipeStepRequest) (*v1.CreateRecipeStepResponse, error)
 	UpdateRecipeStep(context.Context, *v1.UpdateRecipeStepRequest) (*v1.UpdateRecipeStepResponse, error)
@@ -724,6 +745,12 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(recipeServiceMethods.ByName("DeleteRecipe")),
 		connect.WithHandlerOptions(opts...),
 	)
+	recipeServiceUploadRecipeImageHandler := connect.NewUnaryHandlerSimple(
+		RecipeServiceUploadRecipeImageProcedure,
+		svc.UploadRecipeImage,
+		connect.WithSchema(recipeServiceMethods.ByName("UploadRecipeImage")),
+		connect.WithHandlerOptions(opts...),
+	)
 	recipeServiceListRecipeStepsHandler := connect.NewUnaryHandlerSimple(
 		RecipeServiceListRecipeStepsProcedure,
 		svc.ListRecipeSteps,
@@ -828,6 +855,8 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect.HandlerOp
 			recipeServiceUpdateRecipeHandler.ServeHTTP(w, r)
 		case RecipeServiceDeleteRecipeProcedure:
 			recipeServiceDeleteRecipeHandler.ServeHTTP(w, r)
+		case RecipeServiceUploadRecipeImageProcedure:
+			recipeServiceUploadRecipeImageHandler.ServeHTTP(w, r)
 		case RecipeServiceListRecipeStepsProcedure:
 			recipeServiceListRecipeStepsHandler.ServeHTTP(w, r)
 		case RecipeServiceCreateRecipeStepProcedure:
@@ -919,6 +948,10 @@ func (UnimplementedRecipeServiceHandler) UpdateRecipe(context.Context, *v1.Updat
 
 func (UnimplementedRecipeServiceHandler) DeleteRecipe(context.Context, *v1.DeleteRecipeRequest) (*v1.DeleteRecipeResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.DeleteRecipe is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) UploadRecipeImage(context.Context, *v1.UploadRecipeImageRequest) (*v1.UploadRecipeImageResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.RecipeService.UploadRecipeImage is not implemented"))
 }
 
 func (UnimplementedRecipeServiceHandler) ListRecipeSteps(context.Context, *v1.ListRecipeStepsRequest) (*v1.ListRecipeStepsResponse, error) {

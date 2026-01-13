@@ -12,5 +12,10 @@ func (r *Recipe) UpdateRecipe(ctx context.Context, id string, payload models.Upd
 	if err != nil {
 		return nil, fmt.Errorf("failed to update recipe: %w", err)
 	}
+	if recipe.CoverImage != nil {
+		coverImageURL := r.fileStorage.PublicURL(*recipe.CoverImage)
+		recipe.CoverImageUrl = &coverImageURL
+	}
+
 	return recipe, nil
 }

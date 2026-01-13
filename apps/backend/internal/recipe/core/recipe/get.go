@@ -12,5 +12,9 @@ func (r *Recipe) GetRecipe(ctx context.Context, id string) (*models.Recipe, erro
 	if err != nil {
 		return nil, fmt.Errorf("failed to get recipe: %w", err)
 	}
+	if recipe.CoverImage != nil {
+		coverImageURL := r.fileStorage.PublicURL(*recipe.CoverImage)
+		recipe.CoverImageUrl = &coverImageURL
+	}
 	return recipe, nil
 }

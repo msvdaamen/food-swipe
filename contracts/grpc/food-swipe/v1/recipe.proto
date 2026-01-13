@@ -3,6 +3,7 @@ syntax = "proto3";
 package foodswipe.v1;
 
 import "buf/validate/validate.proto";
+import "google/protobuf/field_mask.proto";
 import "food-swipe/v1/common.proto";
 
 message Ingredient {
@@ -117,9 +118,10 @@ message Recipe {
   optional uint32 servings = 5;
   bool is_published = 6;
   optional string cover_image = 7;
-  string created_at = 8;
-  string updated_at = 9;
-  repeated Nutrition nutritions = 10;
+  optional string cover_image_url = 8;
+  string created_at = 9;
+  string updated_at = 10;
+  repeated Nutrition nutritions = 11;
 }
 
 message RecipeStep {
@@ -176,6 +178,7 @@ message UpdateRecipeRequest {
   optional uint32 prep_time = 4;
   optional uint32 servings = 5;
   optional bool is_published = 6;
+  google.protobuf.FieldMask field_mask = 7;
 }
 
 message UpdateRecipeResponse {
@@ -187,6 +190,15 @@ message DeleteRecipeRequest {
 }
 
 message DeleteRecipeResponse {}
+
+message UploadRecipeImageRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  bytes image_data = 2 [(buf.validate.field).bytes.min_len = 1];
+}
+
+message UploadRecipeImageResponse {
+  Recipe recipe = 1;
+}
 
 message ListRecipeStepsRequest {
   string recipe_id = 1 [(buf.validate.field).string.uuid = true];
@@ -318,6 +330,7 @@ service RecipeService {
   rpc CreateRecipe(CreateRecipeRequest) returns (CreateRecipeResponse);
   rpc UpdateRecipe(UpdateRecipeRequest) returns (UpdateRecipeResponse);
   rpc DeleteRecipe(DeleteRecipeRequest) returns (DeleteRecipeResponse);
+  rpc UploadRecipeImage(UploadRecipeImageRequest) returns (UploadRecipeImageResponse);
 
   rpc ListRecipeSteps(ListRecipeStepsRequest) returns (ListRecipeStepsResponse);
   rpc CreateRecipeStep(CreateRecipeStepRequest) returns (CreateRecipeStepResponse);
