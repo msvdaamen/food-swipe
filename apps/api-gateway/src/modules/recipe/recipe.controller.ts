@@ -11,7 +11,7 @@ import { loadRecipesDto } from "./dto/load-recipes.dto.ts";
 import { createRecipeDto } from "./dto/create-recipe.dto.ts";
 import { importRecipeDto } from "./dto/import-recipe.dto.ts";
 import { updateRecipeNutritionDto } from "./dto/update-nutrition.dto.ts";
-import { type Nutrition, nutritions } from "./constants/nutritions.ts";
+import { nutritions } from "./constants/nutritions.ts";
 import { likeRecipeDtoSchema } from "./dto/like-recipe.dto.ts";
 import { sValidator } from "@hono/standard-validator";
 import { createClient } from "@connectrpc/connect";
