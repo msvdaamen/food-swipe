@@ -1,8 +1,6 @@
 package recipe
 
 import (
-	"net/http"
-
 	"connectrpc.com/connect"
 	"connectrpc.com/validate"
 	"github.com/food-swipe/gen/grpc/food-swipe/v1/foodswipev1connect"
@@ -15,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func Register(mux *http.ServeMux, pool *pgxpool.Pool, fileStorage port.FileStorage, logger *zap.Logger) {
+func Register(grpcServer grpcPkg.Server, pool *pgxpool.Pool, fileStorage port.FileStorage, logger *zap.Logger) {
 	storageAdapter := storage.New(pool)
 	core := core.New(storageAdapter, fileStorage)
 	grpcAdapter := grpc.New(core)
@@ -27,5 +25,5 @@ func Register(mux *http.ServeMux, pool *pgxpool.Pool, fileStorage port.FileStora
 			grpcPkg.NewLoggerInterceptor(logger),
 		),
 	)
-	mux.Handle(path, handler)
+	grpcServer.Handle(path, handler)
 }

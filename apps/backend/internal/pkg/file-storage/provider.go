@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-type Adapter struct {
+type Provider struct {
 	PublicUrl       string
 	AccessKeyID     string
 	SecretAccessKey string
@@ -19,7 +19,7 @@ type Adapter struct {
 	Client          *s3.Client
 }
 
-func New(config *Config) *Adapter {
+func New(config *Config) *Provider {
 	cfg, err := awsConfig.LoadDefaultConfig(context.TODO(),
 		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(config.AccessKeyID, config.SecretAccessKey, "")),
 		awsConfig.WithRegion("auto"), // Required by SDK but not used by R2
@@ -32,7 +32,7 @@ func New(config *Config) *Adapter {
 		o.BaseEndpoint = aws.String(config.Endpoint)
 	})
 
-	return &Adapter{
+	return &Provider{
 		PublicUrl:       config.PublicUrl,
 		AccessKeyID:     config.AccessKeyID,
 		SecretAccessKey: config.SecretAccessKey,
@@ -42,7 +42,7 @@ func New(config *Config) *Adapter {
 	}
 }
 
-func (a *Adapter) GetBucket(isPublic bool) string {
+func (a *Provider) GetBucket(isPublic bool) string {
 	if isPublic {
 		return a.bucket + "-public"
 	}

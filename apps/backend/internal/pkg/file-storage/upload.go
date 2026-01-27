@@ -15,7 +15,7 @@ type UploadOptions struct {
 	IsPublic *bool
 }
 
-func (a *Adapter) Upload(ctx context.Context, reader io.Reader, options UploadOptions) (*string, error) {
+func (a *Provider) Upload(ctx context.Context, reader io.Reader, options UploadOptions) (*string, error) {
 	key := uuid.New().String()
 	if options.Key != nil {
 		key = *options.Key

@@ -2,10 +2,7 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log"
-	"net/http"
-	"os"
 	"os/signal"
 	"syscall"
 	"time"
@@ -23,6 +20,8 @@ type Config struct {
 	DatabaseURL string         `env:"DATABASE_URL"`
 	NatsURL     string         `env:"NATS_URL"`
 	FileStorage filestorage.Config
+	Port        string `env:"PORT" env-default:"3000"`
+	GrpcPort    string `env:"GRPC_PORT" env-default:"3001"`
 }
 
 func main() {
@@ -36,6 +35,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer logger.Sync()
 
 	pool, err := setupDatabaseConnection(cfg.DatabaseURL)
 	if err != nil {
@@ -51,33 +51,36 @@ func main() {
 
 	fileStorage := filestorage.New(&cfg.FileStorage)
 
-	mux, server := setupGrpcServer("3001")
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 
-	follow.Register(mux, pool, logger)
-	user.Register(mux, pool, logger)
-	recipe.Register(mux, pool, fileStorage, logger)
+	grpcServer := setupGrpcServer(cfg.GrpcPort, logger)
+	httpServer := setupHttpServer(cfg.Port, logger)
 
-	shutdownChan := make(chan bool, 1)
+	follow.Register(grpcServer, pool, logger)
+	user.Register(grpcServer, pool, logger)
+	recipe.Register(grpcServer, pool, fileStorage, logger)
 
-	go func() {
-		log.Println("Starting HTTP server on: ", server.Addr)
-		if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("HTTP server error: %v", err)
-		}
-		log.Println("Stopped serving new connections.")
-		shutdownChan <- true
-	}()
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-	<-sigChan
+	httpServer.Start()
+	grpcServer.Start()
 
-	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
-	defer shutdownRelease()
+	<-ctx.Done()
+	// To allow force close
+	stop()
+	logger.Info("Received shutdown signal, shutting down.")
 
-	if err := server.Shutdown(shutdownCtx); err != nil {
-		log.Fatalf("HTTP shutdown error: %v", err)
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	err = httpServer.Shutdown(shutdownCtx)
+	if err != nil {
+		log.Printf("Failed to shutdown HTTP server: %v", err)
 	}
 
-	<-shutdownChan
-	log.Println("Graceful shutdown complete.")
+	err = grpcServer.Shutdown(shutdownCtx)
+	if err != nil {
+		log.Printf("Failed to shutdown gRPC server: %v", err)
+	}
+
+	logger.Info("Server shut down gracefully.")
 }
