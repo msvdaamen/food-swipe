@@ -1,5 +1,5 @@
 package filestorage
 
-func (a *Adapter) PublicURL(key string) string {
+func (a *Provider) PublicURL(key string) string {
 	return a.PublicUrl + "/" + key
 }

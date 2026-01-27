@@ -1,12 +1,23 @@
 package main
 
 import (
+	"context"
+	"errors"
+	"log"
 	"net/http"
 
 	"connectrpc.com/grpcreflect"
+	"go.uber.org/zap"
 )
 
-func setupGrpcServer(port string) (*http.ServeMux, *http.Server) {
+type GrpcServer struct {
+	Server *http.Server
+	Mux    *http.ServeMux
+	port   string
+	logger *zap.Logger
+}
+
+func setupGrpcServer(port string, logger *zap.Logger) *GrpcServer {
 	mux := http.NewServeMux()
 	reflector := grpcreflect.NewStaticReflector(
 		"followers.v1.FollowerService",
@@ -22,5 +33,27 @@ func setupGrpcServer(port string) (*http.ServeMux, *http.Server) {
 		Handler:   mux,
 		Protocols: p,
 	}
-	return mux, server
+	return &GrpcServer{
+		Server: server,
+		Mux:    mux,
+		port:   port,
+		logger: logger,
+	}
+}
+
+func (g *GrpcServer) Start() {
+	go func() {
+		g.logger.Info("Starting GRPC server on: " + g.port)
+		if err := g.Server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("GRPC start error: %v", err)
+		}
+	}()
+}
+
+func (h *GrpcServer) Shutdown(ctx context.Context) error {
+	return h.Server.Shutdown(ctx)
+}
+
+func (h *GrpcServer) Handle(path string, handler http.Handler) {
+	h.Mux.Handle(path, handler)
 }

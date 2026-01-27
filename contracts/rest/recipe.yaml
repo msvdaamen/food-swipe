@@ -1,0 +1,6 @@
+openapi: 3.0.3
+info:
+  description: Food swipe api
+  title: Food Swipe API
+  version: 1.2.3
+paths:

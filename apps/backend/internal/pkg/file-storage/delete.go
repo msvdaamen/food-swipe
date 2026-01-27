@@ -11,7 +11,7 @@ type DeleteOptions struct {
 	IsPublic *bool
 }
 
-func (a *Adapter) Delete(ctx context.Context, key string, options DeleteOptions) error {
+func (a *Provider) Delete(ctx context.Context, key string, options DeleteOptions) error {
 	isPublic := options.IsPublic != nil && *options.IsPublic
 
 	_, err := a.Client.DeleteObject(ctx, &s3.DeleteObjectInput{
