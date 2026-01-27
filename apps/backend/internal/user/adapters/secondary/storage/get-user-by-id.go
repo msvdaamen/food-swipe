@@ -14,21 +14,8 @@ const selectUserByID = "SELECT id, name, email, email_verified, image, username,
 func (a *Adapter) GetUserByID(ctx context.Context, userID string) (*models.User, error) {
 	row := a.db.QueryRow(ctx, selectUserByID, userID)
 	var user models.User
-	if err := row.Scan(
-		&user.ID,
-		&user.Name,
-		&user.Email,
-		&user.EmailVerified,
-		&user.Image,
-		&user.Username,
-		&user.DisplayUsername,
-		&user.Role,
-		&user.Banned,
-		&user.BanReason,
-		&user.BanExpires,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	); err != nil {
+	user, err := scanUser(row)
+	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, ErrUserNotFound
 		}

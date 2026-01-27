@@ -9,6 +9,7 @@ import (
 
 	"github.com/food-swipe/internal/follow"
 	filestorage "github.com/food-swipe/internal/pkg/file-storage"
+	"github.com/food-swipe/internal/pkg/i18n"
 	"github.com/food-swipe/internal/pkg/logger"
 	"github.com/food-swipe/internal/recipe"
 	"github.com/food-swipe/internal/user"
@@ -51,14 +52,16 @@ func main() {
 
 	fileStorage := filestorage.New(&cfg.FileStorage)
 
+	i18nProvider := i18n.New()
+
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
 	grpcServer := setupGrpcServer(cfg.GrpcPort, logger)
-	httpServer := setupHttpServer(cfg.Port, logger)
+	httpServer := setupHttpServer(cfg.Port, i18nProvider, logger)
 
 	follow.Register(grpcServer, pool, logger)
-	user.Register(grpcServer, pool, logger)
+	user.Register(grpcServer, httpServer.Echo, pool, logger)
 	recipe.Register(grpcServer, pool, fileStorage, logger)
 
 	httpServer.Start()
