@@ -7,15 +7,15 @@ import (
 )
 
 type Pagination struct {
-	PerPage     uint32
-	TotalPages  uint32
-	CurrentPage uint32
-	Total       uint32
+	PerPage     uint32 `json:"perPage"`
+	TotalPages  uint32 `json:"totalPages"`
+	CurrentPage uint32 `json:"currentPage"`
+	Total       uint32 `json:"total"`
 }
 
 type PaginationResponse[T any] struct {
-	Pagination Pagination
-	Data       []T
+	Pagination Pagination `json:"pagination"`
+	Data       []T        `json:"data"`
 }
 
 func New[T any](data []T, total uint32, page uint32, limit uint32) *PaginationResponse[T] {
