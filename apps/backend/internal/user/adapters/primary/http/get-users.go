@@ -1,7 +1,6 @@
 package http
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/food-swipe/internal/pkg"
@@ -18,8 +17,6 @@ func (a *Adapter) GetUsers(ctx *echo.Context) error {
 	if err := pkg.ValidateRequest(ctx, params); err != nil {
 		return err
 	}
-
-	log.Print(params)
 
 	paginated, err := a.core.GetUsers(ctx.Request().Context(), params.Limit, params.Page)
 	if err != nil {

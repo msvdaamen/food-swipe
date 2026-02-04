@@ -75,9 +75,6 @@ func (h *HttpServer) Start() {
 			log.Fatalf("HTTP start error: %v", err)
 		}
 	}()
-	for _, route := range h.Echo.Router().Routes() {
-		h.logger.Info("Registered route", zap.String("method", route.Method), zap.String("path", route.Path))
-	}
 }
 
 func (s *HttpServer) Shutdown(ctx context.Context) error {
