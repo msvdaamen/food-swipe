@@ -17,8 +17,8 @@ type Handler interface {
 	RevokeAlltokens(ctx context.Context, userID string) error
 
 	// OAuth flow
-	GetAuthUrl(ctx context.Context, provider, redirectURI string) (string, error)
-	ExchangeCode(ctx context.Context, code, state, provider string) (*models.AuthResponse, error)
+	GetAuthUrl(ctx context.Context, provider string, redirectURI string) (string, error)
+	ExchangeCode(ctx context.Context, code string, state string, provider string) (*models.AuthResponse, error)
 
 	// Token validation
 	ValidateAccessToken(ctx context.Context, token string) (*models.User, error)
@@ -29,8 +29,8 @@ type Handler interface {
 
 	// Password reset
 	RequestPasswordReset(ctx context.Context, email string) error
-	ResetPassword(ctx context.Context, token, newPassword string) error
+	ResetPassword(ctx context.Context, token string, newPassword string) error
 
 	// Change password
-	ChangePassword(ctx context.Context, userID, oldPassword, newPassword string) error
+	ChangePassword(ctx context.Context, userID string, oldPassword string, newPassword string) error
 }

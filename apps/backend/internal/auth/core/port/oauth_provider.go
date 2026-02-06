@@ -18,7 +18,7 @@ type OAuthProvider interface {
 	GetUserInfo(ctx context.Context, accessToken string) (*models.OAuthUserInfo, error)
 
 	// GetProviderName returns the name of the OAuth provider
-	GetProviderName() string
+	GetProviderName() models.AuthProviders
 
 	// ValidateProvider checks if the provider is properly configured
 	ValidateProvider() error

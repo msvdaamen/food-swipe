@@ -20,7 +20,7 @@ const (
 	appleAuthURL  = "https://appleid.apple.com/auth/authorize"
 	appleTokenURL = "https://appleid.apple.com/auth/token"
 	appleKeysURL  = "https://appleid.apple.com/auth/keys"
-	providerName  = "apple"
+	providerName  = models.AuthProvidersApple
 )
 
 type Provider struct {
@@ -63,7 +63,7 @@ func New(config Config) *Provider {
 	}
 }
 
-func (p *Provider) GetProviderName() string {
+func (p *Provider) GetProviderName() models.AuthProviders {
 	return providerName
 }
 

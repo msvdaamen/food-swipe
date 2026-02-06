@@ -6,6 +6,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type AuthProviders string
+
+const (
+	AuthProvidersGoogle AuthProviders = "google"
+	AuthProvidersApple  AuthProviders = "apple"
+)
+
 type User struct {
 	ID              uuid.UUID
 	Email           string
