@@ -12,67 +12,67 @@ import (
 func (a *Adapter) handleError(c *echo.Context, err error) error {
 	switch {
 	case err == core.ErrInvalidCredentials:
-		return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Error:   "invalid_credentials",
 			Message: "Invalid email or password",
 		})
 	case err == core.ErrUserAlreadyExists:
-		return (*c).JSON(http.StatusConflict, ErrorResponse{
+		return c.JSON(http.StatusConflict, ErrorResponse{
 			Error:   "user_already_exists",
 			Message: "A user with this email already exists",
 		})
 	case err == core.ErrUsernameAlreadyExists:
-		return (*c).JSON(http.StatusConflict, ErrorResponse{
+		return c.JSON(http.StatusConflict, ErrorResponse{
 			Error:   "username_already_exists",
 			Message: "This username is already taken",
 		})
 	case err == core.ErrUserNotFound:
-		return (*c).JSON(http.StatusNotFound, ErrorResponse{
+		return c.JSON(http.StatusNotFound, ErrorResponse{
 			Error:   "user_not_found",
 			Message: "User not found",
 		})
 	case err == core.ErrInvalidToken:
-		return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Error:   "invalid_token",
 			Message: "Invalid or expired token",
 		})
 	case err == core.ErrTokenExpired:
-		return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Error:   "token_expired",
 			Message: "Token has expired",
 		})
 	case err == core.ErrTokenAlreadyUsed:
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "token_already_used",
 			Message: "This token has already been used",
 		})
 	case err == core.ErrUserBanned:
-		return (*c).JSON(http.StatusForbidden, ErrorResponse{
+		return c.JSON(http.StatusForbidden, ErrorResponse{
 			Error:   "user_banned",
 			Message: err.Error(),
 		})
 	case err == core.ErrInvalidOAuthState:
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "invalid_oauth_state",
 			Message: "Invalid OAuth state",
 		})
 	case err == core.ErrOAuthStateExpired:
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "oauth_state_expired",
 			Message: "OAuth state has expired",
 		})
 	case err == core.ErrProviderNotSupported:
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "provider_not_supported",
 			Message: "OAuth provider not supported",
 		})
 	case err == core.ErrInvalidProvider:
-		return (*c).JSON(http.StatusInternalServerError, ErrorResponse{
+		return c.JSON(http.StatusInternalServerError, ErrorResponse{
 			Error:   "invalid_provider_config",
 			Message: "OAuth provider is not properly configured",
 		})
 	default:
-		return (*c).JSON(http.StatusInternalServerError, ErrorResponse{
+		return c.JSON(http.StatusInternalServerError, ErrorResponse{
 			Error:   "internal_error",
 			Message: "An internal error occurred",
 		})

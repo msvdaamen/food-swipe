@@ -20,7 +20,7 @@ var (
 func (c *Core) ValidateAccessToken(ctx context.Context, tokenString string) (*models.User, error) {
 	claims := &Claims{}
 
-	err := c.jwtManager.ValidateToken(tokenString, claims)
+	err := c.jwt.ValidateToken(tokenString, claims)
 
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
@@ -51,7 +51,7 @@ func (c *Core) ValidateAccessToken(ctx context.Context, tokenString string) (*mo
 func (c *Core) ValidateRefreshToken(ctx context.Context, tokenString string) (*models.User, error) {
 	claims := &Claims{}
 
-	err := c.jwtManager.ValidateToken(tokenString, claims)
+	err := c.jwt.ValidateToken(tokenString, claims)
 
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {

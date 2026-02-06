@@ -14,26 +14,24 @@ type OAuthInitiateRequest struct {
 
 type OAuthInitiateResponse struct {
 	AuthorizationURL string `json:"authorization_url"`
-	State            string `json:"state"`
 }
 
 // InitiateOAuth starts the OAuth flow
 func (a *Adapter) InitiateOAuth(c *echo.Context) error {
 	var req OAuthInitiateRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	oauthReq, authURL, err := a.core.InitiateOAuthFlow((*c).Request().Context(), req.Provider, req.RedirectURI)
+	authURL, err := a.core.GetAuthUrl(c.Request().Context(), req.Provider, req.RedirectURI)
 	if err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, OAuthInitiateResponse{
+	return c.JSON(http.StatusOK, OAuthInitiateResponse{
 		AuthorizationURL: authURL,
-		State:            oauthReq.State,
 	})
 }

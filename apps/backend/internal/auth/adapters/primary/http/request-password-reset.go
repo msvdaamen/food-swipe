@@ -15,17 +15,17 @@ type RequestPasswordResetRequest struct {
 func (a *Adapter) RequestPasswordReset(c *echo.Context) error {
 	var req RequestPasswordResetRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	if err := a.core.RequestPasswordReset((*c).Request().Context(), req.Email); err != nil {
+	if err := a.core.RequestPasswordReset(c.Request().Context(), req.Email); err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, MessageResponse{
+	return c.JSON(http.StatusOK, MessageResponse{
 		Message: "If the email exists, a password reset link has been sent",
 	})
 }

@@ -16,16 +16,16 @@ type LoginRequest struct {
 func (a *Adapter) Login(c *echo.Context) error {
 	var req LoginRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	authResp, err := a.core.Login((*c).Request().Context(), req.Email, req.Password)
+	authResp, err := a.core.Login(c.Request().Context(), req.Email, req.Password)
 	if err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, a.mapAuthResponse(authResp))
+	return c.JSON(http.StatusOK, a.mapAuthResponse(authResp))
 }

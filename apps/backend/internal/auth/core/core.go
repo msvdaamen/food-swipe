@@ -26,7 +26,7 @@ var (
 type Core struct {
 	config         config.Config
 	storage        port.Storage
-	jwtManager     *jwt.Manager
+	jwt            *jwt.Provider
 	oauthProviders map[string]port.OAuthProvider
 	user           port.User
 }
@@ -35,7 +35,7 @@ func New(storage port.Storage, oauthProviders map[string]port.OAuthProvider, use
 	return &Core{
 		config:  config,
 		storage: storage,
-		jwtManager: jwt.NewManager(jwt.Config{
+		jwt: jwt.New(jwt.Config{
 			Secret: config.JwtSecret,
 		}),
 		oauthProviders: oauthProviders,

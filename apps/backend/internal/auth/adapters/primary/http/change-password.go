@@ -15,21 +15,21 @@ type ChangePasswordRequest struct {
 
 // ChangePassword changes a user's password
 func (a *Adapter) ChangePassword(c *echo.Context) error {
-	user := (*c).Get("user").(*models.User)
+	user := c.Get("user").(*models.User)
 
 	var req ChangePasswordRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	if err := a.core.ChangePassword((*c).Request().Context(), user.ID.String(), req.OldPassword, req.NewPassword); err != nil {
+	if err := a.core.ChangePassword(c.Request().Context(), user.ID.String(), req.OldPassword, req.NewPassword); err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, MessageResponse{
+	return c.JSON(http.StatusOK, MessageResponse{
 		Message: "Password changed successfully",
 	})
 }

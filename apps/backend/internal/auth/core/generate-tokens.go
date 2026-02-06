@@ -33,7 +33,7 @@ func (c *Core) GenerateAccessToken(user *models.User) (string, time.Time, error)
 		},
 	}
 
-	tokenString, err := c.jwtManager.GenerateJWTToken(claims)
+	tokenString, err := c.jwt.GenerateJWTToken(claims)
 	if err != nil {
 		return "", time.Time{}, fmt.Errorf("failed to sign access token: %w", err)
 	}
@@ -55,7 +55,7 @@ func (c *Core) GenerateRefreshToken(user *models.User) (string, time.Time, error
 		},
 	}
 
-	tokenString, err := c.jwtManager.GenerateJWTToken(claims)
+	tokenString, err := c.jwt.GenerateJWTToken(claims)
 	if err != nil {
 		return "", time.Time{}, fmt.Errorf("failed to sign refresh token: %w", err)
 	}

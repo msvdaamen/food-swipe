@@ -14,9 +14,9 @@ func AuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
 			// Get the Authorization header
-			authHeader := (*c).Request().Header.Get("Authorization")
+			authHeader := c.Request().Header.Get("Authorization")
 			if authHeader == "" {
-				return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+				return c.JSON(http.StatusUnauthorized, ErrorResponse{
 					Error:   "missing_authorization",
 					Message: "Authorization header is required",
 				})
@@ -25,7 +25,7 @@ func AuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 			// Check if it's a Bearer token
 			parts := strings.SplitN(authHeader, " ", 2)
 			if len(parts) != 2 || parts[0] != "Bearer" {
-				return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+				return c.JSON(http.StatusUnauthorized, ErrorResponse{
 					Error:   "invalid_authorization",
 					Message: "Authorization header must be in the format: Bearer {token}",
 				})
@@ -34,34 +34,34 @@ func AuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 			token := parts[1]
 
 			// Validate the token
-			user, err := authCore.ValidateAccessToken((*c).Request().Context(), token)
+			user, err := authCore.ValidateAccessToken(c.Request().Context(), token)
 			if err != nil {
 				if err == core.ErrTokenExpired {
-					return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+					return c.JSON(http.StatusUnauthorized, ErrorResponse{
 						Error:   "token_expired",
 						Message: "Access token has expired. Please refresh your token.",
 					})
 				}
 				if err == core.ErrInvalidToken {
-					return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+					return c.JSON(http.StatusUnauthorized, ErrorResponse{
 						Error:   "invalid_token",
 						Message: "Invalid access token",
 					})
 				}
 				if err == core.ErrUserBanned {
-					return (*c).JSON(http.StatusForbidden, ErrorResponse{
+					return c.JSON(http.StatusForbidden, ErrorResponse{
 						Error:   "user_banned",
 						Message: "Your account has been banned",
 					})
 				}
-				return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+				return c.JSON(http.StatusUnauthorized, ErrorResponse{
 					Error:   "unauthorized",
 					Message: "Authentication failed",
 				})
 			}
 
 			// Store user in context for use in handlers
-			(*c).Set("user", user)
+			c.Set("user", user)
 
 			return next(c)
 		}
@@ -73,7 +73,7 @@ func OptionalAuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
 			// Get the Authorization header
-			authHeader := (*c).Request().Header.Get("Authorization")
+			authHeader := c.Request().Header.Get("Authorization")
 			if authHeader == "" {
 				// No auth header, continue without setting user
 				return next(c)
@@ -89,10 +89,10 @@ func OptionalAuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 			token := parts[1]
 
 			// Validate the token
-			user, err := authCore.ValidateAccessToken((*c).Request().Context(), token)
+			user, err := authCore.ValidateAccessToken(c.Request().Context(), token)
 			if err == nil && user != nil {
 				// Valid token, store user in context
-				(*c).Set("user", user)
+				c.Set("user", user)
 			}
 
 			return next(c)
@@ -104,9 +104,9 @@ func OptionalAuthMiddleware(authCore *core.Core) echo.MiddlewareFunc {
 func RoleMiddleware(roles ...string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
-			userInterface := (*c).Get("user")
+			userInterface := c.Get("user")
 			if userInterface == nil {
-				return (*c).JSON(http.StatusUnauthorized, ErrorResponse{
+				return c.JSON(http.StatusUnauthorized, ErrorResponse{
 					Error:   "unauthorized",
 					Message: "Authentication required",
 				})
@@ -115,7 +115,7 @@ func RoleMiddleware(roles ...string) echo.MiddlewareFunc {
 			// Type assert to get the user model
 			user, ok := userInterface.(*models.User)
 			if !ok {
-				return (*c).JSON(http.StatusForbidden, ErrorResponse{
+				return c.JSON(http.StatusForbidden, ErrorResponse{
 					Error:   "forbidden",
 					Message: "Access denied",
 				})
@@ -128,7 +128,7 @@ func RoleMiddleware(roles ...string) echo.MiddlewareFunc {
 				}
 			}
 
-			return (*c).JSON(http.StatusForbidden, ErrorResponse{
+			return c.JSON(http.StatusForbidden, ErrorResponse{
 				Error:   "forbidden",
 				Message: "Insufficient permissions",
 			})

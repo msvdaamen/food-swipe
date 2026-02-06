@@ -16,17 +16,17 @@ type ResetPasswordRequest struct {
 func (a *Adapter) ResetPassword(c *echo.Context) error {
 	var req ResetPasswordRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	if err := a.core.ResetPassword((*c).Request().Context(), req.Token, req.NewPassword); err != nil {
+	if err := a.core.ResetPassword(c.Request().Context(), req.Token, req.NewPassword); err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, MessageResponse{
+	return c.JSON(http.StatusOK, MessageResponse{
 		Message: "Password reset successfully",
 	})
 }

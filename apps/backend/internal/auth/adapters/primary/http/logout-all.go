@@ -9,13 +9,13 @@ import (
 
 // LogoutAll revokes all refresh tokens for the user
 func (a *Adapter) LogoutAll(c *echo.Context) error {
-	user := (*c).Get("user").(*models.User)
+	user := c.Get("user").(*models.User)
 
-	if err := a.core.RevokeAllUserTokens((*c).Request().Context(), user.ID.String()); err != nil {
+	if err := a.core.RevokeAlltokens(c.Request().Context(), user.ID.String()); err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, MessageResponse{
+	return c.JSON(http.StatusOK, MessageResponse{
 		Message: "Successfully logged out from all devices",
 	})
 }

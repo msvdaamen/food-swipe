@@ -18,16 +18,16 @@ type RegisterRequest struct {
 func (a *Adapter) Register(c *echo.Context) error {
 	var req RegisterRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	authResp, err := a.core.Register((*c).Request().Context(), req.Email, req.Password, req.Username, req.Name)
+	authResp, err := a.core.Register(c.Request().Context(), req.Email, req.Password, req.Username, req.Name)
 	if err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusCreated, a.mapAuthResponse(authResp))
+	return c.JSON(http.StatusCreated, a.mapAuthResponse(authResp))
 }

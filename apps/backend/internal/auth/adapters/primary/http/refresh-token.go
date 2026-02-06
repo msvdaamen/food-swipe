@@ -15,16 +15,16 @@ type RefreshTokenRequest struct {
 func (a *Adapter) RefreshToken(c *echo.Context) error {
 	var req RefreshTokenRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return (*c).JSON(http.StatusBadRequest, ErrorResponse{
+		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Error:   "validation_error",
 			Message: err.Error(),
 		})
 	}
 
-	tokenPair, err := a.core.RefreshToken((*c).Request().Context(), req.RefreshToken)
+	tokenPair, err := a.core.RefreshToken(c.Request().Context(), req.RefreshToken)
 	if err != nil {
 		return a.handleError(c, err)
 	}
 
-	return (*c).JSON(http.StatusOK, a.mapTokenResponse(tokenPair))
+	return c.JSON(http.StatusOK, a.mapTokenResponse(tokenPair))
 }
