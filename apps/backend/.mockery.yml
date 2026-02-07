@@ -1,0 +1,10 @@
+filename: "{{.InterfaceName | snakecase }}.go"
+dir: "{{.InterfaceDirRelative}}/mocks"
+structname: "{{.InterfaceName}}"
+pkgname: mocks
+template: testify
+packages:
+  github.com/food-swipe/internal/user/core/port:
+    interfaces:
+      Handler:
+      Storage:

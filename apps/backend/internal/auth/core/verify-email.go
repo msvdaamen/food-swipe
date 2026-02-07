@@ -17,7 +17,7 @@ func (c *Core) VerifyEmail(ctx context.Context, token string) error {
 		return ErrTokenAlreadyUsed
 	}
 
-	if time.Now().Unix() > expiresAt {
+	if time.Now().After(expiresAt) {
 		return ErrTokenExpired
 	}
 

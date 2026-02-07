@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	"github.com/food-swipe/internal/user/core/models"
+	"github.com/google/uuid"
 )
 
-func (c *Core) GetUserByID(ctx context.Context, userID string) (*models.User, error) {
+func (c *Core) GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error) {
 	user, err := c.storage.GetUserByID(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user from storage: %w", err)

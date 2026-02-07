@@ -7,11 +7,12 @@ import (
 	"fmt"
 
 	"github.com/food-swipe/internal/user/core/models"
+	"github.com/google/uuid"
 )
 
 const selectUserByID = "SELECT %s FROM users WHERE id = $1"
 
-func (a *Adapter) GetUserByID(ctx context.Context, userID string) (*models.User, error) {
+func (a *Adapter) GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error) {
 	row := a.db.QueryRow(ctx, fmt.Sprintf(selectUserByID, userFields), userID)
 	var user models.User
 	user, err := scanUser(row)

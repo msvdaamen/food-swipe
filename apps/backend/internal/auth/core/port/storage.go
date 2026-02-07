@@ -30,8 +30,8 @@ type Storage interface {
 	DeleteExpiredOAuthStates(ctx context.Context) error
 
 	// Email verification operations
-	CreateEmailVerificationToken(ctx context.Context, userID uuid.UUID, token string, expiresAt int64) error
-	GetEmailVerificationToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt int64, used bool, err error)
+	CreateEmailVerificationToken(ctx context.Context, userID uuid.UUID, token string, expiresAt time.Time) error
+	GetEmailVerificationToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt time.Time, used bool, err error)
 	MarkEmailVerificationTokenAsUsed(ctx context.Context, token string) error
 
 	// Password reset operations

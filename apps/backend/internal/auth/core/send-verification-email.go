@@ -26,7 +26,7 @@ func (c *Core) SendVerificationEmail(ctx context.Context, userID uuid.UUID) erro
 		return fmt.Errorf("failed to generate token: %w", err)
 	}
 
-	expiresAt := time.Now().Add(24 * time.Hour).Unix()
+	expiresAt := time.Now().Add(24 * time.Hour)
 	if err := c.storage.CreateEmailVerificationToken(ctx, userID, token, expiresAt); err != nil {
 		return fmt.Errorf("failed to create verification token: %w", err)
 	}

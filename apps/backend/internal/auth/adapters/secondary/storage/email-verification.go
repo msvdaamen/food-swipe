@@ -11,13 +11,13 @@ import (
 )
 
 // CreateEmailVerificationToken creates a new email verification token in the database
-func (a *Adapter) CreateEmailVerificationToken(ctx context.Context, userID uuid.UUID, token string, expiresAt int64) error {
+func (a *Adapter) CreateEmailVerificationToken(ctx context.Context, userID uuid.UUID, token string, expiresAt time.Time) error {
 	query := `
 		INSERT INTO email_verification_tokens (user_id, token, expires_at)
 		VALUES ($1, $2, $3)
 	`
 
-	_, err := a.db.Exec(ctx, query, userID, token, time.Unix(expiresAt, 0))
+	_, err := a.db.Exec(ctx, query, userID, token, expiresAt)
 	if err != nil {
 		return fmt.Errorf("failed to create email verification token: %w", err)
 	}
@@ -26,9 +26,9 @@ func (a *Adapter) CreateEmailVerificationToken(ctx context.Context, userID uuid.
 }
 
 // GetEmailVerificationToken retrieves an email verification token from the database
-func (a *Adapter) GetEmailVerificationToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt int64, used bool, err error) {
+func (a *Adapter) GetEmailVerificationToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt time.Time, used bool, err error) {
 	query := `
-		SELECT user_id, EXTRACT(EPOCH FROM expires_at)::bigint, used
+		SELECT user_id, expires_at, used
 		FROM email_verification_tokens
 		WHERE token = $1
 	`
@@ -36,9 +36,9 @@ func (a *Adapter) GetEmailVerificationToken(ctx context.Context, token string) (
 	err = a.db.QueryRow(ctx, query, token).Scan(&userID, &expiresAt, &used)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return uuid.Nil, 0, false, fmt.Errorf("email verification token not found")
+			return uuid.Nil, time.Time{}, false, fmt.Errorf("email verification token not found")
 		}
-		return uuid.Nil, 0, false, fmt.Errorf("failed to get email verification token: %w", err)
+		return uuid.Nil, time.Time{}, false, fmt.Errorf("failed to get email verification token: %w", err)
 	}
 
 	return userID, expiresAt, used, nil

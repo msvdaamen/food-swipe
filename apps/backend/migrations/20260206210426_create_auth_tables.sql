@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS user_auth_providers (
     id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL,
     provider VARCHAR(50) NOT NULL,
     provider_user_id VARCHAR(255) NOT NULL,
     password VARCHAR(255),
@@ -15,8 +15,8 @@ CREATE INDEX idx_user_auth_providers_user_id ON user_auth_providers(user_id);
 
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    expires_at TIMESTAMP NOT NULL,
+    user_id UUID NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
     revoked_at TIMESTAMP,
     device_info TEXT,
     ip_address VARCHAR(45),
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS oauth_states (
     code_challenge VARCHAR(128) NOT NULL,
     provider VARCHAR(50) NOT NULL,
     redirect_uri TEXT NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -41,10 +41,9 @@ CREATE INDEX idx_oauth_states_state ON oauth_states(state);
 CREATE INDEX idx_oauth_states_expires_at ON oauth_states(expires_at);
 
 CREATE TABLE IF NOT EXISTS email_verification_tokens (
-    id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    token VARCHAR(255) UNIQUE NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
+    token VARCHAR(255) PRIMARY KEY NOT NULL,
+    user_id UUID NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
     used BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -53,10 +52,9 @@ CREATE INDEX idx_email_verification_tokens_token ON email_verification_tokens(to
 CREATE INDEX idx_email_verification_tokens_user_id ON email_verification_tokens(user_id);
 
 CREATE TABLE IF NOT EXISTS password_reset_tokens (
-    id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    token VARCHAR(255) UNIQUE NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
+    token VARCHAR(255) PRIMARY KEY NOT NULL,
+    user_id UUID NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
     used BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

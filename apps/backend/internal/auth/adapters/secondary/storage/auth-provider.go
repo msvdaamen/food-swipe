@@ -13,7 +13,7 @@ import (
 
 const insertAuthProviderQuery = `
 	INSERT INTO user_auth_providers (id, user_id, provider, provider_user_id, password, created_at, updated_at)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 const getAuthProviderByProviderUserIDQuery = `
@@ -33,7 +33,7 @@ const getAuthProvidersByUserIDQuery = `
 `
 const updateAuthProviderQuery = `
 	UPDATE user_auth_providers
-	SET user_id = $2, provider = $3, provider_user_id = $4, password = $5, updated_at = $7
+	SET user_id = $2, provider = $3, provider_user_id = $4, password = $5, updated_at = $6
 	WHERE id = $1
 `
 
