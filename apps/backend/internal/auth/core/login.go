@@ -15,7 +15,7 @@ func (c *Core) Login(ctx context.Context, email, pass string) (*models.AuthRespo
 	email = strings.ToLower(strings.TrimSpace(email))
 
 	// Get user by email
-	user, err := c.storage.GetUserByEmail(ctx, email)
+	user, err := c.user.GetUserByEmail(ctx, email)
 	if err != nil {
 		return nil, ErrInvalidCredentials
 	}
@@ -29,20 +29,22 @@ func (c *Core) Login(ctx context.Context, email, pass string) (*models.AuthRespo
 		}
 	}
 
-	// Verify password
-	if user.PasswordHash == nil {
+	// Get user auth provider by user ID
+	provider, err := c.storage.GetUserAuthProviderByUserID(ctx, models.AuthProviderPassword, user.ID)
+	if err != nil {
 		return nil, ErrInvalidCredentials
 	}
 
-	if err := password.Verify(pass, *user.PasswordHash); err != nil {
+	if err := password.Verify(pass, *provider.Password); err != nil {
 		return nil, ErrInvalidCredentials
 	}
 
 	// Check if password needs rehashing
-	if password.NeedsRehash(*user.PasswordHash) {
+	if password.NeedsRehash(*provider.Password) {
 		newHash, err := password.Hash(pass)
 		if err == nil {
-			_ = c.storage.UpdatePassword(ctx, user.ID, newHash)
+			provider.Password = &newHash
+			_ = c.storage.UpdateUserAuthProvider(ctx, provider.ID, provider)
 		}
 	}
 

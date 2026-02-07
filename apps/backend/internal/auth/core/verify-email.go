@@ -26,9 +26,15 @@ func (c *Core) VerifyEmail(ctx context.Context, token string) error {
 		return fmt.Errorf("failed to mark token as used: %w", err)
 	}
 
-	// Update user email verified status
-	if err := c.storage.UpdateEmailVerified(ctx, userID, true); err != nil {
-		return fmt.Errorf("failed to update email verified status: %w", err)
+	user, err := c.user.GetUserByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("failed to get user: %w", err)
+	}
+
+	user.EmailVerified = true
+
+	if err := c.user.UpdateUser(ctx, userID, user); err != nil {
+		return fmt.Errorf("failed to update user: %w", err)
 	}
 
 	return nil

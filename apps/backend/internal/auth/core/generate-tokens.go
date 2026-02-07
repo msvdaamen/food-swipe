@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/food-swipe/internal/auth/core/models"
+	userModel "github.com/food-swipe/internal/user/core/models"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -17,7 +17,7 @@ type Claims struct {
 }
 
 // GenerateAccessToken creates a new JWT access token
-func (c *Core) GenerateAccessToken(user *models.User) (string, time.Time, error) {
+func (c *Core) GenerateAccessToken(user *userModel.User) (string, time.Time, error) {
 	expiresAt := time.Now().Add(c.config.AccessTokenTTL)
 
 	claims := &Claims{
@@ -42,16 +42,15 @@ func (c *Core) GenerateAccessToken(user *models.User) (string, time.Time, error)
 }
 
 // GenerateRefreshToken creates a new JWT refresh token
-func (c *Core) GenerateRefreshToken(user *models.User) (string, time.Time, error) {
+func (c *Core) GenerateRefreshToken(ID uuid.UUID, user *userModel.User) (string, time.Time, error) {
 	expiresAt := time.Now().Add(c.config.RefreshTokenTTL)
-
 	claims := &Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expiresAt),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			Subject:   user.ID.String(),
-			ID:        uuid.New().String(),
+			ID:        ID.String(),
 		},
 	}
 

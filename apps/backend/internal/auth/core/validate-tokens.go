@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/food-swipe/internal/auth/core/models"
+	userModel "github.com/food-swipe/internal/user/core/models"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -17,7 +18,7 @@ var (
 )
 
 // ValidateAccessToken validates and parses an access token
-func (c *Core) ValidateAccessToken(ctx context.Context, tokenString string) (*models.User, error) {
+func (c *Core) ValidateAccessToken(ctx context.Context, tokenString string) (*uuid.UUID, error) {
 	claims := &Claims{}
 
 	err := c.jwt.ValidateToken(tokenString, claims)
@@ -34,41 +35,36 @@ func (c *Core) ValidateAccessToken(ctx context.Context, tokenString string) (*mo
 		return nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
 	}
 
-	user, err := c.storage.GetUserByID(ctx, userId)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
-	}
-
-	// Check if user is banned
-	if user.Banned {
-		return nil, ErrUserBanned
-	}
-
-	return user, nil
+	return &userId, nil
 }
 
 // ValidateRefreshToken validates and parses a refresh token
-func (c *Core) ValidateRefreshToken(ctx context.Context, tokenString string) (*models.User, error) {
+func (c *Core) ValidateRefreshToken(ctx context.Context, tokenString string) (*models.RefreshToken, *userModel.User, error) {
 	claims := &Claims{}
 
 	err := c.jwt.ValidateToken(tokenString, claims)
 
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
-			return nil, ErrExpiredToken
+			return nil, nil, ErrExpiredToken
 		}
-		return nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
+		return nil, nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
 	}
 
-	refreshToken, err := c.storage.GetRefreshTokenByHash(ctx, claims.Subject)
+	refreshTokenID, err := uuid.Parse(claims.ID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
+		return nil, nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
 	}
 
-	user, err := c.storage.GetUserByID(ctx, refreshToken.UserID)
+	refreshToken, err := c.storage.GetRefreshTokenByID(ctx, refreshTokenID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
+		return nil, nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
 	}
 
-	return user, nil
+	user, err := c.user.GetUserByID(ctx, refreshToken.UserID)
+	if err != nil {
+		return nil, nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
+	}
+
+	return refreshToken, user, nil
 }

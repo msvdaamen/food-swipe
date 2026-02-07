@@ -20,7 +20,7 @@ const (
 	appleAuthURL  = "https://appleid.apple.com/auth/authorize"
 	appleTokenURL = "https://appleid.apple.com/auth/token"
 	appleKeysURL  = "https://appleid.apple.com/auth/keys"
-	providerName  = models.AuthProvidersApple
+	providerName  = models.AuthProviderApple
 )
 
 type Provider struct {
@@ -63,24 +63,8 @@ func New(config Config) *Provider {
 	}
 }
 
-func (p *Provider) GetProviderName() models.AuthProviders {
+func (p *Provider) GetProviderName() models.AuthProvider {
 	return providerName
-}
-
-func (p *Provider) ValidateProvider() error {
-	if p.clientID == "" {
-		return errors.New("apple client ID is required")
-	}
-	if p.teamID == "" {
-		return errors.New("apple team ID is required")
-	}
-	if p.keyID == "" {
-		return errors.New("apple key ID is required")
-	}
-	if p.privateKey == nil {
-		return errors.New("apple private key is required")
-	}
-	return nil
 }
 
 func (p *Provider) GetAuthorizationURL(state string, codeChallenge string, redirectURI string) string {
@@ -121,10 +105,10 @@ func (p *Provider) generateClientSecret() (string, error) {
 	return tokenString, nil
 }
 
-func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, refreshToken string, expiresIn int64, err error) {
+func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, err error) {
 	clientSecret, err := p.generateClientSecret()
 	if err != nil {
-		return "", "", 0, fmt.Errorf("failed to generate client secret: %w", err)
+		return "", fmt.Errorf("failed to generate client secret: %w", err)
 	}
 
 	data := url.Values{}
@@ -137,28 +121,28 @@ func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier s
 
 	req, err := http.NewRequestWithContext(ctx, "POST", appleTokenURL, strings.NewReader(data.Encode()))
 	if err != nil {
-		return "", "", 0, fmt.Errorf("failed to create token request: %w", err)
+		return "", fmt.Errorf("failed to create token request: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := p.httpClient.Do(req)
 	if err != nil {
-		return "", "", 0, fmt.Errorf("failed to exchange code: %w", err)
+		return "", fmt.Errorf("failed to exchange code: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return "", "", 0, fmt.Errorf("token exchange failed with status %d: %s", resp.StatusCode, string(body))
+		return "", fmt.Errorf("token exchange failed with status %d: %s", resp.StatusCode, string(body))
 	}
 
 	var tokenResp tokenResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		return "", "", 0, fmt.Errorf("failed to decode token response: %w", err)
+		return "", fmt.Errorf("failed to decode token response: %w", err)
 	}
 
-	return tokenResp.AccessToken, tokenResp.RefreshToken, tokenResp.ExpiresIn, nil
+	return tokenResp.AccessToken, nil
 }
 
 func (p *Provider) GetUserInfo(ctx context.Context, accessToken string) (*models.OAuthUserInfo, error) {
@@ -183,7 +167,7 @@ func (p *Provider) GetUserInfo(ctx context.Context, accessToken string) (*models
 		ProviderUserID: claims.Sub,
 		Email:          claims.Email,
 		EmailVerified:  emailVerified,
-		Name:           "", // Apple may provide name in user object on first auth only
-		Picture:        "", // Apple doesn't provide profile pictures
+		Name:           "",  // Apple may provide name in user object on first auth only
+		Picture:        nil, // Apple doesn't provide profile pictures
 	}, nil
 }

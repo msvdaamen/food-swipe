@@ -7,10 +7,11 @@ import (
 
 type Config struct {
 	JwtSecret string `env:"JWT_SECRET"`
+	GrpcUrl   string `env:"GRPC_URL"`
 
 	// JWT Configuration
 	AccessTokenTTL  time.Duration `env:"ACCESS_TOKEN_TTL" env-default:"10m"`
-	RefreshTokenTTL time.Duration `env:"REFRESH_TOKEN_TTL" env-default:"90d"`
+	RefreshTokenTTL time.Duration `env:"REFRESH_TOKEN_TTL" env-default:"2160h"` // 90 days
 
 	// Google OAuth
 	GoogleClientID     string `env:"GOOGLE_CLIENT_ID"`

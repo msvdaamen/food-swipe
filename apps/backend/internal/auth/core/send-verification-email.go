@@ -10,13 +10,8 @@ import (
 )
 
 // SendVerificationEmail sends a verification email to the user
-func (c *Core) SendVerificationEmail(ctx context.Context, userID string) error {
-	uid, err := uuid.Parse(userID)
-	if err != nil {
-		return fmt.Errorf("invalid user ID: %w", err)
-	}
-
-	user, err := c.storage.GetUserByID(ctx, uid)
+func (c *Core) SendVerificationEmail(ctx context.Context, userID uuid.UUID) error {
+	user, err := c.user.GetUserByID(ctx, userID)
 	if err != nil {
 		return ErrUserNotFound
 	}
@@ -32,7 +27,7 @@ func (c *Core) SendVerificationEmail(ctx context.Context, userID string) error {
 	}
 
 	expiresAt := time.Now().Add(24 * time.Hour).Unix()
-	if err := c.storage.CreateEmailVerificationToken(ctx, uid, token, expiresAt); err != nil {
+	if err := c.storage.CreateEmailVerificationToken(ctx, userID, token, expiresAt); err != nil {
 		return fmt.Errorf("failed to create verification token: %w", err)
 	}
 

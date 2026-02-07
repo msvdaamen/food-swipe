@@ -1,40 +1,43 @@
 package http
 
 import (
-	"github.com/food-swipe/internal/auth/core"
+	"github.com/food-swipe/internal/auth/core/port"
+	"github.com/food-swipe/internal/pkg/authenticator"
 	"github.com/labstack/echo/v5"
 )
 
 type Adapter struct {
-	core *core.Core
+	core port.Handler
 }
 
-func New(httpServer *echo.Echo, core *core.Core) *Adapter {
+func New(httpServer *echo.Echo, core port.Handler, auth *authenticator.Provider) *Adapter {
 	adapter := &Adapter{
 		core: core,
 	}
 
+	authMiddleware := authenticator.Middleware(auth)
+
 	// Auth routes
-	auth := httpServer.Group("/api/auth")
+	http := httpServer.Group("/v1/auth")
 
 	// Public routes
-	auth.POST("/register", adapter.Register)
-	auth.POST("/login", adapter.Login)
-	auth.POST("/refresh", adapter.RefreshToken)
-	auth.POST("/oauth/initiate", adapter.InitiateOAuth)
-	auth.POST("/oauth/callback", adapter.OAuthCallback)
-	auth.POST("/verify-email", adapter.VerifyEmail)
-	auth.POST("/password-reset/request", adapter.RequestPasswordReset)
-	auth.POST("/password-reset/confirm", adapter.ResetPassword)
+	http.POST("/register", adapter.Register)
+	http.POST("/login", adapter.Login)
+	http.POST("/refresh", adapter.RefreshToken)
+	http.POST("/oauth/get-auth-url", adapter.GetAuthUrl)
+	http.POST("/oauth/callback", adapter.ExchangeCode)
+	http.POST("/verify-email", adapter.VerifyEmail)
+	http.POST("/password-reset/request", adapter.RequestPasswordReset)
+	http.POST("/password-reset/confirm", adapter.ResetPassword)
 
 	// Protected routes (require authentication)
-	auth.GET("/me", adapter.GetMe, AuthMiddleware(core))
-	auth.POST("/logout", adapter.Logout, AuthMiddleware(core))
-	auth.POST("/logout-all", adapter.LogoutAll, AuthMiddleware(core))
-	auth.PUT("/username", adapter.UpdateUsername, AuthMiddleware(core))
-	auth.PUT("/display-username", adapter.UpdateDisplayUsername, AuthMiddleware(core))
-	auth.POST("/send-verification", adapter.SendVerificationEmail, AuthMiddleware(core))
-	auth.POST("/change-password", adapter.ChangePassword, AuthMiddleware(core))
+	http.GET("/me", adapter.GetMe, authMiddleware)
+	http.POST("/logout", adapter.Logout, authMiddleware)
+	http.POST("/logout-all", adapter.LogoutAll, authMiddleware)
+	// auth.PUT("/username", adapter.UpdateUsername, AuthMiddleware(core))
+	// auth.PUT("/display-username", adapter.UpdateDisplayUsername, AuthMiddleware(core))
+	http.POST("/send-verification", adapter.SendVerificationEmail, authMiddleware)
+	http.POST("/change-password", adapter.ChangePassword, authMiddleware)
 
 	return adapter
 }

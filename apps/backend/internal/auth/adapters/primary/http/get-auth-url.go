@@ -3,27 +3,25 @@ package http
 import (
 	"net/http"
 
+	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/pkg"
 	"github.com/labstack/echo/v5"
 )
 
 type OAuthInitiateRequest struct {
-	Provider    string `json:"provider" validate:"required,oneof=google apple"`
-	RedirectURI string `json:"redirect_uri" validate:"required,url"`
+	Provider    models.AuthProvider `json:"provider" validate:"required,oneof=google apple"`
+	RedirectURI string              `json:"redirectUri" validate:"required,url"`
 }
 
 type OAuthInitiateResponse struct {
-	AuthorizationURL string `json:"authorization_url"`
+	AuthorizationURL string `json:"authorizationUrl"`
 }
 
 // InitiateOAuth starts the OAuth flow
-func (a *Adapter) InitiateOAuth(c *echo.Context) error {
+func (a *Adapter) GetAuthUrl(c *echo.Context) error {
 	var req OAuthInitiateRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return c.JSON(http.StatusBadRequest, ErrorResponse{
-			Error:   "validation_error",
-			Message: err.Error(),
-		})
+		return err
 	}
 
 	authURL, err := a.core.GetAuthUrl(c.Request().Context(), req.Provider, req.RedirectURI)

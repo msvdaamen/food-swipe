@@ -35,11 +35,25 @@ const (
 const (
 	// UserServiceGetUserByIdProcedure is the fully-qualified name of the UserService's GetUserById RPC.
 	UserServiceGetUserByIdProcedure = "/foodswipe.v1.UserService/GetUserById"
+	// UserServiceGetUserByEmailProcedure is the fully-qualified name of the UserService's
+	// GetUserByEmail RPC.
+	UserServiceGetUserByEmailProcedure = "/foodswipe.v1.UserService/GetUserByEmail"
+	// UserServiceGetUserByUsernameProcedure is the fully-qualified name of the UserService's
+	// GetUserByUsername RPC.
+	UserServiceGetUserByUsernameProcedure = "/foodswipe.v1.UserService/GetUserByUsername"
+	// UserServiceCreateUserProcedure is the fully-qualified name of the UserService's CreateUser RPC.
+	UserServiceCreateUserProcedure = "/foodswipe.v1.UserService/CreateUser"
+	// UserServiceUpdateUserProcedure is the fully-qualified name of the UserService's UpdateUser RPC.
+	UserServiceUpdateUserProcedure = "/foodswipe.v1.UserService/UpdateUser"
 )
 
 // UserServiceClient is a client for the foodswipe.v1.UserService service.
 type UserServiceClient interface {
 	GetUserById(context.Context, *v1.GetUserByIdRequest) (*v1.GetUserByIdResponse, error)
+	GetUserByEmail(context.Context, *v1.GetUserByEmailRequest) (*v1.GetUserByEmailResponse, error)
+	GetUserByUsername(context.Context, *v1.GetUserByUsernameRequest) (*v1.GetUserByUsernameResponse, error)
+	CreateUser(context.Context, *v1.CreateUserRequest) (*v1.CreateUserResponse, error)
+	UpdateUser(context.Context, *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error)
 }
 
 // NewUserServiceClient constructs a client for the foodswipe.v1.UserService service. By default, it
@@ -59,12 +73,40 @@ func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(userServiceMethods.ByName("GetUserById")),
 			connect.WithClientOptions(opts...),
 		),
+		getUserByEmail: connect.NewClient[v1.GetUserByEmailRequest, v1.GetUserByEmailResponse](
+			httpClient,
+			baseURL+UserServiceGetUserByEmailProcedure,
+			connect.WithSchema(userServiceMethods.ByName("GetUserByEmail")),
+			connect.WithClientOptions(opts...),
+		),
+		getUserByUsername: connect.NewClient[v1.GetUserByUsernameRequest, v1.GetUserByUsernameResponse](
+			httpClient,
+			baseURL+UserServiceGetUserByUsernameProcedure,
+			connect.WithSchema(userServiceMethods.ByName("GetUserByUsername")),
+			connect.WithClientOptions(opts...),
+		),
+		createUser: connect.NewClient[v1.CreateUserRequest, v1.CreateUserResponse](
+			httpClient,
+			baseURL+UserServiceCreateUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("CreateUser")),
+			connect.WithClientOptions(opts...),
+		),
+		updateUser: connect.NewClient[v1.UpdateUserRequest, v1.UpdateUserResponse](
+			httpClient,
+			baseURL+UserServiceUpdateUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("UpdateUser")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // userServiceClient implements UserServiceClient.
 type userServiceClient struct {
-	getUserById *connect.Client[v1.GetUserByIdRequest, v1.GetUserByIdResponse]
+	getUserById       *connect.Client[v1.GetUserByIdRequest, v1.GetUserByIdResponse]
+	getUserByEmail    *connect.Client[v1.GetUserByEmailRequest, v1.GetUserByEmailResponse]
+	getUserByUsername *connect.Client[v1.GetUserByUsernameRequest, v1.GetUserByUsernameResponse]
+	createUser        *connect.Client[v1.CreateUserRequest, v1.CreateUserResponse]
+	updateUser        *connect.Client[v1.UpdateUserRequest, v1.UpdateUserResponse]
 }
 
 // GetUserById calls foodswipe.v1.UserService.GetUserById.
@@ -76,9 +118,49 @@ func (c *userServiceClient) GetUserById(ctx context.Context, req *v1.GetUserById
 	return nil, err
 }
 
+// GetUserByEmail calls foodswipe.v1.UserService.GetUserByEmail.
+func (c *userServiceClient) GetUserByEmail(ctx context.Context, req *v1.GetUserByEmailRequest) (*v1.GetUserByEmailResponse, error) {
+	response, err := c.getUserByEmail.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// GetUserByUsername calls foodswipe.v1.UserService.GetUserByUsername.
+func (c *userServiceClient) GetUserByUsername(ctx context.Context, req *v1.GetUserByUsernameRequest) (*v1.GetUserByUsernameResponse, error) {
+	response, err := c.getUserByUsername.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CreateUser calls foodswipe.v1.UserService.CreateUser.
+func (c *userServiceClient) CreateUser(ctx context.Context, req *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
+	response, err := c.createUser.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UpdateUser calls foodswipe.v1.UserService.UpdateUser.
+func (c *userServiceClient) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error) {
+	response, err := c.updateUser.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // UserServiceHandler is an implementation of the foodswipe.v1.UserService service.
 type UserServiceHandler interface {
 	GetUserById(context.Context, *v1.GetUserByIdRequest) (*v1.GetUserByIdResponse, error)
+	GetUserByEmail(context.Context, *v1.GetUserByEmailRequest) (*v1.GetUserByEmailResponse, error)
+	GetUserByUsername(context.Context, *v1.GetUserByUsernameRequest) (*v1.GetUserByUsernameResponse, error)
+	CreateUser(context.Context, *v1.CreateUserRequest) (*v1.CreateUserResponse, error)
+	UpdateUser(context.Context, *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error)
 }
 
 // NewUserServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -94,10 +176,42 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(userServiceMethods.ByName("GetUserById")),
 		connect.WithHandlerOptions(opts...),
 	)
+	userServiceGetUserByEmailHandler := connect.NewUnaryHandlerSimple(
+		UserServiceGetUserByEmailProcedure,
+		svc.GetUserByEmail,
+		connect.WithSchema(userServiceMethods.ByName("GetUserByEmail")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceGetUserByUsernameHandler := connect.NewUnaryHandlerSimple(
+		UserServiceGetUserByUsernameProcedure,
+		svc.GetUserByUsername,
+		connect.WithSchema(userServiceMethods.ByName("GetUserByUsername")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceCreateUserHandler := connect.NewUnaryHandlerSimple(
+		UserServiceCreateUserProcedure,
+		svc.CreateUser,
+		connect.WithSchema(userServiceMethods.ByName("CreateUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceUpdateUserHandler := connect.NewUnaryHandlerSimple(
+		UserServiceUpdateUserProcedure,
+		svc.UpdateUser,
+		connect.WithSchema(userServiceMethods.ByName("UpdateUser")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/foodswipe.v1.UserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UserServiceGetUserByIdProcedure:
 			userServiceGetUserByIdHandler.ServeHTTP(w, r)
+		case UserServiceGetUserByEmailProcedure:
+			userServiceGetUserByEmailHandler.ServeHTTP(w, r)
+		case UserServiceGetUserByUsernameProcedure:
+			userServiceGetUserByUsernameHandler.ServeHTTP(w, r)
+		case UserServiceCreateUserProcedure:
+			userServiceCreateUserHandler.ServeHTTP(w, r)
+		case UserServiceUpdateUserProcedure:
+			userServiceUpdateUserHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -109,4 +223,20 @@ type UnimplementedUserServiceHandler struct{}
 
 func (UnimplementedUserServiceHandler) GetUserById(context.Context, *v1.GetUserByIdRequest) (*v1.GetUserByIdResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.UserService.GetUserById is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) GetUserByEmail(context.Context, *v1.GetUserByEmailRequest) (*v1.GetUserByEmailResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.UserService.GetUserByEmail is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) GetUserByUsername(context.Context, *v1.GetUserByUsernameRequest) (*v1.GetUserByUsernameResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.UserService.GetUserByUsername is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) CreateUser(context.Context, *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.UserService.CreateUser is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) UpdateUser(context.Context, *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("foodswipe.v1.UserService.UpdateUser is not implemented"))
 }

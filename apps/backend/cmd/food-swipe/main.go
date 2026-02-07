@@ -7,7 +7,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/food-swipe/internal/auth"
+	authConfig "github.com/food-swipe/internal/auth/config"
 	"github.com/food-swipe/internal/follow"
+	"github.com/food-swipe/internal/pkg/authenticator"
 	filestorage "github.com/food-swipe/internal/pkg/file-storage"
 	"github.com/food-swipe/internal/pkg/i18n"
 	"github.com/food-swipe/internal/pkg/logger"
@@ -17,12 +20,14 @@ import (
 )
 
 type Config struct {
-	LogMode     logger.LogMode `env:"LOG_MODE" env-default:"0"`
-	DatabaseURL string         `env:"DATABASE_URL"`
-	NatsURL     string         `env:"NATS_URL"`
-	FileStorage filestorage.Config
-	Port        string `env:"PORT" env-default:"3000"`
-	GrpcPort    string `env:"GRPC_PORT" env-default:"3001"`
+	LogMode       logger.LogMode `env:"LOG_MODE" env-default:"0"`
+	DatabaseURL   string         `env:"DATABASE_URL"`
+	NatsURL       string         `env:"NATS_URL"`
+	FileStorage   filestorage.Config
+	Port          string `env:"PORT" env-default:"3000"`
+	GrpcPort      string `env:"GRPC_PORT" env-default:"3001"`
+	Auth          authConfig.Config
+	Authenticator authenticator.Config
 }
 
 func main() {
@@ -60,6 +65,9 @@ func main() {
 	grpcServer := setupGrpcServer(cfg.GrpcPort, logger)
 	httpServer := setupHttpServer(cfg.Port, i18nProvider, logger)
 
+	authenticator := authenticator.New(logger, cfg.Authenticator)
+
+	auth.Register(httpServer.Echo, pool, authenticator, cfg.Auth, logger)
 	follow.Register(grpcServer, pool, logger)
 	user.Register(grpcServer, httpServer.Echo, pool, logger)
 	recipe.Register(grpcServer, pool, fileStorage, logger)

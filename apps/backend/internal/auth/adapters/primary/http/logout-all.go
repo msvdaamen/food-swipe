@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/food-swipe/internal/auth/core/models"
+	"github.com/food-swipe/internal/user/core/models"
 	"github.com/labstack/echo/v5"
 )
 
@@ -11,7 +11,7 @@ import (
 func (a *Adapter) LogoutAll(c *echo.Context) error {
 	user := c.Get("user").(*models.User)
 
-	if err := a.core.RevokeAlltokens(c.Request().Context(), user.ID.String()); err != nil {
+	if err := a.core.RevokeAlltokens(c.Request().Context(), user.ID); err != nil {
 		return a.handleError(c, err)
 	}
 

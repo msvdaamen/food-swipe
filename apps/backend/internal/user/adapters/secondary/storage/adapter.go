@@ -9,6 +9,22 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+const userFields = `
+	id,
+	name,
+	email,
+	email_verified,
+	image,
+	username,
+	display_username,
+	role,
+	banned,
+	ban_reason,
+	ban_expires,
+	created_at,
+	updated_at
+`
+
 type Adapter struct {
 	db *pgxpool.Pool
 }
@@ -19,7 +35,7 @@ func New(pool *pgxpool.Pool) *Adapter {
 	}
 }
 
-var ErrUserNotFound = errors.New("User not found")
+var ErrUserNotFound = errors.New("user not found")
 
 func scanUser(row pgx.Row) (models.User, error) {
 	var user models.User

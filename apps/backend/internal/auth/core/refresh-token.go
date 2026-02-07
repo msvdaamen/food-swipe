@@ -2,18 +2,17 @@ package core
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"time"
 
 	"github.com/food-swipe/internal/auth/core/models"
+	userModel "github.com/food-swipe/internal/user/core/models"
 	"github.com/google/uuid"
 )
 
 // RefreshToken generates a new access token from a refresh token
 func (c *Core) RefreshToken(ctx context.Context, refreshToken string) (*models.TokenPair, error) {
-	user, err := c.ValidateRefreshToken(ctx, refreshToken)
+	refreshTokenModel, user, err := c.ValidateRefreshToken(ctx, refreshToken)
 	if err != nil {
 		return nil, ErrInvalidToken
 	}
@@ -30,33 +29,33 @@ func (c *Core) RefreshToken(ctx context.Context, refreshToken string) (*models.T
 	}
 
 	// Revoke old refresh token
-	_ = c.storage.RevokeRefreshToken(ctx, refreshToken)
+	_ = c.storage.RevokeRefreshToken(ctx, refreshTokenModel.ID)
 
 	return tokenPair, nil
 }
 
 // generateTokenPair creates access and refresh tokens for a user
-func (c *Core) generateTokenPair(ctx context.Context, user *models.User) (*models.TokenPair, error) {
+func (c *Core) generateTokenPair(ctx context.Context, user *userModel.User) (*models.TokenPair, error) {
 
 	accessToken, expiresAt, err := c.GenerateAccessToken(user)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate access token: %w", err)
 	}
 
-	// Generate refresh token
-	refreshToken, refreshExpiresAt, err := c.GenerateRefreshToken(user)
+	refreshTokenID, err := uuid.NewV7()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate UUID: %w", err)
+	}
+
+	refreshToken, refreshExpiresAt, err := c.GenerateRefreshToken(refreshTokenID, user)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate refresh token: %w", err)
 	}
 
-	// Store refresh token
-	tokenHash := hashToken(refreshToken)
 	storedToken := &models.RefreshToken{
-		ID:        uuid.New(),
+		ID:        refreshTokenID,
 		UserID:    user.ID,
-		TokenHash: tokenHash,
 		ExpiresAt: refreshExpiresAt,
-		Revoked:   false,
 		CreatedAt: time.Now(),
 	}
 
@@ -67,12 +66,6 @@ func (c *Core) generateTokenPair(ctx context.Context, user *models.User) (*model
 	return &models.TokenPair{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
-		ExpiresIn:    int64(time.Until(expiresAt).Seconds()),
+		ExpiresIn:    expiresAt,
 	}, nil
-}
-
-// hashToken creates a SHA-256 hash of a token for secure storage
-func hashToken(token string) string {
-	hash := sha256.Sum256([]byte(token))
-	return hex.EncodeToString(hash[:])
 }

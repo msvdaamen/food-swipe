@@ -29,6 +29,56 @@ message GetUserByIdResponse {
   User user = 1;
 }
 
+message GetUserByEmailRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+
+message GetUserByEmailResponse {
+  User user = 1;
+}
+
+message GetUserByUsernameRequest {
+  string username = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+}
+
+message GetUserByUsernameResponse {
+  User user = 1;
+}
+
+message CreateUserRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string username = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
+  optional string display_username = 4;
+  optional string image = 5;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2;
+  string email = 3;
+  optional string display_username = 4;
+  optional string image = 5;
+}
+
+message UpdateUserResponse {
+  User user = 1;
+}
+
 service UserService {
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
+  rpc GetUserByUsername(GetUserByUsernameRequest) returns (GetUserByUsernameResponse);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
 }

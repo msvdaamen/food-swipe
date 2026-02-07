@@ -11,7 +11,7 @@ import (
 func (c *Core) RequestPasswordReset(ctx context.Context, email string) error {
 	email = strings.ToLower(strings.TrimSpace(email))
 
-	user, err := c.storage.GetUserByEmail(ctx, email)
+	user, err := c.user.GetUserByEmail(ctx, email)
 	if err != nil {
 		// Don't reveal if email exists or not
 		return nil
@@ -23,7 +23,7 @@ func (c *Core) RequestPasswordReset(ctx context.Context, email string) error {
 		return fmt.Errorf("failed to generate token: %w", err)
 	}
 
-	expiresAt := time.Now().Add(1 * time.Hour).Unix()
+	expiresAt := time.Now().Add(1 * time.Hour)
 	if err := c.storage.CreatePasswordResetToken(ctx, user.ID, token, expiresAt); err != nil {
 		return fmt.Errorf("failed to create reset token: %w", err)
 	}

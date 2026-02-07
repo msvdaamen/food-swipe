@@ -5,6 +5,7 @@ import (
 
 	"github.com/food-swipe/internal/auth/core"
 	"github.com/food-swipe/internal/auth/core/models"
+	userModels "github.com/food-swipe/internal/user/core/models"
 	"github.com/labstack/echo/v5"
 )
 
@@ -88,7 +89,7 @@ func (a *Adapter) mapAuthResponse(authResp *models.AuthResponse) *AuthResponse {
 }
 
 // mapUserResponse converts core user model to HTTP response
-func (a *Adapter) mapUserResponse(user *models.User) *UserResponse {
+func (a *Adapter) mapUserResponse(user *userModels.User) *UserResponse {
 	return &UserResponse{
 		ID:              user.ID.String(),
 		Email:           user.Email,

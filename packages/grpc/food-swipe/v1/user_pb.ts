@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file food-swipe/v1/user.proto.
  */
 export const file_food_swipe_v1_user: GenFile = /*@__PURE__*/
-  fileDesc("Chhmb29kLXN3aXBlL3YxL3VzZXIucHJvdG8SDGZvb2Rzd2lwZS52MSKhAwoEVXNlchIUCgJpZBgBIAEoCUIIukgFcgOwAQESDAoEbmFtZRgCIAEoCRINCgVlbWFpbBgDIAEoCRIWCg5lbWFpbF92ZXJpZmllZBgEIAEoCBISCgVpbWFnZRgFIAEoCUgAiAEBEhAKCHVzZXJuYW1lGAYgASgJEh0KEGRpc3BsYXlfdXNlcm5hbWUYByABKAlIAYgBARIMCgRyb2xlGAggASgJEg4KBmJhbm5lZBgJIAEoCBIXCgpiYW5fcmVhc29uGAogASgJSAKIAQESNAoLYmFuX2V4cGlyZXMYCyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSAOIAQESLgoKY3JlYXRlZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgNIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCCAoGX2ltYWdlQhMKEV9kaXNwbGF5X3VzZXJuYW1lQg0KC19iYW5fcmVhc29uQg4KDF9iYW5fZXhwaXJlcyIqChJHZXRVc2VyQnlJZFJlcXVlc3QSFAoCaWQYASABKAlCCLpIBXIDsAEBIjcKE0dldFVzZXJCeUlkUmVzcG9uc2USIAoEdXNlchgBIAEoCzISLmZvb2Rzd2lwZS52MS5Vc2VyMmEKC1VzZXJTZXJ2aWNlElIKC0dldFVzZXJCeUlkEiAuZm9vZHN3aXBlLnYxLkdldFVzZXJCeUlkUmVxdWVzdBohLmZvb2Rzd2lwZS52MS5HZXRVc2VyQnlJZFJlc3BvbnNlQqgBChBjb20uZm9vZHN3aXBlLnYxQglVc2VyUHJvdG9QAVo4Z2l0aHViLmNvbS9mb29kLXN3aXBlL2dlbi9ncnBjL2Zvb2Qtc3dpcGUvdjE7Zm9vZHN3aXBldjGiAgNGWFiqAgxGb29kc3dpcGUuVjHKAgxGb29kc3dpcGVcVjHiAhhGb29kc3dpcGVcVjFcR1BCTWV0YWRhdGHqAg1Gb29kc3dpcGU6OlYxYgZwcm90bzM", [file_buf_validate_validate, file_google_protobuf_timestamp]);
+  fileDesc("Chhmb29kLXN3aXBlL3YxL3VzZXIucHJvdG8SDGZvb2Rzd2lwZS52MSKhAwoEVXNlchIUCgJpZBgBIAEoCUIIukgFcgOwAQESDAoEbmFtZRgCIAEoCRINCgVlbWFpbBgDIAEoCRIWCg5lbWFpbF92ZXJpZmllZBgEIAEoCBISCgVpbWFnZRgFIAEoCUgAiAEBEhAKCHVzZXJuYW1lGAYgASgJEh0KEGRpc3BsYXlfdXNlcm5hbWUYByABKAlIAYgBARIMCgRyb2xlGAggASgJEg4KBmJhbm5lZBgJIAEoCBIXCgpiYW5fcmVhc29uGAogASgJSAKIAQESNAoLYmFuX2V4cGlyZXMYCyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSAOIAQESLgoKY3JlYXRlZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgNIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCCAoGX2ltYWdlQhMKEV9kaXNwbGF5X3VzZXJuYW1lQg0KC19iYW5fcmVhc29uQg4KDF9iYW5fZXhwaXJlcyIqChJHZXRVc2VyQnlJZFJlcXVlc3QSFAoCaWQYASABKAlCCLpIBXIDsAEBIjcKE0dldFVzZXJCeUlkUmVzcG9uc2USIAoEdXNlchgBIAEoCzISLmZvb2Rzd2lwZS52MS5Vc2VyIi8KFUdldFVzZXJCeUVtYWlsUmVxdWVzdBIWCgVlbWFpbBgBIAEoCUIHukgEcgJgASI6ChZHZXRVc2VyQnlFbWFpbFJlc3BvbnNlEiAKBHVzZXIYASABKAsyEi5mb29kc3dpcGUudjEuVXNlciI3ChhHZXRVc2VyQnlVc2VybmFtZVJlcXVlc3QSGwoIdXNlcm5hbWUYASABKAlCCbpIBnIEEAEYMiI9ChlHZXRVc2VyQnlVc2VybmFtZVJlc3BvbnNlEiAKBHVzZXIYASABKAsyEi5mb29kc3dpcGUudjEuVXNlciKxAQoRQ3JlYXRlVXNlclJlcXVlc3QSFgoFZW1haWwYASABKAlCB7pIBHICYAESGwoIdXNlcm5hbWUYAiABKAlCCbpIBnIEEAEYMhIVCgRuYW1lGAMgASgJQge6SARyAhABEh0KEGRpc3BsYXlfdXNlcm5hbWUYBCABKAlIAIgBARISCgVpbWFnZRgFIAEoCUgBiAEBQhMKEV9kaXNwbGF5X3VzZXJuYW1lQggKBl9pbWFnZSI2ChJDcmVhdGVVc2VyUmVzcG9uc2USIAoEdXNlchgBIAEoCzISLmZvb2Rzd2lwZS52MS5Vc2VyIpgBChFVcGRhdGVVc2VyUmVxdWVzdBIUCgJpZBgBIAEoCUIIukgFcgOwAQESDAoEbmFtZRgCIAEoCRINCgVlbWFpbBgDIAEoCRIdChBkaXNwbGF5X3VzZXJuYW1lGAQgASgJSACIAQESEgoFaW1hZ2UYBSABKAlIAYgBAUITChFfZGlzcGxheV91c2VybmFtZUIICgZfaW1hZ2UiNgoSVXBkYXRlVXNlclJlc3BvbnNlEiAKBHVzZXIYASABKAsyEi5mb29kc3dpcGUudjEuVXNlcjLGAwoLVXNlclNlcnZpY2USUgoLR2V0VXNlckJ5SWQSIC5mb29kc3dpcGUudjEuR2V0VXNlckJ5SWRSZXF1ZXN0GiEuZm9vZHN3aXBlLnYxLkdldFVzZXJCeUlkUmVzcG9uc2USWwoOR2V0VXNlckJ5RW1haWwSIy5mb29kc3dpcGUudjEuR2V0VXNlckJ5RW1haWxSZXF1ZXN0GiQuZm9vZHN3aXBlLnYxLkdldFVzZXJCeUVtYWlsUmVzcG9uc2USZAoRR2V0VXNlckJ5VXNlcm5hbWUSJi5mb29kc3dpcGUudjEuR2V0VXNlckJ5VXNlcm5hbWVSZXF1ZXN0GicuZm9vZHN3aXBlLnYxLkdldFVzZXJCeVVzZXJuYW1lUmVzcG9uc2USTwoKQ3JlYXRlVXNlchIfLmZvb2Rzd2lwZS52MS5DcmVhdGVVc2VyUmVxdWVzdBogLmZvb2Rzd2lwZS52MS5DcmVhdGVVc2VyUmVzcG9uc2USTwoKVXBkYXRlVXNlchIfLmZvb2Rzd2lwZS52MS5VcGRhdGVVc2VyUmVxdWVzdBogLmZvb2Rzd2lwZS52MS5VcGRhdGVVc2VyUmVzcG9uc2VCqAEKEGNvbS5mb29kc3dpcGUudjFCCVVzZXJQcm90b1ABWjhnaXRodWIuY29tL2Zvb2Qtc3dpcGUvZ2VuL2dycGMvZm9vZC1zd2lwZS92MTtmb29kc3dpcGV2MaICA0ZYWKoCDEZvb2Rzd2lwZS5WMcoCDEZvb2Rzd2lwZVxWMeICGEZvb2Rzd2lwZVxWMVxHUEJNZXRhZGF0YeoCDUZvb2Rzd2lwZTo6VjFiBnByb3RvMw", [file_buf_validate_validate, file_google_protobuf_timestamp]);
 
 /**
  * @generated from message foodswipe.v1.User
@@ -127,6 +127,182 @@ export const GetUserByIdResponseSchema: GenMessage<GetUserByIdResponse> = /*@__P
   messageDesc(file_food_swipe_v1_user, 2);
 
 /**
+ * @generated from message foodswipe.v1.GetUserByEmailRequest
+ */
+export type GetUserByEmailRequest = Message<"foodswipe.v1.GetUserByEmailRequest"> & {
+  /**
+   * @generated from field: string email = 1;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.GetUserByEmailRequest.
+ * Use `create(GetUserByEmailRequestSchema)` to create a new message.
+ */
+export const GetUserByEmailRequestSchema: GenMessage<GetUserByEmailRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 3);
+
+/**
+ * @generated from message foodswipe.v1.GetUserByEmailResponse
+ */
+export type GetUserByEmailResponse = Message<"foodswipe.v1.GetUserByEmailResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.User user = 1;
+   */
+  user?: User;
+};
+
+/**
+ * Describes the message foodswipe.v1.GetUserByEmailResponse.
+ * Use `create(GetUserByEmailResponseSchema)` to create a new message.
+ */
+export const GetUserByEmailResponseSchema: GenMessage<GetUserByEmailResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 4);
+
+/**
+ * @generated from message foodswipe.v1.GetUserByUsernameRequest
+ */
+export type GetUserByUsernameRequest = Message<"foodswipe.v1.GetUserByUsernameRequest"> & {
+  /**
+   * @generated from field: string username = 1;
+   */
+  username: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.GetUserByUsernameRequest.
+ * Use `create(GetUserByUsernameRequestSchema)` to create a new message.
+ */
+export const GetUserByUsernameRequestSchema: GenMessage<GetUserByUsernameRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 5);
+
+/**
+ * @generated from message foodswipe.v1.GetUserByUsernameResponse
+ */
+export type GetUserByUsernameResponse = Message<"foodswipe.v1.GetUserByUsernameResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.User user = 1;
+   */
+  user?: User;
+};
+
+/**
+ * Describes the message foodswipe.v1.GetUserByUsernameResponse.
+ * Use `create(GetUserByUsernameResponseSchema)` to create a new message.
+ */
+export const GetUserByUsernameResponseSchema: GenMessage<GetUserByUsernameResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 6);
+
+/**
+ * @generated from message foodswipe.v1.CreateUserRequest
+ */
+export type CreateUserRequest = Message<"foodswipe.v1.CreateUserRequest"> & {
+  /**
+   * @generated from field: string email = 1;
+   */
+  email: string;
+
+  /**
+   * @generated from field: string username = 2;
+   */
+  username: string;
+
+  /**
+   * @generated from field: string name = 3;
+   */
+  name: string;
+
+  /**
+   * @generated from field: optional string display_username = 4;
+   */
+  displayUsername?: string;
+
+  /**
+   * @generated from field: optional string image = 5;
+   */
+  image?: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.CreateUserRequest.
+ * Use `create(CreateUserRequestSchema)` to create a new message.
+ */
+export const CreateUserRequestSchema: GenMessage<CreateUserRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 7);
+
+/**
+ * @generated from message foodswipe.v1.CreateUserResponse
+ */
+export type CreateUserResponse = Message<"foodswipe.v1.CreateUserResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.User user = 1;
+   */
+  user?: User;
+};
+
+/**
+ * Describes the message foodswipe.v1.CreateUserResponse.
+ * Use `create(CreateUserResponseSchema)` to create a new message.
+ */
+export const CreateUserResponseSchema: GenMessage<CreateUserResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 8);
+
+/**
+ * @generated from message foodswipe.v1.UpdateUserRequest
+ */
+export type UpdateUserRequest = Message<"foodswipe.v1.UpdateUserRequest"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string email = 3;
+   */
+  email: string;
+
+  /**
+   * @generated from field: optional string display_username = 4;
+   */
+  displayUsername?: string;
+
+  /**
+   * @generated from field: optional string image = 5;
+   */
+  image?: string;
+};
+
+/**
+ * Describes the message foodswipe.v1.UpdateUserRequest.
+ * Use `create(UpdateUserRequestSchema)` to create a new message.
+ */
+export const UpdateUserRequestSchema: GenMessage<UpdateUserRequest> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 9);
+
+/**
+ * @generated from message foodswipe.v1.UpdateUserResponse
+ */
+export type UpdateUserResponse = Message<"foodswipe.v1.UpdateUserResponse"> & {
+  /**
+   * @generated from field: foodswipe.v1.User user = 1;
+   */
+  user?: User;
+};
+
+/**
+ * Describes the message foodswipe.v1.UpdateUserResponse.
+ * Use `create(UpdateUserResponseSchema)` to create a new message.
+ */
+export const UpdateUserResponseSchema: GenMessage<UpdateUserResponse> = /*@__PURE__*/
+  messageDesc(file_food_swipe_v1_user, 10);
+
+/**
  * @generated from service foodswipe.v1.UserService
  */
 export const UserService: GenService<{
@@ -137,6 +313,38 @@ export const UserService: GenService<{
     methodKind: "unary";
     input: typeof GetUserByIdRequestSchema;
     output: typeof GetUserByIdResponseSchema;
+  },
+  /**
+   * @generated from rpc foodswipe.v1.UserService.GetUserByEmail
+   */
+  getUserByEmail: {
+    methodKind: "unary";
+    input: typeof GetUserByEmailRequestSchema;
+    output: typeof GetUserByEmailResponseSchema;
+  },
+  /**
+   * @generated from rpc foodswipe.v1.UserService.GetUserByUsername
+   */
+  getUserByUsername: {
+    methodKind: "unary";
+    input: typeof GetUserByUsernameRequestSchema;
+    output: typeof GetUserByUsernameResponseSchema;
+  },
+  /**
+   * @generated from rpc foodswipe.v1.UserService.CreateUser
+   */
+  createUser: {
+    methodKind: "unary";
+    input: typeof CreateUserRequestSchema;
+    output: typeof CreateUserResponseSchema;
+  },
+  /**
+   * @generated from rpc foodswipe.v1.UserService.UpdateUser
+   */
+  updateUser: {
+    methodKind: "unary";
+    input: typeof UpdateUserRequestSchema;
+    output: typeof UpdateUserResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_food_swipe_v1_user, 0);

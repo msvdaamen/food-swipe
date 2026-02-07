@@ -2,33 +2,24 @@ package port
 
 import (
 	"context"
+	"time"
 
 	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/google/uuid"
 )
 
 type Storage interface {
-	// User operations
-	CreateUser(ctx context.Context, user *models.User) error
-	GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error)
-	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
-	GetUserByUsername(ctx context.Context, username string) (*models.User, error)
-	UpdateUser(ctx context.Context, user *models.User) error
-	UpdatePassword(ctx context.Context, userID uuid.UUID, passwordHash string) error
-	UpdateEmailVerified(ctx context.Context, userID uuid.UUID, verified bool) error
-	UpdateUsername(ctx context.Context, userID uuid.UUID, username string) error
-	UpdateDisplayUsername(ctx context.Context, userID uuid.UUID, displayUsername *string) error
-
 	// Auth provider operations
-	CreateAuthProvider(ctx context.Context, provider *models.AuthProvider) error
-	GetAuthProviderByProviderUserID(ctx context.Context, provider, providerUserID string) (*models.AuthProvider, error)
-	GetAuthProvidersByUserID(ctx context.Context, userID uuid.UUID) ([]*models.AuthProvider, error)
-	UpdateAuthProvider(ctx context.Context, provider *models.AuthProvider) error
+	CreateUserAuthProvider(ctx context.Context, provider *models.UserAuthProvider) error
+	GetUserAuthProviderByProviderUserID(ctx context.Context, provider models.AuthProvider, providerUserID string) (*models.UserAuthProvider, error)
+	GetUserAuthProviderByUserID(ctx context.Context, provider models.AuthProvider, userID uuid.UUID) (*models.UserAuthProvider, error)
+	GetUserAuthProvidersByUserID(ctx context.Context, userID uuid.UUID) ([]*models.UserAuthProvider, error)
+	UpdateUserAuthProvider(ctx context.Context, ID uuid.UUID, provider *models.UserAuthProvider) error
 
 	// Refresh token operations
 	CreateRefreshToken(ctx context.Context, token *models.RefreshToken) error
-	GetRefreshTokenByHash(ctx context.Context, tokenHash string) (*models.RefreshToken, error)
-	RevokeRefreshToken(ctx context.Context, tokenHash string) error
+	GetRefreshTokenByID(ctx context.Context, ID uuid.UUID) (*models.RefreshToken, error)
+	RevokeRefreshToken(ctx context.Context, ID uuid.UUID) error
 	RevokeAllUserRefreshTokens(ctx context.Context, userID uuid.UUID) error
 	DeleteExpiredRefreshTokens(ctx context.Context) error
 
@@ -44,7 +35,7 @@ type Storage interface {
 	MarkEmailVerificationTokenAsUsed(ctx context.Context, token string) error
 
 	// Password reset operations
-	CreatePasswordResetToken(ctx context.Context, userID uuid.UUID, token string, expiresAt int64) error
-	GetPasswordResetToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt int64, used bool, err error)
+	CreatePasswordResetToken(ctx context.Context, userID uuid.UUID, token string, expiresAt time.Time) error
+	GetPasswordResetToken(ctx context.Context, token string) (userID uuid.UUID, expiresAt time.Time, used bool, err error)
 	MarkPasswordResetTokenAsUsed(ctx context.Context, token string) error
 }

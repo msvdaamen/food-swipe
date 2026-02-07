@@ -251,6 +251,422 @@ func (x *GetUserByIdResponse) GetUser() *User {
 	return nil
 }
 
+type GetUserByEmailRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByEmailRequest) Reset() {
+	*x = GetUserByEmailRequest{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByEmailRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByEmailRequest) ProtoMessage() {}
+
+func (x *GetUserByEmailRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByEmailRequest.ProtoReflect.Descriptor instead.
+func (*GetUserByEmailRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetUserByEmailRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type GetUserByEmailResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByEmailResponse) Reset() {
+	*x = GetUserByEmailResponse{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByEmailResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByEmailResponse) ProtoMessage() {}
+
+func (x *GetUserByEmailResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByEmailResponse.ProtoReflect.Descriptor instead.
+func (*GetUserByEmailResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetUserByEmailResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type GetUserByUsernameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByUsernameRequest) Reset() {
+	*x = GetUserByUsernameRequest{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByUsernameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByUsernameRequest) ProtoMessage() {}
+
+func (x *GetUserByUsernameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByUsernameRequest.ProtoReflect.Descriptor instead.
+func (*GetUserByUsernameRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetUserByUsernameRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+type GetUserByUsernameResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByUsernameResponse) Reset() {
+	*x = GetUserByUsernameResponse{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByUsernameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByUsernameResponse) ProtoMessage() {}
+
+func (x *GetUserByUsernameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByUsernameResponse.ProtoReflect.Descriptor instead.
+func (*GetUserByUsernameResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetUserByUsernameResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type CreateUserRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Email           string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Username        string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Name            string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	DisplayUsername *string                `protobuf:"bytes,4,opt,name=display_username,json=displayUsername,proto3,oneof" json:"display_username,omitempty"`
+	Image           *string                `protobuf:"bytes,5,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CreateUserRequest) Reset() {
+	*x = CreateUserRequest{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserRequest) ProtoMessage() {}
+
+func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserRequest.ProtoReflect.Descriptor instead.
+func (*CreateUserRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CreateUserRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetDisplayUsername() string {
+	if x != nil && x.DisplayUsername != nil {
+		return *x.DisplayUsername
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetImage() string {
+	if x != nil && x.Image != nil {
+		return *x.Image
+	}
+	return ""
+}
+
+type CreateUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserResponse) Reset() {
+	*x = CreateUserResponse{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserResponse) ProtoMessage() {}
+
+func (x *CreateUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CreateUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type UpdateUserRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Email           string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	DisplayUsername *string                `protobuf:"bytes,4,opt,name=display_username,json=displayUsername,proto3,oneof" json:"display_username,omitempty"`
+	Image           *string                `protobuf:"bytes,5,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UpdateUserRequest) Reset() {
+	*x = UpdateUserRequest{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserRequest) ProtoMessage() {}
+
+func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UpdateUserRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetDisplayUsername() string {
+	if x != nil && x.DisplayUsername != nil {
+		return *x.DisplayUsername
+	}
+	return ""
+}
+
+func (x *UpdateUserRequest) GetImage() string {
+	if x != nil && x.Image != nil {
+		return *x.Image
+	}
+	return ""
+}
+
+type UpdateUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserResponse) Reset() {
+	*x = UpdateUserResponse{}
+	mi := &file_food_swipe_v1_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserResponse) ProtoMessage() {}
+
+func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_food_swipe_v1_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserResponse.ProtoReflect.Descriptor instead.
+func (*UpdateUserResponse) Descriptor() ([]byte, []int) {
+	return file_food_swipe_v1_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_food_swipe_v1_user_proto protoreflect.FileDescriptor
 
 const file_food_swipe_v1_user_proto_rawDesc = "" +
@@ -282,9 +698,43 @@ const file_food_swipe_v1_user_proto_rawDesc = "" +
 	"\x12GetUserByIdRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
 	"\x13GetUserByIdResponse\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user2a\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"6\n" +
+	"\x15GetUserByEmailRequest\x12\x1d\n" +
+	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"@\n" +
+	"\x16GetUserByEmailResponse\x12&\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"A\n" +
+	"\x18GetUserByUsernameRequest\x12%\n" +
+	"\busername\x18\x01 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x182R\busername\"C\n" +
+	"\x19GetUserByUsernameResponse\x12&\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"\xe0\x01\n" +
+	"\x11CreateUserRequest\x12\x1d\n" +
+	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\x12%\n" +
+	"\busername\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x182R\busername\x12\x1b\n" +
+	"\x04name\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12.\n" +
+	"\x10display_username\x18\x04 \x01(\tH\x00R\x0fdisplayUsername\x88\x01\x01\x12\x19\n" +
+	"\x05image\x18\x05 \x01(\tH\x01R\x05image\x88\x01\x01B\x13\n" +
+	"\x11_display_usernameB\b\n" +
+	"\x06_image\"<\n" +
+	"\x12CreateUserResponse\x12&\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"\xc1\x01\n" +
+	"\x11UpdateUserRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12.\n" +
+	"\x10display_username\x18\x04 \x01(\tH\x00R\x0fdisplayUsername\x88\x01\x01\x12\x19\n" +
+	"\x05image\x18\x05 \x01(\tH\x01R\x05image\x88\x01\x01B\x13\n" +
+	"\x11_display_usernameB\b\n" +
+	"\x06_image\"<\n" +
+	"\x12UpdateUserResponse\x12&\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user2\xc6\x03\n" +
 	"\vUserService\x12R\n" +
-	"\vGetUserById\x12 .foodswipe.v1.GetUserByIdRequest\x1a!.foodswipe.v1.GetUserByIdResponseB\xa8\x01\n" +
+	"\vGetUserById\x12 .foodswipe.v1.GetUserByIdRequest\x1a!.foodswipe.v1.GetUserByIdResponse\x12[\n" +
+	"\x0eGetUserByEmail\x12#.foodswipe.v1.GetUserByEmailRequest\x1a$.foodswipe.v1.GetUserByEmailResponse\x12d\n" +
+	"\x11GetUserByUsername\x12&.foodswipe.v1.GetUserByUsernameRequest\x1a'.foodswipe.v1.GetUserByUsernameResponse\x12O\n" +
+	"\n" +
+	"CreateUser\x12\x1f.foodswipe.v1.CreateUserRequest\x1a .foodswipe.v1.CreateUserResponse\x12O\n" +
+	"\n" +
+	"UpdateUser\x12\x1f.foodswipe.v1.UpdateUserRequest\x1a .foodswipe.v1.UpdateUserResponseB\xa8\x01\n" +
 	"\x10com.foodswipe.v1B\tUserProtoP\x01Z8github.com/food-swipe/gen/grpc/food-swipe/v1;foodswipev1\xa2\x02\x03FXX\xaa\x02\fFoodswipe.V1\xca\x02\fFoodswipe\\V1\xe2\x02\x18Foodswipe\\V1\\GPBMetadata\xea\x02\rFoodswipe::V1b\x06proto3"
 
 var (
@@ -299,25 +749,45 @@ func file_food_swipe_v1_user_proto_rawDescGZIP() []byte {
 	return file_food_swipe_v1_user_proto_rawDescData
 }
 
-var file_food_swipe_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_food_swipe_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_food_swipe_v1_user_proto_goTypes = []any{
-	(*User)(nil),                  // 0: foodswipe.v1.User
-	(*GetUserByIdRequest)(nil),    // 1: foodswipe.v1.GetUserByIdRequest
-	(*GetUserByIdResponse)(nil),   // 2: foodswipe.v1.GetUserByIdResponse
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*User)(nil),                      // 0: foodswipe.v1.User
+	(*GetUserByIdRequest)(nil),        // 1: foodswipe.v1.GetUserByIdRequest
+	(*GetUserByIdResponse)(nil),       // 2: foodswipe.v1.GetUserByIdResponse
+	(*GetUserByEmailRequest)(nil),     // 3: foodswipe.v1.GetUserByEmailRequest
+	(*GetUserByEmailResponse)(nil),    // 4: foodswipe.v1.GetUserByEmailResponse
+	(*GetUserByUsernameRequest)(nil),  // 5: foodswipe.v1.GetUserByUsernameRequest
+	(*GetUserByUsernameResponse)(nil), // 6: foodswipe.v1.GetUserByUsernameResponse
+	(*CreateUserRequest)(nil),         // 7: foodswipe.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),        // 8: foodswipe.v1.CreateUserResponse
+	(*UpdateUserRequest)(nil),         // 9: foodswipe.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),        // 10: foodswipe.v1.UpdateUserResponse
+	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
 }
 var file_food_swipe_v1_user_proto_depIdxs = []int32{
-	3, // 0: foodswipe.v1.User.ban_expires:type_name -> google.protobuf.Timestamp
-	3, // 1: foodswipe.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	3, // 2: foodswipe.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	0, // 3: foodswipe.v1.GetUserByIdResponse.user:type_name -> foodswipe.v1.User
-	1, // 4: foodswipe.v1.UserService.GetUserById:input_type -> foodswipe.v1.GetUserByIdRequest
-	2, // 5: foodswipe.v1.UserService.GetUserById:output_type -> foodswipe.v1.GetUserByIdResponse
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	11, // 0: foodswipe.v1.User.ban_expires:type_name -> google.protobuf.Timestamp
+	11, // 1: foodswipe.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	11, // 2: foodswipe.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 3: foodswipe.v1.GetUserByIdResponse.user:type_name -> foodswipe.v1.User
+	0,  // 4: foodswipe.v1.GetUserByEmailResponse.user:type_name -> foodswipe.v1.User
+	0,  // 5: foodswipe.v1.GetUserByUsernameResponse.user:type_name -> foodswipe.v1.User
+	0,  // 6: foodswipe.v1.CreateUserResponse.user:type_name -> foodswipe.v1.User
+	0,  // 7: foodswipe.v1.UpdateUserResponse.user:type_name -> foodswipe.v1.User
+	1,  // 8: foodswipe.v1.UserService.GetUserById:input_type -> foodswipe.v1.GetUserByIdRequest
+	3,  // 9: foodswipe.v1.UserService.GetUserByEmail:input_type -> foodswipe.v1.GetUserByEmailRequest
+	5,  // 10: foodswipe.v1.UserService.GetUserByUsername:input_type -> foodswipe.v1.GetUserByUsernameRequest
+	7,  // 11: foodswipe.v1.UserService.CreateUser:input_type -> foodswipe.v1.CreateUserRequest
+	9,  // 12: foodswipe.v1.UserService.UpdateUser:input_type -> foodswipe.v1.UpdateUserRequest
+	2,  // 13: foodswipe.v1.UserService.GetUserById:output_type -> foodswipe.v1.GetUserByIdResponse
+	4,  // 14: foodswipe.v1.UserService.GetUserByEmail:output_type -> foodswipe.v1.GetUserByEmailResponse
+	6,  // 15: foodswipe.v1.UserService.GetUserByUsername:output_type -> foodswipe.v1.GetUserByUsernameResponse
+	8,  // 16: foodswipe.v1.UserService.CreateUser:output_type -> foodswipe.v1.CreateUserResponse
+	10, // 17: foodswipe.v1.UserService.UpdateUser:output_type -> foodswipe.v1.UpdateUserResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_food_swipe_v1_user_proto_init() }
@@ -326,13 +796,15 @@ func file_food_swipe_v1_user_proto_init() {
 		return
 	}
 	file_food_swipe_v1_user_proto_msgTypes[0].OneofWrappers = []any{}
+	file_food_swipe_v1_user_proto_msgTypes[7].OneofWrappers = []any{}
+	file_food_swipe_v1_user_proto_msgTypes[9].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_food_swipe_v1_user_proto_rawDesc), len(file_food_swipe_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

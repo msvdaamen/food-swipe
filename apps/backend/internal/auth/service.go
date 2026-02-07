@@ -1,34 +1,44 @@
 package auth
 
 import (
-	"github.com/food-swipe/internal/auth/adapters/primary/http"
+	"net/http"
+
+	"connectrpc.com/connect"
+	"github.com/food-swipe/gen/grpc/food-swipe/v1/foodswipev1connect"
+	httpAdapter "github.com/food-swipe/internal/auth/adapters/primary/http"
 	"github.com/food-swipe/internal/auth/adapters/secondary/providers/apple"
 	"github.com/food-swipe/internal/auth/adapters/secondary/providers/google"
 	"github.com/food-swipe/internal/auth/adapters/secondary/storage"
+	"github.com/food-swipe/internal/auth/adapters/secondary/user"
 	authConfig "github.com/food-swipe/internal/auth/config"
 	"github.com/food-swipe/internal/auth/core"
+	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/auth/core/port"
+	"github.com/food-swipe/internal/pkg/authenticator"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v5"
+	"go.uber.org/zap"
 )
 
-func Register(httpServer *echo.Echo, pool *pgxpool.Pool, config authConfig.Config) (*core.Core, error) {
-	// Initialize storage adapter
+func Register(httpServer *echo.Echo, pool *pgxpool.Pool, authenticator *authenticator.Provider, config authConfig.Config, logger *zap.Logger) *core.Core {
 	storageAdapter := storage.New(pool)
+	userClient := foodswipev1connect.NewUserServiceClient(
+		http.DefaultClient,
+		config.GrpcUrl,
+		connect.WithGRPC(),
+	)
+	userAdapter := user.New(userClient)
 
-	// Initialize OAuth providers
-	oauthProviders := make(map[string]port.OAuthProvider)
+	oauthProviders := make(map[models.AuthProvider]port.OAuthProvider)
 
-	// Google OAuth provider
 	if config.GoogleClientID != "" && config.GoogleClientSecret != "" {
 		googleProvider := google.New(google.Config{
 			ClientID:     config.GoogleClientID,
 			ClientSecret: config.GoogleClientSecret,
 		})
-		oauthProviders["google"] = googleProvider
+		oauthProviders[googleProvider.GetProviderName()] = googleProvider
 	}
 
-	// Apple OAuth provider
 	if config.AppleClientID != "" && config.AppleTeamID != "" && config.AppleKeyID != "" && config.ApplePrivateKey != nil {
 		appleProvider := apple.New(apple.Config{
 			ClientID:   config.AppleClientID,
@@ -36,14 +46,11 @@ func Register(httpServer *echo.Echo, pool *pgxpool.Pool, config authConfig.Confi
 			KeyID:      config.AppleKeyID,
 			PrivateKey: config.ApplePrivateKey,
 		})
-		oauthProviders["apple"] = appleProvider
+		oauthProviders[appleProvider.GetProviderName()] = appleProvider
 	}
 
-	// Initialize core with configuration
-	coreInstance := core.New(storageAdapter, oauthProviders, nil, config)
+	coreInstance := core.New(storageAdapter, oauthProviders, userAdapter, config)
 
-	// Initialize HTTP adapter
-	http.New(httpServer, coreInstance)
-
-	return coreInstance, nil
+	httpAdapter.New(httpServer, coreInstance, authenticator)
+	return coreInstance
 }

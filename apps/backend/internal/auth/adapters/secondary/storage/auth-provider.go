@@ -4,28 +4,50 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
-// CreateAuthProvider creates a new auth provider link in the database
-func (a *Adapter) CreateAuthProvider(ctx context.Context, provider *models.AuthProvider) error {
-	query := `
-		INSERT INTO auth_providers (id, user_id, provider, provider_user_id, provider_email, access_token, refresh_token, token_expires_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-	`
+const insertAuthProviderQuery = `
+	INSERT INTO user_auth_providers (id, user_id, provider, provider_user_id, password, created_at, updated_at)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+`
 
-	_, err := a.db.Exec(ctx, query,
+const getAuthProviderByProviderUserIDQuery = `
+	SELECT id, user_id, provider, provider_user_id, password, created_at, updated_at
+	FROM user_auth_providers
+	WHERE provider_user_id = $1 AND provider = $2
+`
+const getAuthProviderByUserIDQuery = `
+	SELECT id, user_id, provider, provider_user_id, password, created_at, updated_at
+	FROM user_auth_providers
+	WHERE user_id = $1 AND provider = $2
+`
+const getAuthProvidersByUserIDQuery = `
+	SELECT id, user_id, provider, provider_user_id, password, created_at, updated_at
+	FROM user_auth_providers
+	WHERE user_id = $1
+`
+const updateAuthProviderQuery = `
+	UPDATE user_auth_providers
+	SET user_id = $2, provider = $3, provider_user_id = $4, password = $5, updated_at = $7
+	WHERE id = $1
+`
+
+// CreateUserAuthProvider creates a new auth provider link in the database
+func (a *Adapter) CreateUserAuthProvider(ctx context.Context, provider *models.UserAuthProvider) error {
+	now := time.Now()
+	_, err := a.db.Exec(ctx, insertAuthProviderQuery,
 		provider.ID,
 		provider.UserID,
 		provider.Provider,
 		provider.ProviderUserID,
-		provider.ProviderEmail,
-		provider.AccessToken,
-		provider.RefreshToken,
-		provider.TokenExpiresAt,
+		provider.Password,
+		now,
+		now,
 	)
 
 	if err != nil {
@@ -35,31 +57,23 @@ func (a *Adapter) CreateAuthProvider(ctx context.Context, provider *models.AuthP
 	return nil
 }
 
-// GetAuthProviderByProviderUserID retrieves an auth provider by provider name and provider user ID
-func (a *Adapter) GetAuthProviderByProviderUserID(ctx context.Context, provider, providerUserID string) (*models.AuthProvider, error) {
-	query := `
-		SELECT id, user_id, provider, provider_user_id, provider_email, access_token, refresh_token, token_expires_at, created_at, updated_at
-		FROM auth_providers
-		WHERE provider = $1 AND provider_user_id = $2
-	`
+// GetUserAuthProviderByProviderUserID retrieves an auth provider by provider name and provider user ID
+func (a *Adapter) GetUserAuthProviderByProviderUserID(ctx context.Context, provider models.AuthProvider, providerUserID string) (*models.UserAuthProvider, error) {
 
-	authProvider := &models.AuthProvider{}
-	err := a.db.QueryRow(ctx, query, provider, providerUserID).Scan(
+	authProvider := &models.UserAuthProvider{}
+	err := a.db.QueryRow(ctx, getAuthProviderByProviderUserIDQuery, providerUserID, provider).Scan(
 		&authProvider.ID,
 		&authProvider.UserID,
 		&authProvider.Provider,
 		&authProvider.ProviderUserID,
-		&authProvider.ProviderEmail,
-		&authProvider.AccessToken,
-		&authProvider.RefreshToken,
-		&authProvider.TokenExpiresAt,
+		&authProvider.Password,
 		&authProvider.CreatedAt,
 		&authProvider.UpdatedAt,
 	)
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, fmt.Errorf("auth provider not found")
+			return nil, models.ErrUserProviderNotFound
 		}
 		return nil, fmt.Errorf("failed to get auth provider: %w", err)
 	}
@@ -67,32 +81,47 @@ func (a *Adapter) GetAuthProviderByProviderUserID(ctx context.Context, provider,
 	return authProvider, nil
 }
 
-// GetAuthProvidersByUserID retrieves all auth providers for a user
-func (a *Adapter) GetAuthProvidersByUserID(ctx context.Context, userID uuid.UUID) ([]*models.AuthProvider, error) {
-	query := `
-		SELECT id, user_id, provider, provider_user_id, provider_email, access_token, refresh_token, token_expires_at, created_at, updated_at
-		FROM auth_providers
-		WHERE user_id = $1
-	`
+// GetUserAuthProviderByUserID retrieves an auth provider by provider name and user ID
+func (a *Adapter) GetUserAuthProviderByUserID(ctx context.Context, provider models.AuthProvider, userID uuid.UUID) (*models.UserAuthProvider, error) {
 
-	rows, err := a.db.Query(ctx, query, userID)
+	authProvider := &models.UserAuthProvider{}
+	err := a.db.QueryRow(ctx, getAuthProviderByUserIDQuery, userID, provider).Scan(
+		&authProvider.ID,
+		&authProvider.UserID,
+		&authProvider.Provider,
+		&authProvider.ProviderUserID,
+		&authProvider.Password,
+		&authProvider.CreatedAt,
+		&authProvider.UpdatedAt,
+	)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, models.ErrUserProviderNotFound
+		}
+		return nil, fmt.Errorf("failed to get auth provider: %w", err)
+	}
+
+	return authProvider, nil
+}
+
+// GetUserAuthProvidersByUserID retrieves all auth providers for a user
+func (a *Adapter) GetUserAuthProvidersByUserID(ctx context.Context, userID uuid.UUID) ([]*models.UserAuthProvider, error) {
+	rows, err := a.db.Query(ctx, getAuthProvidersByUserIDQuery, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get auth providers: %w", err)
 	}
 	defer rows.Close()
 
-	var providers []*models.AuthProvider
+	var providers []*models.UserAuthProvider
 	for rows.Next() {
-		provider := &models.AuthProvider{}
+		provider := &models.UserAuthProvider{}
 		err := rows.Scan(
 			&provider.ID,
 			&provider.UserID,
 			&provider.Provider,
 			&provider.ProviderUserID,
-			&provider.ProviderEmail,
-			&provider.AccessToken,
-			&provider.RefreshToken,
-			&provider.TokenExpiresAt,
+			&provider.Password,
 			&provider.CreatedAt,
 			&provider.UpdatedAt,
 		)
@@ -105,29 +134,19 @@ func (a *Adapter) GetAuthProvidersByUserID(ctx context.Context, userID uuid.UUID
 	return providers, nil
 }
 
-// UpdateAuthProvider updates an auth provider's information
-func (a *Adapter) UpdateAuthProvider(ctx context.Context, provider *models.AuthProvider) error {
-	query := `
-		UPDATE auth_providers
-		SET provider_email = $3, access_token = $4, refresh_token = $5, token_expires_at = $6
-		WHERE provider = $1 AND provider_user_id = $2
-	`
-
-	result, err := a.db.Exec(ctx, query,
+func (a *Adapter) UpdateUserAuthProvider(ctx context.Context, providerID uuid.UUID, provider *models.UserAuthProvider) error {
+	payload := []any{
+		provider.ID,
+		provider.UserID,
 		provider.Provider,
 		provider.ProviderUserID,
-		provider.ProviderEmail,
-		provider.AccessToken,
-		provider.RefreshToken,
-		provider.TokenExpiresAt,
-	)
-
-	if err != nil {
-		return fmt.Errorf("failed to update auth provider: %w", err)
+		provider.Password,
+		time.Now(),
 	}
 
-	if result.RowsAffected() == 0 {
-		return fmt.Errorf("auth provider not found")
+	_, err := a.db.Exec(ctx, updateAuthProviderQuery, payload...)
+	if err != nil {
+		return fmt.Errorf("failed to update auth provider: %w", err)
 	}
 
 	return nil

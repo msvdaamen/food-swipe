@@ -13,31 +13,23 @@ import (
 )
 
 // GetAuthUrl starts the OAuth flow with PKCE
-func (c *Core) GetAuthUrl(ctx context.Context, provider, redirectURI string) (string, error) {
+func (c *Core) GetAuthUrl(ctx context.Context, provider models.AuthProvider, redirectURI string) (string, error) {
 	// Get OAuth provider
 	oauthProvider, ok := c.oauthProviders[provider]
 	if !ok {
 		return "", ErrProviderNotSupported
 	}
 
-	// Validate provider configuration
-	if err := oauthProvider.ValidateProvider(); err != nil {
-		return "", fmt.Errorf("%w: %v", ErrInvalidProvider, err)
-	}
-
-	// Generate PKCE challenge
 	codeVerifier, codeChallenge, err := generatePKCEChallenge()
 	if err != nil {
 		return "", fmt.Errorf("failed to generate PKCE challenge: %w", err)
 	}
 
-	// Generate state
 	state, err := generateRandomToken(32)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate state: %w", err)
 	}
 
-	// Store OAuth state
 	oauthState := &models.OAuthState{
 		ID:            uuid.New(),
 		State:         state,
@@ -53,7 +45,6 @@ func (c *Core) GetAuthUrl(ctx context.Context, provider, redirectURI string) (st
 		return "", fmt.Errorf("failed to store oauth state: %w", err)
 	}
 
-	// Get authorization URL
 	authURL := oauthProvider.GetAuthorizationURL(state, codeChallenge, redirectURI)
 
 	return authURL, nil

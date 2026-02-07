@@ -3,8 +3,8 @@ package http
 import (
 	"net/http"
 
-	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/pkg"
+	"github.com/food-swipe/internal/user/core/models"
 	"github.com/labstack/echo/v5"
 )
 
@@ -25,7 +25,7 @@ func (a *Adapter) ChangePassword(c *echo.Context) error {
 		})
 	}
 
-	if err := a.core.ChangePassword(c.Request().Context(), user.ID.String(), req.OldPassword, req.NewPassword); err != nil {
+	if err := a.core.ChangePassword(c.Request().Context(), user.ID, req.OldPassword, req.NewPassword); err != nil {
 		return a.handleError(c, err)
 	}
 

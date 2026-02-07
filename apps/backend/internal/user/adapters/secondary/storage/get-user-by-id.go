@@ -9,10 +9,10 @@ import (
 	"github.com/food-swipe/internal/user/core/models"
 )
 
-const selectUserByID = "SELECT id, name, email, email_verified, image, username, display_username, role, banned, ban_reason, ban_expires, created_at, updated_at FROM users WHERE id = $1"
+const selectUserByID = "SELECT %s FROM users WHERE id = $1"
 
 func (a *Adapter) GetUserByID(ctx context.Context, userID string) (*models.User, error) {
-	row := a.db.QueryRow(ctx, selectUserByID, userID)
+	row := a.db.QueryRow(ctx, fmt.Sprintf(selectUserByID, userFields), userID)
 	var user models.User
 	user, err := scanUser(row)
 	if err != nil {

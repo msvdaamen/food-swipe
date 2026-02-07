@@ -1,6 +1,11 @@
 package models
 
-// OAuthProvider represents the configuration for an OAuth provider
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
 type OAuthProvider struct {
 	Name         string
 	ClientID     string
@@ -12,34 +17,21 @@ type OAuthProvider struct {
 	Scopes       []string
 }
 
-// OAuthUserInfo represents the user information returned by OAuth providers
 type OAuthUserInfo struct {
 	ProviderUserID string
 	Email          string
 	EmailVerified  bool
 	Name           string
-	Picture        string
+	Picture        *string
 }
 
-// PKCEChallenge represents the PKCE challenge for OAuth flow
-type PKCEChallenge struct {
+type OAuthState struct {
+	ID            uuid.UUID
+	State         string
 	CodeVerifier  string
 	CodeChallenge string
-	Method        string // S256 or plain
-}
-
-// OAuthAuthorizationRequest represents the parameters for OAuth authorization
-type OAuthAuthorizationRequest struct {
-	Provider     string
-	State        string
-	CodeVerifier string
-	RedirectURI  string
-}
-
-// OAuthCallbackRequest represents the OAuth callback parameters
-type OAuthCallbackRequest struct {
-	Code         string
-	State        string
-	Provider     string
-	CodeVerifier string
+	Provider      AuthProvider
+	RedirectURI   string
+	ExpiresAt     time.Time
+	CreatedAt     time.Time
 }

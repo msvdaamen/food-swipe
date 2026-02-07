@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/food-swipe/internal/auth/config"
+	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/auth/core/port"
 	"github.com/food-swipe/internal/pkg/jwt"
 )
@@ -27,11 +28,11 @@ type Core struct {
 	config         config.Config
 	storage        port.Storage
 	jwt            *jwt.Provider
-	oauthProviders map[string]port.OAuthProvider
+	oauthProviders map[models.AuthProvider]port.OAuthProvider
 	user           port.User
 }
 
-func New(storage port.Storage, oauthProviders map[string]port.OAuthProvider, user port.User, config config.Config) *Core {
+func New(storage port.Storage, oauthProviders map[models.AuthProvider]port.OAuthProvider, user port.User, config config.Config) *Core {
 	return &Core{
 		config:  config,
 		storage: storage,

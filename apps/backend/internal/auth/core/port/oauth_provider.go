@@ -12,14 +12,11 @@ type OAuthProvider interface {
 	GetAuthorizationURL(state string, codeChallenge string, redirectURI string) string
 
 	// ExchangeCode exchanges the authorization code for tokens
-	ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, refreshToken string, expiresIn int64, err error)
+	ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, err error)
 
 	// GetUserInfo retrieves user information from the OAuth provider
 	GetUserInfo(ctx context.Context, accessToken string) (*models.OAuthUserInfo, error)
 
 	// GetProviderName returns the name of the OAuth provider
-	GetProviderName() models.AuthProviders
-
-	// ValidateProvider checks if the provider is properly configured
-	ValidateProvider() error
+	GetProviderName() models.AuthProvider
 }

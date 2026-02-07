@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/pkg/password"
 )
 
@@ -19,8 +20,13 @@ func (c *Core) ResetPassword(ctx context.Context, token, newPassword string) err
 		return ErrTokenAlreadyUsed
 	}
 
-	if time.Now().Unix() > expiresAt {
+	if time.Now().After(expiresAt) {
 		return ErrTokenExpired
+	}
+
+	provider, err := c.storage.GetUserAuthProviderByUserID(ctx, models.AuthProviderPassword, userID)
+	if err != nil {
+		return fmt.Errorf("failed to get user auth provider: %w", err)
 	}
 
 	// Hash new password
@@ -34,8 +40,10 @@ func (c *Core) ResetPassword(ctx context.Context, token, newPassword string) err
 		return fmt.Errorf("failed to mark token as used: %w", err)
 	}
 
+	provider.Password = &passwordHash
+
 	// Update password
-	if err := c.storage.UpdatePassword(ctx, userID, passwordHash); err != nil {
+	if err := c.storage.UpdateUserAuthProvider(ctx, provider.ID, provider); err != nil {
 		return fmt.Errorf("failed to update password: %w", err)
 	}
 

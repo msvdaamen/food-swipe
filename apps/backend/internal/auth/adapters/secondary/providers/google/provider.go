@@ -3,7 +3,6 @@ package google
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -17,7 +16,7 @@ const (
 	googleAuthURL     = "https://accounts.google.com/o/oauth2/v2/auth"
 	googleTokenURL    = "https://oauth2.googleapis.com/token"
 	googleUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
-	providerName      = models.AuthProvidersGoogle
+	providerName      = models.AuthProviderGoogle
 )
 
 type Provider struct {
@@ -58,18 +57,8 @@ func New(config Config) *Provider {
 	}
 }
 
-func (p *Provider) GetProviderName() models.AuthProviders {
+func (p *Provider) GetProviderName() models.AuthProvider {
 	return providerName
-}
-
-func (p *Provider) ValidateProvider() error {
-	if p.clientID == "" {
-		return errors.New("google client ID is required")
-	}
-	if p.clientSecret == "" {
-		return errors.New("google client secret is required")
-	}
-	return nil
 }
 
 func (p *Provider) GetAuthorizationURL(state string, codeChallenge string, redirectURI string) string {
@@ -89,7 +78,7 @@ func (p *Provider) GetAuthorizationURL(state string, codeChallenge string, redir
 	return fmt.Sprintf("%s?%s", googleAuthURL, params.Encode())
 }
 
-func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, refreshToken string, expiresIn int64, err error) {
+func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier string, redirectURI string) (accessToken string, err error) {
 	data := url.Values{}
 	data.Set("client_id", p.clientID)
 	data.Set("client_secret", p.clientSecret)
@@ -100,28 +89,28 @@ func (p *Provider) ExchangeCode(ctx context.Context, code string, codeVerifier s
 
 	req, err := http.NewRequestWithContext(ctx, "POST", googleTokenURL, strings.NewReader(data.Encode()))
 	if err != nil {
-		return "", "", 0, fmt.Errorf("failed to create token request: %w", err)
+		return "", fmt.Errorf("failed to create token request: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := p.httpClient.Do(req)
 	if err != nil {
-		return "", "", 0, fmt.Errorf("failed to exchange code: %w", err)
+		return "", fmt.Errorf("failed to exchange code: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return "", "", 0, fmt.Errorf("token exchange failed with status %d: %s", resp.StatusCode, string(body))
+		return "", fmt.Errorf("token exchange failed with status %d: %s", resp.StatusCode, string(body))
 	}
 
 	var tokenResp tokenResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		return "", "", 0, fmt.Errorf("failed to decode token response: %w", err)
+		return "", fmt.Errorf("failed to decode token response: %w", err)
 	}
 
-	return tokenResp.AccessToken, tokenResp.RefreshToken, tokenResp.ExpiresIn, nil
+	return tokenResp.AccessToken, nil
 }
 
 func (p *Provider) GetUserInfo(ctx context.Context, accessToken string) (*models.OAuthUserInfo, error) {
@@ -153,6 +142,6 @@ func (p *Provider) GetUserInfo(ctx context.Context, accessToken string) (*models
 		Email:          userInfo.Email,
 		EmailVerified:  userInfo.EmailVerified,
 		Name:           userInfo.Name,
-		Picture:        userInfo.Picture,
+		Picture:        &userInfo.Picture,
 	}, nil
 }

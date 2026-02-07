@@ -21,3 +21,19 @@ type User struct {
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }
+
+type CreateUserParams struct {
+	Email           string
+	Username        string
+	Name            string
+	DisplayUsername *string
+	Image           *string
+}
+
+type UpdateUserParams struct {
+	ID              uuid.UUID
+	Name            string
+	Email           string
+	DisplayUsername *string
+	Image           *string
+}

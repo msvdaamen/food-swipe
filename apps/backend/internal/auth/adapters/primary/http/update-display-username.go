@@ -1,34 +1,26 @@
 package http
 
-import (
-	"net/http"
-
-	"github.com/food-swipe/internal/auth/core/models"
-	"github.com/food-swipe/internal/pkg"
-	"github.com/labstack/echo/v5"
-)
-
 type UpdateDisplayUsernameRequest struct {
 	DisplayUsername *string `json:"display_username"`
 }
 
 // UpdateDisplayUsername updates the user's display username
-func (a *Adapter) UpdateDisplayUsername(c *echo.Context) error {
-	user := c.Get("user").(*models.User)
+// func (a *Adapter) UpdateDisplayUsername(c *echo.Context) error {
+// 	user := c.Get("user").(*models.User)
 
-	var req UpdateDisplayUsernameRequest
-	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return c.JSON(http.StatusBadRequest, ErrorResponse{
-			Error:   "validation_error",
-			Message: err.Error(),
-		})
-	}
+// 	var req UpdateDisplayUsernameRequest
+// 	if err := pkg.ValidateRequest(c, &req); err != nil {
+// 		return c.JSON(http.StatusBadRequest, ErrorResponse{
+// 			Error:   "validation_error",
+// 			Message: err.Error(),
+// 		})
+// 	}
 
-	if err := a.core.UpdateDisplayUsername(c.Request().Context(), user.ID.String(), req.DisplayUsername); err != nil {
-		return a.handleError(c, err)
-	}
+// 	if err := a.core.UpdateDisplayUsername(c.Request().Context(), user.ID.String(), req.DisplayUsername); err != nil {
+// 		return a.handleError(c, err)
+// 	}
 
-	return c.JSON(http.StatusOK, MessageResponse{
-		Message: "Display username updated successfully",
-	})
-}
+// 	return c.JSON(http.StatusOK, MessageResponse{
+// 		Message: "Display username updated successfully",
+// 	})
+// }

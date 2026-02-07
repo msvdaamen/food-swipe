@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/food-swipe/internal/auth/core/models"
+	"github.com/food-swipe/internal/user/core/models"
 	"github.com/labstack/echo/v5"
 )
 
