@@ -8,14 +8,16 @@ export type GetUsersInput = {
   amount: number;
   page: number;
   sort: string;
-
 };
 
 export const getUsers = async (payload: GetUsersInput) => {
   const searchParams = objectToSearchParams(payload);
   const response = await api.fetch(`/v1/users?${searchParams}`, {
-    method: 'GET'
+    method: "GET",
   });
+  if (!response.ok) {
+    throw new Error("Failed to fetch users");
+  }
   return response.json() as Promise<PaginatedData<User>>;
 };
 

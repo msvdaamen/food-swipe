@@ -69,7 +69,7 @@ func main() {
 
 	auth.Register(httpServer.Echo, pool, authenticator, cfg.Auth, logger)
 	follow.Register(grpcServer, pool, logger)
-	user.Register(grpcServer, httpServer.Echo, pool, logger)
+	user.Register(grpcServer, httpServer.Echo, pool, authenticator, logger)
 	recipe.Register(grpcServer, pool, fileStorage, logger)
 
 	httpServer.Start()

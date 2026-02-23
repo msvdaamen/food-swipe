@@ -17,9 +17,8 @@ func (c *Core) RefreshToken(ctx context.Context, refreshToken string) (*models.T
 		return nil, ErrInvalidToken
 	}
 
-	// Check if user is banned
-	if user.Banned {
-		return nil, ErrUserBanned
+	if err := checkUserBan(user); err != nil {
+		return nil, err
 	}
 
 	// Generate new token pair
@@ -37,7 +36,7 @@ func (c *Core) RefreshToken(ctx context.Context, refreshToken string) (*models.T
 // generateTokenPair creates access and refresh tokens for a user
 func (c *Core) generateTokenPair(ctx context.Context, user *userModel.User) (*models.TokenPair, error) {
 
-	accessToken, expiresAt, err := c.GenerateAccessToken(user)
+	accessToken, err := c.GenerateAccessToken(user)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate access token: %w", err)
 	}
@@ -66,6 +65,5 @@ func (c *Core) generateTokenPair(ctx context.Context, user *userModel.User) (*mo
 	return &models.TokenPair{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
-		ExpiresIn:    expiresAt,
 	}, nil
 }

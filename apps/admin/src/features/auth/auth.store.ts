@@ -18,6 +18,11 @@ const initialState: State = {
 export const useAuthStore = create(
   immer(
     combine(initialState, (set) => ({
+      setTokens(accessToken: string, refreshToken: string) {
+        localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        set({ accessToken, refreshToken });
+      },
       setAccessToken(accessToken: string) {
         localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
         set({ accessToken });
@@ -26,6 +31,11 @@ export const useAuthStore = create(
         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         set({ refreshToken });
       },
-    }))
-  )
+      clearTokens() {
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        set({ accessToken: null, refreshToken: null });
+      },
+    })),
+  ),
 );

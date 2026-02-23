@@ -12,10 +12,8 @@ func (a *Adapter) SendVerificationEmail(c *echo.Context) error {
 	user := c.Get("user").(*models.User)
 
 	if err := a.core.SendVerificationEmail(c.Request().Context(), user.ID); err != nil {
-		return a.handleError(c, err)
+		return handleError(c, err)
 	}
 
-	return c.JSON(http.StatusOK, MessageResponse{
-		Message: "Verification email sent successfully",
-	})
+	return c.NoContent(http.StatusOK)
 }

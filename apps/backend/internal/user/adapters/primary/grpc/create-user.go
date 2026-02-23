@@ -14,6 +14,7 @@ func (a *Adapter) CreateUser(ctx context.Context, req *api.CreateUserRequest) (*
 		Name:            req.Name,
 		DisplayUsername: req.DisplayUsername,
 		Image:           req.Image,
+		EmailVerified:   req.EmailVerified,
 	}
 
 	user, err := a.core.CreateUser(ctx, params)

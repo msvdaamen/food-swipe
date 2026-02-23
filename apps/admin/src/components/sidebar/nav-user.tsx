@@ -9,11 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +28,7 @@ import {
 import { getWebsocketClient } from "@/lib/websocket";
 import { useRouter } from "@tanstack/react-router";
 import { useSignOut } from "@/features/auth/api/sign-out";
+import { useAuthStore } from "@/features/auth/auth.store";
 
 export function NavUser({
   user,
@@ -43,6 +40,7 @@ export function NavUser({
   };
 }) {
   const router = useRouter();
+  const authStore = useAuthStore();
   const signOut = useSignOut();
   const { isMobile } = useSidebar();
   const shortName = user.name
@@ -55,7 +53,10 @@ export function NavUser({
     if (websocketClient) {
       websocketClient.disconnect();
     }
-    await signOut.mutateAsync();
+    if (authStore.refreshToken) {
+      await signOut.mutateAsync({ refreshToken: authStore.refreshToken });
+    }
+    authStore.clearTokens();
     router.navigate({ to: "/auth/sign-in" });
   }
 

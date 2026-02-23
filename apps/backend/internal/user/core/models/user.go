@@ -13,7 +13,7 @@ type User struct {
 	EmailVerified   bool
 	Image           *string
 	Username        string
-	DisplayUsername *string
+	DisplayUsername string
 	Role            string
 	Banned          bool
 	BanReason       *string
@@ -26,8 +26,9 @@ type CreateUserParams struct {
 	Email           string
 	Username        string
 	Name            string
-	DisplayUsername *string
+	DisplayUsername string
 	Image           *string
+	EmailVerified   bool
 }
 
 type UpdateUserParams struct {

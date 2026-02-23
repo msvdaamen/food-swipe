@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS user_auth_providers (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     provider VARCHAR(50) NOT NULL,
-    provider_user_id VARCHAR(255) NOT NULL,
+    provider_user_id VARCHAR(255),
     password VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

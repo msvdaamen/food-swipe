@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/pkg/password"
 )
 
-// Login authenticates a user with email and password
-func (c *Core) Login(ctx context.Context, email, pass string) (*models.AuthResponse, error) {
+// SignIn authenticates a user with email and password
+func (c *Core) SignIn(ctx context.Context, email, pass string) (*models.AuthResponse, error) {
 	email = strings.ToLower(strings.TrimSpace(email))
 
 	// Get user by email
@@ -20,13 +19,8 @@ func (c *Core) Login(ctx context.Context, email, pass string) (*models.AuthRespo
 		return nil, ErrInvalidCredentials
 	}
 
-	// Check if user is banned
-	if user.Banned {
-		if user.BanExpires != nil && user.BanExpires.After(time.Now()) {
-			return nil, fmt.Errorf("%w: banned until %s", ErrUserBanned, user.BanExpires.Format(time.RFC3339))
-		} else if user.BanExpires == nil {
-			return nil, fmt.Errorf("%w: permanently banned", ErrUserBanned)
-		}
+	if err := checkUserBan(user); err != nil {
+		return nil, err
 	}
 
 	// Get user auth provider by user ID
@@ -55,7 +49,7 @@ func (c *Core) Login(ctx context.Context, email, pass string) (*models.AuthRespo
 	}
 
 	return &models.AuthResponse{
-		User:      user,
-		TokenPair: tokenPair,
+		AccessToken:  tokenPair.AccessToken,
+		RefreshToken: tokenPair.RefreshToken,
 	}, nil
 }

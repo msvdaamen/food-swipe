@@ -30,12 +30,6 @@ func (a *Adapter) CreateUser(ctx context.Context, params *models.CreateUserParam
 		return nil, fmt.Errorf("failed to generate user ID: %w", err)
 	}
 
-	// Set display_username to username if not provided
-	displayUsername := params.Username
-	if params.DisplayUsername != nil {
-		displayUsername = *params.DisplayUsername
-	}
-
 	row := a.db.QueryRow(
 		ctx,
 		fmt.Sprintf(insertUser, userFields),
@@ -43,7 +37,7 @@ func (a *Adapter) CreateUser(ctx context.Context, params *models.CreateUserParam
 		params.Email,
 		params.Username,
 		params.Name,
-		displayUsername,
+		params.DisplayUsername,
 		params.Image,
 		false,  // email_verified defaults to false
 		"user", // role defaults to user

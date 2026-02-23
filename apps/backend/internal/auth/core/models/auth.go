@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/food-swipe/internal/user/core/models"
 	"github.com/google/uuid"
 )
 
@@ -24,7 +23,7 @@ type UserAuthProvider struct {
 	ID             uuid.UUID
 	UserID         uuid.UUID
 	Provider       AuthProvider
-	ProviderUserID string
+	ProviderUserID *string
 	Password       *string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
@@ -43,10 +42,9 @@ type RefreshToken struct {
 type TokenPair struct {
 	AccessToken  string
 	RefreshToken string
-	ExpiresIn    time.Time
 }
 
 type AuthResponse struct {
-	User      *models.User
-	TokenPair *TokenPair
+	AccessToken  string
+	RefreshToken string
 }

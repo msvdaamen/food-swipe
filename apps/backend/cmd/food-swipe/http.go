@@ -57,6 +57,11 @@ func setupHttpServer(port string, i18nProvider *i18n.Provider, logger *zap.Logge
 	e.Validator = &CustomValidator{validator: validator}
 	e.Use(middleware.RequestLogger())
 	e.Use(middleware.BodyLimit(2_097_152)) // 2MB
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:5173", "https://food-swipe.app"},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+		AllowCredentials: true,
+	}))
 	e.Use(validationMiddleware(i18nProvider))
 
 	s := http.Server{Addr: ":" + port, Handler: e}

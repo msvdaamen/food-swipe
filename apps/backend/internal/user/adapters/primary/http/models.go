@@ -16,7 +16,7 @@ type User struct {
 	CreatedAt       time.Time  `json:"createdAt"`
 	UpdatedAt       time.Time  `json:"updatedAt"`
 	Username        string     `json:"username"`
-	DisplayUsername *string    `json:"displayUsername"`
+	DisplayUsername string     `json:"displayUsername"`
 	Role            string     `json:"role"`
 	Banned          bool       `json:"banned"`
 	BanReason       *string    `json:"banReason"`

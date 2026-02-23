@@ -4,8 +4,11 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 
 export const getUserStats = async () => {
   const response = await api.fetch("/v1/users/stats", {
-    method: 'GET'
+    method: "GET",
   });
+  if (!response.ok) {
+    throw new Error("Failed to fetch user stats");
+  }
   return response.json() as Promise<UserStats>;
 };
 

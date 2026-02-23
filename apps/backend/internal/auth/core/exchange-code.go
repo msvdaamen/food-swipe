@@ -57,8 +57,8 @@ func (c *Core) ExchangeCode(ctx context.Context, code string, state string, prov
 			return nil, fmt.Errorf("failed to get user: %w", err)
 		}
 
-		if user.Banned {
-			return nil, ErrUserBanned
+		if err := checkUserBan(user); err != nil {
+			return nil, err
 		}
 
 		tokenPair, err := c.generateTokenPair(ctx, user)
@@ -67,36 +67,33 @@ func (c *Core) ExchangeCode(ctx context.Context, code string, state string, prov
 		}
 
 		return &models.AuthResponse{
-			User:      user,
-			TokenPair: tokenPair,
+			AccessToken:  tokenPair.AccessToken,
+			RefreshToken: tokenPair.RefreshToken,
 		}, nil
 	}
 
 	user, err := c.user.GetUserByEmail(ctx, userInfo.Email)
-	if err != nil {
+	if err != nil && user != nil {
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
 	if user == nil {
 		username := c.generateUsernameFromEmail(ctx, userInfo.Email)
-		id, err := uuid.NewV7()
-		if err != nil {
-			return nil, fmt.Errorf("failed to generate UUID: %w", err)
-		}
 		now := time.Now()
 		user = &userModel.User{
-			ID:            id,
-			Email:         userInfo.Email,
-			EmailVerified: true,
-			Username:      username,
-			Name:          userInfo.Name,
-			Image:         userInfo.Picture,
-			Role:          "user",
-			Banned:        false,
-			CreatedAt:     now,
-			UpdatedAt:     now,
+			Email:           userInfo.Email,
+			EmailVerified:   true,
+			Username:        username,
+			DisplayUsername: username,
+			Name:            userInfo.Name,
+			Image:           userInfo.Picture,
+			Role:            "user",
+			Banned:          false,
+			CreatedAt:       now,
+			UpdatedAt:       now,
 		}
+		user, err = c.user.CreateUser(ctx, user)
 
-		if err := c.user.CreateUser(ctx, user); err != nil {
+		if err != nil {
 			return nil, fmt.Errorf("failed to create user: %w", err)
 		}
 	}
@@ -109,7 +106,7 @@ func (c *Core) ExchangeCode(ctx context.Context, code string, state string, prov
 		ID:             ID,
 		UserID:         user.ID,
 		Provider:       provider,
-		ProviderUserID: userInfo.ProviderUserID,
+		ProviderUserID: &userInfo.ProviderUserID,
 		CreatedAt:      now,
 		UpdatedAt:      now,
 	}
@@ -124,8 +121,8 @@ func (c *Core) ExchangeCode(ctx context.Context, code string, state string, prov
 	}
 
 	return &models.AuthResponse{
-		User:      user,
-		TokenPair: tokenPair,
+		AccessToken:  tokenPair.AccessToken,
+		RefreshToken: tokenPair.RefreshToken,
 	}, nil
 }
 

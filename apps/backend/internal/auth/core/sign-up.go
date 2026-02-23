@@ -13,8 +13,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// Register creates a new user with email and password
-func (c *Core) Register(ctx context.Context, email, pass, username, name string) (*models.AuthResponse, error) {
+// SignUp creates a new user with email and password
+func (c *Core) SignUp(ctx context.Context, email, pass, username, name string) (*models.AuthResponse, error) {
 	// Validate email
 	email = strings.ToLower(strings.TrimSpace(email))
 	if email == "" {
@@ -45,14 +45,8 @@ func (c *Core) Register(ctx context.Context, email, pass, username, name string)
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
-	userID, err := uuid.NewV7()
-	if err != nil {
-		return nil, fmt.Errorf("failed to generate UUID: %w", err)
-	}
-
 	// Create user
 	user := &userModel.User{
-		ID:            userID,
 		Email:         email,
 		EmailVerified: false,
 		Username:      username,
@@ -62,8 +56,9 @@ func (c *Core) Register(ctx context.Context, email, pass, username, name string)
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 	}
+	user, err = c.user.CreateUser(ctx, user)
 
-	if err := c.user.CreateUser(ctx, user); err != nil {
+	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
@@ -93,7 +88,7 @@ func (c *Core) Register(ctx context.Context, email, pass, username, name string)
 	}
 
 	return &models.AuthResponse{
-		User:      user,
-		TokenPair: tokenPair,
+		AccessToken:  tokenPair.AccessToken,
+		RefreshToken: tokenPair.RefreshToken,
 	}, nil
 }

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/food-swipe/internal/auth/core/models"
@@ -24,9 +23,8 @@ func (a *Adapter) ExchangeCode(c *echo.Context) error {
 
 	authResp, err := a.core.ExchangeCode(c.Request().Context(), req.Code, req.State, req.Provider)
 	if err != nil {
-		log.Print(err)
-		return a.handleError(c, err)
+		return handleError(c, err)
 	}
 
-	return c.JSON(http.StatusOK, a.mapAuthResponse(authResp))
+	return c.JSON(http.StatusOK, mapAuthResponse(authResp))
 }

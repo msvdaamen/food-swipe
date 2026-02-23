@@ -17,7 +17,7 @@ type Claims struct {
 }
 
 // GenerateAccessToken creates a new JWT access token
-func (c *Core) GenerateAccessToken(user *userModel.User) (string, time.Time, error) {
+func (c *Core) GenerateAccessToken(user *userModel.User) (string, error) {
 	expiresAt := time.Now().Add(c.config.AccessTokenTTL)
 
 	claims := &Claims{
@@ -35,10 +35,10 @@ func (c *Core) GenerateAccessToken(user *userModel.User) (string, time.Time, err
 
 	tokenString, err := c.jwt.GenerateJWTToken(claims)
 	if err != nil {
-		return "", time.Time{}, fmt.Errorf("failed to sign access token: %w", err)
+		return "", fmt.Errorf("failed to sign access token: %w", err)
 	}
 
-	return tokenString, expiresAt, nil
+	return tokenString, nil
 }
 
 // GenerateRefreshToken creates a new JWT refresh token

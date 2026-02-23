@@ -26,7 +26,7 @@ func (a *Adapter) GetAuthUrl(c *echo.Context) error {
 
 	authURL, err := a.core.GetAuthUrl(c.Request().Context(), req.Provider, req.RedirectURI)
 	if err != nil {
-		return a.handleError(c, err)
+		return handleError(c, err)
 	}
 
 	return c.JSON(http.StatusOK, OAuthInitiateResponse{

@@ -31,7 +31,7 @@ type User struct {
 	EmailVerified   bool                   `protobuf:"varint,4,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`
 	Image           *string                `protobuf:"bytes,5,opt,name=image,proto3,oneof" json:"image,omitempty"`
 	Username        string                 `protobuf:"bytes,6,opt,name=username,proto3" json:"username,omitempty"`
-	DisplayUsername *string                `protobuf:"bytes,7,opt,name=display_username,json=displayUsername,proto3,oneof" json:"display_username,omitempty"`
+	DisplayUsername string                 `protobuf:"bytes,7,opt,name=display_username,json=displayUsername,proto3" json:"display_username,omitempty"`
 	Role            string                 `protobuf:"bytes,8,opt,name=role,proto3" json:"role,omitempty"`
 	Banned          bool                   `protobuf:"varint,9,opt,name=banned,proto3" json:"banned,omitempty"`
 	BanReason       *string                `protobuf:"bytes,10,opt,name=ban_reason,json=banReason,proto3,oneof" json:"ban_reason,omitempty"`
@@ -115,8 +115,8 @@ func (x *User) GetUsername() string {
 }
 
 func (x *User) GetDisplayUsername() string {
-	if x != nil && x.DisplayUsername != nil {
-		return *x.DisplayUsername
+	if x != nil {
+		return x.DisplayUsername
 	}
 	return ""
 }
@@ -432,8 +432,9 @@ type CreateUserRequest struct {
 	Email           string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	Username        string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Name            string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	DisplayUsername *string                `protobuf:"bytes,4,opt,name=display_username,json=displayUsername,proto3,oneof" json:"display_username,omitempty"`
-	Image           *string                `protobuf:"bytes,5,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	DisplayUsername string                 `protobuf:"bytes,4,opt,name=display_username,json=displayUsername,proto3" json:"display_username,omitempty"`
+	EmailVerified   bool                   `protobuf:"varint,5,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`
+	Image           *string                `protobuf:"bytes,6,opt,name=image,proto3,oneof" json:"image,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -490,10 +491,17 @@ func (x *CreateUserRequest) GetName() string {
 }
 
 func (x *CreateUserRequest) GetDisplayUsername() string {
-	if x != nil && x.DisplayUsername != nil {
-		return *x.DisplayUsername
+	if x != nil {
+		return x.DisplayUsername
 	}
 	return ""
+}
+
+func (x *CreateUserRequest) GetEmailVerified() bool {
+	if x != nil {
+		return x.EmailVerified
+	}
+	return false
 }
 
 func (x *CreateUserRequest) GetImage() string {
@@ -671,28 +679,27 @@ var File_food_swipe_v1_user_proto protoreflect.FileDescriptor
 
 const file_food_swipe_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x18food-swipe/v1/user.proto\x12\ffoodswipe.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9e\x04\n" +
+	"\x18food-swipe/v1/user.proto\x12\ffoodswipe.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x84\x04\n" +
 	"\x04User\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12%\n" +
 	"\x0eemail_verified\x18\x04 \x01(\bR\remailVerified\x12\x19\n" +
 	"\x05image\x18\x05 \x01(\tH\x00R\x05image\x88\x01\x01\x12\x1a\n" +
-	"\busername\x18\x06 \x01(\tR\busername\x12.\n" +
-	"\x10display_username\x18\a \x01(\tH\x01R\x0fdisplayUsername\x88\x01\x01\x12\x12\n" +
+	"\busername\x18\x06 \x01(\tR\busername\x12)\n" +
+	"\x10display_username\x18\a \x01(\tR\x0fdisplayUsername\x12\x12\n" +
 	"\x04role\x18\b \x01(\tR\x04role\x12\x16\n" +
 	"\x06banned\x18\t \x01(\bR\x06banned\x12\"\n" +
 	"\n" +
 	"ban_reason\x18\n" +
-	" \x01(\tH\x02R\tbanReason\x88\x01\x01\x12@\n" +
-	"\vban_expires\x18\v \x01(\v2\x1a.google.protobuf.TimestampH\x03R\n" +
+	" \x01(\tH\x01R\tbanReason\x88\x01\x01\x12@\n" +
+	"\vban_expires\x18\v \x01(\v2\x1a.google.protobuf.TimestampH\x02R\n" +
 	"banExpires\x88\x01\x01\x129\n" +
 	"\n" +
 	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\b\n" +
-	"\x06_imageB\x13\n" +
-	"\x11_display_usernameB\r\n" +
+	"\x06_imageB\r\n" +
 	"\v_ban_reasonB\x0e\n" +
 	"\f_ban_expires\".\n" +
 	"\x12GetUserByIdRequest\x12\x18\n" +
@@ -706,14 +713,14 @@ const file_food_swipe_v1_user_proto_rawDesc = "" +
 	"\x18GetUserByUsernameRequest\x12%\n" +
 	"\busername\x18\x01 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x182R\busername\"C\n" +
 	"\x19GetUserByUsernameResponse\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"\xe0\x01\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"\xed\x01\n" +
 	"\x11CreateUserRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\x12%\n" +
 	"\busername\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x182R\busername\x12\x1b\n" +
-	"\x04name\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12.\n" +
-	"\x10display_username\x18\x04 \x01(\tH\x00R\x0fdisplayUsername\x88\x01\x01\x12\x19\n" +
-	"\x05image\x18\x05 \x01(\tH\x01R\x05image\x88\x01\x01B\x13\n" +
-	"\x11_display_usernameB\b\n" +
+	"\x04name\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12)\n" +
+	"\x10display_username\x18\x04 \x01(\tR\x0fdisplayUsername\x12%\n" +
+	"\x0eemail_verified\x18\x05 \x01(\bR\remailVerified\x12\x19\n" +
+	"\x05image\x18\x06 \x01(\tH\x00R\x05image\x88\x01\x01B\b\n" +
 	"\x06_image\"<\n" +
 	"\x12CreateUserResponse\x12&\n" +
 	"\x04user\x18\x01 \x01(\v2\x12.foodswipe.v1.UserR\x04user\"\xc1\x01\n" +

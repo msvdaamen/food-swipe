@@ -33,7 +33,7 @@ func (c *Core) VerifyEmail(ctx context.Context, token string) error {
 
 	user.EmailVerified = true
 
-	if err := c.user.UpdateUser(ctx, userID, user); err != nil {
+	if _, err := c.user.UpdateUser(ctx, userID, user); err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
 

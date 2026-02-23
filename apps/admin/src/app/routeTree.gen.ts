@@ -13,8 +13,8 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as LayoutUsersRouteImport } from './routes/_layout/users'
-import { Route as LayoutActivitiesRouteRouteImport } from './routes/_layout/activities/route'
 import { Route as LayoutRecipesRecipesRouteImport } from './routes/_layout/recipes/recipes'
 import { Route as LayoutRecipesMeasurementsRouteImport } from './routes/_layout/recipes/measurements'
 import { Route as LayoutRecipesIngredientsRouteImport } from './routes/_layout/recipes/ingredients'
@@ -41,14 +41,14 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutUsersRoute = LayoutUsersRouteImport.update({
   id: '/users',
   path: '/users',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutActivitiesRouteRoute = LayoutActivitiesRouteRouteImport.update({
-  id: '/activities',
-  path: '/activities',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutRecipesRecipesRoute = LayoutRecipesRecipesRouteImport.update({
@@ -75,21 +75,21 @@ const LayoutRecipesRecipeIdRoute = LayoutRecipesRecipeIdRouteImport.update({
 } as any)
 const LayoutActivitiesRecipesUploadedRoute =
   LayoutActivitiesRecipesUploadedRouteImport.update({
-    id: '/recipes-uploaded',
-    path: '/recipes-uploaded',
-    getParentRoute: () => LayoutActivitiesRouteRoute,
+    id: '/activities/recipes-uploaded',
+    path: '/activities/recipes-uploaded',
+    getParentRoute: () => LayoutRoute,
   } as any)
 const LayoutActivitiesLoginActivityRoute =
   LayoutActivitiesLoginActivityRouteImport.update({
-    id: '/login-activity',
-    path: '/login-activity',
-    getParentRoute: () => LayoutActivitiesRouteRoute,
+    id: '/activities/login-activity',
+    path: '/activities/login-activity',
+    getParentRoute: () => LayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
   '/users': typeof LayoutUsersRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth': typeof AuthIndexRoute
   '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -101,8 +101,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/activities': typeof LayoutActivitiesRouteRouteWithChildren
   '/users': typeof LayoutUsersRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth': typeof AuthIndexRoute
   '/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -116,8 +116,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/activities': typeof LayoutActivitiesRouteRouteWithChildren
   '/_layout/users': typeof LayoutUsersRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/': typeof AuthIndexRoute
   '/_layout/activities/login-activity': typeof LayoutActivitiesLoginActivityRoute
@@ -131,8 +131,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/activities'
     | '/users'
+    | '/auth/callback'
     | '/auth/sign-in'
     | '/auth'
     | '/activities/login-activity'
@@ -144,8 +144,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/activities'
     | '/users'
+    | '/auth/callback'
     | '/auth/sign-in'
     | '/auth'
     | '/activities/login-activity'
@@ -158,8 +158,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_layout'
-    | '/_layout/activities'
     | '/_layout/users'
+    | '/auth/callback'
     | '/auth/sign-in'
     | '/auth/'
     | '/_layout/activities/login-activity'
@@ -173,6 +173,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
+  AuthCallbackRoute: typeof AuthCallbackRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
@@ -207,18 +208,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_layout/users': {
       id: '/_layout/users'
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof LayoutUsersRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/activities': {
-      id: '/_layout/activities'
-      path: '/activities'
-      fullPath: '/activities'
-      preLoaderRoute: typeof LayoutActivitiesRouteRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/recipes/recipes': {
@@ -251,39 +252,25 @@ declare module '@tanstack/react-router' {
     }
     '/_layout/activities/recipes-uploaded': {
       id: '/_layout/activities/recipes-uploaded'
-      path: '/recipes-uploaded'
+      path: '/activities/recipes-uploaded'
       fullPath: '/activities/recipes-uploaded'
       preLoaderRoute: typeof LayoutActivitiesRecipesUploadedRouteImport
-      parentRoute: typeof LayoutActivitiesRouteRoute
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/activities/login-activity': {
       id: '/_layout/activities/login-activity'
-      path: '/login-activity'
+      path: '/activities/login-activity'
       fullPath: '/activities/login-activity'
       preLoaderRoute: typeof LayoutActivitiesLoginActivityRouteImport
-      parentRoute: typeof LayoutActivitiesRouteRoute
+      parentRoute: typeof LayoutRoute
     }
   }
 }
 
-interface LayoutActivitiesRouteRouteChildren {
+interface LayoutRouteChildren {
+  LayoutUsersRoute: typeof LayoutUsersRoute
   LayoutActivitiesLoginActivityRoute: typeof LayoutActivitiesLoginActivityRoute
   LayoutActivitiesRecipesUploadedRoute: typeof LayoutActivitiesRecipesUploadedRoute
-}
-
-const LayoutActivitiesRouteRouteChildren: LayoutActivitiesRouteRouteChildren = {
-  LayoutActivitiesLoginActivityRoute: LayoutActivitiesLoginActivityRoute,
-  LayoutActivitiesRecipesUploadedRoute: LayoutActivitiesRecipesUploadedRoute,
-}
-
-const LayoutActivitiesRouteRouteWithChildren =
-  LayoutActivitiesRouteRoute._addFileChildren(
-    LayoutActivitiesRouteRouteChildren,
-  )
-
-interface LayoutRouteChildren {
-  LayoutActivitiesRouteRoute: typeof LayoutActivitiesRouteRouteWithChildren
-  LayoutUsersRoute: typeof LayoutUsersRoute
   LayoutRecipesRecipeIdRoute: typeof LayoutRecipesRecipeIdRoute
   LayoutRecipesIngredientsRoute: typeof LayoutRecipesIngredientsRoute
   LayoutRecipesMeasurementsRoute: typeof LayoutRecipesMeasurementsRoute
@@ -291,8 +278,9 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutActivitiesRouteRoute: LayoutActivitiesRouteRouteWithChildren,
   LayoutUsersRoute: LayoutUsersRoute,
+  LayoutActivitiesLoginActivityRoute: LayoutActivitiesLoginActivityRoute,
+  LayoutActivitiesRecipesUploadedRoute: LayoutActivitiesRecipesUploadedRoute,
   LayoutRecipesRecipeIdRoute: LayoutRecipesRecipeIdRoute,
   LayoutRecipesIngredientsRoute: LayoutRecipesIngredientsRoute,
   LayoutRecipesMeasurementsRoute: LayoutRecipesMeasurementsRoute,
@@ -305,6 +293,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
+  AuthCallbackRoute: AuthCallbackRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthIndexRoute: AuthIndexRoute,
 }

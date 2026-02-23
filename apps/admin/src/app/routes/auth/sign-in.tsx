@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate, useRouter } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { type } from "arktype";
@@ -13,7 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
 import { useSignIn } from "@/features/auth/api/sign-in";
-import { authClient } from "@/lib/auth";
+import { useAuthStore } from "@/features/auth/auth.store";
+import { GoogleSignInButton } from "@/features/auth/components/google-sign-in-button/google-sign-in-button";
+import { useSignInSocial } from "@/features/auth/api/sign-in-social";
 
 export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent,
@@ -25,23 +27,35 @@ const validator = type({
 });
 
 function RouteComponent() {
-  const { data: session } = authClient.useSession();
+  const { accessToken } = useAuthStore();
+  const router = useRouter();
 
   const signIn = useSignIn();
+  const signInSocial = useSignInSocial();
+
   const form = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: "msv.daamen@outlook.com",
+      password: "Gymshark98!",
     },
     validators: {
       onChange: validator,
     },
-    onSubmit: async ({value}) => {
+    onSubmit: async ({ value }) => {
       await signIn.mutateAsync(value);
+      router.navigate({
+        to: "/activities/login-activity",
+      });
     },
   });
 
-  if (session) {
+  async function handleGoogleSignIn() {
+    await signInSocial.mutateAsync({
+      provider: "google",
+    });
+  }
+
+  if (accessToken) {
     return <Navigate to="/" />;
   }
 
@@ -49,8 +63,11 @@ function RouteComponent() {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
-                    <img src="/images/logo.png" alt="FoodSwipe Logo" />
+          <img src="/images/logo.png" alt="FoodSwipe Logo" />
           <Card>
+            <CardContent>
+              <GoogleSignInButton onClick={handleGoogleSignIn} />
+            </CardContent>
             <CardHeader>
               <CardTitle className="text-2xl">Login</CardTitle>
               <CardDescription>
@@ -60,8 +77,8 @@ function RouteComponent() {
             <CardContent>
               <form
                 onSubmit={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
+                  e.preventDefault();
+                  e.stopPropagation();
                   form.handleSubmit();
                 }}
               >

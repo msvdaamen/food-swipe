@@ -12,9 +12,8 @@ import (
 )
 
 var (
-	ErrInvalidToken     = errors.New("invalid token")
-	ErrExpiredToken     = errors.New("expired token")
-	ErrInvalidTokenType = errors.New("invalid token type")
+	ErrInvalidToken = errors.New("invalid token")
+	ErrExpiredToken = errors.New("expired token")
 )
 
 // ValidateAccessToken validates and parses an access token
@@ -59,6 +58,10 @@ func (c *Core) ValidateRefreshToken(ctx context.Context, tokenString string) (*m
 	refreshToken, err := c.storage.GetRefreshTokenByID(ctx, refreshTokenID)
 	if err != nil {
 		return nil, nil, fmt.Errorf("%w: %v", ErrInvalidToken, err)
+	}
+
+	if refreshToken.RevokedAt != nil {
+		return nil, nil, ErrInvalidToken
 	}
 
 	user, err := c.user.GetUserByID(ctx, refreshToken.UserID)

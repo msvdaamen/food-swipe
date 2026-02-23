@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v5"
 )
 
-type RegisterRequest struct {
+type SignUpRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
 	Username string `json:"username" validate:"required,min=3,max=50"`
@@ -15,19 +15,16 @@ type RegisterRequest struct {
 }
 
 // Register creates a new user account
-func (a *Adapter) Register(c *echo.Context) error {
-	var req RegisterRequest
+func (a *Adapter) SignUp(c *echo.Context) error {
+	var req SignUpRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return c.JSON(http.StatusBadRequest, ErrorResponse{
-			Error:   "validation_error",
-			Message: err.Error(),
-		})
+		return err
 	}
 
-	authResp, err := a.core.Register(c.Request().Context(), req.Email, req.Password, req.Username, req.Name)
+	authResp, err := a.core.SignUp(c.Request().Context(), req.Email, req.Password, req.Username, req.Name)
 	if err != nil {
-		return a.handleError(c, err)
+		return handleError(c, err)
 	}
 
-	return c.JSON(http.StatusCreated, a.mapAuthResponse(authResp))
+	return c.JSON(http.StatusCreated, mapAuthResponse(authResp))
 }

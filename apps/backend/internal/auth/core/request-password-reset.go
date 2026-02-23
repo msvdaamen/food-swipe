@@ -17,6 +17,10 @@ func (c *Core) RequestPasswordReset(ctx context.Context, email string) error {
 		return nil
 	}
 
+	if err := checkUserBan(user); err != nil {
+		return err
+	}
+
 	// Generate reset token
 	token, err := generateRandomToken(32)
 	if err != nil {

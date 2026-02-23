@@ -1,15 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
+import { SocialAuthProvider } from "../types/social-auth-provider";
 import { AuthResponse } from "../types/auth.response";
 import { useAuthStore } from "../auth.store";
 
-export type SignInInput = {
-  email: string;
-  password: string;
+export type SignInSocialCallbackInput = {
+  provider: SocialAuthProvider;
+  code: string;
+  state: string;
 };
 
-export async function signIn(payload: SignInInput) {
+export async function signInSocialCallback(payload: SignInSocialCallbackInput) {
+  console.log(import.meta.env);
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/v1/auth/sign-in`,
+    `${import.meta.env.VITE_API_URL}/v1/auth/sign-in-social-callback`,
     {
       method: "POST",
       headers: {
@@ -20,17 +23,17 @@ export async function signIn(payload: SignInInput) {
   );
 
   if (!response.ok) {
-    throw new Error("Refresh failed");
+    throw new Error("SignIn social failed");
   }
 
   return response.json() as Promise<AuthResponse>;
 }
 
-export const useSignIn = () => {
+export const useSignInSocialCallback = () => {
   const authStore = useAuthStore();
 
   return useMutation({
-    mutationFn: signIn,
+    mutationFn: signInSocialCallback,
     onSuccess: (response) => {
       authStore.setTokens(response.accessToken, response.refreshToken);
     },

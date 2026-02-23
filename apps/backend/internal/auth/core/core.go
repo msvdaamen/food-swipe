@@ -2,11 +2,14 @@ package core
 
 import (
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/food-swipe/internal/auth/config"
 	"github.com/food-swipe/internal/auth/core/models"
 	"github.com/food-swipe/internal/auth/core/port"
 	"github.com/food-swipe/internal/pkg/jwt"
+	userModels "github.com/food-swipe/internal/user/core/models"
 )
 
 var (
@@ -42,4 +45,16 @@ func New(storage port.Storage, oauthProviders map[models.AuthProvider]port.OAuth
 		oauthProviders: oauthProviders,
 		user:           user,
 	}
+}
+
+func checkUserBan(user *userModels.User) error {
+	if user.Banned {
+		if user.BanExpires == nil {
+			return ErrUserBanned
+		}
+		if user.BanExpires.After(time.Now()) {
+			return fmt.Errorf("%w: banned until %s", ErrUserBanned, user.BanExpires.Format(time.RFC3339))
+		}
+	}
+	return nil
 }

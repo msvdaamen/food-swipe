@@ -9,8 +9,30 @@ import (
 	"github.com/labstack/echo/v5"
 )
 
+type AuthResponse struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+}
+
+type UserResponse struct {
+	ID              string  `json:"id"`
+	Email           string  `json:"email"`
+	EmailVerified   bool    `json:"emailVerified"`
+	Username        string  `json:"username"`
+	DisplayUsername string  `json:"displayUsername"`
+	Name            string  `json:"name"`
+	Image           *string `json:"image"`
+	Role            string  `json:"role"`
+	CreatedAt       string  `json:"createdAt"`
+}
+
+type ErrorResponse struct {
+	Error   string `json:"error"`
+	Message string `json:"message"`
+}
+
 // handleError converts core errors to HTTP error responses
-func (a *Adapter) handleError(c *echo.Context, err error) error {
+func handleError(c *echo.Context, err error) error {
 	switch {
 	case err == core.ErrInvalidCredentials:
 		return c.JSON(http.StatusUnauthorized, ErrorResponse{
@@ -73,23 +95,20 @@ func (a *Adapter) handleError(c *echo.Context, err error) error {
 			Message: "OAuth provider is not properly configured",
 		})
 	default:
-		return c.JSON(http.StatusInternalServerError, ErrorResponse{
-			Error:   "internal_error",
-			Message: "An internal error occurred",
-		})
+		return err
 	}
 }
 
 // mapAuthResponse converts core auth response to HTTP response
-func (a *Adapter) mapAuthResponse(authResp *models.AuthResponse) *AuthResponse {
+func mapAuthResponse(authResp *models.AuthResponse) *AuthResponse {
 	return &AuthResponse{
-		User:  a.mapUserResponse(authResp.User),
-		Token: a.mapTokenResponse(authResp.TokenPair),
+		AccessToken:  authResp.AccessToken,
+		RefreshToken: authResp.RefreshToken,
 	}
 }
 
 // mapUserResponse converts core user model to HTTP response
-func (a *Adapter) mapUserResponse(user *userModels.User) *UserResponse {
+func mapUserResponse(user *userModels.User) *UserResponse {
 	return &UserResponse{
 		ID:              user.ID.String(),
 		Email:           user.Email,
@@ -104,11 +123,9 @@ func (a *Adapter) mapUserResponse(user *userModels.User) *UserResponse {
 }
 
 // mapTokenResponse converts core token pair to HTTP response
-func (a *Adapter) mapTokenResponse(tokenPair *models.TokenPair) *TokenResponse {
-	return &TokenResponse{
+func mapTokenResponse(tokenPair *models.TokenPair) *AuthResponse {
+	return &AuthResponse{
 		AccessToken:  tokenPair.AccessToken,
 		RefreshToken: tokenPair.RefreshToken,
-		ExpiresIn:    tokenPair.ExpiresIn,
-		TokenType:    "Bearer",
 	}
 }

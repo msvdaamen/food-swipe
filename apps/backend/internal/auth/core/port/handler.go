@@ -9,8 +9,8 @@ import (
 
 type Handler interface {
 	// Password-based authentication
-	Register(ctx context.Context, email string, password string, username string, name string) (*models.AuthResponse, error)
-	Login(ctx context.Context, email string, password string) (*models.AuthResponse, error)
+	SignUp(ctx context.Context, email string, password string, username string, name string) (*models.AuthResponse, error)
+	SignIn(ctx context.Context, email string, password string) (*models.AuthResponse, error)
 
 	// Token management
 	RefreshToken(ctx context.Context, refreshToken string) (*models.TokenPair, error)

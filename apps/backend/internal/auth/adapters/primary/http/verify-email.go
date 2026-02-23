@@ -15,17 +15,12 @@ type VerifyEmailRequest struct {
 func (a *Adapter) VerifyEmail(c *echo.Context) error {
 	var req VerifyEmailRequest
 	if err := pkg.ValidateRequest(c, &req); err != nil {
-		return c.JSON(http.StatusBadRequest, ErrorResponse{
-			Error:   "validation_error",
-			Message: err.Error(),
-		})
+		return err
 	}
 
 	if err := a.core.VerifyEmail(c.Request().Context(), req.Token); err != nil {
-		return a.handleError(c, err)
+		return handleError(c, err)
 	}
 
-	return c.JSON(http.StatusOK, MessageResponse{
-		Message: "Email verified successfully",
-	})
+	return c.NoContent(http.StatusOK)
 }

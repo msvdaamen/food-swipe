@@ -10,5 +10,5 @@ import (
 // GetMe returns the current authenticated user
 func (a *Adapter) GetMe(c *echo.Context) error {
 	user := c.Get("user").(*models.User)
-	return c.JSON(http.StatusOK, a.mapUserResponse(user))
+	return c.JSON(http.StatusOK, mapUserResponse(user))
 }

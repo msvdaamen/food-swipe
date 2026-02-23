@@ -31,7 +31,7 @@ func createUser(t *testing.T, dbPool *pgxpool.Pool) {
 		Email:           "test@test.com",
 		Username:        "test",
 		Name:            "test",
-		DisplayUsername: stringPtr("test"),
+		DisplayUsername: "test",
 		Image:           stringPtr("image"),
 	})
 	assert.NoError(err)
@@ -39,7 +39,7 @@ func createUser(t *testing.T, dbPool *pgxpool.Pool) {
 	assert.Equal(user.Email, "test@test.com")
 	assert.Equal(user.Username, "test")
 	assert.Equal(user.Name, "test")
-	assert.Equal(*user.DisplayUsername, "test")
+	assert.Equal(user.DisplayUsername, "test")
 	assert.Equal(*user.Image, "image")
 	assert.Equal(user.EmailVerified, false)
 	assert.Equal(user.Role, "user")
