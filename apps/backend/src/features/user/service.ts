@@ -1,11 +1,9 @@
-import { Result, UnhandledException } from "better-result";
 import { NewUserEntity } from "../../schema";
 import { GetUsersDto } from "./dto/get-users.dto";
 import { UserModel } from "./types/user.model";
 import { PaginatedData } from "../../common/types/paginated-data";
 import { UserRepository, UserRepositoryImpl } from "./repository";
 import { UserStats } from "./types/user-stats.model";
-import { NotFoundError } from "../../common/errors/not-found.error";
 import { CreatePagination } from "../../common/create-pagination";
 import { DatabaseProvider } from "../../providers/database.provider";
 import { KvStoreProvider } from "../../providers/kvstore.provider";
@@ -14,15 +12,12 @@ import type { UserEntity } from "../../schema";
 import { format } from "date-fns";
 
 export interface UserService {
-  findById(userId: string): Promise<Result<UserModel, NotFoundError>>;
-  updateUser(
-    userId: string,
-    payload: Partial<UserModel>
-  ): Promise<Result<void, UnhandledException>>;
-  getUsers(payload: GetUsersDto): Promise<Result<PaginatedData<UserModel>, UnhandledException>>;
-  create(payload: NewUserEntity): Promise<Result<UserModel, UnhandledException>>;
+  findById(userId: string): Promise<UserModel>;
+  updateUser(userId: string, payload: Partial<UserModel>): Promise<void>;
+  getUsers(payload: GetUsersDto): Promise<PaginatedData<UserModel>>;
+  create(payload: NewUserEntity): Promise<UserModel>;
 
-  getStats(from: Date, until: Date): Promise<Result<UserStats, UnhandledException>>;
+  getStats(from: Date, until: Date): Promise<UserStats>;
 }
 
 export class UserServiceImpl implements UserService {
@@ -32,81 +27,64 @@ export class UserServiceImpl implements UserService {
     private readonly storage: StorageService
   ) {}
 
-  findById(userId: string): Promise<Result<UserModel, NotFoundError>> {
-    return Result.gen(
-      async function* (this: UserServiceImpl) {
-        const user = yield* Result.await(this.repository.findById(userId));
-        return Result.ok({
-          ...user,
-          imageUrl: user.image ? this.getProfileImageUrl(user.image) : null
-        });
-      }.bind(this)
-    );
+  async findById(userId: string): Promise<UserModel> {
+    const user = await this.repository.findById(userId);
+    return {
+      ...user,
+      imageUrl: user.image ? this.getProfileImageUrl(user.image) : null
+    };
   }
 
   getProfileImageUrl(filename: string): string {
     return this.storage.getPublicUrl(filename);
   }
 
-  updateUser(
-    userId: string,
-    payload: Partial<UserModel>
-  ): Promise<Result<void, UnhandledException>> {
+  updateUser(userId: string, payload: Partial<UserModel>): Promise<void> {
     const { imageUrl: _drop, ...entityFields } = payload;
-    return Result.tryPromise(() =>
-      this.repository.updateUser(userId, entityFields as Partial<UserEntity>)
-    );
+    return this.repository.updateUser(userId, entityFields as Partial<UserEntity>);
   }
 
-  getUsers(payload: GetUsersDto): Promise<Result<PaginatedData<UserModel>, UnhandledException>> {
-    return Result.gen(
-      async function* (this: UserServiceImpl) {
-        const paginationData = yield* Result.await(this.repository.getUsers(payload));
-        const mappedUsers = paginationData.data.map(
-          (user) =>
-            ({
-              ...user,
-              imageUrl: user.image ? this.getProfileImageUrl(user.image) : null
-            }) as UserModel
-        );
-        const { total, perPage, currentPage } = paginationData.pagination;
-        return Result.ok({
-          data: mappedUsers,
-          pagination: CreatePagination(total, perPage, currentPage)
-        });
-      }.bind(this)
+  async getUsers(payload: GetUsersDto): Promise<PaginatedData<UserModel>> {
+    const paginationData = await this.repository.getUsers(payload);
+    const mappedUsers = paginationData.data.map(
+      (user) =>
+        ({
+          ...user,
+          imageUrl: user.image ? this.getProfileImageUrl(user.image) : null
+        }) as UserModel
     );
+    const { total, perPage, currentPage } = paginationData.pagination;
+    return {
+      data: mappedUsers,
+      pagination: CreatePagination(total, perPage, currentPage)
+    };
   }
 
-  create(payload: NewUserEntity): Promise<Result<UserModel, UnhandledException>> {
-    return Result.gen(
-      async function* (this: UserServiceImpl) {
-        const newUser = yield* Result.await(this.repository.create(payload));
-        return Result.ok({
-          ...newUser,
-          imageUrl: newUser.image ? this.getProfileImageUrl(newUser.image) : null
-        } as UserModel);
-      }.bind(this)
-    );
+  async create(payload: NewUserEntity): Promise<UserModel> {
+    const newUser = await this.repository.create(payload);
+    return {
+      ...newUser,
+      imageUrl: newUser.image ? this.getProfileImageUrl(newUser.image) : null
+    } as UserModel;
   }
 
-  getStats(from: Date, until: Date): Promise<Result<UserStats, UnhandledException>> {
-    return Result.gen(
-      async function* (this: UserServiceImpl) {
-        const cacheKey = `user-stats:${format(from, "yyyy-MM-dd")}:${format(until, "yyyy-MM-dd")}`;
-        const cached = await this.cache.get<string>(cacheKey);
-        if (cached) {
-          return Result.try(() => JSON.parse(cached) as UserStats);
-        }
+  async getStats(from: Date, until: Date): Promise<UserStats> {
+    const cacheKey = `user-stats:${format(from, "yyyy-MM-dd")}:${format(until, "yyyy-MM-dd")}`;
+    const cached = await this.cache.get<string>(cacheKey);
+    if (cached) {
+      try {
+        return JSON.parse(cached) as UserStats;
+      } catch {
+        /* ignore bad cache */
+      }
+    }
 
-        const total = yield* Result.await(this.repository.getTotal(from, until));
-        const active = yield* Result.await(this.repository.getActive(from, until));
-        const newUsers = yield* Result.await(this.repository.getNew(from, until));
-        const result = { total, active, new: newUsers };
-        await this.cache.setItem(cacheKey, JSON.stringify(result), { ttl: 60 });
-        return Result.ok(result);
-      }.bind(this)
-    );
+    const total = await this.repository.getTotal(from, until);
+    const active = await this.repository.getActive(from, until);
+    const newUsers = await this.repository.getNew(from, until);
+    const result = { total, active, new: newUsers };
+    await this.cache.setItem(cacheKey, JSON.stringify(result), { ttl: 60 });
+    return result;
   }
 }
 

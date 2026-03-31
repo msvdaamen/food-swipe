@@ -1,4 +1,3 @@
-import { Result } from "better-result";
 import type { StorageService } from "../../providers/storage/storage.service";
 import { createUserService, UserService } from "../user/service";
 import { KvStoreProvider } from "../../providers/kvstore.provider";
@@ -10,40 +9,31 @@ export class AuthService {
     private readonly userService: UserService
   ) {}
 
-  async getAuthUser(userId: string) {
-    return await this.userService.findById(userId);
+  getAuthUser(userId: string) {
+    return this.userService.findById(userId);
   }
 
   async uploadProfilePicture(userId: string, file: File) {
-    return Result.gen(
-      async function* (this: AuthService) {
-        const user = yield* Result.await(this.userService.findById(userId));
-        const filename = yield* Result.await(
-          this.storageService.upload(file, {
-            isPublic: true,
-            path: "profiles"
-          })
-        );
-        const uploadResult = await this.userService.updateUser(userId, { image: filename });
-        if (uploadResult.isErr()) {
-          yield* Result.await(
-            this.storageService.delete(filename, {
-              isPublic: true
-            })
-          );
-          return Result.err(uploadResult.error);
-        }
-        const imageKey = user.image;
-        if (imageKey) {
-          yield* Result.await(
-            this.storageService.delete(imageKey, {
-              isPublic: true
-            })
-          );
-        }
-        return Result.ok(filename);
-      }.bind(this)
-    );
+    const user = await this.userService.findById(userId);
+    const filename = await this.storageService.upload(file, {
+      isPublic: true,
+      path: "profiles"
+    });
+    try {
+      await this.userService.updateUser(userId, { image: filename });
+    } catch (e) {
+      await this.storageService.delete(filename, {
+        isPublic: true
+      });
+      throw e;
+    }
+    const imageKey = user.image;
+    if (imageKey) {
+      await this.storageService.delete(imageKey, {
+        isPublic: true
+      });
+    }
+    return filename;
   }
 }
 

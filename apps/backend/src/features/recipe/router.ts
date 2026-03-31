@@ -1,5 +1,5 @@
 import { sValidator } from "@hono/standard-validator";
-import { matchError } from "better-result";
+import { NotFoundError } from "../../common/errors/not-found.error";
 import { authRouterFactory } from "../auth/router";
 import { loadRecipesDto } from "./dto/load-recipes.dto";
 import { createRecipeDto } from "./dto/create-recipe.dto";
@@ -23,34 +23,41 @@ app.get("/", sValidator("query", loadRecipesDto), async (c) => {
   const filters = c.req.valid("query");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.getAll(user, filters);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.getAll(user, filters);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.get("/:id", async (c) => {
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.getById(c.req.param("id"));
-  if (result.isErr()) {
-    return recipeErr(c, result.error);
+  try {
+    const data = await svc.getById(c.req.param("id"));
+    return c.json(data);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/", sValidator("json", createRecipeDto), async (c) => {
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.create(payload);
-  if (result.isErr()) {
-    return recipeErr(c, result.error);
+  try {
+    const data = await svc.create(payload);
+    return c.json(data);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/:id/image", async (c) => {
@@ -62,11 +69,15 @@ app.post("/:id/image", async (c) => {
   }
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.uploadImage(id, file);
-  if (result.isErr()) {
-    return recipeErr(c, result.error);
+  try {
+    const data = await svc.uploadImage(id, file);
+    return c.json(data);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.put("/:id", sValidator("json", updateRecipeDto), async (c) => {
@@ -74,36 +85,38 @@ app.put("/:id", sValidator("json", updateRecipeDto), async (c) => {
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.update(id, payload);
-  if (result.isErr()) {
-    return recipeErr(c, result.error);
+  try {
+    const data = await svc.update(id, payload);
+    return c.json(data);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.delete("/:id", async (c) => {
   const id = c.req.param("id");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.delete(id);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    await svc.delete(id);
+    return c.json({}, 201);
+  } catch {
+    return c.status(500);
   }
-  return c.json({}, 201);
 });
 
 app.get("/:id/steps", async (c) => {
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.getSteps(c.req.param("id"));
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.getSteps(c.req.param("id"));
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/:id/steps", sValidator("json", createRecipeStepDto), async (c) => {
@@ -111,13 +124,12 @@ app.post("/:id/steps", sValidator("json", createRecipeStepDto), async (c) => {
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.createStep(id, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.createStep(id, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.put("/:id/steps/:stepId", sValidator("json", updateRecipeStepDto), async (c) => {
@@ -126,13 +138,12 @@ app.put("/:id/steps/:stepId", sValidator("json", updateRecipeStepDto), async (c)
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.updateStep(id, stepId, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.updateStep(id, stepId, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.delete("/:id/steps/:stepId", async (c) => {
@@ -140,13 +151,12 @@ app.delete("/:id/steps/:stepId", async (c) => {
   const stepId = Number(c.req.param("stepId"));
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.deleteStep(id, stepId);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    await svc.deleteStep(id, stepId);
+    return c.json({}, 201);
+  } catch {
+    return c.status(500);
   }
-  return c.json({}, 201);
 });
 
 app.put("/:id/steps/:stepId/reorder", sValidator("json", reorderRecipeStepDto), async (c) => {
@@ -155,25 +165,23 @@ app.put("/:id/steps/:stepId/reorder", sValidator("json", reorderRecipeStepDto), 
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.reorderSteps(id, stepId, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.reorderSteps(id, stepId, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.get("/:id/ingredients", async (c) => {
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.getIngredients(c.req.param("id"));
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.getIngredients(c.req.param("id"));
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/:id/ingredients", sValidator("json", createRecipeIngredientDto), async (c) => {
@@ -181,13 +189,12 @@ app.post("/:id/ingredients", sValidator("json", createRecipeIngredientDto), asyn
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.createIngredient(id, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.createIngredient(id, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.put(
@@ -199,14 +206,13 @@ app.put(
     const payload = c.req.valid("json");
     const recipeBooks = createRecipeBookService(c.get("db"));
     const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-    const result = await svc.updateIngredient(id, ingredientId, payload);
-    if (result.isErr()) {
-      return matchError(result.error, {
-        UnhandledException: () => c.status(500),
-      });
+    try {
+      const data = await svc.updateIngredient(id, ingredientId, payload);
+      return c.json(data);
+    } catch {
+      return c.status(500);
     }
-    return c.json(result.value);
-  },
+  }
 );
 
 app.delete("/:id/ingredients/:ingredientId", async (c) => {
@@ -214,25 +220,23 @@ app.delete("/:id/ingredients/:ingredientId", async (c) => {
   const ingredientId = Number(c.req.param("ingredientId"));
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.deleteIngredient(id, ingredientId);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    await svc.deleteIngredient(id, ingredientId);
+    return c.json({}, 201);
+  } catch {
+    return c.status(500);
   }
-  return c.json({}, 201);
 });
 
 app.get("/:id/nutritions", async (c) => {
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.getNutrition(c.req.param("id"));
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.getNutrition(c.req.param("id"));
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 const allowedNutritions = new Set<string>(nutritions);
@@ -245,13 +249,12 @@ app.put("/:id/nutritions/:name", sValidator("json", updateRecipeNutritionDto), a
   const payload = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const result = await svc.updateNutrition(id, name as Nutrition, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.updateNutrition(id, name as Nutrition, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/:id/like", sValidator("json", likeRecipeDtoSchema), async (c) => {
@@ -260,23 +263,23 @@ app.post("/:id/like", sValidator("json", likeRecipeDtoSchema), async (c) => {
   const { like } = c.req.valid("json");
   const recipeBooks = createRecipeBookService(c.get("db"));
   const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
-  const existing = await svc.getById(id);
-  if (existing.isErr()) {
-    const response = matchError(existing.error, {
-      NotFound: (e) => c.json({ message: e.message }, 404),
-      UnhandledException: (e) => c.json({ error: "Internal server error" }, 500),
-    });
-    return response;
+  try {
+    await svc.getById(id);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.json({ error: "Internal server error" }, 500);
   }
-  const result = await svc.like(user.id, existing.value.id, like);
-  if (result.isErr()) {
-    const response = matchError(result.error, {
-      NotFound: (e) => c.json({ message: e.message }, 404),
-      UnhandledException: (e) => c.json({ error: "Internal server error" }, 500),
-    });
-    return response;
+  try {
+    const data = await svc.like(user.id, id, like);
+    return c.json(data);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return c.json({ message: e.message }, 404);
+    }
+    return c.json({ error: "Internal server error" }, 500);
   }
-  return c.json(result.value);
 });
 
 export const recipeRouter = app;

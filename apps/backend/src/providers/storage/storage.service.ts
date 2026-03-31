@@ -1,5 +1,3 @@
-import { Result, UnhandledException } from "better-result";
-
 export type StorageOptions = {
   isPublic?: boolean;
   path?: string;
@@ -50,46 +48,29 @@ export class StorageService {
     return isPublic ? this.publicBucket : this.privateBucket;
   }
 
-  upload<T extends Blob>(
-    file: T,
-    options?: StorageOptions
-  ): Promise<Result<string, UnhandledException>> {
-    return Result.tryPromise(async () => {
-      const isPublic = options?.isPublic ?? false;
-      const bucket = this.pickBucket(isPublic);
-      const key = objectKey(file, options);
-      const body = await file.arrayBuffer();
-      const contentType =
-        file instanceof File && file.type
-          ? file.type
-          : "application/octet-stream";
-      await bucket.put(key, body, {
-        httpMetadata: { contentType }
-      });
-      return key;
+  async upload<T extends Blob>(file: T, options?: StorageOptions): Promise<string> {
+    const isPublic = options?.isPublic ?? false;
+    const bucket = this.pickBucket(isPublic);
+    const key = objectKey(file, options);
+    const body = await file.arrayBuffer();
+    const contentType =
+      file instanceof File && file.type ? file.type : "application/octet-stream";
+    await bucket.put(key, body, {
+      httpMetadata: { contentType }
     });
+    return key;
   }
 
-  delete(
-    key: string,
-    options?: StorageOptions
-  ): Promise<Result<void, UnhandledException>> {
-    return Result.tryPromise(async () => {
-      const isPublic = options?.isPublic ?? false;
-      const bucket = this.pickBucket(isPublic);
-      await bucket.delete(key.replace(/^\//, ""));
-    });
+  async delete(key: string, options?: StorageOptions): Promise<void> {
+    const isPublic = options?.isPublic ?? false;
+    const bucket = this.pickBucket(isPublic);
+    await bucket.delete(key.replace(/^\//, ""));
   }
 
-  get(
-    key: string,
-    options?: StorageOptions
-  ): Promise<Result<R2ObjectBody | null, UnhandledException>> {
-    return Result.tryPromise(async () => {
-      const isPublic = options?.isPublic ?? false;
-      const bucket = this.pickBucket(isPublic);
-      return await bucket.get(key.replace(/^\//, ""));
-    });
+  async get(key: string, options?: StorageOptions): Promise<R2ObjectBody | null> {
+    const isPublic = options?.isPublic ?? false;
+    const bucket = this.pickBucket(isPublic);
+    return await bucket.get(key.replace(/^\//, ""));
   }
 }
 

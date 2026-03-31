@@ -1,5 +1,4 @@
 import { sValidator } from "@hono/standard-validator";
-import { matchError } from "better-result";
 import { authRouterFactory } from "../auth/router";
 import { getIngredientsDto } from "./dto/get-ingredients.dto";
 import { createIngredientDto } from "./dto/create-ingredient.dto";
@@ -11,50 +10,46 @@ const app = authRouterFactory.createApp();
 app.get("/", sValidator("query", getIngredientsDto), async (c) => {
   const svc = createIngredientService(c.get("db"));
   const params = c.req.valid("query");
-  const result = await svc.all(params);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.all(params);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.post("/", sValidator("json", createIngredientDto), async (c) => {
   const svc = createIngredientService(c.get("db"));
   const payload = c.req.valid("json");
-  const result = await svc.create(payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.create(payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.put("/:id", sValidator("json", updateIngredientDto), async (c) => {
   const svc = createIngredientService(c.get("db"));
   const id = Number(c.req.param("id"));
   const payload = c.req.valid("json");
-  const result = await svc.update(id, payload);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    const data = await svc.update(id, payload);
+    return c.json(data);
+  } catch {
+    return c.status(500);
   }
-  return c.json(result.value);
 });
 
 app.delete("/:id", async (c) => {
   const svc = createIngredientService(c.get("db"));
   const id = Number(c.req.param("id"));
-  const result = await svc.delete(id);
-  if (result.isErr()) {
-    return matchError(result.error, {
-      UnhandledException: () => c.status(500),
-    });
+  try {
+    await svc.delete(id);
+    return c.json({ message: "Ingredient deleted" });
+  } catch {
+    return c.status(500);
   }
-  return c.json({ message: "Ingredient deleted" });
 });
 
 export const ingredientRouter = app;
