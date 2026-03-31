@@ -1,8 +1,8 @@
-import { DbService } from "../../common/db.service";
+import { DbService } from "../../common/db.service.ts";
 import {
   storageService,
   type StorageService,
-} from "../../providers/storage/storage.service";
+} from "../../providers/storage/storage.service.ts";
 import type { RecipeModel } from "./models/recipe.model.ts";
 import {
   recipes,
@@ -15,7 +15,7 @@ import {
   type RecipeNutritionEntity,
   recipesToRecipeBooks,
   type RecipeEntity,
-} from "../../schema";
+} from "../../schema/index.ts";
 import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
 import type { RecipeStepModel } from "./models/recipe-step.model.ts";
 import type { RecipeIngredientModel } from "./models/recipe-ingredient.model.ts";

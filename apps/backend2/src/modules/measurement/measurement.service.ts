@@ -1,5 +1,5 @@
 import {DbService} from "../../common/db.service.ts";
-import {type MeasurementEntity, measurements} from "../../schema";
+import {type MeasurementEntity, measurements} from "../../schema/index.ts";
 import type {CreateMeasurementDto} from "./dto/create-measurement.dto.ts";
 import type {UpdateMeasurementDto} from "./dto/update-measurement.dto.ts";
 import {eq} from "drizzle-orm";

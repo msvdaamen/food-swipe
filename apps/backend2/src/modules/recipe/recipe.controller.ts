@@ -1,6 +1,6 @@
     import type { Hono } from "hono";
-import { authRouterFactory } from "../auth/auth.controller";
-import { recipeService } from "./recipe.service";
+import { authRouterFactory } from "../auth/auth.controller.ts";
+import { recipeService } from "./recipe.service.ts";
 import {createRecipeStepDto} from "./dto/create-recipe-step.dto.ts";
 import {createRecipeIngredientDto} from "./dto/create-recipe-ingredient.dto.ts";
 import {updateRecipeDto} from "./dto/update-recipe.dto.ts";

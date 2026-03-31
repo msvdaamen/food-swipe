@@ -1,38 +1,43 @@
 {
-  "name": "food-swipe-admin-backend",
-  "version": "1.0.0",
-  "module": "src/app.ts",
-  "types": "src/app.ts",
-  "type": "module",
+  "name": "@food-swipe/backend",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "bun --watch run --preload ./src/instrumentation.ts ./src/app.ts",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "cf-typegen": "wrangler types",
+    "migrate": "drizzle-kit migrate",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/pg": "^8.15.6"
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "@better-auth/expo": "^1.4.5",
-    "@food-swipe/file-storage": "workspace:*",
-    "@hono/standard-validator": "^0.2.0",
-    "@imgly/background-removal-node": "^1.4.5",
-    "@kubiks/otel-drizzle": "^2.1.0",
-    "@sentry/bun": "^10.28.0",
-    "add": "^2.0.6",
-    "arktype": "^2.1.27",
-    "better-auth": "^1.4.5",
+    "@better-auth/drizzle-adapter": "^1.5.6",
+    "@better-auth/expo": "^1.5.6",
+    "@hono/standard-validator": "^0.2.2",
+    "better-auth": "^1.5.6",
+    "better-result": "^2.7.0",
     "date-fns": "^4.1.0",
-    "drizzle-kit": "^0.31.7",
-    "drizzle-orm": "^0.44.7",
-    "hono": "^4.10.8",
-    "hono-rate-limiter": "^0.4.2",
-    "jsonwebtoken": "^9.0.2",
-    "openai": "^6.9.0",
-    "pg": "^8.16.3",
-    "typescript": "^5.7.3",
-    "zod": "^4.1.13"
+    "drizzle-orm": "^1.0.0-beta.20",
+    "hono": "^4.12.9",
+    "pg": "^8.20.0",
+    "unstorage": "^1.17.5",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.12.4",
+    "@types/node": "^25.5.0",
+    "drizzle-kit": "^1.0.0-beta.20",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "oxlint-tsgolint": "^0.18.1",
+    "typescript": "^5.5.2",
+    "vitest": "~3.2.0",
+    "wrangler": "^4.78.0"
   }
 }

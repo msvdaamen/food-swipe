@@ -1,0 +1,50 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-10",
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "API_URL": "http://localhost:8787",
+    "WEB_URL": "http://localhost:5173",
+    "ENVIRONMENT": "development"
+  },
+  "env": {
+    "production": {
+      "vars": {
+        "API_URL": "http://localhost:8787",
+        "WEB_URL": "http://localhost:5173",
+        "ENVIRONMENT": "production"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "FOOD_SWIPE_CACHE",
+          "id": "75eeffbe9f0c4c359c89b3cd16e2e092"
+        }
+      ],
+      "hyperdrive": [
+        {
+          "binding": "HYPERDRIVE",
+          "id": "<YOUR_HYPERDRIVE_ID>"
+        }
+      ]
+    }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "FOOD_SWIPE_CACHE",
+      "id": "75eeffbe9f0c4c359c89b3cd16e2e092"
+    }
+  ],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "<YOUR_HYPERDRIVE_ID>",
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/food-swipe"
+    }
+  ]
+}

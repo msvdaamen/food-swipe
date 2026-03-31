@@ -1,12 +1,10 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, index, uuid } from "drizzle-orm/pg-core";
 import { users } from "./user.schema";
 
 export const sessions = pgTable(
   "sessions",
   {
-    id: uuid("id")
-      .primaryKey(),
+    id: uuid("id").primaryKey(),
     expiresAt: timestamp("expires_at").notNull(),
     token: text("token").notNull().unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -18,16 +16,15 @@ export const sessions = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    impersonatedBy: text("impersonated_by"),
+    impersonatedBy: text("impersonated_by")
   },
-  (table) => [index("sessions_userId_idx").on(table.userId)],
+  (table) => [index("sessions_userId_idx").on(table.userId)]
 );
 
 export const accounts = pgTable(
   "accounts",
   {
-    id: uuid("id")
-      .primaryKey(),
+    id: uuid("id").primaryKey(),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     userId: uuid("user_id")
@@ -43,16 +40,15 @@ export const accounts = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+      .notNull()
   },
-  (table) => [index("accounts_userId_idx").on(table.userId)],
+  (table) => [index("accounts_userId_idx").on(table.userId)]
 );
 
 export const verifications = pgTable(
   "verifications",
   {
-    id: uuid("id")
-      .primaryKey(),
+    id: uuid("id").primaryKey(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: timestamp("expires_at").notNull(),
@@ -60,21 +56,7 @@ export const verifications = pgTable(
     updatedAt: timestamp("updated_at")
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+      .notNull()
   },
-  (table) => [index("verifications_identifier_idx").on(table.identifier)],
+  (table) => [index("verifications_identifier_idx").on(table.identifier)]
 );
-
-export const sessionRelations = relations(sessions, ({ one }) => ({
-  users: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
-  }),
-}));
-
-export const accountRelations = relations(accounts, ({ one }) => ({
-  users: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
-  }),
-}));

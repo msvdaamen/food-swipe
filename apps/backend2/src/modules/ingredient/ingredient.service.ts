@@ -1,5 +1,5 @@
 import {DbService} from "../../common/db.service.ts";
-import {type IngredientEntity, ingredients} from "../../schema";
+import {type IngredientEntity, ingredients} from "../../schema/index.ts";
 import {and, asc, count, desc, eq, ilike} from "drizzle-orm";
 import type {CreateIngredientDto} from "./dto/update-ingredient.dto.ts";
 import {PgColumn} from "drizzle-orm/pg-core";

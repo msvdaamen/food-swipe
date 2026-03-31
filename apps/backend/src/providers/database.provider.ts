@@ -1,19 +1,54 @@
-import { drizzle } from "drizzle-orm/bun-sql";
-import { migrate } from "drizzle-orm/bun-sql/migrator";
-import { databaseConfig } from "../config/database.config.ts";
-import * as schema from "../schema";
-import { instrumentDrizzleClient } from "@kubiks/otel-drizzle";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { AppContext } from "..";
+import { Client } from "pg";
+import { Result, TaggedError } from "better-result";
 
-export type DatabaseProvider = ReturnType<typeof drizzle<typeof schema>>;
+export type DatabaseProvider = Awaited<ReturnType<typeof createDatabase>>;
 
-export const databaseProvider = drizzle(databaseConfig.url, {
-  casing: "snake_case",
-  schema,
-});
-instrumentDrizzleClient(databaseProvider);
-export async function migrateDatabase() {
-  await migrate(databaseProvider, {
-    migrationsFolder: "./drizzle",
-    migrationsSchema: "public",
+export async function createDatabase(connectionString: string) {
+  const client = new Client({
+    connectionString: connectionString
+  });
+  await client.connect();
+  return drizzle({
+    client,
+    casing: "snake_case"
   });
 }
+
+export type DBContext = {
+  Variables: {
+    db: DatabaseProvider;
+  };
+} & AppContext;
+
+class TransactionError extends TaggedError("TransactionError")<{
+  message: string;
+  cause?: unknown;
+}>() {}
+
+type TransactionFn = Parameters<DatabaseProvider["transaction"]>[0];
+export type TransactionInstance = Awaited<ReturnType<TransactionFn>>;
+
+const runTransaction = async <T>(
+  db: DatabaseProvider,
+  operation: (db: TransactionInstance) => Promise<Result<T, Error>>
+): Promise<Result<T, TransactionError>> => {
+  return await Result.tryPromise({
+    try: async () => {
+      const result = await db.transaction(async (tx) => {
+        const result = await operation(tx);
+        if (Result.isError(result)) {
+          throw result.error;
+        }
+        return result.value;
+      });
+      return result;
+    },
+    catch: (e) =>
+      new TransactionError({
+        message: "Transaction failed",
+        cause: e
+      })
+  });
+};
