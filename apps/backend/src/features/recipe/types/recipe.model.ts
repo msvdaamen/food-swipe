@@ -1,0 +1,15 @@
+import type { RecipeNutritionEntity } from "../../../schema";
+import type { Nutrition } from "../constants/nutritions";
+
+export type RecipeModel = {
+  id: string;
+  title: string;
+  description: string | null;
+  prepTime: number | null;
+  servings: number | null;
+  isPublished: boolean;
+  coverImageUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  nutrition: Partial<Record<Nutrition, RecipeNutritionEntity>>;
+};

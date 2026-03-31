@@ -9,6 +9,8 @@ import { NotFoundError } from "../../common/errors/not-found.error";
 import { CreatePagination } from "../../common/create-pagination";
 import { DatabaseProvider } from "../../providers/database.provider";
 import { KvStoreProvider } from "../../providers/kvstore.provider";
+import { StorageService } from "../../providers/storage/storage.service";
+import type { UserEntity } from "../../schema";
 import { format } from "date-fns";
 
 export interface UserService {
@@ -26,7 +28,8 @@ export interface UserService {
 export class UserServiceImpl implements UserService {
   constructor(
     private readonly repository: UserRepository,
-    private readonly cache: KvStoreProvider
+    private readonly cache: KvStoreProvider,
+    private readonly storage: StorageService
   ) {}
 
   findById(userId: string): Promise<Result<UserModel, NotFoundError>> {
@@ -42,14 +45,17 @@ export class UserServiceImpl implements UserService {
   }
 
   getProfileImageUrl(filename: string): string {
-    throw new Error("Method not implemented.");
+    return this.storage.getPublicUrl(filename);
   }
 
   updateUser(
     userId: string,
     payload: Partial<UserModel>
   ): Promise<Result<void, UnhandledException>> {
-    return Result.tryPromise(() => this.repository.updateUser(userId, payload));
+    const { imageUrl: _drop, ...entityFields } = payload;
+    return Result.tryPromise(() =>
+      this.repository.updateUser(userId, entityFields as Partial<UserEntity>)
+    );
   }
 
   getUsers(payload: GetUsersDto): Promise<Result<PaginatedData<UserModel>, UnhandledException>> {
@@ -104,7 +110,11 @@ export class UserServiceImpl implements UserService {
   }
 }
 
-export function createUserService(db: DatabaseProvider, cache: KvStoreProvider): UserService {
+export function createUserService(
+  db: DatabaseProvider,
+  cache: KvStoreProvider,
+  storage: StorageService
+): UserService {
   const userRepository = new UserRepositoryImpl(db);
-  return new UserServiceImpl(userRepository, cache);
+  return new UserServiceImpl(userRepository, cache, storage);
 }

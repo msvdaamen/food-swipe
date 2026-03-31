@@ -1,17 +1,15 @@
 import { sValidator } from "@hono/standard-validator";
 import { matchError } from "better-result";
 import { authRouterFactory } from "../auth/router";
-import { getIngredientsDto } from "./dto/get-ingredients.dto";
-import { createIngredientDto } from "./dto/create-ingredient.dto";
-import { updateIngredientDto } from "./dto/update-ingredient.dto";
-import { createIngredientService } from "./service";
+import { createMeasurementDto } from "./dto/create-measurement.dto";
+import { updateMeasurementDto } from "./dto/update-measurement.dto";
+import { createMeasurementService } from "./service";
 
 const app = authRouterFactory.createApp();
 
-app.get("/", sValidator("query", getIngredientsDto), async (c) => {
-  const svc = createIngredientService(c.get("db"));
-  const params = c.req.valid("query");
-  const result = await svc.all(params);
+app.get("/", async (c) => {
+  const svc = createMeasurementService(c.get("db"));
+  const result = await svc.all();
   if (result.isErr()) {
     return matchError(result.error, {
       UnhandledException: () => c.status(500),
@@ -20,8 +18,8 @@ app.get("/", sValidator("query", getIngredientsDto), async (c) => {
   return c.json(result.value);
 });
 
-app.post("/", sValidator("json", createIngredientDto), async (c) => {
-  const svc = createIngredientService(c.get("db"));
+app.post("/", sValidator("json", createMeasurementDto), async (c) => {
+  const svc = createMeasurementService(c.get("db"));
   const payload = c.req.valid("json");
   const result = await svc.create(payload);
   if (result.isErr()) {
@@ -32,8 +30,8 @@ app.post("/", sValidator("json", createIngredientDto), async (c) => {
   return c.json(result.value);
 });
 
-app.put("/:id", sValidator("json", updateIngredientDto), async (c) => {
-  const svc = createIngredientService(c.get("db"));
+app.put("/:id", sValidator("json", updateMeasurementDto), async (c) => {
+  const svc = createMeasurementService(c.get("db"));
   const id = Number(c.req.param("id"));
   const payload = c.req.valid("json");
   const result = await svc.update(id, payload);
@@ -46,7 +44,7 @@ app.put("/:id", sValidator("json", updateIngredientDto), async (c) => {
 });
 
 app.delete("/:id", async (c) => {
-  const svc = createIngredientService(c.get("db"));
+  const svc = createMeasurementService(c.get("db"));
   const id = Number(c.req.param("id"));
   const result = await svc.delete(id);
   if (result.isErr()) {
@@ -54,7 +52,7 @@ app.delete("/:id", async (c) => {
       UnhandledException: () => c.status(500),
     });
   }
-  return c.json({ message: "Ingredient deleted" });
+  return c.json({ message: "Measurement deleted" });
 });
 
-export const ingredientRouter = app;
+export const measurementRouter = app;

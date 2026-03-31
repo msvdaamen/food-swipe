@@ -1,8 +1,9 @@
 import type { Hono } from "hono";
+import type { AppContext } from "../../app-context";
 import { endOfMonth, startOfMonth, sub } from "date-fns";
 import { sValidator } from "@hono/standard-validator";
 import { authRouterFactory } from "../auth/router";
-import { getUsersDto } from "./dto/get-users.dto.js";
+import { getUsersDto } from "./dto/get-users.dto";
 import { kvStorage } from "../../providers/kvstore.provider";
 import { createUserService } from "./service";
 import { matchError, Result } from "better-result";
@@ -10,19 +11,19 @@ import { matchError, Result } from "better-result";
 const app = authRouterFactory.createApp();
 
 app.get("/", sValidator("query", getUsersDto), async (c) => {
-  const userService = createUserService(c.get("db"), kvStorage);
+  const userService = createUserService(c.get("db"), kvStorage, c.get("storage"));
   const payload = c.req.valid("query");
   const result = await userService.getUsers(payload);
   if (result.isErr()) {
     return matchError(result.error, {
-      UnhandledException: () => c.status(500)
+      UnhandledException: () => c.status(500),
     });
   }
-  return c.json(result);
+  return c.json(result.value);
 });
 
 app.get("/stats", async (c) => {
-  const userService = createUserService(c.get("db"), kvStorage);
+  const userService = createUserService(c.get("db"), kvStorage, c.get("storage"));
   const thisMonthStart = startOfMonth(new Date());
   const thisMonthEnd = endOfMonth(new Date());
   const lastMonthStart = startOfMonth(sub(thisMonthStart, { months: 1 }));
@@ -46,10 +47,8 @@ app.get("/stats", async (c) => {
     new: nowStats.new,
     totalLastMonth: lastMonthStats.total,
     activeLastMonth: lastMonthStats.active,
-    newLastMonth: lastMonthStats.new
+    newLastMonth: lastMonthStats.new,
   });
 });
 
-export const registerUserController = (instance: Hono) => {
-  instance.route("/v1/users", app);
-};
+export const userRouter = app;

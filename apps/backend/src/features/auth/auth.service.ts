@@ -1,5 +1,5 @@
 import { Result } from "better-result";
-import { storageService, type StorageService } from "../../providers/storage/storage.service";
+import type { StorageService } from "../../providers/storage/storage.service";
 import { createUserService, UserService } from "../user/service";
 import { KvStoreProvider } from "../../providers/kvstore.provider";
 import { DatabaseProvider } from "../../providers/database.provider";
@@ -33,9 +33,10 @@ export class AuthService {
           );
           return Result.err(uploadResult.error);
         }
-        if (user.image) {
+        const imageKey = user.image;
+        if (imageKey) {
           yield* Result.await(
-            this.storageService.delete(user.image, {
+            this.storageService.delete(imageKey, {
               isPublic: true
             })
           );
@@ -46,7 +47,11 @@ export class AuthService {
   }
 }
 
-export function createAuthService(db: DatabaseProvider, kvStore: KvStoreProvider) {
-  const userService = createUserService(db, kvStore);
-  return new AuthService(storageService, userService);
+export function createAuthService(
+  db: DatabaseProvider,
+  kvStore: KvStoreProvider,
+  storage: StorageService
+) {
+  const userService = createUserService(db, kvStore, storage);
+  return new AuthService(storage, userService);
 }

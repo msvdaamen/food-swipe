@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import { AppContext } from "../..";
+import type { AppContext } from "../../app-context";
 import { AuthUser } from "./auth-user.type";
 
 export type AuthContext = {
