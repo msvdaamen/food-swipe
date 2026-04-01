@@ -9,6 +9,7 @@ import { measurementRouter } from "./features/measurement/router";
 import { ingredientRouter } from "./features/ingredient/router";
 import { recipeBookRouter } from "./features/recipe-book/router";
 import { recipeRouter } from "./features/recipe/router";
+import { HTTPException } from "hono/http-exception";
 
 export type { AppContext } from "./app-context";
 
@@ -20,15 +21,13 @@ app.use(
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
     exposeHeaders: ["Content-Length"],
-    credentials: true,
-  }),
+    credentials: true
+  })
 );
 
 app.get("/", (c) => c.text("Hello World!"));
 
-app.use("/v1/*", setupMiddleware);
-
-app.on(["POST", "GET"], "/v1/auth/*", async (c) => {
+app.on(["POST", "GET"], "/v1/auth/*", setupMiddleware, async (c) => {
   return c.get("auth").handler(c.req.raw);
 });
 
@@ -39,11 +38,22 @@ app.route("/v1/recipe-books", recipeBookRouter);
 app.route("/v1/recipes", recipeRouter);
 app.route("/v1/me", authRouter);
 
-app.get("/v1/test", async (c) => {
+app.get("/v1/test", setupMiddleware, async (c) => {
   const session = await c.get("db").select().from(users);
   return c.json(session);
 });
 
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+  console.error(err.message);
+  if (c.env.ENVIRONMENT !== "production") {
+    return c.json({ error: err.message }, 500);
+  }
+  return c.text("Internal Server Error", 500);
+});
+
 export default {
-  fetch: app.fetch,
+  fetch: app.fetch
 } satisfies ExportedHandler<Env>;

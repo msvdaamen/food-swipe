@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import AppBreadcrumbs from "@/components/app-breadcrumbs";
 import { useWebsocket } from "@/lib/websocket";
 
-export const Route = createFileRoute("/_layout")({
+export const Route = createFileRoute("/(main)")({
   component: Layout,
 });
 

@@ -15,7 +15,7 @@ import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const Route = createFileRoute("/_layout/recipes/recipes")({
+export const Route = createFileRoute("/(main)/recipes/recipes")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Recipes",

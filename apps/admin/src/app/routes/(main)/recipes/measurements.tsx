@@ -16,7 +16,7 @@ import { UpdateMeasurementDialog } from "@/features/measurement/components/updat
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
 import { useDeleteMeasurement } from "@/features/measurement/api/delete-measurement";
 
-export const Route = createFileRoute("/_layout/recipes/measurements")({
+export const Route = createFileRoute("/(main)/recipes/measurements")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Measurements",

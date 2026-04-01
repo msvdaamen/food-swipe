@@ -4,10 +4,11 @@ import { authMiddleware, type AuthContext } from "./auth.middleware";
 import { uploadProfilePictureDto } from "./dto/upload-profile-picture";
 import { createAuthService } from "./auth.service";
 import { kvStorage } from "../../providers/kvstore.provider";
+import { setupMiddleware } from "../../middlewares/setup.middleware";
 
 export const authRouterFactory = createFactory<AuthContext>({
   initApp: (app) => {
-    app.use(authMiddleware);
+    app.use(setupMiddleware, authMiddleware);
   }
 });
 

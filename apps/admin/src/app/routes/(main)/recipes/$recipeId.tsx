@@ -60,7 +60,7 @@ import { useDeleteRecipe } from "@/features/recipes/api/delete-recipe";
 import { useUpdateRecipe } from "@/features/recipes/api/update-recipe";
 import { useRecipeIngredientDelete } from "@/features/recipes/api/ingredients/delete-recipe-ingredient";
 
-export const Route = createFileRoute("/_layout/recipes/$recipeId")({
+export const Route = createFileRoute("/(main)/recipes/$recipeId")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Recipes",

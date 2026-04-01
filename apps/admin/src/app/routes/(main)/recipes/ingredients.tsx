@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 import { CreateIngredientDialog } from "@/features/ingredient/components/create-ingredient.dialog";
 import { IngredientsListView } from "@/features/ingredient/components/ingredients-list.view";
 import { useDebounce } from "@uidotdev/usehooks";
-export const Route = createFileRoute("/_layout/recipes/ingredients")({
+export const Route = createFileRoute("/(main)/recipes/ingredients")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Ingredients",

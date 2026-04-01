@@ -7,7 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_layout/users')({
+export const Route = createFileRoute('/(main)/users')({
   component: RouteComponent,
 })
 

@@ -15,7 +15,7 @@ import {
 import { useUserStats } from "@/features/user/api/get-user-stats";
 import { useUsers } from "@/features/user/api/get-users";
 
-export const Route = createFileRoute("/_layout/activities/login-activity")({
+export const Route = createFileRoute("/(main)/activities/login-activity")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Login Activity",

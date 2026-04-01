@@ -11,10 +11,10 @@ import { createRecipeIngredientDto } from "./dto/create-recipe-ingredient.dto";
 import { updateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto";
 import { updateRecipeNutritionDto } from "./dto/update-nutrition.dto";
 import { likeRecipeDtoSchema } from "./dto/like-recipe.dto";
-import { nutritions } from "./constants/nutritions";
-import type { Nutrition } from "./constants/nutritions";
-import { createRecipeService } from "./service";
-import { createRecipeBookService } from "../recipe-book/service";
+import { nutritions, type Nutrition } from "@food-swipe/types";
+import { createRecipeService } from "./recipe-service";
+import { createRecipeBookService } from "../recipe-book/recipe-book.service";
+import { HTTPException } from "hono/http-exception";
 
 const app = authRouterFactory.createApp();
 
@@ -41,7 +41,7 @@ app.get("/:id", async (c) => {
     if (e instanceof NotFoundError) {
       return c.json({ message: e.message }, 404);
     }
-    return c.status(500);
+    throw new HTTPException(500, { cause: e });
   }
 });
 
@@ -53,10 +53,11 @@ app.post("/", sValidator("json", createRecipeDto), async (c) => {
     const data = await svc.create(payload);
     return c.json(data);
   } catch (e) {
+    console.error(e);
     if (e instanceof NotFoundError) {
       return c.json({ message: e.message }, 404);
     }
-    return c.status(500);
+    throw new HTTPException(500, { cause: e });
   }
 });
 
@@ -261,18 +262,10 @@ app.post("/:id/like", sValidator("json", likeRecipeDtoSchema), async (c) => {
   const id = c.req.param("id");
   const user = c.get("user");
   const { like } = c.req.valid("json");
-  const recipeBooks = createRecipeBookService(c.get("db"));
-  const svc = createRecipeService(c.get("db"), c.get("storage"), recipeBooks);
+  const recipeBookService = createRecipeBookService(c.get("db"));
+  const service = createRecipeService(c.get("db"), c.get("storage"), recipeBookService);
   try {
-    await svc.getById(id);
-  } catch (e) {
-    if (e instanceof NotFoundError) {
-      return c.json({ message: e.message }, 404);
-    }
-    return c.json({ error: "Internal server error" }, 500);
-  }
-  try {
-    const data = await svc.like(user.id, id, like);
+    const data = await service.like(user.id, id, like);
     return c.json(data);
   } catch (e) {
     if (e instanceof NotFoundError) {

@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
 import { useRecipes } from "@/features/recipes/api/get-recipes";
 
-export const Route = createFileRoute("/_layout/activities/recipes-uploaded")({
+export const Route = createFileRoute("/(main)/activities/recipes-uploaded")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Recipes Uploaded",

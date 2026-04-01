@@ -1,0 +1,8 @@
+{
+  "name": "@food-swipe/types",
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^6"
+  }
+}

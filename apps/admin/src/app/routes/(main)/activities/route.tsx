@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_layout/activities")({
+export const Route = createFileRoute("/(main)/activities")({
   component: RouteComponent,
   context: () => ({ breadcrumb: "Activities" }),
 });

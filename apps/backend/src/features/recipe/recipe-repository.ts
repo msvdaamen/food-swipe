@@ -1,68 +1,43 @@
+import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
 import { DatabaseProvider } from "../../providers/database.provider";
-import { StorageService } from "../../providers/storage/storage.service";
-import { NotFoundError } from "../../common/errors/not-found.error";
 import {
   ingredients,
   measurements,
+  RecipeEntity,
   recipeIngredients,
   recipeNutritions,
   recipes,
+  RecipeStepEntity,
   recipeSteps,
   recipesToRecipeBooks,
-  type RecipeEntity,
-  type RecipeNutritionEntity
+  type RecipeNutritionEntity as RecipeNutritionEntitySchema
 } from "../../schema";
-import { and, asc, eq, gt, gte, lt, lte, sql } from "drizzle-orm";
-import type { RecipeModel } from "./types/recipe.model";
-import type { RecipeStepModel } from "./types/recipe-step.model";
-import type { RecipeIngredientModel } from "./types/recipe-ingredient.model";
-import type { LoadRecipesDto } from "./dto/load-recipes.dto";
-import type { CreateRecipeDto } from "./dto/create-recipe.dto";
-import type { UpdateRecipeDto } from "./dto/update-recipe.dto";
-import type { CreateRecipeStepDto } from "./dto/create-recipe-step.dto";
-import type { UpdateRecipeStepDto } from "./dto/update-recipe-step.dto";
-import type { ReorderRecipeStepDto } from "./dto/reorder-recipe-step.dto";
-import type { CreateRecipeIngredientDto } from "./dto/create-recipe-ingredient.dto";
-import type { UpdateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto";
-import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto";
-import type { Nutrition } from "./constants/nutritions";
-import type { AuthUser } from "../auth/auth-user.type";
-import type { RecipeBookService } from "../recipe-book/service";
+import { CreateRecipeDto } from "./dto/create-recipe.dto";
+import { LoadRecipesDto } from "./dto/load-recipes.dto";
+import { UpdateRecipeDto } from "./dto/update-recipe.dto";
+import { Nutrition } from "@food-swipe/types";
+import { NotFoundError } from "../../common/errors/not-found.error";
+import { v7 as uuid } from "uuid";
+import { CreateRecipeStepDto } from "./dto/create-recipe-step.dto";
+import { UpdateRecipeStepDto } from "./dto/update-recipe-step.dto";
+import { ReorderRecipeStepDto } from "./dto/reorder-recipe-step.dto";
+import { CreateRecipeIngredientDto } from "./dto/create-recipe-ingredient.dto";
+import { UpdateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto";
+import { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto";
+import { RecipeRepository } from "./types/interfaces/recipe.repository";
+import {
+  RecipeIngredientModel,
+  RecipeModel,
+  RecipeNutritionModel,
+  RecipeStepModel
+} from "./types/models";
 
-type RecipeNutritionRow = { recipe: RecipeEntity; nutrition: RecipeNutritionEntity | null };
+type RecipeNutritionRow = { recipe: RecipeEntity; nutrition: RecipeNutritionEntitySchema | null };
 
-export class RecipeService {
-  constructor(
-    private readonly db: DatabaseProvider,
-    private readonly storage: StorageService,
-    private readonly recipeBooks: RecipeBookService
-  ) {}
+export class RecipeRepositoryImpl implements RecipeRepository {
+  constructor(private readonly db: DatabaseProvider) {}
 
-  private mapRecipeToModel(
-    results: RecipeNutritionRow[]
-  ): Record<string, RecipeModel> {
-    const recipesMap: Record<string, RecipeModel> = {};
-    for (const result of results) {
-      const recipe: RecipeModel = recipesMap[result.recipe.id] || {
-        ...result.recipe,
-        coverImageUrl: result.recipe.coverImage
-          ? this.storage.getPublicUrl(result.recipe.coverImage)
-          : null,
-        nutrition: {}
-      };
-      if (result.nutrition) {
-        recipe.nutrition[result.nutrition.name as Nutrition] = result.nutrition;
-      }
-      recipesMap[result.recipe.id] = recipe;
-    }
-    return recipesMap;
-  }
-
-  async getAll(user: AuthUser, filters: LoadRecipesDto): Promise<RecipeModel[]> {
-    const f = { ...filters };
-    if (user.role !== "admin") {
-      f.isPublished = true;
-    }
+  async getAll(filters: LoadRecipesDto): Promise<RecipeModel[]> {
     const results = await this.db
       .select({
         recipe: recipes,
@@ -70,7 +45,7 @@ export class RecipeService {
       })
       .from(recipes)
       .where(
-        f.isPublished !== undefined ? eq(recipes.isPublished, f.isPublished) : undefined
+        filters.isPublished !== undefined ? eq(recipes.isPublished, filters.isPublished) : undefined
       )
       .leftJoin(recipeNutritions, eq(recipeNutritions.recipeId, recipes.id))
       .orderBy(asc(recipes.title));
@@ -91,7 +66,7 @@ export class RecipeService {
       throw new NotFoundError({ id: recipeId, message: "Recipe not found" });
     }
     const recipesMap = this.mapRecipeToModel(results);
-    const model = recipesMap[recipeId];
+    const model = recipesMap[0];
     if (!model) {
       throw new NotFoundError({ id: recipeId, message: "Recipe not found" });
     }
@@ -99,41 +74,21 @@ export class RecipeService {
   }
 
   async create(payload: CreateRecipeDto): Promise<RecipeModel> {
+    const id = uuid();
     await this.db.insert(recipes).values({
-      id: payload.id,
+      id,
       title: payload.title,
       description: payload.description || null,
       prepTime: payload.prepTime,
       servings: payload.servings,
       coverImage: payload.coverImage?.trim() || null
     });
-    return this.getById(payload.id);
+    return this.getById(id);
   }
 
   async update(recipeId: string, payload: UpdateRecipeDto): Promise<RecipeModel> {
     await this.db.update(recipes).set(payload).where(eq(recipes.id, recipeId));
     return this.getById(recipeId);
-  }
-
-  async uploadImage(recipeId: string, file: File): Promise<RecipeModel> {
-    const existing = await this.db.select().from(recipes).where(eq(recipes.id, recipeId));
-    const [recipe] = existing;
-    if (!recipe) {
-      throw new NotFoundError({ id: recipeId, message: "Recipe not found" });
-    }
-
-    const coverKey = await this.storage.upload(file, { isPublic: true, path: "recipes" });
-
-    await this.db
-      .update(recipes)
-      .set({ coverImage: coverKey })
-      .where(eq(recipes.id, recipeId));
-
-    if (recipe.coverImage) {
-      await this.storage.delete(recipe.coverImage, { isPublic: true });
-    }
-
-    return this.getById(recipe.id);
   }
 
   async delete(recipeId: string): Promise<void> {
@@ -153,12 +108,7 @@ export class RecipeService {
       await tx
         .update(recipeSteps)
         .set({ stepNumber: sql`${recipeSteps.stepNumber} + 1` })
-        .where(
-          and(
-            eq(recipeSteps.recipeId, recipeId),
-            gte(recipeSteps.stepNumber, payload.order)
-          )
-        );
+        .where(and(eq(recipeSteps.recipeId, recipeId), gte(recipeSteps.stepNumber, payload.order)));
       const [step] = await tx
         .insert(recipeSteps)
         .values({
@@ -186,8 +136,8 @@ export class RecipeService {
     return step;
   }
 
-  deleteStep(recipeId: string, stepId: number): Promise<void> {
-    return this.db.transaction(async (tx) => {
+  async deleteStep(recipeId: string, stepId: number): Promise<void> {
+    return await this.db.transaction(async (tx) => {
       const [step] = await tx
         .delete(recipeSteps)
         .where(and(eq(recipeSteps.id, stepId), eq(recipeSteps.recipeId, recipeId)))
@@ -197,10 +147,7 @@ export class RecipeService {
         .update(recipeSteps)
         .set({ stepNumber: sql`${recipeSteps.stepNumber} - 1` })
         .where(
-          and(
-            eq(recipeSteps.recipeId, recipeId),
-            gt(recipeSteps.stepNumber, step.stepNumber)
-          )
+          and(eq(recipeSteps.recipeId, recipeId), gt(recipeSteps.stepNumber, step.stepNumber))
         );
     });
   }
@@ -209,7 +156,7 @@ export class RecipeService {
     recipeId: string,
     stepId: number,
     { orderTo, orderFrom }: ReorderRecipeStepDto
-  ): Promise<RecipeStepModel[]> {
+  ): Promise<RecipeStepEntity[]> {
     if (orderTo === orderFrom) {
       return this.getSteps(recipeId);
     }
@@ -268,10 +215,7 @@ export class RecipeService {
     }));
   }
 
-  async getIngredient(
-    recipeId: string,
-    ingredientId: number
-  ): Promise<RecipeIngredientModel> {
+  async getIngredient(recipeId: string, ingredientId: number): Promise<RecipeIngredientModel> {
     const [row] = await this.db
       .select({
         recipeIngredient: recipeIngredients,
@@ -339,8 +283,8 @@ export class RecipeService {
       );
   }
 
-  getNutrition(recipeId: string): Promise<RecipeNutritionEntity[]> {
-    return this.db
+  async getNutrition(recipeId: string): Promise<RecipeNutritionModel[]> {
+    return await this.db
       .select()
       .from(recipeNutritions)
       .where(eq(recipeNutritions.recipeId, recipeId))
@@ -351,7 +295,7 @@ export class RecipeService {
     recipeId: string,
     name: Nutrition,
     payload: UpdateRecipeNutritionDto
-  ): Promise<RecipeNutritionEntity> {
+  ): Promise<RecipeNutritionModel> {
     const [nutrition] = await this.db
       .insert(recipeNutritions)
       .values({ recipeId, name, ...payload })
@@ -364,31 +308,41 @@ export class RecipeService {
     return nutrition;
   }
 
-  async like(userId: string, recipeId: string, like: boolean): Promise<RecipeModel> {
-    const recipeBook = await this.recipeBooks.getLikedRecipeBook(userId);
+  async like(recipeBookId: number, recipeId: string, like: boolean): Promise<RecipeModel> {
     if (!like) {
       await this.db
         .delete(recipesToRecipeBooks)
         .where(
           and(
-            eq(recipesToRecipeBooks.recipeBookId, recipeBook.id),
+            eq(recipesToRecipeBooks.recipeBookId, recipeBookId),
             eq(recipesToRecipeBooks.recipeId, recipeId)
           )
         );
     } else {
       await this.db
         .insert(recipesToRecipeBooks)
-        .values({ recipeBookId: recipeBook.id, recipeId })
+        .values({ recipeBookId: recipeBookId, recipeId })
         .onConflictDoNothing();
     }
     return this.getById(recipeId);
   }
-}
 
-export function createRecipeService(
-  db: DatabaseProvider,
-  storage: StorageService,
-  recipeBooks: RecipeBookService
-): RecipeService {
-  return new RecipeService(db, storage, recipeBooks);
+  private mapRecipeToModel(results: RecipeNutritionRow[]): RecipeModel[] {
+    const recipesMap = new Map<string, RecipeModel>();
+    const recipeIds: string[] = [];
+    for (const result of results) {
+      if (!recipesMap.has(result.recipe.id)) {
+        recipeIds.push(result.recipe.id);
+      }
+      const recipe: RecipeModel = recipesMap.get(result.recipe.id) || {
+        ...result.recipe,
+        nutrition: {}
+      };
+      if (result.nutrition) {
+        recipe.nutrition[result.nutrition.name as Nutrition] = result.nutrition;
+      }
+      recipesMap.set(result.recipe.id, recipe);
+    }
+    return recipeIds.map((id) => recipesMap.get(id)!);
+  }
 }
