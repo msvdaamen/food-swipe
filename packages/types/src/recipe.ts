@@ -41,7 +41,7 @@ export type RecipeIngredient = {
     servings: number | null;
     isPublished: boolean;
     coverImageUrl: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     nutrition: Partial<Record<Nutrition, RecipeNutrition>>;
   };

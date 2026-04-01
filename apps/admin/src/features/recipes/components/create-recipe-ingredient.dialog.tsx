@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ComboBox } from "@/components/ui/combobox";
 import { Ingredient } from "@/features/ingredient/types/ingredient.type";
 import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
@@ -88,7 +87,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
             children={(field) => (
               <>
                 <Label>Ingredient</Label>
-                <ComboBox<Ingredient>
+                {/* <ComboBox<Ingredient>
                   items={ingredients.data}
                   value={field.state.value?.toString() ?? ""}
                   onValueChange={(value) => {
@@ -103,7 +102,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                   onSearchChange={(search) => {
                     setSearch(search);
                   }}
-                />
+                /> */}
               </>
             )}
           />
@@ -134,7 +133,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                   <Label>Measurement</Label>
                   <Select
                     defaultValue={field.state.value?.toString() ?? ""}
-                    onValueChange={(value: string) =>
+                    onValueChange={(value: string | null) =>
                       field.handleChange(value ? Number(value) : null)
                     }
                   >

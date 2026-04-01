@@ -91,7 +91,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
             children={(field) => (
               <>
                 <Label>Ingredient</Label>
-                <ComboBox<Ingredient>
+                {/* <ComboBox<Ingredient>
                   items={ingredients.data}
                   value={field.state.value?.toString() ?? ""}
                   onValueChange={(value) => {
@@ -106,7 +106,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
                   onSearchChange={(search) => {
                     setSearch(search);
                   }}
-                />
+                /> */}
               </>
             )}
           />
@@ -137,7 +137,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
                   <Label>Measurement</Label>
                   <Select
                     value={field.state.value?.toString() ?? ""}
-                    onValueChange={(value: string) =>
+                    onValueChange={(value: string | null) =>
                       field.handleChange(value ? Number(value) : null)
                     }
                   >

@@ -11,7 +11,6 @@ import type { CreateRecipeIngredientDto } from "./dto/create-recipe-ingredient.d
 import type { UpdateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto";
 import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto";
 import type { AuthUser } from "../auth/auth-user.type";
-import type { RecipeBookService } from "../recipe-book/recipe-book.service";
 import { RecipeRepositoryImpl } from "./recipe-repository";
 import type { RecipeService } from "./types/interfaces/recipe.service";
 import { RecipeRepository } from "./types/interfaces/recipe.repository";
@@ -23,6 +22,7 @@ import {
   Nutrition
 } from "@food-swipe/types";
 import { RecipeModel } from "./types/models";
+import { RecipeBookService } from "../recipe-book/types/interfaces/recipe-book.service";
 
 class RecipeServiceImpl implements RecipeService {
   constructor(
@@ -155,6 +155,8 @@ class RecipeServiceImpl implements RecipeService {
   private mapFromModel(model: RecipeModel): Recipe {
     return {
       ...model,
+      createdAt: model.createdAt.toISOString(),
+      updatedAt: model.updatedAt.toISOString(),
       coverImageUrl: model.coverImage ? this.storage.getPublicUrl(model.coverImage) : null
     };
   }

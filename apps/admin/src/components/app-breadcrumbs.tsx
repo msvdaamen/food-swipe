@@ -43,19 +43,17 @@ export default function AppBreadcrumbs() {
                 "hover:text-normal": !!breadcrumb.path,
               })}
             >
-              <BreadcrumbLink asChild>
-                {breadcrumb.path ? (
-                  <Link to={breadcrumb.path}>{breadcrumb.title}</Link>
-                ) : (
-                  <div className="hover:text-muted-foreground">
-                    {breadcrumb.title}
-                  </div>
-                )}
-              </BreadcrumbLink>
+              <BreadcrumbLink
+                render={() =>
+                  breadcrumb.path ? (
+                    <Link to={breadcrumb.path}>{breadcrumb.title}</Link>
+                  ) : (
+                    <div className="hover:text-muted-foreground">{breadcrumb.title}</div>
+                  )
+                }
+              ></BreadcrumbLink>
             </BreadcrumbItem>
-            {index < array.length - 1 ? (
-              <BreadcrumbSeparator className="hidden md:block" />
-            ) : null}
+            {index < array.length - 1 ? <BreadcrumbSeparator className="hidden md:block" /> : null}
           </Fragment>
         ))}
       </BreadcrumbList>

@@ -1,10 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "backend",
+  "name": "food-swipe-backend",
   "main": "src/index.ts",
   "compatibility_date": "2026-03-10",
   "observability": {
     "enabled": true
+  },
+  "route": {
+    "pattern": "api.food-swipe.app",
+    "custom_domain": true
   },
   "upload_source_maps": true,
   "compatibility_flags": ["nodejs_compat"],
@@ -17,10 +21,10 @@
   "env": {
     "production": {
       "vars": {
-        "API_URL": "http://localhost:8787",
-        "WEB_URL": "http://localhost:5173",
+        "API_URL": "https://api.food-swipe.app",
+        "WEB_URL": "https://admin.food-swipe.app",
         "ENVIRONMENT": "production",
-        "STORAGE_PUBLIC_URL": "https://your-public-r2-domain.example"
+        "STORAGE_PUBLIC_URL": "https://static.food-swipe.app"
       },
       "kv_namespaces": [
         {
@@ -31,7 +35,7 @@
       "hyperdrive": [
         {
           "binding": "HYPERDRIVE",
-          "id": "<YOUR_HYPERDRIVE_ID>"
+          "id": "957ba740f64444dca2a77e5862dfcb34"
         }
       ],
       "r2_buckets": [
@@ -55,7 +59,7 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "<YOUR_HYPERDRIVE_ID>",
+      "id": "957ba740f64444dca2a77e5862dfcb34",
       "localConnectionString": "postgresql://postgres:postgres@localhost:5432/food-swipe"
     }
   ],
