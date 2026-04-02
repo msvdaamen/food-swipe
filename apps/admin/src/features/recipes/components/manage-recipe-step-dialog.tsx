@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,14 +27,14 @@ interface ManageRecipeStepDialogProps {
 
 const validator = type({
   description: "string > 0",
-  order: "number",
+  order: "number"
 });
 
 export function ManageRecipeStepDialog({
   recipeId,
   stepId,
   isOpen,
-  onClose,
+  onClose
 }: ManageRecipeStepDialogProps) {
   const queryClient = useQueryClient();
   const createStep = useRecipeStepCreate();
@@ -42,10 +42,10 @@ export function ManageRecipeStepDialog({
   const form = useForm({
     defaultValues: {
       description: "",
-      order: 1,
+      order: 1
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       if (stepId) {
@@ -55,16 +55,12 @@ export function ManageRecipeStepDialog({
       }
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   useEffect(() => {
     if (stepId) {
-      const steps = queryClient.getQueryData<RecipeStep[]>([
-        "recipe",
-        recipeId,
-        "steps",
-      ]);
+      const steps = queryClient.getQueryData<RecipeStep[]>(["recipe", recipeId, "steps"]);
       const step = steps?.find((step) => step.id === stepId);
       if (step) {
         form.setFieldValue("description", step.description);
@@ -74,11 +70,7 @@ export function ManageRecipeStepDialog({
   }, [form, queryClient, recipeId, stepId]);
 
   useEffect(() => {
-    const steps = queryClient.getQueryData<RecipeStep[]>([
-      "recipe",
-      recipeId,
-      "steps",
-    ]);
+    const steps = queryClient.getQueryData<RecipeStep[]>(["recipe", recipeId, "steps"]);
     if (steps) {
       form.setFieldValue("order", steps.length + 1);
     }

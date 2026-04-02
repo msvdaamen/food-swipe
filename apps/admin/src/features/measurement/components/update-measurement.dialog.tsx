@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -25,13 +25,13 @@ interface UpdateMeasurementProps {
 
 const validator = type({
   name: "string",
-  abbreviation: "string",
+  abbreviation: "string"
 });
 
 export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
   isOpen,
   onClose,
-  measurementId,
+  measurementId
 }) => {
   const queryClient = useQueryClient();
   const updateMeasurement = useUpdateMeasurement();
@@ -39,30 +39,26 @@ export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
   const form = useForm({
     defaultValues: {
       name: "",
-      abbreviation: "",
+      abbreviation: ""
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       await updateMeasurement.mutateAsync({
         measurementId,
-        data: value,
+        data: value
       });
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   useEffect(() => {
-    const measurements = queryClient.getQueryData<Measurement[]>([
-      "measurements",
-    ]);
+    const measurements = queryClient.getQueryData<Measurement[]>(["measurements"]);
     if (!measurements) return;
 
-    const measurement = measurements.find(
-      (measurement) => measurement.id === measurementId
-    );
+    const measurement = measurements.find((measurement) => measurement.id === measurementId);
     form.setFieldValue("name", measurement?.name || "");
     form.setFieldValue("abbreviation", measurement?.abbreviation || "");
   }, [isOpen, measurementId, queryClient, form]);

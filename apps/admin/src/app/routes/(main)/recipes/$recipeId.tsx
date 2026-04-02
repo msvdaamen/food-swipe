@@ -10,13 +10,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
+  DragEndEvent
 } from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-  verticalListSortingStrategy,
+  verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CircleHelp, GripVertical, Loader, Pencil, Trash } from "lucide-react";
@@ -26,7 +26,7 @@ import {
   Nutrition,
   nutritionOrder,
   NutritionUnit,
-  nutritionUnits,
+  nutritionUnits
 } from "@/features/recipes/constants/nutritions";
 import { RecipeNutrition } from "@/features/recipes/types/recipe-nutrition.type";
 import { SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,13 +38,10 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { ManageRecipeStepDialog } from "@/features/recipes/components/manage-recipe-step-dialog";
-import {
-  restrictToParentElement,
-  restrictToVerticalAxis,
-} from "@dnd-kit/modifiers";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { RecipeStep } from "@/features/recipes/types/recipe-step.type";
 import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
 import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
@@ -63,8 +60,8 @@ import { useRecipeIngredientDelete } from "@/features/recipes/api/ingredients/de
 export const Route = createFileRoute("/(main)/recipes/$recipeId")({
   component: RouteComponent,
   context: () => ({
-    breadcrumb: "Recipes",
-  }),
+    breadcrumb: "Recipes"
+  })
 });
 
 function RouteComponent() {
@@ -74,7 +71,7 @@ function RouteComponent() {
   const deleteRecipe = useDeleteRecipe({
     onSuccess: () => {
       navigate({ to: "/recipes/recipes" });
-    },
+    }
   });
 
   const updateRecipe = useUpdateRecipe();
@@ -86,15 +83,12 @@ function RouteComponent() {
     deleteRecipe.mutate(id);
   };
 
-  const handleUpdateRecipe = async (
-    field: string,
-    value: string | number | boolean
-  ) => {
+  const handleUpdateRecipe = async (field: string, value: string | number | boolean) => {
     updateRecipe.mutate({
       recipeId,
       data: {
-        [field]: value,
-      },
+        [field]: value
+      }
     });
   };
 
@@ -120,10 +114,7 @@ function RouteComponent() {
     <>
       <div className="p-4">
         <div className="flex justify-end">
-          <Button
-            variant="destructive"
-            onClick={() => handleDeleteRecipe(recipe.id)}
-          >
+          <Button variant="destructive" onClick={() => handleDeleteRecipe(recipe.id)}>
             Delete
           </Button>
         </div>
@@ -144,12 +135,7 @@ function RouteComponent() {
                   <CircleHelp />
                 </div>
               )}
-              <input
-                type="file"
-                hidden
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-              />
+              <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} />
             </div>
 
             <div className="mt-4 flex gap-2">
@@ -185,18 +171,14 @@ function RouteComponent() {
               <Textarea
                 className="w-full rounded-md border p-2"
                 defaultValue={recipe.description}
-                onBlur={(e) =>
-                  handleUpdateRecipe("description", e.target.value)
-                }
+                onBlur={(e) => handleUpdateRecipe("description", e.target.value)}
               />
             </p>
             <div className="mt-1 flex gap-2">
               <Checkbox
                 id="is-published"
                 defaultChecked={recipe.isPublished}
-                onCheckedChange={(checked) =>
-                  handleUpdateRecipe("isPublished", !!checked)
-                }
+                onCheckedChange={(checked) => handleUpdateRecipe("isPublished", !!checked)}
               />
               <Label htmlFor="is-published">Is published</Label>
             </div>
@@ -216,8 +198,7 @@ function RouteComponent() {
 function Ingredients({ recipeId }: { recipeId: string }) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] =
-    useState<RecipeIngredient | null>(null);
+  const [selectedIngredient, setSelectedIngredient] = useState<RecipeIngredient | null>(null);
   const { data: ingredients, isLoading } = useRecipeIngredients(recipeId);
   const deleteIngredient = useRecipeIngredientDelete();
 
@@ -265,11 +246,7 @@ function Ingredients({ recipeId }: { recipeId: string }) {
                 {ingredient.measurement}
               </div>
               <div className="flex min-w-28 flex-shrink gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => openUpdateDialog(ingredient)}
-                >
+                <Button variant="ghost" size="sm" onClick={() => openUpdateDialog(ingredient)}>
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button
@@ -278,7 +255,7 @@ function Ingredients({ recipeId }: { recipeId: string }) {
                   onClick={() =>
                     deleteIngredient.mutate({
                       recipeId,
-                      ingredientId: ingredient.ingredientId,
+                      ingredientId: ingredient.ingredientId
                     })
                   }
                 >
@@ -312,13 +289,11 @@ function Steps({ recipeId }: { recipeId: string }) {
   const deleteStep = useRecipeStepDelete(recipeId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeStepId, setActiveStepId] = useState<number | undefined>(
-    undefined
-  );
+  const [activeStepId, setActiveStepId] = useState<number | undefined>(undefined);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates
     })
   );
 
@@ -345,18 +320,14 @@ function Steps({ recipeId }: { recipeId: string }) {
     const oldIndex = steps?.findIndex((step) => step.id === Number(active.id));
     const newIndex = steps?.findIndex((step) => step.id === Number(over?.id));
 
-    if (
-      active.id !== over?.id &&
-      oldIndex !== undefined &&
-      newIndex !== undefined
-    ) {
+    if (active.id !== over?.id && oldIndex !== undefined && newIndex !== undefined) {
       reorderSteps.mutate({
         recipeId,
         stepId: Number(active.id),
         data: {
           orderFrom: oldIndex + 1,
-          orderTo: newIndex + 1,
-        },
+          orderTo: newIndex + 1
+        }
       });
     }
   };
@@ -414,26 +385,21 @@ function Steps({ recipeId }: { recipeId: string }) {
 function SortableStep({
   step,
   update,
-  remove,
+  remove
 }: {
   step: RecipeStep;
   update: (id: number) => void;
   remove: (id: number) => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: step.id });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: step.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="t-row flex items-center px-2 py-1 border-t"
-    >
+    <div ref={setNodeRef} style={style} className="t-row flex items-center px-2 py-1 border-t">
       <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
       <div className="description flex-grow">{step.description}</div>
       <div className="flex min-w-28 flex-shrink gap-1">
@@ -471,7 +437,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
           recipeId,
           name,
           value: 0,
-          unit: "g",
+          unit: "g"
         });
       }
     }
@@ -480,26 +446,18 @@ function Nutritions({ recipeId }: { recipeId: string }) {
 
   const updateNutritionMutation = useRecipeNutritionUpdate();
 
-  const updateNutritionValue = (
-    name: Nutrition,
-    unit: NutritionUnit,
-    value: number
-  ) => {
+  const updateNutritionValue = (name: Nutrition, unit: NutritionUnit, value: number) => {
     updateNutrition(name, unit, Number(value));
   };
 
-  const updateNutrition = (
-    name: Nutrition,
-    unit: NutritionUnit,
-    value: number
-  ) => {
+  const updateNutrition = (name: Nutrition, unit: NutritionUnit, value: number) => {
     updateNutritionMutation.mutate({
       recipeId,
       name,
       data: {
         unit,
-        value,
-      },
+        value
+      }
     });
   };
 
@@ -531,11 +489,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                     type="number"
                     min={0}
                     onBlur={(e) =>
-                      updateNutritionValue(
-                        nutrition.name,
-                        nutrition.unit,
-                        e.target.valueAsNumber
-                      )
+                      updateNutritionValue(nutrition.name, nutrition.unit, e.target.valueAsNumber)
                     }
                   />
                 </TableCell>
@@ -543,11 +497,7 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                   <Select
                     defaultValue={nutrition.unit}
                     onValueChange={(value) =>
-                      updateNutritionValue(
-                        nutrition.name,
-                        value as NutritionUnit,
-                        nutrition.value
-                      )
+                      updateNutritionValue(nutrition.name, value as NutritionUnit, nutrition.value)
                     }
                   >
                     <SelectTrigger className="w-full">

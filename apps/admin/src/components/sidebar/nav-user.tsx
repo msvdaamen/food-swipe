@@ -10,20 +10,20 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
+  useSidebar
 } from "@/components/ui/sidebar";
 import { getWebsocketClient } from "@/lib/websocket";
 import { useRouter } from "@tanstack/react-router";
 import { useSignOut } from "@/features/auth/api/sign-out";
 
 export function NavUser({
-  user,
+  user
 }: {
   user: {
     name: string;

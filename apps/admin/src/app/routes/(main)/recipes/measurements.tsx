@@ -9,7 +9,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { CreateMeasurementDialog } from "@/features/measurement/components/create-measurement.dialog";
 import { UpdateMeasurementDialog } from "@/features/measurement/components/update-measurement.dialog";
@@ -19,21 +19,19 @@ import { useDeleteMeasurement } from "@/features/measurement/api/delete-measurem
 export const Route = createFileRoute("/(main)/recipes/measurements")({
   component: RouteComponent,
   context: () => ({
-    breadcrumb: "Measurements",
-  }),
+    breadcrumb: "Measurements"
+  })
 });
 
 function RouteComponent() {
   const [search, setSearch] = useState("");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const [selectedMeasurementId, setSelectedMeasurementId] = useState<
-    number | null
-  >(null);
+  const [selectedMeasurementId, setSelectedMeasurementId] = useState<number | null>(null);
 
   const { data, isError, error, isPending } = useMeasurements();
   const deleteMeasurement = useDeleteMeasurement();
-  
+
   const openCreateMeasurementDialog = () => {
     setIsCreateOpen(true);
   };
@@ -105,18 +103,14 @@ function RouteComponent() {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() =>
-                            openUpdateMeasurementDialog(measurement.id)
-                          }
+                          onClick={() => openUpdateMeasurementDialog(measurement.id)}
                         >
                           <PencilIcon className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="destructive"
                           size="icon"
-                          onClick={() =>
-                            deleteMeasurement.mutate(measurement.id)
-                          }
+                          onClick={() => deleteMeasurement.mutate(measurement.id)}
                         >
                           <TrashIcon className="h-4 w-4" />
                         </Button>
@@ -127,10 +121,7 @@ function RouteComponent() {
           </TableBody>
         </Table>
       </div>
-      <CreateMeasurementDialog
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-      />
+      <CreateMeasurementDialog isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
       <UpdateMeasurementDialog
         isOpen={isUpdateOpen}
         onClose={closeUpdateMeasurementDialog}

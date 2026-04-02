@@ -4,7 +4,7 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 } from "./ui/pagination";
 
 import { Pagination } from "./ui/pagination";
@@ -18,7 +18,7 @@ interface AppPaginationProps {
 export default function AppPagination({
   totalPages,
   currentPage,
-  onPageChange,
+  onPageChange
 }: AppPaginationProps) {
   const getPageNumbers = () => {
     const delta = 1; // Number of pages to show before and after current page
@@ -57,9 +57,7 @@ export default function AppPagination({
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-            className={
-              currentPage === 1 ? "pointer-events-none opacity-50" : ""
-            }
+            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
 
@@ -82,12 +80,8 @@ export default function AppPagination({
 
         <PaginationItem>
           <PaginationNext
-            onClick={() =>
-              currentPage < totalPages && onPageChange(currentPage + 1)
-            }
-            className={
-              currentPage === totalPages ? "pointer-events-none opacity-50" : ""
-            }
+            onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
+            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
       </PaginationContent>

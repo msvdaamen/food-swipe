@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { ComboBox } from "@/components/ui/combobox";
 import { RecipeIngredient } from "../types/recipe-ingredient.type";
@@ -38,20 +38,20 @@ interface UpdateRecipeIngredientProps {
 const validator = type({
   ingredientId: "number",
   amount: "number",
-  measurementId: "number?",
+  measurementId: "number?"
 });
 
 export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
   isOpen,
   onClose,
   recipeId,
-  ingredient,
+  ingredient
 }) => {
   const updateIngredient = useRecipeIngredientUpdate();
   const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
-    amount: 100,
+    amount: 100
   });
   const { data: measurements = [] as Measurement[] } = useMeasurements();
 
@@ -59,10 +59,10 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
     defaultValues: {
       ingredientId: ingredient.ingredientId || null,
       amount: ingredient.amount || null,
-      measurementId: ingredient.measurementId || null,
+      measurementId: ingredient.measurementId || null
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       await updateIngredient.mutateAsync({
@@ -70,12 +70,12 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
         ingredientId: ingredient.ingredientId,
         data: {
           amount: Number(value.amount),
-          measurementId: value.measurementId,
-        },
+          measurementId: value.measurementId
+        }
       });
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   return (

@@ -9,8 +9,8 @@ export type CreateRecipeIngredientInput = {
     ingredientId: number;
     amount: number;
     measurementId: number | null;
-  }
-}
+  };
+};
 
 export const createRecipeIngredient = async (payload: CreateRecipeIngredientInput) => {
   const response = await api.fetch(`/v1/recipes/${payload.recipeId}/ingredients`, {
@@ -18,7 +18,7 @@ export const createRecipeIngredient = async (payload: CreateRecipeIngredientInpu
     body: JSON.stringify(payload.data)
   });
   return response.json() as Promise<RecipeIngredient>;
-}
+};
 
 export const useRecipeIngredientCreate = () => {
   const queryClient = useQueryClient();
@@ -29,6 +29,6 @@ export const useRecipeIngredientCreate = () => {
         getRecipeIngredientsQueryOptions(ingredient.recipeId).queryKey,
         (old) => [...(old || []), ingredient]
       );
-    },
+    }
   });
 };

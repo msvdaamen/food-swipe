@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -21,27 +21,24 @@ interface ImportRecipeDialogProps {
 }
 
 const validator = type({
-  url: "string",
+  url: "string"
 });
 
-export const ImportRecipeDialog: FC<ImportRecipeDialogProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const ImportRecipeDialog: FC<ImportRecipeDialogProps> = ({ isOpen, onClose }) => {
   const importRecipe = useRecipeImport();
 
   const form = useForm({
     defaultValues: {
-      url: "",
+      url: ""
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
-      const {recipeId} = await importRecipe.mutateAsync(value.url);
+      const { recipeId } = await importRecipe.mutateAsync(value.url);
       formApi.reset();
       onClose(recipeId);
-    },
+    }
   });
 
   return (

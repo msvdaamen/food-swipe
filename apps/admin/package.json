@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "preview": "vite preview",
-    "deploy": "wrangler deploy -e production"
+    "deploy": "wrangler deploy -e production",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

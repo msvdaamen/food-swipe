@@ -10,7 +10,7 @@ export const getRecipeNutrition = async (recipeId: string) => {
 export const getRecipeNutritionQueryOptions = (recipeId: string) => {
   return queryOptions({
     queryKey: ["recipes", recipeId, "nutrition"],
-    queryFn: () => getRecipeNutrition(recipeId),
+    queryFn: () => getRecipeNutrition(recipeId)
   });
 };
 

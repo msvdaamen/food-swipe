@@ -10,7 +10,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { useUserStats } from "@/features/user/api/get-user-stats";
 import { useUsers } from "@/features/user/api/get-users";
@@ -19,8 +19,8 @@ export const Route = createFileRoute("/(main)/activities/login-activity")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Login Activity",
-    path: "/activities/login-activity",
-  }),
+    path: "/activities/login-activity"
+  })
 });
 
 function RouteComponent() {
@@ -63,7 +63,7 @@ function UsersTable() {
   const { data, isLoading, isError, error, isPending } = useUsers({
     amount: 10,
     page,
-    sort: "id",
+    sort: "id"
   });
 
   const loadingArr = Array(5).fill(null);
@@ -97,9 +97,7 @@ function UsersTable() {
                   <TableRow key={user.id}>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.username}</TableCell>
-                    <TableCell>
-                      {user.name}
-                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
                     <TableCell className="whitespace-nowrap">
                       {format(new Date(user.createdAt), "MM/dd/yyyy")}
                     </TableCell>
@@ -159,11 +157,7 @@ function StatsCard(props: PropsWithoutRef<StatsCardProps>) {
                     : "border-green-600 text-green-600 dark:border-green-500 dark:text-green-500"
                 }`}
               >
-                {percentage > 0 ? (
-                  <ArrowUp className="size-4" />
-                ) : (
-                  <ArrowDown className="size-4" />
-                )}
+                {percentage > 0 ? <ArrowUp className="size-4" /> : <ArrowDown className="size-4" />}
                 {Math.abs(percentage).toFixed(0)}%
               </div>
             </div>

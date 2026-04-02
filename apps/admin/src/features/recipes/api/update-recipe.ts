@@ -39,11 +39,8 @@ export const useUpdateRecipe = (config: UseUpdateRecipeOptions = {}) => {
       const [recipe] = args;
       queryClient.invalidateQueries(getRecipesQueryOptions());
 
-      queryClient.setQueryData<Recipe>(
-        getRecipeQueryOptions(recipe.id).queryKey,
-        recipe
-      );
+      queryClient.setQueryData<Recipe>(getRecipeQueryOptions(recipe.id).queryKey, recipe);
       onSuccess?.(...args);
-    },
+    }
   });
 };

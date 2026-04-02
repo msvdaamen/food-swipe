@@ -12,13 +12,14 @@ export type UpdateRecipeIngredientInput = {
   };
 };
 
-export const updateRecipeIngredient = async (
-  payload: UpdateRecipeIngredientInput
-) => {
-  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`, {
-    method: 'PUT',
-    body: JSON.stringify(payload.data)
-  });
+export const updateRecipeIngredient = async (payload: UpdateRecipeIngredientInput) => {
+  const response = await api.fetch(
+    `/v1/recipes/${payload.recipeId}/ingredients/${payload.ingredientId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(payload.data)
+    }
+  );
   return response.json() as Promise<RecipeIngredient>;
 };
 
@@ -29,11 +30,8 @@ export const useRecipeIngredientUpdate = () => {
     onSuccess: (ingredient) => {
       queryClient.setQueryData<RecipeIngredient[]>(
         getRecipeIngredientsQueryOptions(ingredient.recipeId).queryKey,
-        (old) =>
-          old?.map((i) =>
-            i.ingredientId === ingredient.ingredientId ? ingredient : i
-          )
+        (old) => old?.map((i) => (i.ingredientId === ingredient.ingredientId ? ingredient : i))
       );
-    },
+    }
   });
 };

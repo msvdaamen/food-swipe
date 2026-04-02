@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { Ingredient } from "@/features/ingredient/types/ingredient.type";
 import { Measurement } from "@/features/measurement/types/measurement.type";
@@ -35,19 +35,19 @@ interface CreateRecipeIngredientProps {
 const validator = type({
   ingredientId: "number",
   amount: "number",
-  measurementId: "number?",
+  measurementId: "number?"
 });
 
 export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   isOpen,
   onClose,
-  recipeId,
+  recipeId
 }) => {
   const createIngredient = useRecipeIngredientCreate();
   const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
-    amount: 100,
+    amount: 100
   });
   const { data: measurements = [] as Measurement[] } = useMeasurements();
 
@@ -55,10 +55,10 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
     defaultValues: {
       ingredientId: null as number | null,
       amount: null as number | null,
-      measurementId: null as number | null,
+      measurementId: null as number | null
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       await createIngredient.mutateAsync({
@@ -66,12 +66,12 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
         data: {
           amount: Number(value.amount),
           measurementId: value.measurementId,
-          ingredientId: value.ingredientId!,
-        },
+          ingredientId: value.ingredientId!
+        }
       });
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   return (

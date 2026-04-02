@@ -2,11 +2,7 @@ import { objectToSearchParams } from "@/lib/utils";
 import { Ingredient } from "../types/ingredient.type";
 import { PaginatedData } from "@/types/paginated-data";
 import { api } from "@/lib/api";
-import {
-  keepPreviousData,
-  queryOptions,
-  useQuery,
-} from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
 
 export type GetIngredientsInput = {
   search?: string;
@@ -27,7 +23,7 @@ export const getIngredientsQueryOptions = (payload: GetIngredientsInput) =>
   queryOptions({
     queryKey: ["ingredients", payload],
     queryFn: () => getIngredients(payload),
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousData
   });
 
 export const useIngredients = (payload: GetIngredientsInput) =>

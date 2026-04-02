@@ -17,15 +17,17 @@ export const recipeImportStatusses = [
   "done"
 ] as const;
 
-export type RecipeImportStatus = typeof recipeImportStatusses[number];
+export type RecipeImportStatus = (typeof recipeImportStatusses)[number];
 
 export const useImportingRecipeStore = create<State>()((set, get) => ({
   recipesStatus: {},
-  addStatus: (recipeId: string, status: RecipeImportStatus) => set((state) => ({ recipesStatus: { ...state.recipesStatus, [recipeId]: status } })),
-  updateStatus: (recipeId: string, status: RecipeImportStatus) => set((state) => ({ recipesStatus: { ...state.recipesStatus, [recipeId]: status } })),
+  addStatus: (recipeId: string, status: RecipeImportStatus) =>
+    set((state) => ({ recipesStatus: { ...state.recipesStatus, [recipeId]: status } })),
+  updateStatus: (recipeId: string, status: RecipeImportStatus) =>
+    set((state) => ({ recipesStatus: { ...state.recipesStatus, [recipeId]: status } })),
   removeStatus: (recipeId: string) => {
     const statuses = { ...get().recipesStatus };
     delete statuses[recipeId];
     set({ recipesStatus: statuses });
-  },
+  }
 }));

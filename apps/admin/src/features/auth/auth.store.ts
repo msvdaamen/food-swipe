@@ -12,7 +12,7 @@ type State = {
 
 const initialState: State = {
   accessToken: localStorage.getItem(ACCESS_TOKEN_KEY),
-  refreshToken: localStorage.getItem(REFRESH_TOKEN_KEY),
+  refreshToken: localStorage.getItem(REFRESH_TOKEN_KEY)
 };
 
 export const useAuthStore = create(
@@ -25,7 +25,7 @@ export const useAuthStore = create(
       setRefreshToken(refreshToken: string) {
         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         set({ refreshToken });
-      },
+      }
     }))
   )
 );

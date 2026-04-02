@@ -5,7 +5,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
@@ -15,8 +15,8 @@ export const Route = createFileRoute("/(main)/activities/recipes-uploaded")({
   component: RouteComponent,
   context: () => ({
     breadcrumb: "Recipes Uploaded",
-    path: "/activities/recipes-uploaded",
-  }),
+    path: "/activities/recipes-uploaded"
+  })
 });
 
 function RouteComponent() {
@@ -28,9 +28,7 @@ function RouteComponent() {
     <div className="space-y-4">
       <div className="space-y-1">
         <h1 className="text-2xl font-medium">Uploaded recipes</h1>
-        <p className="text-sm text-muted-foreground">
-          Recipes that are uploaded from the app
-        </p>
+        <p className="text-sm text-muted-foreground">Recipes that are uploaded from the app</p>
       </div>
 
       <div className="rounded-md border">
@@ -59,7 +57,7 @@ function RouteComponent() {
                     onClick={() =>
                       navigate({
                         to: "/recipes/$recipeId",
-                        params: { recipeId: recipe.id },
+                        params: { recipeId: recipe.id }
                       })
                     }
                   >

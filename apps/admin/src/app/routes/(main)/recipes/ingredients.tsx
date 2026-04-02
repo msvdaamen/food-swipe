@@ -9,8 +9,8 @@ import { useDebounce } from "@uidotdev/usehooks";
 export const Route = createFileRoute("/(main)/recipes/ingredients")({
   component: RouteComponent,
   context: () => ({
-    breadcrumb: "Ingredients",
-  }),
+    breadcrumb: "Ingredients"
+  })
 });
 
 function RouteComponent() {
@@ -39,10 +39,7 @@ function RouteComponent() {
 
         <IngredientsListView search={debouncedSearch} />
       </div>
-      <CreateIngredientDialog
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-      />
+      <CreateIngredientDialog isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
     </>
   );
 }

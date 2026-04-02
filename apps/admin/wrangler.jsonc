@@ -4,10 +4,10 @@
   // Set this to today's date
   "compatibility_date": "2026-04-01",
   "assets": {
-    "not_found_handling": "single-page-application",
+    "not_found_handling": "single-page-application"
   },
   "route": {
     "pattern": "admin.food-swipe.app",
-    "custom_domain": true,
-  },
+    "custom_domain": true
+  }
 }

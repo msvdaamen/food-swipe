@@ -10,7 +10,8 @@ export const signIn = (payload: SignInInput) => {
   return authClient.signIn.email(payload);
 };
 
-export const useSignIn = () => useMutation({
-  mutationFn: signIn,
-  onSuccess: () => {},
-})
+export const useSignIn = () =>
+  useMutation({
+    mutationFn: signIn,
+    onSuccess: () => {}
+  });

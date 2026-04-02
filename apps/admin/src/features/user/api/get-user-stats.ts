@@ -4,7 +4,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 
 export const getUserStats = async () => {
   const response = await api.fetch("/v1/users/stats", {
-    method: 'GET'
+    method: "GET"
   });
   return response.json() as Promise<UserStats>;
 };
@@ -12,7 +12,7 @@ export const getUserStats = async () => {
 export const getUserStatsQueryOptions = () => {
   return queryOptions({
     queryKey: ["user-stats"],
-    queryFn: getUserStats,
+    queryFn: getUserStats
   });
 };
 

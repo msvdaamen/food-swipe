@@ -1,17 +1,16 @@
-import { useFieldContext } from '../../hooks/form-context.ts'
-import { Field, FieldError, FieldLabel } from '../ui/field.tsx'
-import { Input } from '../ui/input.tsx'
-
+import { useFieldContext } from "../../hooks/form-context.ts";
+import { Field, FieldError, FieldLabel } from "../ui/field.tsx";
+import { Input } from "../ui/input.tsx";
 
 type Props = {
   label: string;
   placeholder?: string;
-  type?: HTMLInputElement['type'];
-}
+  type?: HTMLInputElement["type"];
+};
 
 export default function TextField({ label, placeholder, type }: Props) {
-  const field = useFieldContext<string>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const field = useFieldContext<string>();
+  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
   return (
     <Field data-invalid={isInvalid}>
@@ -26,9 +25,7 @@ export default function TextField({ label, placeholder, type }: Props) {
         type={type}
         placeholder={placeholder}
       />
-      {isInvalid && (
-        <FieldError errors={field.state.meta.errors} />
-      )}
+      {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
-  )
+  );
 }

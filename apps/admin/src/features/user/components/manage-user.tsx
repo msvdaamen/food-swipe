@@ -2,11 +2,15 @@ import { DialogState } from "@/types/dialog-state";
 import { create } from "zustand";
 import { User } from "../types/user.type";
 import { Dialog } from "@radix-ui/react-dialog";
-import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import {
-  FieldGroup,
-} from "@/components/ui/field"
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { FieldGroup } from "@/components/ui/field";
 import { useAppForm } from "@/hooks/form";
 import { Form } from "@/components/form/form";
 import { type } from "arktype";
@@ -14,11 +18,11 @@ import { useEffect } from "react";
 import { useCreateUser } from "../api/create-user";
 import { useUpdateUser } from "../api/update-user";
 
-export const useManageUserDialogState = create<DialogState<User>>(set =>({
-    isOpen: false,
-    open: (user?: User) => set(state => ({ isOpen: !state.isOpen, data: user })),
-    close: () => set(state => ({ isOpen: !state.isOpen })),
-    data: null
+export const useManageUserDialogState = create<DialogState<User>>((set) => ({
+  isOpen: false,
+  open: (user?: User) => set((state) => ({ isOpen: !state.isOpen, data: user })),
+  close: () => set((state) => ({ isOpen: !state.isOpen })),
+  data: null
 }));
 
 const validatorCreate = type({
@@ -28,7 +32,6 @@ const validatorCreate = type({
   password: "string > 5",
   role: "'admin' | 'user'"
 });
-
 
 const validatorUpdate = type({
   email: "string.email",
@@ -78,40 +81,40 @@ export function ManagerUserDialog() {
     <Dialog open={state.isOpen} onOpenChange={state.close}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {state.data == null ? "Create" : "Edit"} user
-          </DialogTitle>
-          <DialogDescription>
-            Manage a user
-          </DialogDescription>
+          <DialogTitle>{state.data == null ? "Create" : "Edit"} user</DialogTitle>
+          <DialogDescription>Manage a user</DialogDescription>
         </DialogHeader>
         <Form
           onSubmit={() => {
-            form.handleSubmit()
+            form.handleSubmit();
           }}
         >
-        <FieldGroup>
-          <form.AppField
-          name="email"
-          children={field => <field.TextField label="E-mail" placeholder="E-mail" type="email" />}
-          />
-          <form.AppField
-          name="username"
-          children={field => <field.TextField label="Username" placeholder="Username" />}
-          />
-          <form.AppField
-          name="name"
-          children={field => <field.TextField label="Name" placeholder="Name" />}
-          />
-          <form.AppField
-          name="password"
-          children={field => <field.TextField label="Password" placeholder="Password" type="password" />}
-          />
-          <form.AppField
-          name="role"
-          children={field => <field.TextField label="Role" placeholder="Role" />}
-          />
-        </FieldGroup>
+          <FieldGroup>
+            <form.AppField
+              name="email"
+              children={(field) => (
+                <field.TextField label="E-mail" placeholder="E-mail" type="email" />
+              )}
+            />
+            <form.AppField
+              name="username"
+              children={(field) => <field.TextField label="Username" placeholder="Username" />}
+            />
+            <form.AppField
+              name="name"
+              children={(field) => <field.TextField label="Name" placeholder="Name" />}
+            />
+            <form.AppField
+              name="password"
+              children={(field) => (
+                <field.TextField label="Password" placeholder="Password" type="password" />
+              )}
+            />
+            <form.AppField
+              name="role"
+              children={(field) => <field.TextField label="Role" placeholder="Role" />}
+            />
+          </FieldGroup>
         </Form>
 
         <DialogFooter>
@@ -124,5 +127,5 @@ export function ManagerUserDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

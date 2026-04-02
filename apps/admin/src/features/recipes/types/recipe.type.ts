@@ -10,5 +10,5 @@ export type Recipe = {
   servings: number | null;
   isPublished: boolean;
   createdAt: string;
-  nutrition: Record<Nutrition, RecipeNutrition>
+  nutrition: Record<Nutrition, RecipeNutrition>;
 };

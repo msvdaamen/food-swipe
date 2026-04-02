@@ -6,7 +6,7 @@ import { Recipe } from "../types/recipe.type";
 
 export const deleteRecipe = async (recipeId: string) => {
   const response = await api.fetch(`/v1/recipes/${recipeId}`, {
-    method: 'DELETE'
+    method: "DELETE"
   });
   return response.json() as Promise<void>;
 };
@@ -22,15 +22,12 @@ export const useDeleteRecipe = (config: UseDeleteRecipeOptions = {}) => {
     mutationFn: deleteRecipe,
     ...restConfig,
     onSuccess: (...args) => {
-      const [,recipeId] = args;
+      const [, recipeId] = args;
       queryClient.invalidateQueries(getRecipesQueryOptions());
-      queryClient.setQueryData<Recipe[]>(
-        getRecipesQueryOptions().queryKey,
-        (old) => {
-          return old?.filter((recipe) => recipe.id !== recipeId);
-        },
-      );
+      queryClient.setQueryData<Recipe[]>(getRecipesQueryOptions().queryKey, (old) => {
+        return old?.filter((recipe) => recipe.id !== recipeId);
+      });
       onSuccess?.(...args);
-    },
+    }
   });
 };

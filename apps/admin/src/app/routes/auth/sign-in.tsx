@@ -2,13 +2,7 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { type } from "arktype";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
@@ -16,12 +10,12 @@ import { useSignIn } from "@/features/auth/api/sign-in";
 import { authClient } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth/sign-in")({
-  component: RouteComponent,
+  component: RouteComponent
 });
 
 const validator = type({
   email: "string.email",
-  password: "string > 0",
+  password: "string > 0"
 });
 
 function RouteComponent() {
@@ -31,14 +25,14 @@ function RouteComponent() {
   const form = useForm({
     defaultValues: {
       email: "",
-      password: "",
+      password: ""
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
-    onSubmit: async ({value}) => {
+    onSubmit: async ({ value }) => {
       await signIn.mutateAsync(value);
-    },
+    }
   });
 
   if (session) {
@@ -49,19 +43,17 @@ function RouteComponent() {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
-                    <img src="/images/logo.png" alt="FoodSwipe Logo" />
+          <img src="/images/logo.png" alt="FoodSwipe Logo" />
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Login</CardTitle>
-              <CardDescription>
-                Enter your email below to login to your account
-              </CardDescription>
+              <CardDescription>Enter your email below to login to your account</CardDescription>
             </CardHeader>
             <CardContent>
               <form
                 onSubmit={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
+                  e.preventDefault();
+                  e.stopPropagation();
                   form.handleSubmit();
                 }}
               >
@@ -112,16 +104,8 @@ function RouteComponent() {
                   <form.Subscribe
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                     children={([canSubmit, isSubmitting]) => (
-                      <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={!canSubmit}
-                      >
-                        {isSubmitting ? (
-                          <LoaderCircle className="animate-spin" />
-                        ) : (
-                          ""
-                        )}
+                      <Button type="submit" className="w-full" disabled={!canSubmit}>
+                        {isSubmitting ? <LoaderCircle className="animate-spin" /> : ""}
                         Login
                       </Button>
                     )}

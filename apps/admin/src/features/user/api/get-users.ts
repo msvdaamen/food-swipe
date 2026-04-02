@@ -8,13 +8,12 @@ export type GetUsersInput = {
   amount: number;
   page: number;
   sort: string;
-
 };
 
 export const getUsers = async (payload: GetUsersInput) => {
   const searchParams = objectToSearchParams(payload);
   const response = await api.fetch(`/v1/users?${searchParams}`, {
-    method: 'GET'
+    method: "GET"
   });
   return response.json() as Promise<PaginatedData<User>>;
 };
@@ -22,9 +21,8 @@ export const getUsers = async (payload: GetUsersInput) => {
 export const getUsersQueryOptions = (payload: GetUsersInput) => {
   return queryOptions({
     queryKey: ["users", payload],
-    queryFn: () => getUsers(payload),
+    queryFn: () => getUsers(payload)
   });
 };
 
-export const useUsers = (payload: GetUsersInput) =>
-  useQuery(getUsersQueryOptions(payload));
+export const useUsers = (payload: GetUsersInput) => useQuery(getUsersQueryOptions(payload));

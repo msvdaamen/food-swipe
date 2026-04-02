@@ -3,7 +3,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  SidebarRail
 } from "@/components/ui/sidebar";
 
 import { User, Utensils, Egg, Ruler, Activity, Library, Users } from "lucide-react";
@@ -16,7 +16,7 @@ const data = {
   user: {
     name: "Mischa Daamen",
     email: "msv.daamen@outlook.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/avatars/shadcn.jpg"
   },
   navMain: [
     {
@@ -27,14 +27,14 @@ const data = {
         {
           title: "Logins",
           url: "/activities/login-activity",
-          icon: User,
+          icon: User
         },
         {
           title: "Recipes",
           url: "/activities/recipes-uploaded",
-          icon: Utensils,
-        },
-      ],
+          icon: Utensils
+        }
+      ]
     },
     {
       title: "Recipes",
@@ -43,31 +43,29 @@ const data = {
         {
           title: "Recipes",
           url: "/recipes/recipes",
-          icon: Utensils,
+          icon: Utensils
         },
         {
           title: "Ingredients",
           url: "/recipes/ingredients",
-          icon: Egg,
+          icon: Egg
         },
         {
           title: "Measurements",
           url: "/recipes/measurements",
-          icon: Ruler,
-        },
-      ],
+          icon: Ruler
+        }
+      ]
     },
     {
       title: "Users",
       icon: Users,
       url: "/users"
     }
-  ],
+  ]
 };
 
-export default function AppSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

@@ -1,7 +1,5 @@
-
-import { authClient } from "@/lib/auth"
+import { authClient } from "@/lib/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 
 type UpdateUserInput = {
   id: string;
@@ -13,18 +11,17 @@ type UpdateUserInput = {
 };
 
 export async function updateUser(input: UpdateUserInput) {
- return await authClient.admin.updateUser({
-   userId: input.id,
-   data: {
-     email: input.email, // required
-     password: input.password || undefined, // required
-     name: input.name, // required
-     role: input.role as "user" | "admin",
-     username: input.username
-   }
- })
+  return await authClient.admin.updateUser({
+    userId: input.id,
+    data: {
+      email: input.email, // required
+      password: input.password || undefined, // required
+      name: input.name, // required
+      role: input.role as "user" | "admin",
+      username: input.username
+    }
+  });
 }
-
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
@@ -32,6 +29,6 @@ export const useUpdateUser = () => {
     mutationFn: updateUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-    },
+    }
   });
-}
+};

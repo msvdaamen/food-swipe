@@ -4,7 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "./ui/breadcrumb";
 import clsx from "clsx";
 import { Fragment } from "react/jsx-runtime";
@@ -25,7 +25,7 @@ export default function AppBreadcrumbs() {
     if (breadcrumb) {
       breadcrumbs.push({
         title: breadcrumb,
-        path,
+        path
       });
     }
   }
@@ -40,7 +40,7 @@ export default function AppBreadcrumbs() {
                 hidden: index < array.length - 1,
                 "md:block": index < array.length - 1,
                 "text-foreground": index === array.length - 1,
-                "hover:text-normal": !!breadcrumb.path,
+                "hover:text-normal": !!breadcrumb.path
               })}
             >
               <BreadcrumbLink

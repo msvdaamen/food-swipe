@@ -9,7 +9,7 @@ export type CreateRecipeStepInput = {
     description: string;
     order: number;
   };
-}
+};
 
 export const createRecipeStep = async (payload: CreateRecipeStepInput) => {
   const response = await api.fetch(`/v1/recipes/${payload.recipeId}/steps`, {
@@ -17,7 +17,7 @@ export const createRecipeStep = async (payload: CreateRecipeStepInput) => {
     body: JSON.stringify(payload.data)
   });
   return response.json() as Promise<RecipeStep>;
-}
+};
 
 export const useRecipeStepCreate = () => {
   const queryClient = useQueryClient();
@@ -28,6 +28,6 @@ export const useRecipeStepCreate = () => {
         getRecipeStepsQueryOptions(step.recipeId).queryKey,
         (old) => [...(old || []), step]
       );
-    },
+    }
   });
 };

@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -22,28 +22,25 @@ interface CreateMeasurementProps {
 
 const validator = type({
   name: "string",
-  abbreviation: "string",
+  abbreviation: "string"
 });
 
-export const CreateMeasurementDialog: FC<CreateMeasurementProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const CreateMeasurementDialog: FC<CreateMeasurementProps> = ({ isOpen, onClose }) => {
   const createMeasurement = useCreateMeasurement();
 
   const form = useForm({
     defaultValues: {
       name: "",
-      abbreviation: "",
+      abbreviation: ""
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       await createMeasurement.mutateAsync(value);
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   return (

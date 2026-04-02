@@ -9,12 +9,9 @@ export type DeleteRecipeStepInput = {
 };
 
 export const deleteRecipeStep = async (payload: DeleteRecipeStepInput) => {
-  const response = await api.fetch(
-    `/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const response = await api.fetch(`/v1/recipes/${payload.recipeId}/steps/${payload.stepId}`, {
+    method: "DELETE"
+  });
   return response.json() as Promise<void>;
 };
 
@@ -28,6 +25,6 @@ export const useRecipeStepDelete = (recipeId: string) => {
         old?.filter((step) => step.id !== stepId)
       );
       queryClient.invalidateQueries({ queryKey: key });
-    },
+    }
   });
 };

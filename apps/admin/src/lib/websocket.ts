@@ -77,7 +77,7 @@ class WebSocketClient {
       () => {
         this.connect();
       },
-      (this.retryCount ^ 2) * 3000,
+      (this.retryCount ^ 2) * 3000
     );
   }
 
@@ -87,7 +87,7 @@ class WebSocketClient {
 
   addEventListener<T, Event extends WebsocketEvent<T> = WebsocketEvent<T>>(
     type: Event["type"],
-    listener: WebsocketEventListener<T>,
+    listener: WebsocketEventListener<T>
   ) {
     const listeners = this.listeners.get(type) || new Set();
     listeners.add(listener);
@@ -96,7 +96,7 @@ class WebSocketClient {
 
   removeEventListener<T, Event extends WebsocketEvent<T> = WebsocketEvent<T>>(
     type: Event["type"],
-    listener: WebsocketEventListener<T>,
+    listener: WebsocketEventListener<T>
   ) {
     const listeners = this.listeners.get(type);
     if (listeners) {

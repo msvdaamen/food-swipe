@@ -31,6 +31,6 @@ export const useRecipeNutritionUpdate = () => {
         getRecipeNutritionQueryOptions(nutrition.recipeId).queryKey,
         (old) => old?.map((n) => (n.name === nutrition.name ? nutrition : n))
       );
-    },
+    }
   });
 };

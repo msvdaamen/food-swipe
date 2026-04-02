@@ -1,4 +1,4 @@
-import { Pagination } from './pagination';
+import { Pagination } from "./pagination";
 
 export type PaginatedData<T> = {
   data: T[];

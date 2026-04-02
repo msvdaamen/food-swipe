@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
@@ -23,31 +23,31 @@ interface UpdateIngredientProps {
 }
 
 const validator = type({
-  name: "string",
+  name: "string"
 });
 
 export const UpdateIngredientDialog: FC<UpdateIngredientProps> = ({
   isOpen,
   onClose,
   ingredientId,
-  name,
+  name
 }) => {
   const updateIngredient = useUpdateIngredient();
   const form = useForm({
     defaultValues: {
-      name: name || "",
+      name: name || ""
     },
     validators: {
-      onChange: validator,
+      onChange: validator
     },
     onSubmit: async ({ value, formApi }) => {
       await updateIngredient.mutateAsync({
         data: value,
-        ingredientId,
+        ingredientId
       });
       formApi.reset();
       onClose();
-    },
+    }
   });
 
   return (

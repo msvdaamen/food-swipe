@@ -1,7 +1,4 @@
-import {
-  Nutrition,
-  NutritionUnit,
-} from "@/features/recipes/constants/nutritions";
+import { Nutrition, NutritionUnit } from "@/features/recipes/constants/nutritions";
 
 export type RecipeNutrition = {
   id: number;

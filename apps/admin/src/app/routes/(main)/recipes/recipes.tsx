@@ -10,7 +10,11 @@ import { getRecipesQueryOptions, useRecipes } from "@/features/recipes/api/get-r
 import { CreateRecipeDialog } from "@/features/recipes/components/create-recipe-dialog";
 import { useWebsocket } from "@/lib/websocket";
 import { toast } from "sonner";
-import { RecipeImportStatus, recipeImportStatusses, useImportingRecipeStore } from "@/features/recipes/stores/importing-recipe.store";
+import {
+  RecipeImportStatus,
+  recipeImportStatusses,
+  useImportingRecipeStore
+} from "@/features/recipes/stores/importing-recipe.store";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,8 +22,8 @@ import { useQueryClient } from "@tanstack/react-query";
 export const Route = createFileRoute("/(main)/recipes/recipes")({
   component: RouteComponent,
   context: () => ({
-    breadcrumb: "Recipes",
-  }),
+    breadcrumb: "Recipes"
+  })
 });
 
 function RouteComponent() {
@@ -33,21 +37,27 @@ function RouteComponent() {
   const importingRecipeStore = useImportingRecipeStore();
 
   useEffect(() => {
-    websocket.addEventListener('recipe-import-updated', recipeImportUpdated);
+    websocket.addEventListener("recipe-import-updated", recipeImportUpdated);
     return () => {
-      websocket.removeEventListener('recipe-import-updated', recipeImportUpdated);
+      websocket.removeEventListener("recipe-import-updated", recipeImportUpdated);
     };
   }, [websocket]);
 
-  function recipeImportUpdated({ recipeId, status }: { recipeId: string; status: RecipeImportStatus}) {
+  function recipeImportUpdated({
+    recipeId,
+    status
+  }: {
+    recipeId: string;
+    status: RecipeImportStatus;
+  }) {
     importingRecipeStore.updateStatus(recipeId, status);
   }
 
   function recipeImportClosed(recipeId?: string) {
-    setImportRecipeDialogOpen(false)
+    setImportRecipeDialogOpen(false);
     if (recipeId) {
-      importingRecipeStore.addStatus(recipeId, 'importing');
-      toast(() => <ImportRecipeToast recipeId={recipeId}/>, {
+      importingRecipeStore.addStatus(recipeId, "importing");
+      toast(() => <ImportRecipeToast recipeId={recipeId} />, {
         duration: Infinity,
         id: recipeId
       });
@@ -64,14 +74,8 @@ function RouteComponent() {
 
   return (
     <>
-      <CreateRecipeDialog
-        open={createRecipeDialogOpen}
-        onOpenChange={setCreateRecipeDialogOpen}
-      />
-      <ImportRecipeDialog
-        isOpen={importRecipeDialogOpen}
-        onClose={recipeImportClosed}
-      />
+      <CreateRecipeDialog open={createRecipeDialogOpen} onOpenChange={setCreateRecipeDialogOpen} />
+      <ImportRecipeDialog isOpen={importRecipeDialogOpen} onClose={recipeImportClosed} />
       <div className="p-4">
         <div className="mb-4 flex justify-between">
           <div className="w-64">
@@ -102,7 +106,7 @@ function RouteComponent() {
               onClick={() =>
                 navigate({
                   to: "/recipes/$recipeId",
-                  params: { recipeId: recipe.id },
+                  params: { recipeId: recipe.id }
                 })
               }
             >
@@ -135,14 +139,13 @@ function RouteComponent() {
   );
 }
 
-
 function ImportRecipeToast({ recipeId }: { recipeId: string }) {
-   const store = useImportingRecipeStore();
-  const status = useImportingRecipeStore(state => state.recipesStatus[recipeId]);
+  const store = useImportingRecipeStore();
+  const status = useImportingRecipeStore((state) => state.recipesStatus[recipeId]);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (status && status === 'done') {
+    if (status && status === "done") {
       setTimeout(() => {
         toast.dismiss(recipeId);
         store.removeStatus(recipeId);
@@ -154,15 +157,18 @@ function ImportRecipeToast({ recipeId }: { recipeId: string }) {
   if (!status) return null;
 
   const index = recipeImportStatusses.indexOf(status);
-  const progress = index === recipeImportStatusses.length - 1 ? 100 : Math.floor((index + 1) / recipeImportStatusses.length * 100);
+  const progress =
+    index === recipeImportStatusses.length - 1
+      ? 100
+      : Math.floor(((index + 1) / recipeImportStatusses.length) * 100);
 
   return (
     <div className="flex flex-col gap-2 w-[324px]">
       <span>Importing recipe</span>
       <Progress value={progress} className="w-full" />
       <div className="flex gap-2 items-center">
-        { status !== 'done' && <Spinner /> } <span className="text-sm text-gray-400">{status}</span>
+        {status !== "done" && <Spinner />} <span className="text-sm text-gray-400">{status}</span>
       </div>
-  </div>
-  )
+    </div>
+  );
 }

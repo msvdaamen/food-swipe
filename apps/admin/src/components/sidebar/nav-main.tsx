@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarMenuSubItem
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
 
@@ -42,7 +42,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                 <span>{item.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ),
+          )
         )}
       </SidebarMenu>
     </SidebarGroup>
