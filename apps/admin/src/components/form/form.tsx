@@ -1,8 +1,8 @@
-import { FormEventHandler, PropsWithChildren, Suspense } from "react";
+import { PropsWithChildren, SubmitEventHandler, Suspense } from "react";
 import { Spinner } from "../ui/spinner";
 
 type Props = PropsWithChildren<{
-  onSubmit: FormEventHandler<HTMLFormElement>;
+  onSubmit: SubmitEventHandler<HTMLFormElement>;
 }>;
 
 export function Form({ onSubmit, children }: Props) {

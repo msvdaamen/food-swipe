@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList
+} from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +15,8 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
-import { useForm } from "@tanstack/react-form";
-import { Loader } from "lucide-react";
-import { FC, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,10 +24,14 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Ingredient } from "@/features/ingredient/types/ingredient.type";
-import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
+import { Ingredient } from "@/features/ingredient/types/ingredient.type";
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
+import { Measurement } from "@/features/measurement/types/measurement.type";
+import { useForm } from "@tanstack/react-form";
+import { type } from "arktype";
+import { Loader } from "lucide-react";
+import { FC } from "react";
 import { useRecipeIngredientCreate } from "../api/ingredients/create-recipe-ingredient";
 
 interface CreateRecipeIngredientProps {
@@ -44,7 +52,6 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   recipeId
 }) => {
   const createIngredient = useRecipeIngredientCreate();
-  const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100
@@ -87,22 +94,23 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
             children={(field) => (
               <>
                 <Label>Ingredient</Label>
-                {/* <ComboBox<Ingredient>
+                <Combobox
                   items={ingredients.data}
-                  value={field.state.value?.toString() ?? ""}
-                  onValueChange={(value) => {
-                    field.handleChange(value ? Number(value) : null);
-                  }}
-                  placeholder="Select ingredient"
-                  valueFn={(item) => item.id.toString()}
-                  displayFn={(item) => item?.name ?? ""}
-                  filterFn={(item, search) =>
-                    item.name.toLowerCase().includes(search.toLowerCase())
-                  }
-                  onSearchChange={(search) => {
-                    setSearch(search);
-                  }}
-                /> */}
+                  value={field.state.value ? Number(field.state.value) : null}
+                  onValueChange={(value) => field.handleChange(value ? Number(value) : null)}
+                >
+                  <ComboboxInput placeholder="Select a ingredient" />
+                  <ComboboxContent>
+                    <ComboboxEmpty>No ingredient found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(item) => (
+                        <ComboboxItem key={item.id} value={item.id}>
+                          {item}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
               </>
             )}
           />

@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList
+} from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +15,7 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
-import { useForm } from "@tanstack/react-form";
-import { Loader } from "lucide-react";
-import { FC, useState } from "react";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,13 +23,16 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { ComboBox } from "@/components/ui/combobox";
-import { RecipeIngredient } from "../types/recipe-ingredient.type";
-import { Ingredient } from "@/features/ingredient/types/ingredient.type";
-import { Measurement } from "@/features/measurement/types/measurement.type";
 import { useIngredients } from "@/features/ingredient/api/get-ingredients";
+import { Ingredient } from "@/features/ingredient/types/ingredient.type";
 import { useMeasurements } from "@/features/measurement/api/get-measurements";
+import { Measurement } from "@/features/measurement/types/measurement.type";
+import { useAppForm } from "@/hooks/form";
+import { type } from "arktype";
+import { Loader } from "lucide-react";
+import { FC } from "react";
 import { useRecipeIngredientUpdate } from "../api/ingredients/update-recipe-ingredient";
+import { RecipeIngredient } from "../types/recipe-ingredient.type";
 
 interface UpdateRecipeIngredientProps {
   isOpen: boolean;
@@ -48,14 +54,13 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
   ingredient
 }) => {
   const updateIngredient = useRecipeIngredientUpdate();
-  const [, setSearch] = useState("");
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100
   });
   const { data: measurements = [] as Measurement[] } = useMeasurements();
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       ingredientId: ingredient.ingredientId || null,
       amount: ingredient.amount || null,
@@ -91,41 +96,31 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
             children={(field) => (
               <>
                 <Label>Ingredient</Label>
-                {/* <ComboBox<Ingredient>
+                <Combobox
                   items={ingredients.data}
-                  value={field.state.value?.toString() ?? ""}
-                  onValueChange={(value) => {
-                    field.handleChange(value ? Number(value) : null);
-                  }}
-                  placeholder="Select ingredient"
-                  valueFn={(item) => item.id.toString()}
-                  displayFn={(item) => item?.name ?? ""}
-                  filterFn={(item, search) =>
-                    item.name.toLowerCase().includes(search.toLowerCase())
-                  }
-                  onSearchChange={(search) => {
-                    setSearch(search);
-                  }}
-                /> */}
+                  onValueChange={(value) => field.handleChange(value ? Number(value) : null)}
+                  value={field.state.value ? Number(field.state.value) : null}
+                >
+                  <ComboboxInput placeholder="Select a ingredient" />
+                  <ComboboxContent>
+                    <ComboboxEmpty>No ingredient found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(item) => (
+                        <ComboboxItem key={item.id} value={item.id}>
+                          {item.name}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
               </>
             )}
           />
           <div className="mt-4">
-            <form.Field
+            <form.AppField
               name="amount"
               children={(field) => (
-                <>
-                  <Label htmlFor={field.name}>Amount</Label>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    type="number"
-                    value={field.state.value ?? ""}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-                    placeholder="Amount"
-                  />
-                </>
+                <field.TextField label="Amount" placeholder="Amount" type="number" />
               )}
             />
           </div>
