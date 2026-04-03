@@ -2,15 +2,8 @@
   "name": "food-swipe",
   "type": "module",
   "private": true,
-  "devDependencies": {
-    "@types/aws-lambda": "8.10.148",
-    "@types/bun": "latest"
-  },
   "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "sst": "3.11.11"
+    "typescript": "^6"
   },
   "workspaces": [
     "apps/*",

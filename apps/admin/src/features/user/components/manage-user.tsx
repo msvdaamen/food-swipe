@@ -1,7 +1,5 @@
-import { DialogState } from "@/types/dialog-state";
-import { create } from "zustand";
-import { User } from "../types/user.type";
-import { Dialog } from "@radix-ui/react-dialog";
+import { Form } from "@/components/form/form";
+import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogDescription,
@@ -9,14 +7,16 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { useAppForm } from "@/hooks/form";
-import { Form } from "@/components/form/form";
+import { DialogState } from "@/types/dialog-state";
+import { Dialog } from "@radix-ui/react-dialog";
 import { type } from "arktype";
 import { useEffect } from "react";
+import { create } from "zustand";
 import { useCreateUser } from "../api/create-user";
 import { useUpdateUser } from "../api/update-user";
+import { User } from "../types/user.type";
 
 export const useManageUserDialogState = create<DialogState<User>>((set) => ({
   isOpen: false,
@@ -75,7 +75,7 @@ export function ManagerUserDialog() {
     if (state.isOpen) {
       form.reset();
     }
-  }, [state.isOpen]);
+  }, [form, state.isOpen]);
 
   return (
     <Dialog open={state.isOpen} onOpenChange={state.close}>

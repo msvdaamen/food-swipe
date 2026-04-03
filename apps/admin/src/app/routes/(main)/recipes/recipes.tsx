@@ -1,23 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Import } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
-import styles from "./recipes.module.css";
-import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
+import { Progress } from "@/components/ui/progress";
+import { Spinner } from "@/components/ui/spinner";
 import { getRecipesQueryOptions, useRecipes } from "@/features/recipes/api/get-recipes";
 import { CreateRecipeDialog } from "@/features/recipes/components/create-recipe-dialog";
-import { useWebsocket } from "@/lib/websocket";
-import { toast } from "sonner";
+import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
 import {
   RecipeImportStatus,
   recipeImportStatusses,
   useImportingRecipeStore
 } from "@/features/recipes/stores/importing-recipe.store";
-import { Progress } from "@/components/ui/progress";
-import { Spinner } from "@/components/ui/spinner";
+import { useWebsocket } from "@/lib/websocket";
 import { useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Import, Plus, Search } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import styles from "./recipes.module.css";
 
 export const Route = createFileRoute("/(main)/recipes/recipes")({
   component: RouteComponent,
@@ -36,22 +35,19 @@ function RouteComponent() {
 
   const importingRecipeStore = useImportingRecipeStore();
 
+  const recipeImportUpdated = useCallback(
+    ({ recipeId, status }: { recipeId: string; status: RecipeImportStatus }) => {
+      importingRecipeStore.updateStatus(recipeId, status);
+    },
+    [importingRecipeStore]
+  );
+
   useEffect(() => {
     websocket.addEventListener("recipe-import-updated", recipeImportUpdated);
     return () => {
       websocket.removeEventListener("recipe-import-updated", recipeImportUpdated);
     };
-  }, [websocket]);
-
-  function recipeImportUpdated({
-    recipeId,
-    status
-  }: {
-    recipeId: string;
-    status: RecipeImportStatus;
-  }) {
-    importingRecipeStore.updateStatus(recipeId, status);
-  }
+  }, [websocket, recipeImportUpdated]);
 
   function recipeImportClosed(recipeId?: string) {
     setImportRecipeDialogOpen(false);
@@ -152,7 +148,7 @@ function ImportRecipeToast({ recipeId }: { recipeId: string }) {
         queryClient.invalidateQueries(getRecipesQueryOptions());
       }, 3000);
     }
-  }, [status]);
+  }, [queryClient, store, recipeId, status]);
 
   if (!status) return null;
 
