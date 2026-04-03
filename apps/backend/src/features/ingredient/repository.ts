@@ -45,7 +45,7 @@ export class IngredientRepositoryImpl {
       .where(whereClause);
     return {
       data: result,
-      pagination: CreatePagination(total, payload.amount, payload.page),
+      pagination: CreatePagination(total, payload.amount, payload.page)
     };
   }
 

@@ -53,8 +53,7 @@ export class StorageService {
     const bucket = this.pickBucket(isPublic);
     const key = objectKey(file, options);
     const body = await file.arrayBuffer();
-    const contentType =
-      file instanceof File && file.type ? file.type : "application/octet-stream";
+    const contentType = file instanceof File && file.type ? file.type : "application/octet-stream";
     await bucket.put(key, body, {
       httpMetadata: { contentType }
     });
