@@ -155,8 +155,6 @@ class RecipeServiceImpl implements RecipeService {
   private mapFromModel(model: RecipeModel): Recipe {
     return {
       ...model,
-      createdAt: model.createdAt.toISOString(),
-      updatedAt: model.updatedAt.toISOString(),
       coverImageUrl: model.coverImage ? this.storage.getPublicUrl(model.coverImage) : null
     };
   }
