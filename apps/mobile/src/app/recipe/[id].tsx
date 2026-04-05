@@ -9,16 +9,19 @@ import {
 import { AppCheckbox } from "@/components/ui/checkbox";
 import { Colors } from "@/constants/theme";
 import { FText } from "@/components/f-text";
-import { useRecipe } from "@/features/recipe/api/get-recipe";
+import {
+  getRecipeIngredientsQueryOptions,
+  getRecipeNutritionQueryOptions,
+  getRecipeStepsQueryOptions,
+  useRecipe,
+} from "@food-swipe/client-api/recipe";
+import { useApiClient } from "@food-swipe/client-api";
 import { useLocalSearchParams } from "expo-router";
-import { getRecipeIngredientsOptions } from "@/features/recipe/api/get-recipe-ingredients";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { NumberStepper } from "@/components/number-stepper";
 import { LikeButton } from "@/components/like-button";
-import { getRecipeStepsOptions } from "@/features/recipe/api/get-recipe-steps";
-import { RecipeNutrition } from "@/features/recipe/types/recipe-nutrition.type";
-import { nutritionOrder } from "@/features/recipe/constants/nutritions";
-import { getRecipeNutritionOptions } from "@/features/recipe/api/get-recipe-nutrition";
+import type { RecipeNutrition } from "@food-swipe/types";
+import { nutritionOrder } from "@food-swipe/types";
 import { Skeleton } from "@/components/skeleton";
 
 export default function RecipeModal() {
@@ -26,20 +29,30 @@ export default function RecipeModal() {
     id: string;
     coverImageUrl?: string;
   }>();
-  const { data: recipe } = useRecipe(recipeId);
+
+  const { data: recipe } = useRecipe(
+    { recipeId: recipeId ?? "" },
+    { enabled: Boolean(recipeId) },
+  );
   const theme = useColorScheme();
   const backgroundColor = theme === "dark" ? Colors.stone950 : Colors.gray50;
   const [isLiked, setIsLiked] = useState(false);
 
+  const imageUri = coverImageUrl || recipe?.coverImageUrl;
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <ScrollView style={styles.scrollContainer} scrollEventThrottle={16}>
-        <Image
-          style={styles.recipeImage}
-          source={{
-            uri: coverImageUrl || recipe?.coverImageUrl,
-          }}
-        />
+        {imageUri ? (
+          <Image
+            style={styles.recipeImage}
+            source={{
+              uri: imageUri,
+            }}
+          />
+        ) : (
+          <View style={[styles.recipeImage, { backgroundColor: Colors.gray200 }]} />
+        )}
         {recipe && (
           <View style={[styles.contentContainer]}>
             <View style={styles.headerContainer}>
@@ -51,9 +64,14 @@ export default function RecipeModal() {
                 {recipe.nutrition.energy?.value} calories
               </FText>
             )}
-            <FText style={styles.descriptionText}>{recipe.description}</FText>
+            <FText style={styles.descriptionText}>
+              {recipe.description ?? ""}
+            </FText>
             <Suspense fallback={<Loader />}>
-              <Ingredients id={recipe.id} servings={recipe.servings} />
+              <Ingredients
+                id={recipe.id}
+                servings={recipe.servings ?? 1}
+              />
               <Steps id={recipe.id} />
               <Nutritions id={recipe.id} />
             </Suspense>
@@ -64,9 +82,16 @@ export default function RecipeModal() {
   );
 }
 
-const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
+const Ingredients = ({
+  id,
+  servings,
+}: {
+  id: string;
+  servings: number;
+}) => {
+  const api = useApiClient();
   const { data: ingredients } = useSuspenseQuery(
-    getRecipeIngredientsOptions(id),
+    getRecipeIngredientsQueryOptions(api, id),
   );
   const [checked, setChecked] = useState(true);
   const [amount, setAmount] = useState(servings);
@@ -81,7 +106,7 @@ const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
     <View style={styles.ingredientsContainer}>
       <FText style={styles.ingredientsTitle}>Ingredients</FText>
       <NumberStepper initialValue={amount} onChange={setAmount} />
-      {ingredients.map((ingredient, index) => (
+      {ingredients.map((ingredient) => (
         <View key={ingredient.ingredientId} style={styles.ingredientRow}>
           <View style={styles.checkboxContainer}>
             <AppCheckbox
@@ -105,7 +130,8 @@ const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
 };
 
 const Steps = ({ id }: { id: string }) => {
-  const { data: steps } = useSuspenseQuery(getRecipeStepsOptions(id));
+  const api = useApiClient();
+  const { data: steps } = useSuspenseQuery(getRecipeStepsQueryOptions(api, id));
 
   const theme = useColorScheme();
   const textColor = theme === "dark" ? "white" : "black";
@@ -128,8 +154,9 @@ const Steps = ({ id }: { id: string }) => {
 };
 
 const Nutritions = ({ id }: { id: string }) => {
+  const api = useApiClient();
   const { data: recipeNutrition } = useSuspenseQuery(
-    getRecipeNutritionOptions(id),
+    getRecipeNutritionQueryOptions(api, id),
   );
 
   const nutritionMap = new Map<string, RecipeNutrition>(

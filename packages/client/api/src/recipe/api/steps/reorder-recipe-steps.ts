@@ -7,6 +7,7 @@ import { getRecipeStepsQueryOptions } from "./get-recipe-steps";
 function arrayMove<T>(items: readonly T[], fromIndex: number, toIndex: number): T[] {
   const next = [...items];
   const [removed] = next.splice(fromIndex, 1);
+  if (removed === undefined) return next;
   next.splice(toIndex, 0, removed);
   return next;
 }

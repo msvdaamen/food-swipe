@@ -16,10 +16,13 @@ export class AuthApiClient {
   async fetch(endpoint: string, init?: RequestInit): Promise<Response> {
     const url = endpoint.startsWith("http") ? endpoint : `${this.baseUrl}${endpoint}`;
 
+    const isFormData =
+      typeof FormData !== "undefined" && init?.body instanceof FormData;
+
     const baseInit: RequestInit = {
       ...init,
       headers: {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         ...init?.headers,
       },
       credentials: this.options.credentials ?? "include",

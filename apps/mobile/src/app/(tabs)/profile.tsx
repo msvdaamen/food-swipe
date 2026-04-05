@@ -11,8 +11,7 @@ import {
   FeedPlaceholder,
 } from "@/features/user/components";
 import * as ImagePicker from "expo-image-picker";
-import { useUploadProfilePicture } from "@/features/auth/api/upload-profile-picture";
-import { useMe } from "@/features/auth/api/me";
+import { useMe, useUploadProfilePicture } from "@food-swipe/client-api/user";
 
 export default function ProfileScreen() {
   const { data: user, isPending, error } = useMe();
@@ -90,7 +89,7 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader
-          avatarUrl={user.image}
+          avatarUrl={user.imageUrl ?? user.image ?? undefined}
           name={user.name}
           username={user.username!}
           bio={""}
