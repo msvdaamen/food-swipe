@@ -1,9 +1,8 @@
 name: Monorepo CI/CD
 
-run-name: Monorepo CI/CD · ${{ github.event_name }} · ${{ github.ref_name }}
+run-name: ${{ github.event_name }} · ${{ github.ref_name }}
 
 on:
-  pull_request:
   push:
     branches:
       - main
@@ -59,8 +58,6 @@ jobs:
     needs: [changes, backend, admin]
     if: |
       always() &&
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/main' &&
       needs.changes.outputs.backend == 'true' &&
       needs.backend.result == 'success' &&
       (needs.changes.outputs.admin != 'true' || needs.admin.result == 'success')
@@ -88,8 +85,6 @@ jobs:
     needs: [changes, backend, admin]
     if: |
       always() &&
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/main' &&
       needs.changes.outputs.admin == 'true' &&
       needs.admin.result == 'success' &&
       (needs.changes.outputs.backend != 'true' || needs.backend.result == 'success')
