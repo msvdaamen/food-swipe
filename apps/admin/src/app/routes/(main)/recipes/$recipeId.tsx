@@ -23,12 +23,12 @@ import { CircleHelp, GripVertical, Loader, Pencil, Trash } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Nutrition,
+  type Nutrition,
   nutritionOrder,
-  NutritionUnit,
-  nutritionUnits
-} from "@/features/recipes/constants/nutritions";
-import { RecipeNutrition } from "@/features/recipes/types/recipe-nutrition.type";
+  type NutritionUnit,
+  nutritionUnits,
+  type RecipeNutrition
+} from "@food-swipe/types";
 import { SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Select, SelectItem } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";
@@ -42,20 +42,21 @@ import {
 } from "@/components/ui/table";
 import { ManageRecipeStepDialog } from "@/features/recipes/components/manage-recipe-step-dialog";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { RecipeStep } from "@/features/recipes/types/recipe-step.type";
+import type { RecipeIngredient, RecipeStep } from "@food-swipe/types";
 import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
 import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
-import { RecipeIngredient } from "@/features/recipes/types/recipe-ingredient.type";
-import { useRecipe } from "@/features/recipes/api/get-recipe";
-import { useRecipeIngredients } from "@/features/recipes/api/ingredients/get-recipe-ingredients";
-import { useRecipeSteps } from "@/features/recipes/api/steps/get-recipe-steps";
-import { useRecipeStepsReorder } from "@/features/recipes/api/steps/reorder-recipe-steps";
-import { useRecipeStepDelete } from "@/features/recipes/api/steps/delete-recipe-step";
-import { useRecipeNutrition } from "@/features/recipes/api/nutritions/get-recipe-nutrition";
-import { useRecipeNutritionUpdate } from "@/features/recipes/api/nutritions/update-recipe-nutrition";
-import { useDeleteRecipe } from "@/features/recipes/api/delete-recipe";
-import { useUpdateRecipe } from "@/features/recipes/api/update-recipe";
-import { useRecipeIngredientDelete } from "@/features/recipes/api/ingredients/delete-recipe-ingredient";
+import {
+  useDeleteRecipe,
+  useRecipe,
+  useRecipeIngredientDelete,
+  useRecipeIngredients,
+  useRecipeNutrition,
+  useRecipeNutritionUpdate,
+  useRecipeStepDelete,
+  useRecipeSteps,
+  useRecipeStepsReorder,
+  useUpdateRecipe
+} from "@food-swipe/client-api/recipe";
 
 export const Route = createFileRoute("/(main)/recipes/$recipeId")({
   component: RouteComponent,
@@ -170,7 +171,7 @@ function RouteComponent() {
               <Label>Description</Label>
               <Textarea
                 className="w-full rounded-md border p-2"
-                defaultValue={recipe.description}
+                defaultValue={recipe.description ?? ""}
                 onBlur={(e) => handleUpdateRecipe("description", e.target.value)}
               />
             </p>
@@ -489,7 +490,11 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                     type="number"
                     min={0}
                     onBlur={(e) =>
-                      updateNutritionValue(nutrition.name, nutrition.unit, e.target.valueAsNumber)
+                      updateNutritionValue(
+                        nutrition.name as Nutrition,
+                        nutrition.unit as NutritionUnit,
+                        e.target.valueAsNumber
+                      )
                     }
                   />
                 </TableCell>
@@ -497,7 +502,11 @@ function Nutritions({ recipeId }: { recipeId: string }) {
                   <Select
                     defaultValue={nutrition.unit}
                     onValueChange={(value) =>
-                      updateNutritionValue(nutrition.name, value as NutritionUnit, nutrition.value)
+                      updateNutritionValue(
+                        nutrition.name as Nutrition,
+                        value as NutritionUnit,
+                        nutrition.value
+                      )
                     }
                   >
                     <SelectTrigger className="w-full">

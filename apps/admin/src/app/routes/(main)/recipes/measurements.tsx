@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/table";
 import { CreateMeasurementDialog } from "@/features/measurement/components/create-measurement.dialog";
 import { UpdateMeasurementDialog } from "@/features/measurement/components/update-measurement.dialog";
-import { useMeasurements } from "@/features/measurement/api/get-measurements";
-import { useDeleteMeasurement } from "@/features/measurement/api/delete-measurement";
+import { useDeleteMeasurement, useMeasurements } from "@food-swipe/client-api/measurement";
 
 export const Route = createFileRoute("/(main)/recipes/measurements")({
   component: RouteComponent,

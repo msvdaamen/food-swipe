@@ -1,4 +1,5 @@
 import { authClient } from "@/lib/auth";
+import { userKeys } from "@food-swipe/client-api/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UpdateUserInput = {
@@ -28,7 +29,7 @@ export const useUpdateUser = () => {
   return useMutation({
     mutationFn: updateUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
     }
   });
 };

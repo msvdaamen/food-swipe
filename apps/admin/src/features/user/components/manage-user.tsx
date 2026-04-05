@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { create } from "zustand";
 import { useCreateUser } from "../api/create-user";
 import { useUpdateUser } from "../api/update-user";
-import { User } from "../types/user.type";
+import type { User } from "@food-swipe/types";
 
 export const useManageUserDialogState = create<DialogState<User>>((set) => ({
   isOpen: false,

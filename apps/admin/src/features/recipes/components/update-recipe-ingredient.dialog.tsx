@@ -23,16 +23,16 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { useIngredients } from "@/features/ingredient/api/get-ingredients";
-import { Ingredient } from "@/features/ingredient/types/ingredient.type";
-import { useMeasurements } from "@/features/measurement/api/get-measurements";
-import { Measurement } from "@/features/measurement/types/measurement.type";
+import type { Ingredient } from "@food-swipe/types";
+import { useIngredients } from "@food-swipe/client-api/ingredient";
+import { useMeasurements } from "@food-swipe/client-api/measurement";
+import type { Measurement } from "@food-swipe/types";
 import { useAppForm } from "@/hooks/form";
 import { type } from "arktype";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useRecipeIngredientUpdate } from "../api/ingredients/update-recipe-ingredient";
-import { RecipeIngredient } from "../types/recipe-ingredient.type";
+import type { RecipeIngredient } from "@food-swipe/types";
+import { useRecipeIngredientUpdate } from "@food-swipe/client-api/recipe";
 
 interface UpdateRecipeIngredientProps {
   isOpen: boolean;
