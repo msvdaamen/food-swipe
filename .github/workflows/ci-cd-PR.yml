@@ -9,44 +9,10 @@ permissions:
   contents: read
 
 jobs:
-  changes:
-    name: Detect Changed Projects
-    runs-on: ubuntu-latest
-    outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      admin: ${{ steps.filter.outputs.admin }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Detect changes
-        id: filter
-        uses: dorny/paths-filter@v4
-        with:
-          filters: |
-            backend:
-              - '.github/workflows/ci-cd.yml'
-              - '.github/workflows/backend.yml'
-              - 'apps/backend/**'
-              - 'packages/**'
-              - 'package.json'
-              - 'bun.lock'
-            admin:
-              - '.github/workflows/ci-cd.yml'
-              - '.github/workflows/admin.yml'
-              - 'apps/admin/**'
-              - 'packages/**'
-              - 'package.json'
-              - 'bun.lock'
-
   backend:
     name: Backend API
-    needs: changes
-    if: needs.changes.outputs.backend == 'true'
     uses: ./.github/workflows/backend.yml
 
   admin:
     name: Admin Web
-    needs: changes
-    if: needs.changes.outputs.admin == 'true'
     uses: ./.github/workflows/admin.yml
