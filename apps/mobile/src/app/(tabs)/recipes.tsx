@@ -1,13 +1,7 @@
 import { FText } from "@/components/f-text";
 import { useRouter } from "expo-router";
 import { Clock } from "lucide-react-native";
-import {
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { FView } from "@/components/f-view";
@@ -66,11 +60,7 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={styles.recipeCard}
-      onPress={handleRecipeCardPress}
-    >
+    <TouchableOpacity activeOpacity={0.8} style={styles.recipeCard} onPress={handleRecipeCardPress}>
       <Image
         style={styles.recipeImage}
         source={{
@@ -92,9 +82,7 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
           <FText style={styles.recipeCardText}>{recipe.title}</FText>
           <View style={styles.recipeCardDetailsContainer}>
             {recipe.nutrition.energy && (
-              <FText style={styles.recipeCardDetailText}>
-                {recipe.nutrition.energy.value} cal
-              </FText>
+              <FText style={styles.recipeCardDetailText}>{recipe.nutrition.energy.value} cal</FText>
             )}
             <View
               style={{

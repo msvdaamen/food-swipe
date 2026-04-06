@@ -57,10 +57,7 @@ export function FeedPlaceholder({ isOwnProfile }: FeedPlaceholderProps) {
       {/* Grid placeholder for future feed items */}
       <View style={styles.gridPlaceholder}>
         {[...Array(6)].map((_, index) => (
-          <View
-            key={index}
-            style={[styles.gridItem, { backgroundColor: gridItemBg }]}
-          />
+          <View key={index} style={[styles.gridItem, { backgroundColor: gridItemBg }]} />
         ))}
       </View>
     </View>

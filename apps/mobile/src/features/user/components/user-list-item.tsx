@@ -20,12 +20,7 @@ type UserListItemProps = {
   onFollowPress?: (userId: string) => void;
 };
 
-export function UserListItem({
-  user,
-  currentUserId,
-  onPress,
-  onFollowPress,
-}: UserListItemProps) {
+export function UserListItem({ user, currentUserId, onPress, onFollowPress }: UserListItemProps) {
   const isOwnProfile = user.id === currentUserId;
 
   const placeholderBg = useThemeColor({
@@ -70,15 +65,9 @@ export function UserListItem({
           />
         ) : (
           <View
-            style={[
-              styles.avatar,
-              styles.avatarPlaceholder,
-              { backgroundColor: placeholderBg },
-            ]}
+            style={[styles.avatar, styles.avatarPlaceholder, { backgroundColor: placeholderBg }]}
           >
-            <FText style={styles.avatarPlaceholderText}>
-              {user.name.charAt(0).toUpperCase()}
-            </FText>
+            <FText style={styles.avatarPlaceholderText}>{user.name.charAt(0).toUpperCase()}</FText>
           </View>
         )}
 
@@ -86,21 +75,14 @@ export function UserListItem({
           <FText style={styles.name} numberOfLines={1}>
             {user.name}
           </FText>
-          <FText
-            style={[styles.username, { color: usernameColor }]}
-            numberOfLines={1}
-          >
+          <FText style={[styles.username, { color: usernameColor }]} numberOfLines={1}>
             @{user.username}
           </FText>
         </View>
       </View>
 
       {!isOwnProfile && (
-        <FollowButton
-          isFollowing={user.isFollowing}
-          onPress={handleFollowPress}
-          size="small"
-        />
+        <FollowButton isFollowing={user.isFollowing} onPress={handleFollowPress} size="small" />
       )}
     </Pressable>
   );

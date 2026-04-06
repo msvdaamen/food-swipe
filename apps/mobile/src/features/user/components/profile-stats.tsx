@@ -47,17 +47,9 @@ export function ProfileStats({
     <View style={[styles.container, { borderColor }]}>
       <StatItem label="Posts" value={postsCount} />
       <View style={[styles.divider, { backgroundColor: borderColor }]} />
-      <StatItem
-        label="Followers"
-        value={followersCount}
-        onPress={onFollowersPress}
-      />
+      <StatItem label="Followers" value={followersCount} onPress={onFollowersPress} />
       <View style={[styles.divider, { backgroundColor: borderColor }]} />
-      <StatItem
-        label="Following"
-        value={followingCount}
-        onPress={onFollowingPress}
-      />
+      <StatItem label="Following" value={followingCount} onPress={onFollowingPress} />
     </View>
   );
 }

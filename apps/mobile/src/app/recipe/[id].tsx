@@ -1,11 +1,5 @@
 import { Suspense, useState } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  View,
-  useColorScheme,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, View, useColorScheme } from "react-native";
 import { AppCheckbox } from "@/components/ui/checkbox";
 import { Colors } from "@/constants/theme";
 import { FText } from "@/components/f-text";
@@ -30,10 +24,7 @@ export default function RecipeModal() {
     coverImageUrl?: string;
   }>();
 
-  const { data: recipe } = useRecipe(
-    { recipeId: recipeId ?? "" },
-    { enabled: Boolean(recipeId) },
-  );
+  const { data: recipe } = useRecipe({ recipeId: recipeId ?? "" }, { enabled: Boolean(recipeId) });
   const theme = useColorScheme();
   const backgroundColor = theme === "dark" ? Colors.stone950 : Colors.gray50;
   const [isLiked, setIsLiked] = useState(false);
@@ -60,18 +51,11 @@ export default function RecipeModal() {
               <LikeButton isLiked={isLiked} onChange={setIsLiked} />
             </View>
             {recipe.nutrition.energy && (
-              <FText style={styles.caloriesText}>
-                {recipe.nutrition.energy?.value} calories
-              </FText>
+              <FText style={styles.caloriesText}>{recipe.nutrition.energy?.value} calories</FText>
             )}
-            <FText style={styles.descriptionText}>
-              {recipe.description ?? ""}
-            </FText>
+            <FText style={styles.descriptionText}>{recipe.description ?? ""}</FText>
             <Suspense fallback={<Loader />}>
-              <Ingredients
-                id={recipe.id}
-                servings={recipe.servings ?? 1}
-              />
+              <Ingredients id={recipe.id} servings={recipe.servings ?? 1} />
               <Steps id={recipe.id} />
               <Nutritions id={recipe.id} />
             </Suspense>
@@ -82,17 +66,9 @@ export default function RecipeModal() {
   );
 }
 
-const Ingredients = ({
-  id,
-  servings,
-}: {
-  id: string;
-  servings: number;
-}) => {
+const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
   const api = useApiClient();
-  const { data: ingredients } = useSuspenseQuery(
-    getRecipeIngredientsQueryOptions(api, id),
-  );
+  const { data: ingredients } = useSuspenseQuery(getRecipeIngredientsQueryOptions(api, id));
   const [checked, setChecked] = useState(true);
   const [amount, setAmount] = useState(servings);
 
@@ -109,11 +85,7 @@ const Ingredients = ({
       {ingredients.map((ingredient) => (
         <View key={ingredient.ingredientId} style={styles.ingredientRow}>
           <View style={styles.checkboxContainer}>
-            <AppCheckbox
-              value={checked}
-              onValueChange={setChecked}
-              color={Colors.emerald500}
-            />
+            <AppCheckbox value={checked} onValueChange={setChecked} color={Colors.emerald500} />
           </View>
           <View style={styles.amountContainer}>
             <FText style={styles.amountText}>
@@ -141,9 +113,7 @@ const Steps = ({ id }: { id: string }) => {
       <FText style={styles.stepsTitle}>Steps</FText>
       {steps.map((step) => (
         <View key={step.id} style={styles.stepRow}>
-          <View
-            style={[styles.stepNumberContainer, { borderColor: textColor }]}
-          >
+          <View style={[styles.stepNumberContainer, { borderColor: textColor }]}>
             <FText style={[styles.stepNumberText]}>{step.stepNumber}</FText>
           </View>
           <FText style={[styles.stepText]}>{step.description}</FText>
@@ -155,9 +125,7 @@ const Steps = ({ id }: { id: string }) => {
 
 const Nutritions = ({ id }: { id: string }) => {
   const api = useApiClient();
-  const { data: recipeNutrition } = useSuspenseQuery(
-    getRecipeNutritionQueryOptions(api, id),
-  );
+  const { data: recipeNutrition } = useSuspenseQuery(getRecipeNutritionQueryOptions(api, id));
 
   const nutritionMap = new Map<string, RecipeNutrition>(
     recipeNutrition.map((nutrition) => [nutrition.name, nutrition]),

@@ -1,12 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useMemo, useState } from "react";
-import {
-  StyleSheet,
-  TextInput,
-  TextInputProps,
-  View,
-  useColorScheme,
-} from "react-native";
+import { StyleSheet, TextInput, TextInputProps, View, useColorScheme } from "react-native";
 import { FText } from "../f-text";
 
 type Color = "transparent";

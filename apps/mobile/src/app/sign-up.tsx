@@ -4,7 +4,7 @@ import { AppInput } from "@/components/ui/input";
 import { Colors } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 import { useForm } from "@tanstack/react-form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -17,12 +17,18 @@ import {
 } from "react-native";
 import { useSignUp } from "@/features/auth/api/sign-up";
 
-const signUpSchema = type({
-  email: "string.email",
-  username: "/^[a-z0-9_-]{3,30}$/",
-  password: "string >= 6",
-  firstName: "string >= 1",
-  lastName: "string >= 1",
+const signUpSchema = z.object({
+  email: z.email(),
+  username: z
+    .string()
+    .regex(
+      /^[a-z0-9_-]{3,30}$/,
+      "Username must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens",
+    ),
+  password: z.string().min(6),
+  passwordConfirmation: z.string().min(6),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
 });
 
 export default function SignUp() {
@@ -84,9 +90,7 @@ export default function SignUp() {
                         color="transparent"
                       />
                       {field.state.meta.errors ? (
-                        <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(", ")}
-                        </FText>
+                        <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                       ) : null}
                     </View>
                   )}
@@ -103,9 +107,7 @@ export default function SignUp() {
                         color="transparent"
                       />
                       {field.state.meta.errors ? (
-                        <FText style={styles.errorText}>
-                          {field.state.meta.errors.join(", ")}
-                        </FText>
+                        <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                       ) : null}
                     </View>
                   )}
@@ -125,9 +127,7 @@ export default function SignUp() {
                       color="transparent"
                     />
                     {field.state.meta.errors ? (
-                      <FText style={styles.errorText}>
-                        {field.state.meta.errors.join(", ")}
-                      </FText>
+                      <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                     ) : null}
                   </View>
                 )}
@@ -147,9 +147,7 @@ export default function SignUp() {
                       color="transparent"
                     />
                     {field.state.meta.errors ? (
-                      <FText style={styles.errorText}>
-                        {field.state.meta.errors.join(", ")}
-                      </FText>
+                      <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                     ) : null}
                   </View>
                 )}
@@ -168,9 +166,7 @@ export default function SignUp() {
                       color="transparent"
                     />
                     {field.state.meta.errors ? (
-                      <FText style={styles.errorText}>
-                        {field.state.meta.errors.join(", ")}
-                      </FText>
+                      <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                     ) : null}
                   </View>
                 )}
@@ -189,9 +185,7 @@ export default function SignUp() {
                       color="transparent"
                     />
                     {field.state.meta.errors ? (
-                      <FText style={styles.errorText}>
-                        {field.state.meta.errors.join(", ")}
-                      </FText>
+                      <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                     ) : null}
                   </View>
                 )}

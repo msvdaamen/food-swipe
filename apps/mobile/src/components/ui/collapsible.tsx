@@ -7,10 +7,7 @@ import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ChevronRight } from "lucide-react-native";
 
-export function Collapsible({
-  children,
-  title,
-}: PropsWithChildren & { title: string }) {
+export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? "light";
 

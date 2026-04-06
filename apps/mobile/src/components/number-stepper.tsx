@@ -19,8 +19,7 @@ type Props = {
 
 export function NumberStepper({ initialValue, onChange }: Props) {
   const [amount, setAmount] = useState(initialValue);
-  const range =
-    amount > 1 ? [amount - 1, amount, amount + 1] : [amount, amount + 1];
+  const range = amount > 1 ? [amount - 1, amount, amount + 1] : [amount, amount + 1];
 
   const changeAmount = (newAmount: number) => {
     direction.value = newAmount > amount ? 1 : 0;
@@ -114,11 +113,7 @@ export function NumberStepper({ initialValue, onChange }: Props) {
             </AnimatedFText>
           ),
       )}
-      <AppButton
-        size="small"
-        type="icon"
-        onPress={() => changeAmount(amount + 1)}
-      >
+      <AppButton size="small" type="icon" onPress={() => changeAmount(amount + 1)}>
         <Plus size={16} color="white" />
       </AppButton>
     </View>

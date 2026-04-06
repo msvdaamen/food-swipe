@@ -97,9 +97,7 @@ export default function ProfileScreen() {
         >
           <ChevronLeft size={28} color={iconColor} />
         </Pressable>
-        <FText style={styles.headerTitle}>
-          {isOwnProfile ? "Profile" : MOCK_USER.username}
-        </FText>
+        <FText style={styles.headerTitle}>{isOwnProfile ? "Profile" : MOCK_USER.username}</FText>
         <View style={styles.headerRight} />
       </View>
 
@@ -129,12 +127,8 @@ export default function ProfileScreen() {
           postsCount={MOCK_USER.postsCount}
           followersCount={MOCK_USER.followersCount}
           followingCount={MOCK_USER.followingCount}
-          onFollowersPress={() =>
-            handleFollowersPress(MOCK_USER.id, MOCK_USER.username)
-          }
-          onFollowingPress={() =>
-            handleFollowingPress(MOCK_USER.id, MOCK_USER.username)
-          }
+          onFollowersPress={() => handleFollowersPress(MOCK_USER.id, MOCK_USER.username)}
+          onFollowingPress={() => handleFollowingPress(MOCK_USER.id, MOCK_USER.username)}
         />
 
         <FeedPlaceholder isOwnProfile={isOwnProfile} />

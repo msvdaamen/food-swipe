@@ -1,11 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useEffect, useMemo, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacityProps,
-} from "react-native";
+import { Pressable, StyleSheet, Text, TouchableOpacityProps } from "react-native";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -134,9 +129,7 @@ export function AppButton({
       >
         {PreIcon && PreIcon}
         {type !== "icon" && (
-          <Text style={[styles.buttonText, { color: textColor }]}>
-            {children}
-          </Text>
+          <Text style={[styles.buttonText, { color: textColor }]}>{children}</Text>
         )}
         {type === "icon" && children}
       </Animated.View>

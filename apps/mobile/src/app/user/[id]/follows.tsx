@@ -1,21 +1,12 @@
 import { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, FlatList, Pressable, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FText } from "@/components/f-text";
 import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ChevronLeft } from "lucide-react-native";
-import {
-  UserListItem,
-  type UserListItemData,
-} from "@/features/user/components/user-list-item";
+import { UserListItem, type UserListItemData } from "@/features/user/components/user-list-item";
 
 type TabType = "followers" | "following";
 
@@ -166,9 +157,7 @@ export default function FollowsScreen() {
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
       <FText style={[styles.emptyText, { color: emptyTextColor }]}>
-        {activeTab === "followers"
-          ? "No followers yet"
-          : "Not following anyone yet"}
+        {activeTab === "followers" ? "No followers yet" : "Not following anyone yet"}
       </FText>
     </View>
   );
@@ -195,20 +184,14 @@ export default function FollowsScreen() {
             style={[
               styles.tabText,
               {
-                color:
-                  activeTab === "followers" ? tabActiveColor : tabInactiveColor,
+                color: activeTab === "followers" ? tabActiveColor : tabInactiveColor,
               },
             ]}
           >
             Followers
           </FText>
           {activeTab === "followers" && (
-            <View
-              style={[
-                styles.tabIndicator,
-                { backgroundColor: tabIndicatorColor },
-              ]}
-            />
+            <View style={[styles.tabIndicator, { backgroundColor: tabIndicatorColor }]} />
           )}
         </Pressable>
 
@@ -217,20 +200,14 @@ export default function FollowsScreen() {
             style={[
               styles.tabText,
               {
-                color:
-                  activeTab === "following" ? tabActiveColor : tabInactiveColor,
+                color: activeTab === "following" ? tabActiveColor : tabInactiveColor,
               },
             ]}
           >
             Following
           </FText>
           {activeTab === "following" && (
-            <View
-              style={[
-                styles.tabIndicator,
-                { backgroundColor: tabIndicatorColor },
-              ]}
-            />
+            <View style={[styles.tabIndicator, { backgroundColor: tabIndicatorColor }]} />
           )}
         </Pressable>
       </View>

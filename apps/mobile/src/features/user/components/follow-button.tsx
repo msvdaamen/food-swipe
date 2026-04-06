@@ -4,11 +4,7 @@ import { FText } from "@/components/f-text";
 import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { UserPlus, UserCheck } from "lucide-react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 type FollowButtonProps = {
   isFollowing: boolean;
@@ -16,11 +12,7 @@ type FollowButtonProps = {
   size?: "default" | "small";
 };
 
-export function FollowButton({
-  isFollowing,
-  onPress,
-  size = "default",
-}: FollowButtonProps) {
+export function FollowButton({ isFollowing, onPress, size = "default" }: FollowButtonProps) {
   const [following, setFollowing] = useState(isFollowing);
   const scale = useSharedValue(1);
 
@@ -56,9 +48,7 @@ export function FollowButton({
           styles.container,
           isSmall && styles.containerSmall,
           animatedStyle,
-          following
-            ? { backgroundColor: followingBg }
-            : { backgroundColor: Colors.emerald500 },
+          following ? { backgroundColor: followingBg } : { backgroundColor: Colors.emerald500 },
         ]}
       >
         {following ? (

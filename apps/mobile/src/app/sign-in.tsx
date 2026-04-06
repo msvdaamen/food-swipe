@@ -4,21 +4,15 @@ import { AppInput } from "@/components/ui/input";
 import { Colors } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 import { useForm } from "@tanstack/react-form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  ImageBackground,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ImageBackground, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useSignIn } from "@/features/auth/api/sign-in";
 
-const signInSchema = type({
-  email: "string.email",
-  password: "string >= 1",
+const signInSchema = z.object({
+  email: z.email(),
+  password: z.string().min(1),
 });
 
 export default function SignIn() {
@@ -73,9 +67,7 @@ export default function SignIn() {
                     color="transparent"
                   />
                   {field.state.meta.errors ? (
-                    <FText style={styles.errorText}>
-                      {field.state.meta.errors.join(", ")}
-                    </FText>
+                    <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                   ) : null}
                 </View>
               )}
@@ -94,9 +86,7 @@ export default function SignIn() {
                     color="transparent"
                   />
                   {field.state.meta.errors ? (
-                    <FText style={styles.errorText}>
-                      {field.state.meta.errors.join(", ")}
-                    </FText>
+                    <FText style={styles.errorText}>{field.state.meta.errors.join(", ")}</FText>
                   ) : null}
                 </View>
               )}
@@ -113,9 +103,7 @@ export default function SignIn() {
           </View>
 
           <View style={styles.footer}>
-            <FText style={styles.footerText}>
-              Don&apos;t have an account?{" "}
-            </FText>
+            <FText style={styles.footerText}>Don&apos;t have an account? </FText>
             <Link href="/sign-up" replace>
               <FText style={styles.linkText}>Sign Up</FText>
             </Link>

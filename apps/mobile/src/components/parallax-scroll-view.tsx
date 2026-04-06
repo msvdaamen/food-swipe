@@ -38,22 +38,14 @@ export default function ParallaxScrollView({
           ),
         },
         {
-          scale: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [2, 1, 1],
-          ),
+          scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
         },
       ],
     };
   });
 
   return (
-    <Animated.ScrollView
-      ref={scrollRef}
-      style={{ flex: 1 }}
-      scrollEventThrottle={16}
-    >
+    <Animated.ScrollView ref={scrollRef} style={{ flex: 1 }} scrollEventThrottle={16}>
       <Animated.View
         style={[
           styles.header,

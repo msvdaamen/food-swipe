@@ -62,24 +62,13 @@ export function ProfileHeader({
             />
           ) : (
             <View
-              style={[
-                styles.avatar,
-                styles.avatarPlaceholder,
-                { backgroundColor: placeholderBg },
-              ]}
+              style={[styles.avatar, styles.avatarPlaceholder, { backgroundColor: placeholderBg }]}
             >
-              <FText style={styles.avatarPlaceholderText}>
-                {name.charAt(0).toUpperCase()}
-              </FText>
+              <FText style={styles.avatarPlaceholderText}>{name.charAt(0).toUpperCase()}</FText>
             </View>
           )}
           {isOwnProfile && (
-            <View
-              style={[
-                styles.cameraOverlay,
-                { backgroundColor: cameraOverlayBg },
-              ]}
-            >
+            <View style={[styles.cameraOverlay, { backgroundColor: cameraOverlayBg }]}>
               <Camera size={20} color={Colors.white} />
             </View>
           )}
@@ -88,12 +77,8 @@ export function ProfileHeader({
 
       <View style={styles.infoContainer}>
         <FText style={styles.name}>{name}</FText>
-        <FText style={[styles.username, { color: usernameColor }]}>
-          @{username}
-        </FText>
-        {bio ? (
-          <FText style={[styles.bio, { color: bioColor }]}>{bio}</FText>
-        ) : null}
+        <FText style={[styles.username, { color: usernameColor }]}>@{username}</FText>
+        {bio ? <FText style={[styles.bio, { color: bioColor }]}>{bio}</FText> : null}
       </View>
     </View>
   );
