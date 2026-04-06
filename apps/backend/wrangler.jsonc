@@ -60,7 +60,7 @@
     {
       "binding": "HYPERDRIVE",
       "id": "957ba740f64444dca2a77e5862dfcb34",
-      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/food-swipe"
+      "localConnectionString": "postgres://postgres:postgres@localhost:5432/food-swipe"
     }
   ],
   "r2_buckets": [

@@ -105,7 +105,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                     <ComboboxList>
                       {(item) => (
                         <ComboboxItem key={item.id} value={item.id}>
-                          {item}
+                          {item.name}
                         </ComboboxItem>
                       )}
                     </ComboboxList>
