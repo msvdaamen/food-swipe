@@ -9,9 +9,11 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ApiClientProvider } from "@food-swipe/client-api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth";
+import { api } from "@/lib/api-client";
 import { Colors } from "@/constants/theme";
 
 const darkTheme = {
@@ -55,27 +57,29 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
-        <QueryClientProvider client={queryClient}>
-          <Stack>
-            <Stack.Protected guard={!!session}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="recipe/[id]"
-                options={{
-                  presentation: "pageSheet",
-                  title: "Recipe",
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="user/[id]"
-                options={{
-                  presentation: "card",
-                  title: "User",
-                  headerShown: false,
-                }}
-              />
-              {/*<Stack.Screen
+        {/* Shared REST hooks from @food-swipe/client-api/* use useApiClient() */}
+        <ApiClientProvider client={api}>
+          <QueryClientProvider client={queryClient}>
+            <Stack>
+              <Stack.Protected guard={!!session}>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="recipe/[id]"
+                  options={{
+                    presentation: "pageSheet",
+                    title: "Recipe",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="user/[id]"
+                  options={{
+                    presentation: "card",
+                    title: "User",
+                    headerShown: false,
+                  }}
+                />
+                {/*<Stack.Screen
                 name="user/[id]/follows"
                 options={{
                   presentation: "card",
@@ -83,15 +87,16 @@ export default function RootLayout() {
                   headerShown: false,
                 }}
               />*/}
-            </Stack.Protected>
+              </Stack.Protected>
 
-            <Stack.Protected guard={!session}>
-              <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-              <Stack.Screen name="sign-up" options={{ headerShown: false }} />
-            </Stack.Protected>
-          </Stack>
-          <StatusBar style="auto" />
-        </QueryClientProvider>
+              <Stack.Protected guard={!session}>
+                <Stack.Screen name="sign-in" options={{ headerShown: false }} />
+                <Stack.Screen name="sign-up" options={{ headerShown: false }} />
+              </Stack.Protected>
+            </Stack>
+            <StatusBar style="auto" />
+          </QueryClientProvider>
+        </ApiClientProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );

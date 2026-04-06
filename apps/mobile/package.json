@@ -10,6 +10,8 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@food-swipe/types": "workspace:*",
+    "@food-swipe/client-api": "workspace:*",
     "@better-auth/expo": "^1.4.5",
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.8.11",

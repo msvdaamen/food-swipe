@@ -2,21 +2,20 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { useForm } from "@tanstack/react-form";
-import { RecipeStep } from "../types/recipe-step.type";
+import type { RecipeStep } from "@food-swipe/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { type } from "arktype";
 import { useEffect } from "react";
-import { useRecipeStepCreate } from "../api/steps/create-recipe-step";
-import { useRecipeStepUpdate } from "../api/steps/update-recipe-step";
+import { useRecipeStepCreate, useRecipeStepUpdate } from "@food-swipe/client-api/recipe";
 
 interface ManageRecipeStepDialogProps {
   recipeId: string;

@@ -1,0 +1,19 @@
+{
+  "name": "@food-swipe/client-api",
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^6",
+    "@food-swipe/types": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "react": "^19.1.0",
+    "@types/react": "^19.1.0"
+  },
+  "exports": {
+    ".": "./index.ts",
+    "./measurement": "./src/measurement/index.ts",
+    "./ingredient": "./src/ingredient/index.ts",
+    "./user": "./src/user/index.ts",
+    "./recipe": "./src/recipe/index.ts"
+  }
+}

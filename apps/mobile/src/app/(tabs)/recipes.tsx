@@ -12,9 +12,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { FView } from "@/components/f-view";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRecipesQueryOptions } from "@/features/recipe/api/get-recipes";
+import { getRecipesQueryOptions } from "@food-swipe/client-api/recipe";
+import { useApiClient } from "@food-swipe/client-api";
 import { Suspense } from "react";
-import { Recipe } from "@/features/recipe/types/recipe.type";
+import type { Recipe } from "@food-swipe/types";
 
 export default function RecipesView() {
   return (
@@ -29,7 +30,8 @@ function Loading() {
 }
 
 function RecipesList() {
-  const { data } = useSuspenseQuery(getRecipesQueryOptions());
+  const api = useApiClient();
+  const { data } = useSuspenseQuery(getRecipesQueryOptions(api));
 
   return (
     <SafeAreaView>
@@ -49,11 +51,17 @@ function RecipesList() {
 
 function RecipeItem({ recipe }: { recipe: Recipe }) {
   const router = useRouter();
+  const coverUri = recipe.coverImageUrl ?? "";
 
   const handleRecipeCardPress = () => {
     router.navigate({
       pathname: "/recipe/[id]",
-      params: { id: recipe.id, coverImageUrl: recipe.coverImageUrl },
+      params: {
+        id: recipe.id,
+        ...(recipe.coverImageUrl != null && {
+          coverImageUrl: recipe.coverImageUrl,
+        }),
+      },
     });
   };
 
@@ -66,7 +74,7 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
       <Image
         style={styles.recipeImage}
         source={{
-          uri: recipe.coverImageUrl,
+          uri: coverUri,
         }}
       />
       <FView style={styles.recipeCardOverlay}>
@@ -99,7 +107,7 @@ function RecipeItem({ recipe }: { recipe: Recipe }) {
             >
               <Clock size={16} color="#d1d5db" />
               <FText style={styles.recipeCardDetailText}>
-                {recipe.prepTime} mins
+                {recipe.prepTime != null ? `${recipe.prepTime} mins` : "—"}
               </FText>
             </View>
           </View>

@@ -1,6 +1,1 @@
-import { Pagination } from "./pagination";
-
-export type PaginatedData<T> = {
-  data: T[];
-  pagination: Pagination;
-};
+export type { PaginatedData } from "@food-swipe/types";

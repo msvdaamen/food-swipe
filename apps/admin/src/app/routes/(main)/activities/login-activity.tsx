@@ -12,8 +12,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { useUserStats } from "@/features/user/api/get-user-stats";
-import { useUsers } from "@/features/user/api/get-users";
+import { useUserStats, useUsers } from "@food-swipe/client-api/user";
 
 export const Route = createFileRoute("/(main)/activities/login-activity")({
   component: RouteComponent,

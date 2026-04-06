@@ -24,15 +24,15 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { useIngredients } from "@/features/ingredient/api/get-ingredients";
-import { Ingredient } from "@/features/ingredient/types/ingredient.type";
-import { useMeasurements } from "@/features/measurement/api/get-measurements";
-import { Measurement } from "@/features/measurement/types/measurement.type";
+import type { Ingredient } from "@food-swipe/types";
+import { useIngredients } from "@food-swipe/client-api/ingredient";
+import { useMeasurements } from "@food-swipe/client-api/measurement";
+import type { Measurement } from "@food-swipe/types";
 import { useForm } from "@tanstack/react-form";
 import { type } from "arktype";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useRecipeIngredientCreate } from "../api/ingredients/create-recipe-ingredient";
+import { useRecipeIngredientCreate } from "@food-swipe/client-api/recipe";
 
 interface CreateRecipeIngredientProps {
   isOpen: boolean;
@@ -105,7 +105,7 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                     <ComboboxList>
                       {(item) => (
                         <ComboboxItem key={item.id} value={item.id}>
-                          {item}
+                          {item.name}
                         </ComboboxItem>
                       )}
                     </ComboboxList>

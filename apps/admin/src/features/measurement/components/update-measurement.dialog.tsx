@@ -13,9 +13,9 @@ import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC, useEffect } from "react";
+import { measurementKeys, useUpdateMeasurement } from "@food-swipe/client-api/measurement";
+import type { Measurement } from "@food-swipe/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { Measurement } from "../types/measurement.type";
-import { useUpdateMeasurement } from "../api/update-measurement";
 
 interface UpdateMeasurementProps {
   isOpen: boolean;
@@ -55,7 +55,7 @@ export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
   });
 
   useEffect(() => {
-    const measurements = queryClient.getQueryData<Measurement[]>(["measurements"]);
+    const measurements = queryClient.getQueryData<Measurement[]>(measurementKeys.list());
     if (!measurements) return;
 
     const measurement = measurements.find((measurement) => measurement.id === measurementId);

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { useUsers } from "@/features/user/api/get-users";
+import { useUsers } from "@food-swipe/client-api/user";
 import {
   ManagerUserDialog,
   useManageUserDialogState
@@ -69,7 +69,7 @@ function RouteComponent() {
                     <TableCell>{user.username}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {format(new Date(user.createdAt), "MM/dd/yyyy")}
+                      {format(user.createdAt, "MM/dd/yyyy")}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -14,7 +14,8 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix"
+    "lint:fix": "oxlint --fix",
+    "build:check": "tsc --noEmit && wrangler deploy --dry-run -e production"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.5.6",

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
-import { useRecipes } from "@/features/recipes/api/get-recipes";
+import { useRecipes } from "@food-swipe/client-api/recipe";
 
 export const Route = createFileRoute("/(main)/activities/recipes-uploaded")({
   component: RouteComponent,
@@ -64,7 +64,7 @@ function RouteComponent() {
                     <TableCell>{recipe.title}</TableCell>
                     <TableCell>UNKNOWN</TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {format(new Date(recipe.createdAt), "PPP")}
+                      {format(recipe.createdAt, "PPP")}
                     </TableCell>
                     <TableCell></TableCell>
                   </TableRow>

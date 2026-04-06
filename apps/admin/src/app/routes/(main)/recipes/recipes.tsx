@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
-import { getRecipesQueryOptions, useRecipes } from "@/features/recipes/api/get-recipes";
+import { getRecipesQueryOptions, useRecipes } from "@food-swipe/client-api/recipe";
+import { useApiClient } from "@food-swipe/client-api";
 import { CreateRecipeDialog } from "@/features/recipes/components/create-recipe-dialog";
 import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
 import {
@@ -136,6 +137,7 @@ function RouteComponent() {
 }
 
 function ImportRecipeToast({ recipeId }: { recipeId: string }) {
+  const api = useApiClient();
   const store = useImportingRecipeStore();
   const status = useImportingRecipeStore((state) => state.recipesStatus[recipeId]);
   const queryClient = useQueryClient();
@@ -145,10 +147,10 @@ function ImportRecipeToast({ recipeId }: { recipeId: string }) {
       setTimeout(() => {
         toast.dismiss(recipeId);
         store.removeStatus(recipeId);
-        queryClient.invalidateQueries(getRecipesQueryOptions());
+        queryClient.invalidateQueries(getRecipesQueryOptions(api));
       }, 3000);
     }
-  }, [queryClient, store, recipeId, status]);
+  }, [api, queryClient, store, recipeId, status]);
 
   if (!status) return null;
 

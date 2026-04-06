@@ -13,7 +13,7 @@ import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useUpdateIngredient } from "../api/update-ingredient";
+import { useUpdateIngredient } from "@food-swipe/client-api/ingredient";
 
 interface UpdateIngredientProps {
   isOpen: boolean;

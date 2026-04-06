@@ -1,6 +1,7 @@
 import { Form } from "@/components/form/form";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,18 +11,18 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { useAppForm } from "@/hooks/form";
 import { DialogState } from "@/types/dialog-state";
-import { Dialog } from "@radix-ui/react-dialog";
 import { type } from "arktype";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { useCreateUser } from "../api/create-user";
 import { useUpdateUser } from "../api/update-user";
-import { User } from "../types/user.type";
+import type { User } from "@food-swipe/types";
 
 export const useManageUserDialogState = create<DialogState<User>>((set) => ({
   isOpen: false,
-  open: (user?: User) => set((state) => ({ isOpen: !state.isOpen, data: user })),
-  close: () => set((state) => ({ isOpen: !state.isOpen })),
+  open: (user?: User) =>
+    set(user !== undefined ? { isOpen: true, data: user } : { isOpen: true, data: null }),
+  close: () => set({ isOpen: false }),
   data: null
 }));
 
@@ -78,7 +79,10 @@ export function ManagerUserDialog() {
   }, [form, state.isOpen]);
 
   return (
-    <Dialog open={state.isOpen} onOpenChange={state.close}>
+    <Dialog
+      open={state.isOpen}
+      onOpenChange={(open) => useManageUserDialogState.setState({ isOpen: open })}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{state.data == null ? "Create" : "Edit"} user</DialogTitle>

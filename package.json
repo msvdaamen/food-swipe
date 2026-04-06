@@ -8,5 +8,8 @@
   "workspaces": [
     "apps/*",
     "packages/**/*"
-  ]
+  ],
+  "catalog": {
+    "@tanstack/react-query": "^5.96.2"
+  }
 }
