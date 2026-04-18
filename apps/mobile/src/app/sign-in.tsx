@@ -37,7 +37,7 @@ export default function SignIn() {
 
   return (
     <ImageBackground
-      source={require("@assets/images/auth_background.jpg")}
+      source={require("../../assets/images/auth_background.jpg")}
       style={styles.background}
       resizeMode="cover"
     >

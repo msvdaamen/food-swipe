@@ -6,12 +6,11 @@ import { FText } from "@/components/f-text";
 import {
   getRecipeIngredientsQueryOptions,
   getRecipeNutritionQueryOptions,
+  getRecipeQueryOptions,
   getRecipeStepsQueryOptions,
-  useRecipe,
-} from "@food-swipe/client-api/recipe";
-import { useApiClient } from "@food-swipe/client-api";
+} from "@/features/recipes/api";
 import { useLocalSearchParams } from "expo-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { NumberStepper } from "@/components/number-stepper";
 import { LikeButton } from "@/components/like-button";
 import type { RecipeNutrition } from "@food-swipe/types";
@@ -24,7 +23,10 @@ export default function RecipeModal() {
     coverImageUrl?: string;
   }>();
 
-  const { data: recipe } = useRecipe({ recipeId: recipeId ?? "" }, { enabled: Boolean(recipeId) });
+  const { data: recipe } = useQuery({
+    ...getRecipeQueryOptions(recipeId ?? ""),
+    enabled: Boolean(recipeId),
+  });
   const theme = useColorScheme();
   const backgroundColor = theme === "dark" ? Colors.stone950 : Colors.gray50;
   const [isLiked, setIsLiked] = useState(false);
@@ -67,8 +69,7 @@ export default function RecipeModal() {
 }
 
 const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
-  const api = useApiClient();
-  const { data: ingredients } = useSuspenseQuery(getRecipeIngredientsQueryOptions(api, id));
+  const { data: ingredients } = useSuspenseQuery(getRecipeIngredientsQueryOptions(id));
   const [checked, setChecked] = useState(true);
   const [amount, setAmount] = useState(servings);
 
@@ -102,8 +103,7 @@ const Ingredients = ({ id, servings }: { id: string; servings: number }) => {
 };
 
 const Steps = ({ id }: { id: string }) => {
-  const api = useApiClient();
-  const { data: steps } = useSuspenseQuery(getRecipeStepsQueryOptions(api, id));
+  const { data: steps } = useSuspenseQuery(getRecipeStepsQueryOptions(id));
 
   const theme = useColorScheme();
   const textColor = theme === "dark" ? "white" : "black";
@@ -124,8 +124,7 @@ const Steps = ({ id }: { id: string }) => {
 };
 
 const Nutritions = ({ id }: { id: string }) => {
-  const api = useApiClient();
-  const { data: recipeNutrition } = useSuspenseQuery(getRecipeNutritionQueryOptions(api, id));
+  const { data: recipeNutrition } = useSuspenseQuery(getRecipeNutritionQueryOptions(id));
 
   const nutritionMap = new Map<string, RecipeNutrition>(
     recipeNutrition.map((nutrition) => [nutrition.name, nutrition]),

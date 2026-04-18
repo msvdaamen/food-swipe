@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
-import { useRecipes } from "@food-swipe/client-api/recipe";
+import { getRecipesQueryOptions } from "@/features/recipes/api";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/(main)/activities/recipes-uploaded")({
   component: RouteComponent,
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/(main)/activities/recipes-uploaded")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { data: recipes, isLoading } = useRecipes({ isPublished: false });
+  const { data: recipes, isLoading } = useQuery(getRecipesQueryOptions({ isPublished: false }));
   const loadingArr = Array(5).fill(null);
 
   return (

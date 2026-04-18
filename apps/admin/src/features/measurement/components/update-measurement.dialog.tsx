@@ -13,7 +13,7 @@ import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC, useEffect } from "react";
-import { measurementKeys, useUpdateMeasurement } from "@food-swipe/client-api/measurement";
+import { measurementKeys, useUpdateMeasurement } from "@/features/measurement/api";
 import type { Measurement } from "@food-swipe/types";
 import { useQueryClient } from "@tanstack/react-query";
 

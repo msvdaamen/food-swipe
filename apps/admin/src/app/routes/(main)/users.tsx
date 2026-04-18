@@ -8,11 +8,13 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { useUsers } from "@food-swipe/client-api/user";
+
+import { getUsersQueryOptions } from "@/features/user/api";
 import {
   ManagerUserDialog,
   useManageUserDialogState
 } from "@/features/user/components/manage-user";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -24,11 +26,13 @@ export const Route = createFileRoute("/(main)/users")({
 function RouteComponent() {
   const manageUserDialog = useManageUserDialogState();
   const [page, setPage] = useState(1);
-  const { data, isPending, error } = useUsers({
-    amount: 10,
-    page: page,
-    sort: "id"
-  });
+  const { data, isPending, error } = useQuery(
+    getUsersQueryOptions({
+      amount: 10,
+      page,
+      sort: "id"
+    })
+  );
   const loadingArr = Array(5).fill(null);
 
   if (error) {

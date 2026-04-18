@@ -24,15 +24,17 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import type { Ingredient } from "@food-swipe/types";
-import { useIngredients } from "@food-swipe/client-api/ingredient";
-import { useMeasurements } from "@food-swipe/client-api/measurement";
+
+import { getIngredientsQueryOptions } from "@/features/ingredient/api";
+import { getMeasurementsQueryOptions } from "@/features/measurement/api";
 import type { Measurement } from "@food-swipe/types";
 import { useAppForm } from "@/hooks/form";
 import { type } from "arktype";
 import { Loader } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 import type { RecipeIngredient } from "@food-swipe/types";
-import { useRecipeIngredientUpdate } from "@food-swipe/client-api/recipe";
+import { useRecipeIngredientUpdate } from "@/features/recipes/api";
 
 interface UpdateRecipeIngredientProps {
   isOpen: boolean;
@@ -53,12 +55,15 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
   recipeId,
   ingredient
 }) => {
+
   const updateIngredient = useRecipeIngredientUpdate();
-  const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
-    page: 1,
-    amount: 100
-  });
-  const { data: measurements = [] as Measurement[] } = useMeasurements();
+  const { data: ingredients = { data: [] as Ingredient[] } } = useQuery(
+    getIngredientsQueryOptions({
+      page: 1,
+      amount: 100
+    })
+  );
+  const { data: measurements = [] as Measurement[] } = useQuery(getMeasurementsQueryOptions());
 
   const form = useAppForm({
     defaultValues: {

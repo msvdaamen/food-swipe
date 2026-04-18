@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/auth";
-import { userKeys } from "@food-swipe/client-api/user";
+import { userKeys } from "./keys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UpdateUserInput = {

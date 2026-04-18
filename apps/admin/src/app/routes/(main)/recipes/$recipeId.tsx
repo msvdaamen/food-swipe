@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,17 +47,17 @@ import type { RecipeIngredient, RecipeStep } from "@food-swipe/types";
 import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
 import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
 import {
+  getRecipeIngredientsQueryOptions,
+  getRecipeNutritionQueryOptions,
+  getRecipeQueryOptions,
+  getRecipeStepsQueryOptions,
   useDeleteRecipe,
-  useRecipe,
   useRecipeIngredientDelete,
-  useRecipeIngredients,
-  useRecipeNutrition,
   useRecipeNutritionUpdate,
   useRecipeStepDelete,
-  useRecipeSteps,
   useRecipeStepsReorder,
   useUpdateRecipe
-} from "@food-swipe/client-api/recipe";
+} from "@/features/recipes/api";
 
 export const Route = createFileRoute("/(main)/recipes/$recipeId")({
   component: RouteComponent,
@@ -68,7 +69,7 @@ export const Route = createFileRoute("/(main)/recipes/$recipeId")({
 function RouteComponent() {
   const navigate = useNavigate();
   const { recipeId } = Route.useParams();
-  const { data: recipe, isLoading } = useRecipe({ recipeId });
+  const { data: recipe, isLoading } = useQuery(getRecipeQueryOptions(recipeId));
   const deleteRecipe = useDeleteRecipe({
     onSuccess: () => {
       navigate({ to: "/recipes/recipes" });
@@ -200,7 +201,7 @@ function Ingredients({ recipeId }: { recipeId: string }) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState<RecipeIngredient | null>(null);
-  const { data: ingredients, isLoading } = useRecipeIngredients(recipeId);
+  const { data: ingredients, isLoading } = useQuery(getRecipeIngredientsQueryOptions(recipeId));
   const deleteIngredient = useRecipeIngredientDelete();
 
   const openCreateDialog = () => {
@@ -285,7 +286,7 @@ function Ingredients({ recipeId }: { recipeId: string }) {
 }
 
 function Steps({ recipeId }: { recipeId: string }) {
-  const { data: steps, isLoading } = useRecipeSteps(recipeId);
+  const { data: steps, isLoading } = useQuery(getRecipeStepsQueryOptions(recipeId));
   const reorderSteps = useRecipeStepsReorder(recipeId);
   const deleteStep = useRecipeStepDelete(recipeId);
 
@@ -419,7 +420,7 @@ function SortableStep({
 }
 
 function Nutritions({ recipeId }: { recipeId: string }) {
-  const { data, isFetching } = useRecipeNutrition(recipeId);
+  const { data, isFetching } = useQuery(getRecipeNutritionQueryOptions(recipeId));
 
   const nutritions = useMemo(() => {
     const nutritions: RecipeNutrition[] = data || [];

@@ -12,7 +12,9 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { useUserStats, useUsers } from "@food-swipe/client-api/user";
+
+import { getUserStatsQueryOptions, getUsersQueryOptions } from "@/features/user/api";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/(main)/activities/login-activity")({
   component: RouteComponent,
@@ -23,7 +25,7 @@ export const Route = createFileRoute("/(main)/activities/login-activity")({
 });
 
 function RouteComponent() {
-  const { data: stats, isLoading: isLoadingStats } = useUserStats();
+  const { data: stats, isLoading: isLoadingStats } = useQuery(getUserStatsQueryOptions());
 
   return (
     <div className="space-y-6">
@@ -59,11 +61,13 @@ function RouteComponent() {
 function UsersTable() {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError, error, isPending } = useUsers({
-    amount: 10,
-    page,
-    sort: "id"
-  });
+  const { data, isLoading, isError, error, isPending } = useQuery(
+    getUsersQueryOptions({
+      amount: 10,
+      page,
+      sort: "id"
+    })
+  );
 
   const loadingArr = Array(5).fill(null);
 

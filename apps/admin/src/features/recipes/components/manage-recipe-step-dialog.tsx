@@ -15,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { type } from "arktype";
 import { useEffect } from "react";
-import { useRecipeStepCreate, useRecipeStepUpdate } from "@food-swipe/client-api/recipe";
+import { recipeKeys, useRecipeStepCreate, useRecipeStepUpdate } from "@/features/recipes/api";
 
 interface ManageRecipeStepDialogProps {
   recipeId: string;
@@ -59,7 +59,7 @@ export function ManageRecipeStepDialog({
 
   useEffect(() => {
     if (stepId) {
-      const steps = queryClient.getQueryData<RecipeStep[]>(["recipe", recipeId, "steps"]);
+      const steps = queryClient.getQueryData<RecipeStep[]>(recipeKeys.steps(recipeId));
       const step = steps?.find((step) => step.id === stepId);
       if (step) {
         form.setFieldValue("description", step.description);
@@ -69,7 +69,7 @@ export function ManageRecipeStepDialog({
   }, [form, queryClient, recipeId, stepId]);
 
   useEffect(() => {
-    const steps = queryClient.getQueryData<RecipeStep[]>(["recipe", recipeId, "steps"]);
+    const steps = queryClient.getQueryData<RecipeStep[]>(recipeKeys.steps(recipeId));
     if (steps) {
       form.setFieldValue("order", steps.length + 1);
     }

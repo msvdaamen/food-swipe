@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useCreateRecipe } from "@food-swipe/client-api/recipe";
+import { useCreateRecipe } from "@/features/recipes/api";
 import { type } from "arktype";
 import { Loader } from "lucide-react";
 

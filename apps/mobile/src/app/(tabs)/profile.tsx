@@ -11,10 +11,11 @@ import {
   FeedPlaceholder,
 } from "@/features/user/components";
 import * as ImagePicker from "expo-image-picker";
-import { useMe, useUploadProfilePicture } from "@food-swipe/client-api/user";
+import { getMeQueryOptions, useUploadProfilePicture } from "@/features/user/api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProfileScreen() {
-  const { data: user, isPending, error } = useMe();
+  const { data: user, isPending, error } = useQuery(getMeQueryOptions());
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const uploadProfilePicture = useUploadProfilePicture();

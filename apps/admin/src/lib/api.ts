@@ -1,5 +1,5 @@
 import { router } from "@/app/router";
-import { AuthApiClient } from "@food-swipe/client-api";
+import { AuthApiClient } from "@/lib/api-client";
 
 const url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 

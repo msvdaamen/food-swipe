@@ -25,14 +25,16 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import type { Ingredient } from "@food-swipe/types";
-import { useIngredients } from "@food-swipe/client-api/ingredient";
-import { useMeasurements } from "@food-swipe/client-api/measurement";
+
+import { getIngredientsQueryOptions } from "@/features/ingredient/api";
+import { getMeasurementsQueryOptions } from "@/features/measurement/api";
 import type { Measurement } from "@food-swipe/types";
 import { useForm } from "@tanstack/react-form";
 import { type } from "arktype";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useRecipeIngredientCreate } from "@food-swipe/client-api/recipe";
+import { useRecipeIngredientCreate } from "@/features/recipes/api";
+import { useQuery } from "@tanstack/react-query";
 
 interface CreateRecipeIngredientProps {
   isOpen: boolean;
@@ -52,11 +54,13 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
   recipeId
 }) => {
   const createIngredient = useRecipeIngredientCreate();
-  const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
-    page: 1,
-    amount: 100
-  });
-  const { data: measurements = [] as Measurement[] } = useMeasurements();
+  const { data: ingredients = { data: [] as Ingredient[] } } = useQuery(
+    getIngredientsQueryOptions({
+      page: 1,
+      amount: 100
+    })
+  );
+  const { data: measurements = [] as Measurement[] } = useQuery(getMeasurementsQueryOptions());
 
   const form = useForm({
     defaultValues: {

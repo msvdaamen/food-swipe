@@ -13,7 +13,7 @@ import { type } from "arktype";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useCreateMeasurement } from "@food-swipe/client-api/measurement";
+import { useCreateMeasurement } from "@/features/measurement/api";
 
 interface CreateMeasurementProps {
   isOpen: boolean;

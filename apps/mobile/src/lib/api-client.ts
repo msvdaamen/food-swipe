@@ -1,8 +1,8 @@
-import { AuthApiClient } from "@food-swipe/client-api";
+import { AuthApiClient } from "@/lib/api/client";
 import { router } from "expo-router";
 import { authClient } from "./auth";
 
-const url = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
+const url = process.env.EXPO_PUBLIC_API_URL || "http://localhost:8787";
 
 export const api = new AuthApiClient(url, {
   credentials: "omit",

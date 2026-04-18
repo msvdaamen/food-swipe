@@ -6,7 +6,11 @@ import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import AppPagination from "@/components/app-pagination";
 import { UpdateIngredientDialog } from "./update-ingredient.dialog";
-import { useDeleteIngredient, useIngredients } from "@food-swipe/client-api/ingredient";
+import {
+  getIngredientsQueryOptions,
+  useDeleteIngredient
+} from "@/features/ingredient/api";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   search: string;
@@ -23,11 +27,13 @@ export const IngredientsListView = ({ search }: Props) => {
     setPage(1);
     setPrevSearch(search);
   }
-  const { data, isPending, error } = useIngredients({
-    page,
-    search,
-    amount: 10
-  });
+  const { data, isPending, error } = useQuery(
+    getIngredientsQueryOptions({
+      page,
+      search,
+      amount: 10
+    })
+  );
   const deleteIngredient = useDeleteIngredient();
 
   const openUpdateIngredientDialog = (id: number, name: string) => {

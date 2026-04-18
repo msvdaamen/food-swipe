@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/table";
 import { CreateMeasurementDialog } from "@/features/measurement/components/create-measurement.dialog";
 import { UpdateMeasurementDialog } from "@/features/measurement/components/update-measurement.dialog";
-import { useDeleteMeasurement, useMeasurements } from "@food-swipe/client-api/measurement";
+import {
+  getMeasurementsQueryOptions,
+  useDeleteMeasurement
+} from "@/features/measurement/api";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/(main)/recipes/measurements")({
   component: RouteComponent,
@@ -28,7 +32,7 @@ function RouteComponent() {
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [selectedMeasurementId, setSelectedMeasurementId] = useState<number | null>(null);
 
-  const { data, isError, error, isPending } = useMeasurements();
+  const { data, isError, error, isPending } = useQuery(getMeasurementsQueryOptions());
   const deleteMeasurement = useDeleteMeasurement();
 
   const openCreateMeasurementDialog = () => {

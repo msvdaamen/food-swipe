@@ -12,8 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { FView } from "@/components/f-view";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRecipesQueryOptions } from "@food-swipe/client-api/recipe";
-import { useApiClient } from "@food-swipe/client-api";
+import { getRecipesQueryOptions } from "@/features/recipes/api";
 import { Suspense } from "react";
 import type { Recipe } from "@food-swipe/types";
 
@@ -30,8 +29,7 @@ function Loading() {
 }
 
 function RecipesList() {
-  const api = useApiClient();
-  const { data } = useSuspenseQuery(getRecipesQueryOptions(api));
+  const { data } = useSuspenseQuery(getRecipesQueryOptions());
 
   return (
     <SafeAreaView>

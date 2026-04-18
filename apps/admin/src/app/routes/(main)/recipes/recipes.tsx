@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
-import { getRecipesQueryOptions, useRecipes } from "@food-swipe/client-api/recipe";
-import { useApiClient } from "@food-swipe/client-api";
+import { getRecipesQueryOptions } from "@/features/recipes/api";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { CreateRecipeDialog } from "@/features/recipes/components/create-recipe-dialog";
 import { ImportRecipeDialog } from "@/features/recipes/components/import-recipe.dialog";
 import {
@@ -12,7 +12,6 @@ import {
   useImportingRecipeStore
 } from "@/features/recipes/stores/importing-recipe.store";
 import { useWebsocket } from "@/lib/websocket";
-import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Import, Plus, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -30,7 +29,7 @@ function RouteComponent() {
   const websocket = useWebsocket();
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const { data: recipes, isPending, error } = useRecipes();
+  const { data: recipes, isPending, error } = useQuery(getRecipesQueryOptions());
   const [importRecipeDialogOpen, setImportRecipeDialogOpen] = useState(false);
   const [createRecipeDialogOpen, setCreateRecipeDialogOpen] = useState(false);
 
@@ -137,7 +136,6 @@ function RouteComponent() {
 }
 
 function ImportRecipeToast({ recipeId }: { recipeId: string }) {
-  const api = useApiClient();
   const store = useImportingRecipeStore();
   const status = useImportingRecipeStore((state) => state.recipesStatus[recipeId]);
   const queryClient = useQueryClient();
@@ -147,10 +145,10 @@ function ImportRecipeToast({ recipeId }: { recipeId: string }) {
       setTimeout(() => {
         toast.dismiss(recipeId);
         store.removeStatus(recipeId);
-        queryClient.invalidateQueries(getRecipesQueryOptions(api));
+        queryClient.invalidateQueries(getRecipesQueryOptions());
       }, 3000);
     }
-  }, [api, queryClient, store, recipeId, status]);
+  }, [queryClient, store, recipeId, status]);
 
   if (!status) return null;
 
