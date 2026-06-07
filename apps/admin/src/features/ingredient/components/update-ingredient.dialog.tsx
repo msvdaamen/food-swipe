@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
+import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useUpdateIngredient } from "@food-swipe/client-api/ingredient";
+import { useUpdateIngredient } from "@/features/ingredient/api/update-ingredient";
 
 interface UpdateIngredientProps {
   isOpen: boolean;
@@ -22,8 +22,8 @@ interface UpdateIngredientProps {
   name?: string;
 }
 
-const validator = type({
-  name: "string"
+const validator = z.object({
+  name: z.string()
 });
 
 export const UpdateIngredientDialog: FC<UpdateIngredientProps> = ({

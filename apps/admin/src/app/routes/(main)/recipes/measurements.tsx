@@ -11,9 +11,16 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { CreateMeasurementDialog } from "@/features/measurement/components/create-measurement.dialog";
-import { UpdateMeasurementDialog } from "@/features/measurement/components/update-measurement.dialog";
-import { useDeleteMeasurement, useMeasurements } from "@food-swipe/client-api/measurement";
+import {
+  CreateMeasurementDialog,
+  useCreateMeasurementDialog
+} from "@/features/measurement/components/create-measurement.dialog";
+import {
+  UpdateMeasurementDialog,
+  useUpdateMeasurementDialog
+} from "@/features/measurement/components/update-measurement.dialog";
+import { useDeleteMeasurement } from "@/features/measurement/api/delete-measurement";
+import { useMeasurements } from "@/features/measurement/api/get-measurements";
 
 export const Route = createFileRoute("/(main)/recipes/measurements")({
   component: RouteComponent,
@@ -24,26 +31,12 @@ export const Route = createFileRoute("/(main)/recipes/measurements")({
 
 function RouteComponent() {
   const [search, setSearch] = useState("");
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const [selectedMeasurementId, setSelectedMeasurementId] = useState<number | null>(null);
+
+  const createMeasurementDialog = useCreateMeasurementDialog();
+  const updateMeasurementDialog = useUpdateMeasurementDialog();
 
   const { data, isError, error, isPending } = useMeasurements();
   const deleteMeasurement = useDeleteMeasurement();
-
-  const openCreateMeasurementDialog = () => {
-    setIsCreateOpen(true);
-  };
-
-  const openUpdateMeasurementDialog = (id: number) => {
-    setIsUpdateOpen(true);
-    setSelectedMeasurementId(id);
-  };
-
-  const closeUpdateMeasurementDialog = () => {
-    setIsUpdateOpen(false);
-    setSelectedMeasurementId(null);
-  };
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -70,7 +63,7 @@ function RouteComponent() {
       </div>
 
       <div className="mb-2 flex justify-end">
-        <Button size="sm" onClick={openCreateMeasurementDialog}>
+        <Button size="sm" onClick={createMeasurementDialog.open}>
           Add measurement
         </Button>
       </div>
@@ -102,7 +95,9 @@ function RouteComponent() {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => openUpdateMeasurementDialog(measurement.id)}
+                          onClick={() =>
+                            updateMeasurementDialog.open({ measurementId: measurement.id })
+                          }
                         >
                           <PencilIcon className="h-4 w-4" />
                         </Button>
@@ -120,12 +115,8 @@ function RouteComponent() {
           </TableBody>
         </Table>
       </div>
-      <CreateMeasurementDialog isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
-      <UpdateMeasurementDialog
-        isOpen={isUpdateOpen}
-        onClose={closeUpdateMeasurementDialog}
-        measurementId={selectedMeasurementId!}
-      />
+      <CreateMeasurementDialog />
+      <UpdateMeasurementDialog />
     </>
   );
 }

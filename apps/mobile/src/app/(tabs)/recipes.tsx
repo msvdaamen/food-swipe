@@ -12,8 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { FView } from "@/components/f-view";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRecipesQueryOptions } from "@food-swipe/client-api/recipe";
-import { useApiClient } from "@food-swipe/client-api";
+import { getRecipesQueryOptions } from "@/features/recipe/api";
+import { useApiClient } from "@/lib/api-client-context";
 import { Suspense } from "react";
 import type { Recipe } from "@food-swipe/types";
 

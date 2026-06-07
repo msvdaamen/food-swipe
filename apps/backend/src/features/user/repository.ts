@@ -1,13 +1,14 @@
 import { DatabaseProvider } from "../../providers/database.provider";
 import { NewUserEntity, sessions, UserEntity, users } from "../../schema";
-import { NotFoundError } from "../../common/errors/not-found.error";
+import { NotFoundError2 } from "../../common/errors/not-found.error";
 import { and, count, eq, gte, lte, sql } from "drizzle-orm";
 import { GetUsersDto } from "./dto/get-users.dto";
 import { PaginatedData } from "../../common/types/paginated-data";
 import { CreatePagination } from "../../common/create-pagination";
+import { Result } from "better-result";
 
 export interface UserRepository {
-  findById(userId: string): Promise<UserEntity>;
+  findById(userId: string): Promise<Result<UserEntity, NotFoundError2>>;
   updateUser(userId: string, payload: Partial<UserEntity>): Promise<void>;
   getUsers(payload: GetUsersDto): Promise<PaginatedData<UserEntity>>;
   create(payload: NewUserEntity): Promise<UserEntity>;
@@ -20,12 +21,12 @@ export interface UserRepository {
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly database: DatabaseProvider) {}
 
-  async findById(userId: string): Promise<UserEntity> {
+  async findById(userId: string): Promise<Result<UserEntity, NotFoundError2>> {
     const [user] = await this.database.select().from(users).where(eq(users.id, userId)).limit(1);
     if (!user) {
-      throw new NotFoundError({ id: userId, message: "User not found" });
+      return Result.err(new NotFoundError2({ id: userId, message: "User not found" }));
     }
-    return user;
+    return Result.ok(user);
   }
 
   async updateUser(userId: string, payload: Partial<UserEntity>): Promise<void> {

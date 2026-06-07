@@ -9,7 +9,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ApiClientProvider } from "@food-swipe/client-api";
+import { ApiClientProvider } from "@/lib/api-client-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth";
@@ -57,7 +57,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
-        {/* Shared REST hooks from @food-swipe/client-api/* use useApiClient() */}
+        {/* App-local REST hooks use useApiClient() */}
         <ApiClientProvider client={api}>
           <QueryClientProvider client={queryClient}>
             <Stack>

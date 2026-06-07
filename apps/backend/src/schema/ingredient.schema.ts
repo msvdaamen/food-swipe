@@ -1,6 +1,6 @@
-import { index, pgTable } from "drizzle-orm/pg-core";
+import { index, camelCase } from "drizzle-orm/pg-core";
 
-export const ingredients = pgTable(
+export const ingredients = camelCase.table(
   "ingredients",
   (t) => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),

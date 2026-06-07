@@ -6,7 +6,8 @@ import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import AppPagination from "@/components/app-pagination";
 import { UpdateIngredientDialog } from "./update-ingredient.dialog";
-import { useDeleteIngredient, useIngredients } from "@food-swipe/client-api/ingredient";
+import { useDeleteIngredient } from "@/features/ingredient/api/delete-ingredient";
+import { useIngredients } from "@/features/ingredient/api/get-ingredients";
 
 type Props = {
   search: string;

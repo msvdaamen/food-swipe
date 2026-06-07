@@ -1,3 +1,4 @@
+
 import type { Recipe } from "@food-swipe/types";
 
 export type RecipeDto = Omit<Recipe, "createdAt" | "updatedAt"> & {

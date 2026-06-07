@@ -25,39 +25,47 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import type { Ingredient } from "@food-swipe/types";
-import { useIngredients } from "@food-swipe/client-api/ingredient";
-import { useMeasurements } from "@food-swipe/client-api/measurement";
+import { useIngredients } from "@/features/ingredient/api/get-ingredients";
+import { useMeasurements } from "@/features/measurement/api/get-measurements";
 import type { Measurement } from "@food-swipe/types";
 import { useForm } from "@tanstack/react-form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Loader } from "lucide-react";
-import { FC } from "react";
-import { useRecipeIngredientCreate } from "@food-swipe/client-api/recipe";
+import { FC, useMemo } from "react";
+import { useRecipeIngredientCreate } from "@/features/recipes/api/ingredients/create-recipe-ingredient";
+import { createDialogState } from "@/lib/dialog";
 
 interface CreateRecipeIngredientProps {
-  isOpen: boolean;
-  onClose: () => void;
   recipeId: string;
 }
 
-const validator = type({
-  ingredientId: "number",
-  amount: "number",
-  measurementId: "number?"
+const validator = z.object({
+  ingredientId: z
+    .number()
+    .nullable()
+    .refine((value) => value !== null),
+  amount: z
+    .number()
+    .nullable()
+    .refine((value) => value !== null),
+  measurementId: z.number().nullable()
 });
 
-export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
-  isOpen,
-  onClose,
-  recipeId
-}) => {
+export const useCreateRecipeIngredientDialog = createDialogState();
+
+export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({ recipeId }) => {
+  const { isOpen, onClose } = useCreateRecipeIngredientDialog();
+
   const createIngredient = useRecipeIngredientCreate();
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100
   });
   const { data: measurements = [] as Measurement[] } = useMeasurements();
-
+  const ingredientsMap = useMemo(
+    () => new Map(ingredients.data.map((ingredient) => [ingredient.id, ingredient])),
+    [ingredients.data]
+  );
   const form = useForm({
     defaultValues: {
       ingredientId: null as number | null,
@@ -96,15 +104,17 @@ export const CreateRecipeIngredientDialog: FC<CreateRecipeIngredientProps> = ({
                 <Label>Ingredient</Label>
                 <Combobox
                   items={ingredients.data}
-                  value={field.state.value ? Number(field.state.value) : null}
-                  onValueChange={(value) => field.handleChange(value ? Number(value) : null)}
+                  value={ingredientsMap.get(field.state.value!) ?? null}
+                  onValueChange={(ingredient) => field.handleChange(ingredient?.id ?? null)}
+                  itemToStringLabel={(ingredient) => ingredient.name}
+                  itemToStringValue={(ingredient) => ingredient.id.toString()}
                 >
-                  <ComboboxInput placeholder="Select a ingredient" />
+                  <ComboboxInput placeholder="Select an ingredient" />
                   <ComboboxContent>
                     <ComboboxEmpty>No ingredient found.</ComboboxEmpty>
                     <ComboboxList>
                       {(item) => (
-                        <ComboboxItem key={item.id} value={item.id}>
+                        <ComboboxItem key={item.id} value={item}>
                           {item.name}
                         </ComboboxItem>
                       )}

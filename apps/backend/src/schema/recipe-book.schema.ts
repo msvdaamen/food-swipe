@@ -1,8 +1,8 @@
-import { pgTable, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { camelCase, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { eq, sql } from "drizzle-orm";
 import { users } from "./user.schema";
 
-export const recipeBooks = pgTable(
+export const recipeBooks = camelCase.table(
   "recipe_books",
   (t) => ({
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),

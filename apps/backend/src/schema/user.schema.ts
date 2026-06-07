@@ -1,6 +1,6 @@
-import { index, pgTable } from "drizzle-orm/pg-core";
+import { index, camelCase } from "drizzle-orm/pg-core";
 
-export const users = pgTable(
+export const users = camelCase.table(
   "users",
   (t) => ({
     id: t.uuid("id").primaryKey(),

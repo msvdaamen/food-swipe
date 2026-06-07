@@ -9,32 +9,27 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
+import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
-import { FC, useEffect } from "react";
-import { measurementKeys, useUpdateMeasurement } from "@food-swipe/client-api/measurement";
+import { useEffect } from "react";
+import { measurementKeys } from "@/features/measurement/api/measurement-keys";
+import { useUpdateMeasurement } from "@/features/measurement/api/update-measurement";
 import type { Measurement } from "@food-swipe/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { createDialogState } from "@/lib/dialog";
 
-interface UpdateMeasurementProps {
-  isOpen: boolean;
-  onClose: () => void;
-  measurementId: number;
-}
-
-const validator = type({
-  name: "string",
-  abbreviation: "string"
+const validator = z.object({
+  name: z.string(),
+  abbreviation: z.string()
 });
 
-export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
-  isOpen,
-  onClose,
-  measurementId
-}) => {
+export const useUpdateMeasurementDialog = createDialogState<{ measurementId: number }>();
+
+export const UpdateMeasurementDialog = () => {
   const queryClient = useQueryClient();
   const updateMeasurement = useUpdateMeasurement();
+  const { isOpen, data, onClose } = useUpdateMeasurementDialog();
 
   const form = useForm({
     defaultValues: {
@@ -46,7 +41,7 @@ export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
     },
     onSubmit: async ({ value, formApi }) => {
       await updateMeasurement.mutateAsync({
-        measurementId,
+        measurementId: data!.measurementId,
         data: value
       });
       formApi.reset();
@@ -58,10 +53,10 @@ export const UpdateMeasurementDialog: FC<UpdateMeasurementProps> = ({
     const measurements = queryClient.getQueryData<Measurement[]>(measurementKeys.list());
     if (!measurements) return;
 
-    const measurement = measurements.find((measurement) => measurement.id === measurementId);
+    const measurement = measurements.find((measurement) => measurement.id === data?.measurementId);
     form.setFieldValue("name", measurement?.name || "");
     form.setFieldValue("abbreviation", measurement?.abbreviation || "");
-  }, [isOpen, measurementId, queryClient, form]);
+  }, [isOpen, data, queryClient, form]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

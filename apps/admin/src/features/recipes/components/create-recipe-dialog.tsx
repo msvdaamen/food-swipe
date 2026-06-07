@@ -8,21 +8,20 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useCreateRecipe } from "@food-swipe/client-api/recipe";
-import { type } from "arktype";
+import { useCreateRecipe } from "@/features/recipes/api/create-recipe";
+import { z } from "zod";
 import { Loader } from "lucide-react";
+import { createDialogState } from "@/lib/dialog";
 
-interface CreateRecipeDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const validator = type({
-  title: "string"
+const validator = z.object({
+  title: z.string()
 });
 
-export const CreateRecipeDialog = ({ open, onOpenChange }: CreateRecipeDialogProps) => {
+export const useCreateRecipeDialog = createDialogState();
+
+export const CreateRecipeDialog = () => {
   const createRecipe = useCreateRecipe();
+  const { isOpen, onClose } = useCreateRecipeDialog();
 
   const form = useForm({
     defaultValues: {
@@ -33,12 +32,12 @@ export const CreateRecipeDialog = ({ open, onOpenChange }: CreateRecipeDialogPro
     },
     onSubmit: async ({ value }) => {
       await createRecipe.mutateAsync({ title: value.title.trim() });
-      onOpenChange(false);
+      onClose();
     }
   });
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create recipe</DialogTitle>
@@ -66,7 +65,7 @@ export const CreateRecipeDialog = ({ open, onOpenChange }: CreateRecipeDialogPro
             )}
           </form.Field>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <form.Subscribe

@@ -13,35 +13,36 @@ import { useForm } from "@tanstack/react-form";
 import type { RecipeStep } from "@food-swipe/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import { type } from "arktype";
+import { z } from "zod";
 import { useEffect } from "react";
-import { useRecipeStepCreate, useRecipeStepUpdate } from "@food-swipe/client-api/recipe";
+import { useRecipeSteps } from "@/features/recipes/api/steps/get-recipe-steps";
+import { useRecipeStepCreate } from "@/features/recipes/api/steps/create-recipe-step";
+import { useRecipeStepUpdate } from "@/features/recipes/api/steps/update-recipe-step";
+import { createDialogState } from "@/lib/dialog";
 
 interface ManageRecipeStepDialogProps {
   recipeId: string;
-  stepId?: number;
-  isOpen: boolean;
-  onClose: () => void;
 }
 
-const validator = type({
-  description: "string > 0",
-  order: "number"
+const validator = z.object({
+  description: z.string().min(1),
+  order: z.number()
 });
 
-export function ManageRecipeStepDialog({
-  recipeId,
-  stepId,
-  isOpen,
-  onClose
-}: ManageRecipeStepDialogProps) {
+export const useManageRecipeStepDialog = createDialogState<number | null>();
+
+export function ManageRecipeStepDialog({ recipeId }: ManageRecipeStepDialogProps) {
+  const { isOpen, onClose, data: stepId } = useManageRecipeStepDialog();
+
+  const { data: steps } = useRecipeSteps(recipeId);
   const queryClient = useQueryClient();
   const createStep = useRecipeStepCreate();
   const updateStep = useRecipeStepUpdate();
+
   const form = useForm({
     defaultValues: {
       description: "",
-      order: 1
+      order: steps ? steps.length + 1 : 1
     },
     validators: {
       onChange: validator

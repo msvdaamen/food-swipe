@@ -4,6 +4,14 @@ import { eq } from "drizzle-orm";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
 import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
 
+export interface MeasurementRepository {
+  all(): Promise<MeasurementEntity[]>;
+  create(payload: CreateMeasurementDto): Promise<MeasurementEntity>;
+  update(id: number, payload: UpdateMeasurementDto): Promise<MeasurementEntity>;
+  delete(id: number): Promise<void>;
+  findByAbbreviation(abbreviation: string): Promise<MeasurementEntity | null>;
+}
+
 export class MeasurementRepositoryImpl {
   constructor(private readonly db: DatabaseProvider) {}
 
@@ -38,8 +46,4 @@ export class MeasurementRepositoryImpl {
       .where(eq(measurements.abbreviation, abbreviation));
     return row ?? null;
   }
-}
-
-export function createMeasurementRepository(db: DatabaseProvider): MeasurementRepositoryImpl {
-  return new MeasurementRepositoryImpl(db);
 }

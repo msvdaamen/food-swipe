@@ -4,10 +4,7 @@
   "type": "module",
   "peerDependencies": {
     "typescript": "^6",
-    "@food-swipe/types": "workspace:*",
-    "@tanstack/react-query": "catalog:",
-    "react": "^19.1.0",
-    "@types/react": "^19.1.0"
+    "@food-swipe/types": "workspace:*"
   },
   "exports": {
     ".": "./index.ts",

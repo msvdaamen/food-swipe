@@ -9,19 +9,19 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
+import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
 import { FC } from "react";
-import { useRecipeImport } from "@food-swipe/client-api/recipe";
+import { useRecipeImport } from "@/features/recipes/api/import-recipe";
 
 interface ImportRecipeDialogProps {
   isOpen: boolean;
   onClose: (recipeId?: string) => void;
 }
 
-const validator = type({
-  url: "string"
+const validator = z.object({
+  url: z.string()
 });
 
 export const ImportRecipeDialog: FC<ImportRecipeDialogProps> = ({ isOpen, onClose }) => {

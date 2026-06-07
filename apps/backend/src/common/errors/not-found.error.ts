@@ -1,3 +1,5 @@
+import { TaggedError } from "better-result";
+
 export class NotFoundError extends Error {
   readonly id: string;
 
@@ -7,3 +9,8 @@ export class NotFoundError extends Error {
     this.id = payload.id;
   }
 }
+
+export class NotFoundError2 extends TaggedError("NotFoundError")<{
+  id: string;
+  message: string;
+}>() {}

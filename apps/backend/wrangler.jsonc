@@ -16,7 +16,7 @@
     "API_URL": "http://localhost:8787",
     "WEB_URL": "http://localhost:5173",
     "ENVIRONMENT": "development",
-    "STORAGE_PUBLIC_URL": "http://localhost:8787/r2-public"
+    "STORAGE_PUBLIC_URL": "https://static-dev.food-swipe.app"
   },
   "env": {
     "production": {
@@ -66,11 +66,13 @@
   "r2_buckets": [
     {
       "binding": "R2_PUBLIC",
-      "bucket_name": "food-swipe-public"
+      "bucket_name": "food-swipe-dev-public",
+      "remote": true
     },
     {
       "binding": "R2_PRIVATE",
-      "bucket_name": "food-swipe-private"
+      "bucket_name": "food-swipe-dev-private",
+      "remote": true
     }
   ]
 }

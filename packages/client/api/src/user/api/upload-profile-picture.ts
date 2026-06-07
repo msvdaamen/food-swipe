@@ -1,7 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AuthApiClient } from "../../client";
-import { useApiClient } from "../../context";
-import { userKeys } from "../keys";
+import type { HttpClient } from "../../client";
 
 export type UploadProfilePictureResult = {
   filename: string;
@@ -11,7 +8,7 @@ export type UploadProfilePictureResult = {
  * Upload a profile image. `uri` is a React Native local file URI (e.g. from ImagePicker).
  */
 export const uploadProfilePicture = async (
-  api: AuthApiClient,
+  api: HttpClient,
   uri: string,
 ): Promise<UploadProfilePictureResult> => {
   const uriArray = uri.split(".");
@@ -33,15 +30,4 @@ export const uploadProfilePicture = async (
   }
 
   return response.json() as Promise<UploadProfilePictureResult>;
-};
-
-export const useUploadProfilePicture = () => {
-  const api = useApiClient();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (uri: string) => uploadProfilePicture(api, uri),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: userKeys.me() });
-    },
-  });
 };

@@ -9,24 +9,22 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { type } from "arktype";
+import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { Loader } from "lucide-react";
-import { FC } from "react";
-import { useCreateMeasurement } from "@food-swipe/client-api/measurement";
+import { useCreateMeasurement } from "@/features/measurement/api/create-measurement";
+import { createDialogState } from "@/lib/dialog";
 
-interface CreateMeasurementProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const validator = type({
-  name: "string",
-  abbreviation: "string"
+const validator = z.object({
+  name: z.string(),
+  abbreviation: z.string()
 });
 
-export const CreateMeasurementDialog: FC<CreateMeasurementProps> = ({ isOpen, onClose }) => {
+export const useCreateMeasurementDialog = createDialogState();
+
+export const CreateMeasurementDialog = () => {
   const createMeasurement = useCreateMeasurement();
+  const { isOpen, onClose } = useCreateMeasurementDialog();
 
   const form = useForm({
     defaultValues: {

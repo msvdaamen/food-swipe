@@ -1,9 +1,14 @@
 import { DatabaseProvider } from "../../providers/database.provider";
-import { createRecipeBookRepository } from "./recipe-book.repository";
+import { createRecipeBookRepository, RecipeBookRepository } from "./recipe-book.repository";
 import type { CreateRecipeBookDto } from "./dto/create-recipe-book.dto";
-import { RecipeBookService } from "./types/interfaces/recipe-book.service";
 import { RecipeBook } from "@food-swipe/types";
-import { RecipeBookRepository } from "./types/interfaces/recipe-book.repository";
+
+export interface RecipeBookService {
+  getRecipeBooks(userId: string): Promise<RecipeBook[]>;
+  createRecipeBook(userId: string, payload: CreateRecipeBookDto): Promise<RecipeBook>;
+  getLikedRecipeBook(userId: string): Promise<RecipeBook>;
+  createRecipeBook(userId: string, payload: CreateRecipeBookDto): Promise<RecipeBook>;
+}
 
 class RecipeBookServiceImpl implements RecipeBookService {
   constructor(private readonly repo: RecipeBookRepository) {}

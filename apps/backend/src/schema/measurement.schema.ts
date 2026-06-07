@@ -1,6 +1,6 @@
-import { pgTable } from "drizzle-orm/pg-core";
+import { camelCase } from "drizzle-orm/pg-core";
 
-export const measurements = pgTable("measurements", (t) => ({
+export const measurements = camelCase.table("measurements", (t) => ({
   id: t.smallint().primaryKey().generatedByDefaultAsIdentity(),
   name: t.text().notNull(),
   abbreviation: t.text().notNull()

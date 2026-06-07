@@ -10,36 +10,29 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { useAppForm } from "@/hooks/form";
-import { DialogState } from "@/types/dialog-state";
-import { type } from "arktype";
+import { z } from "zod";
 import { useEffect } from "react";
-import { create } from "zustand";
 import { useCreateUser } from "../api/create-user";
 import { useUpdateUser } from "../api/update-user";
 import type { User } from "@food-swipe/types";
+import { createDialogState } from "@/lib/dialog";
 
-export const useManageUserDialogState = create<DialogState<User>>((set) => ({
-  isOpen: false,
-  open: (user?: User) =>
-    set(user !== undefined ? { isOpen: true, data: user } : { isOpen: true, data: null }),
-  close: () => set({ isOpen: false }),
-  data: null
-}));
+export const useManageUserDialogState = createDialogState<User | null>();
 
-const validatorCreate = type({
-  email: "string.email",
-  username: "/^[a-z0-9_-]{3,30}$/",
-  name: "string > 0",
-  password: "string > 5",
-  role: "'admin' | 'user'"
+const validatorCreate = z.object({
+  email: z.email(),
+  username: z.string().regex(/^[a-z0-9_-]{3,30}$/),
+  name: z.string().min(1),
+  password: z.string().min(6),
+  role: z.enum(["admin", "user"])
 });
 
-const validatorUpdate = type({
-  email: "string.email",
-  username: "/^[a-z0-9_-]{3,30}$/",
-  name: "string > 0",
-  password: "string",
-  role: "'admin' | 'user'"
+const validatorUpdate = z.object({
+  email: z.email(),
+  username: z.string().regex(/^[a-z0-9_-]{3,30}$/),
+  name: z.string().min(1),
+  password: z.string(),
+  role: z.enum(["admin", "user"])
 });
 
 export function ManagerUserDialog() {
@@ -67,7 +60,7 @@ export function ManagerUserDialog() {
           await updateUser.mutateAsync({ id: data.id, ...value });
         }
 
-        state.close();
+        state.onClose();
       } catch {}
     }
   });
@@ -122,7 +115,7 @@ export function ManagerUserDialog() {
         </Form>
 
         <DialogFooter>
-          <Button onClick={state.close} variant="outline">
+          <Button onClick={state.onClose} variant="outline">
             Cancel
           </Button>
           <Button type="submit" onClick={form.handleSubmit}>

@@ -40,23 +40,31 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { ManageRecipeStepDialog } from "@/features/recipes/components/manage-recipe-step-dialog";
-import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import type { RecipeIngredient, RecipeStep } from "@food-swipe/types";
-import { CreateRecipeIngredientDialog } from "@/features/recipes/components/create-recipe-ingredient.dialog";
-import { UpdateRecipeIngredientDialog } from "@/features/recipes/components/update-recipe-ingredient.dialog";
 import {
-  useDeleteRecipe,
-  useRecipe,
-  useRecipeIngredientDelete,
-  useRecipeIngredients,
-  useRecipeNutrition,
-  useRecipeNutritionUpdate,
-  useRecipeStepDelete,
-  useRecipeSteps,
-  useRecipeStepsReorder,
-  useUpdateRecipe
-} from "@food-swipe/client-api/recipe";
+  ManageRecipeStepDialog,
+  useManageRecipeStepDialog
+} from "@/features/recipes/components/manage-recipe-step-dialog";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import type { RecipeStep } from "@food-swipe/types";
+import {
+  CreateRecipeIngredientDialog,
+  useCreateRecipeIngredientDialog
+} from "@/features/recipes/components/create-recipe-ingredient.dialog";
+import {
+  UpdateRecipeIngredientDialog,
+  useUpdateRecipeIngredientDialog
+} from "@/features/recipes/components/update-recipe-ingredient.dialog";
+import { useDeleteRecipe } from "@/features/recipes/api/delete-recipe";
+import { useRecipe } from "@/features/recipes/api/get-recipe";
+import { useRecipeIngredientDelete } from "@/features/recipes/api/ingredients/delete-recipe-ingredient";
+import { useRecipeIngredients } from "@/features/recipes/api/ingredients/get-recipe-ingredients";
+import { useRecipeNutrition } from "@/features/recipes/api/nutritions/get-recipe-nutrition";
+import { useRecipeNutritionUpdate } from "@/features/recipes/api/nutritions/update-recipe-nutrition";
+import { useRecipeStepDelete } from "@/features/recipes/api/steps/delete-recipe-step";
+import { useRecipeSteps } from "@/features/recipes/api/steps/get-recipe-steps";
+import { useRecipeStepsReorder } from "@/features/recipes/api/steps/reorder-recipe-steps";
+import { useUpdateRecipe } from "@/features/recipes/api/update-recipe";
+import { useUpdateRecipeImage } from "@/features/recipes/api/update-recipe-image";
 
 export const Route = createFileRoute("/(main)/recipes/$recipeId")({
   component: RouteComponent,
@@ -74,6 +82,7 @@ function RouteComponent() {
       navigate({ to: "/recipes/recipes" });
     }
   });
+  const updateRecipeImage = useUpdateRecipeImage({ recipeId });
 
   const updateRecipe = useUpdateRecipe();
 
@@ -93,10 +102,20 @@ function RouteComponent() {
     });
   };
 
-  const handleFileUpload = () => {
-    setIsChangingImage(true);
-    // TODO: Implement file upload
-    setTimeout(() => setIsChangingImage(false), 1000);
+  const handleFileUpload = async () => {
+    const fileInput = fileInputRef.current;
+    if (fileInput) {
+      const file = fileInput.files?.[0];
+      if (file) {
+        setIsChangingImage(true);
+        try {
+          await updateRecipeImage.mutateAsync(file);
+        } finally {
+          setIsChangingImage(false);
+          fileInput.value = "";
+        }
+      }
+    }
   };
 
   const openFileUploader = () => {
@@ -129,7 +148,11 @@ function RouteComponent() {
                 </div>
               ) : recipe.coverImageUrl ? (
                 <div className="cursor-pointer">
-                  <img src={recipe.coverImageUrl} alt="" />
+                  <img
+                    src={recipe.coverImageUrl}
+                    className="min-w-10 min-h-10 bg-amber-500"
+                    alt=""
+                  />
                 </div>
               ) : (
                 <div className="flex aspect-video w-full cursor-pointer items-center justify-center bg-gray-100">
@@ -197,25 +220,10 @@ function RouteComponent() {
 }
 
 function Ingredients({ recipeId }: { recipeId: string }) {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState<RecipeIngredient | null>(null);
+  const createRecipeDialog = useCreateRecipeIngredientDialog();
+  const updateRecipeIngredientDialog = useUpdateRecipeIngredientDialog();
   const { data: ingredients, isLoading } = useRecipeIngredients(recipeId);
   const deleteIngredient = useRecipeIngredientDelete();
-
-  const openCreateDialog = () => {
-    setIsCreateOpen(true);
-  };
-
-  const openUpdateDialog = (ingredient: RecipeIngredient) => {
-    setSelectedIngredient(ingredient);
-    setIsUpdateOpen(true);
-  };
-
-  const closeUpdateDialog = () => {
-    setSelectedIngredient(null);
-    setIsUpdateOpen(false);
-  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -225,7 +233,7 @@ function Ingredients({ recipeId }: { recipeId: string }) {
     <div className="mt-8">
       <div className="mb-1 flex gap-2">
         <h2 className="grow text-2xl font-bold">Ingredients</h2>
-        <Button size="sm" onClick={openCreateDialog}>
+        <Button size="sm" onClick={createRecipeDialog.open}>
           Add ingredient
         </Button>
       </div>
@@ -247,7 +255,11 @@ function Ingredients({ recipeId }: { recipeId: string }) {
                 {ingredient.measurement}
               </div>
               <div className="flex min-w-28 flex-shrink gap-1">
-                <Button variant="ghost" size="sm" onClick={() => openUpdateDialog(ingredient)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => updateRecipeIngredientDialog.open(ingredient)}
+                >
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button
@@ -267,30 +279,18 @@ function Ingredients({ recipeId }: { recipeId: string }) {
           ))}
         </div>
       </div>
-      <CreateRecipeIngredientDialog
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-        recipeId={recipeId}
-      />
-      {selectedIngredient && (
-        <UpdateRecipeIngredientDialog
-          isOpen={isUpdateOpen}
-          onClose={closeUpdateDialog}
-          recipeId={recipeId}
-          ingredient={selectedIngredient}
-        />
-      )}
+      <CreateRecipeIngredientDialog recipeId={recipeId} />
+      <UpdateRecipeIngredientDialog recipeId={recipeId} />
     </div>
   );
 }
 
 function Steps({ recipeId }: { recipeId: string }) {
   const { data: steps, isLoading } = useRecipeSteps(recipeId);
+  const manageRecipeStepDialog = useManageRecipeStepDialog();
   const reorderSteps = useRecipeStepsReorder(recipeId);
   const deleteStep = useRecipeStepDelete(recipeId);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeStepId, setActiveStepId] = useState<number | undefined>(undefined);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -300,16 +300,6 @@ function Steps({ recipeId }: { recipeId: string }) {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
-    setActiveStepId(undefined);
-  }
-
-  function openModal(stepId?: number) {
-    setActiveStepId(stepId);
-    setIsModalOpen(true);
   }
 
   function removeStep(stepId: number) {
@@ -337,7 +327,7 @@ function Steps({ recipeId }: { recipeId: string }) {
       <div className="mt-8">
         <div className="mb-1 flex gap-2">
           <h2 className="grow text-2xl font-bold">Steps</h2>
-          <Button size="sm" onClick={() => openModal()}>
+          <Button size="sm" onClick={() => manageRecipeStepDialog.open(null)}>
             Add Step
           </Button>
         </div>
@@ -360,12 +350,7 @@ function Steps({ recipeId }: { recipeId: string }) {
                   strategy={verticalListSortingStrategy}
                 >
                   {steps?.map((step) => (
-                    <SortableStep
-                      key={step.id}
-                      step={step}
-                      update={openModal}
-                      remove={removeStep}
-                    />
+                    <SortableStep key={step.id} step={step} remove={removeStep} />
                   ))}
                 </SortableContext>
               </DndContext>
@@ -373,25 +358,13 @@ function Steps({ recipeId }: { recipeId: string }) {
           </div>
         </div>
       </div>
-      <ManageRecipeStepDialog
-        recipeId={recipeId}
-        onClose={closeModal}
-        stepId={activeStepId}
-        isOpen={isModalOpen}
-      />
+      <ManageRecipeStepDialog recipeId={recipeId} />
     </>
   );
 }
 
-function SortableStep({
-  step,
-  update,
-  remove
-}: {
-  step: RecipeStep;
-  update: (id: number) => void;
-  remove: (id: number) => void;
-}) {
+function SortableStep({ step, remove }: { step: RecipeStep; remove: (id: number) => void }) {
+  const manageRecipeStepDialog = useManageRecipeStepDialog();
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: step.id });
 
   const style = {
@@ -404,7 +377,7 @@ function SortableStep({
       <div className="step min-w-20 flex-shrink">{step.stepNumber}</div>
       <div className="description flex-grow">{step.description}</div>
       <div className="flex min-w-28 flex-shrink gap-1">
-        <Button variant="outline" size="sm" onClick={() => update(step.id)}>
+        <Button variant="outline" size="sm" onClick={() => manageRecipeStepDialog.open(step.id)}>
           <Pencil />
         </Button>
         <Button variant="destructive" size="sm" onClick={() => remove(step.id)}>

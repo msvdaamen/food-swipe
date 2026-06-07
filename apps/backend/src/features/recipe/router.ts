@@ -61,7 +61,7 @@ app.post("/", sValidator("json", createRecipeDto), async (c) => {
   }
 });
 
-app.post("/:id/image", async (c) => {
+app.put("/:id/image", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.parseBody();
   const file = body["file"];

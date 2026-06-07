@@ -11,7 +11,7 @@ import {
   FeedPlaceholder,
 } from "@/features/user/components";
 import * as ImagePicker from "expo-image-picker";
-import { useMe, useUploadProfilePicture } from "@food-swipe/client-api/user";
+import { useMe, useUploadProfilePicture } from "@/features/user/api";
 
 export default function ProfileScreen() {
   const { data: user, isPending, error } = useMe();

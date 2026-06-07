@@ -4,7 +4,7 @@ import { AppInput } from "@/components/ui/input";
 import { Colors } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 import { useForm } from "@tanstack/react-form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -17,12 +17,13 @@ import {
 } from "react-native";
 import { useSignUp } from "@/features/auth/api/sign-up";
 
-const signUpSchema = type({
-  email: "string.email",
-  username: "/^[a-z0-9_-]{3,30}$/",
-  password: "string >= 6",
-  firstName: "string >= 1",
-  lastName: "string >= 1",
+const signUpSchema = z.object({
+  email: z.string().email(),
+  username: z.string().regex(/^[a-z0-9_-]{3,30}$/),
+  password: z.string().min(6),
+  passwordConfirmation: z.string(),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
 });
 
 export default function SignUp() {
