@@ -85,5 +85,8 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: admin-dist
-          path: apps/admin/dist
+          path: |
+            apps/admin/dist
+            apps/admin/.wrangler
           if-no-files-found: error
+          include-hidden-files: true

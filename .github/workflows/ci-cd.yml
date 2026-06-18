@@ -79,7 +79,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: admin-dist
-          path: apps/admin/dist
+          path: apps/admin
 
       - name: Deploy admin
         run: bun run --filter @food-swipe/admin deploy
