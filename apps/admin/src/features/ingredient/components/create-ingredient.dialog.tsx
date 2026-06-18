@@ -19,7 +19,7 @@ const validator = z.object({
   name: z.string()
 });
 
-export const useCreateIngredientDialog = createDialogState();
+export const useCreateIngredientDialog = createDialogState(); // oxlint-disable-line only-export-components
 
 export function CreateIngredientDialog() {
   const { isOpen, onClose } = useCreateIngredientDialog();

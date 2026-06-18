@@ -661,7 +661,7 @@ function SidebarMenuSubButton({
     }
   });
 }
-
+/* oxlint-disable only-export-components */
 export {
   Sidebar,
   SidebarContent,

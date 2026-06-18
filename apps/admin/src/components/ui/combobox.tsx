@@ -253,6 +253,7 @@ function useComboboxAnchor() {
   return React.useRef<HTMLDivElement | null>(null);
 }
 
+/* oxlint-disable only-export-components */
 export {
   Combobox,
   ComboboxInput,

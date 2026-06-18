@@ -17,7 +17,7 @@ import { useUpdateUser } from "../api/update-user";
 import type { User } from "@food-swipe/types";
 import { createDialogState } from "@/lib/dialog";
 
-export const useManageUserDialogState = createDialogState<User | null>();
+export const useManageUserDialogState = createDialogState<User | null>(); // oxlint-disable-line only-export-components
 
 const validatorCreate = z.object({
   email: z.email(),

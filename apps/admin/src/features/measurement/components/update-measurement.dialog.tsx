@@ -24,7 +24,7 @@ const validator = z.object({
   abbreviation: z.string()
 });
 
-export const useUpdateMeasurementDialog = createDialogState<{ measurementId: number }>();
+export const useUpdateMeasurementDialog = createDialogState<{ measurementId: number }>(); // oxlint-disable-line only-export-components
 
 export const UpdateMeasurementDialog = () => {
   const queryClient = useQueryClient();

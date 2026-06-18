@@ -51,7 +51,7 @@ const validator = z.object({
   measurementId: z.number().nullable()
 });
 
-export const useUpdateRecipeIngredientDialog = createDialogState<RecipeIngredient>();
+export const useUpdateRecipeIngredientDialog = createDialogState<RecipeIngredient>(); // oxlint-disable-line only-export-components
 
 export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({ recipeId }) => {
   const { isOpen, onClose, data } = useUpdateRecipeIngredientDialog();

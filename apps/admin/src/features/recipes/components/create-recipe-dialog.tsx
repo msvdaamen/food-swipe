@@ -17,7 +17,7 @@ const validator = z.object({
   title: z.string()
 });
 
-export const useCreateRecipeDialog = createDialogState();
+export const useCreateRecipeDialog = createDialogState(); // oxlint-disable-line only-export-components
 
 export const CreateRecipeDialog = () => {
   const createRecipe = useCreateRecipe();

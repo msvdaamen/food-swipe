@@ -29,7 +29,7 @@ const validator = z.object({
   order: z.number()
 });
 
-export const useManageRecipeStepDialog = createDialogState<number | null>();
+export const useManageRecipeStepDialog = createDialogState<number | null>(); // oxlint-disable-line only-export-components
 
 export function ManageRecipeStepDialog({ recipeId }: ManageRecipeStepDialogProps) {
   const { isOpen, onClose, data: stepId } = useManageRecipeStepDialog();

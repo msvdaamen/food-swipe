@@ -54,5 +54,5 @@ function Button({
     />
   );
 }
-
+/* oxlint-disable only-export-components */
 export { Button, buttonVariants };

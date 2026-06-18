@@ -45,5 +45,5 @@ function Badge({
     }
   });
 }
-
+/* oxlint-disable only-export-components */
 export { Badge, badgeVariants };

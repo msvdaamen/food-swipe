@@ -20,7 +20,7 @@ const validator = z.object({
   abbreviation: z.string()
 });
 
-export const useCreateMeasurementDialog = createDialogState();
+export const useCreateMeasurementDialog = createDialogState(); // oxlint-disable-line only-export-components
 
 export const CreateMeasurementDialog = () => {
   const createMeasurement = useCreateMeasurement();
