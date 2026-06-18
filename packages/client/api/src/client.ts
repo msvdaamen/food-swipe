@@ -1,3 +1,4 @@
+
 export type AuthApiClientOptions = {
   /** Called when the server responds with 401. Use for sign-out, refresh, or redirect. */
   onUnauthorized?: (response: Response) => void | Promise<void>;
@@ -7,7 +8,12 @@ export type AuthApiClientOptions = {
   transformInit?: (init: RequestInit) => RequestInit | Promise<RequestInit>;
 };
 
-export class AuthApiClient {
+
+export interface HttpClient {
+  fetch(endpoint: string, init?: RequestInit): Promise<Response>;
+}
+
+export class AuthApiClient implements HttpClient {
   constructor(
     private readonly baseUrl: string,
     private readonly options: AuthApiClientOptions = {},

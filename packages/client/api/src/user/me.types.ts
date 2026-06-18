@@ -6,4 +6,5 @@ export type MeUser = {
   username: string | null;
   image: string | null;
   imageUrl: string | null;
+  role: string;
 };

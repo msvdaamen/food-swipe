@@ -3,7 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { CreateIngredientDialog } from "@/features/ingredient/components/create-ingredient.dialog";
+import {
+  CreateIngredientDialog,
+  useCreateIngredientDialog
+} from "@/features/ingredient/components/create-ingredient.dialog";
 import { IngredientsListView } from "@/features/ingredient/components/ingredients-list.view";
 import { useDebounce } from "@uidotdev/usehooks";
 export const Route = createFileRoute("/(main)/recipes/ingredients")({
@@ -14,9 +17,9 @@ export const Route = createFileRoute("/(main)/recipes/ingredients")({
 });
 
 function RouteComponent() {
+  const createIngredientDialog = useCreateIngredientDialog();
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
     <>
@@ -32,14 +35,14 @@ function RouteComponent() {
         </div>
 
         <div className="mb-2 flex justify-end">
-          <Button size="sm" onClick={() => setIsCreateOpen(true)}>
+          <Button size="sm" onClick={() => createIngredientDialog.open()}>
             Add ingredients
           </Button>
         </div>
 
         <IngredientsListView search={debouncedSearch} />
       </div>
-      <CreateIngredientDialog isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
+      <CreateIngredientDialog />
     </>
   );
 }

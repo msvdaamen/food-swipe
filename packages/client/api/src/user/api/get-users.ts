@@ -1,9 +1,6 @@
 import type { PaginatedData, User } from "@food-swipe/types";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import type { AuthApiClient } from "../../client";
-import { useApiClient } from "../../context";
+import type { HttpClient } from "../../client";
 import { objectToSearchParams } from "../../internal/search-params";
-import { userKeys } from "../keys";
 
 export type GetUsersInput = {
   amount: number;
@@ -27,22 +24,11 @@ function mapGetUsersDtoToModel(dto: GetUsersDto): PaginatedData<User> {
   };
 }
 
-export const getUsers = async (api: AuthApiClient, payload: GetUsersInput) => {
+export const getUsers = async (api: HttpClient, payload: GetUsersInput) => {
   const searchParams = objectToSearchParams(payload);
   const response = await api.fetch(`/v1/users?${searchParams}`, {
     method: "GET",
   });
   const data = (await response.json()) as PaginatedData<UserDto>;
   return mapGetUsersDtoToModel(data);
-};
-
-export const getUsersQueryOptions = (api: AuthApiClient, payload: GetUsersInput) =>
-  queryOptions({
-    queryKey: userKeys.list(payload),
-    queryFn: () => getUsers(api, payload),
-  });
-
-export const useUsers = (payload: GetUsersInput) => {
-  const api = useApiClient();
-  return useQuery(getUsersQueryOptions(api, payload));
 };

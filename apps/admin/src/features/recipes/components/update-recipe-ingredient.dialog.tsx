@@ -24,47 +24,54 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import type { Ingredient } from "@food-swipe/types";
-import { useIngredients } from "@food-swipe/client-api/ingredient";
-import { useMeasurements } from "@food-swipe/client-api/measurement";
+import { useIngredients } from "@/features/ingredient/api/get-ingredients";
+import { useMeasurements } from "@/features/measurement/api/get-measurements";
 import type { Measurement } from "@food-swipe/types";
 import { useAppForm } from "@/hooks/form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Loader } from "lucide-react";
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import type { RecipeIngredient } from "@food-swipe/types";
-import { useRecipeIngredientUpdate } from "@food-swipe/client-api/recipe";
+import { useRecipeIngredientUpdate } from "@/features/recipes/api/ingredients/update-recipe-ingredient";
+import { createDialogState } from "@/lib/dialog";
 
 interface UpdateRecipeIngredientProps {
-  isOpen: boolean;
-  onClose: () => void;
   recipeId: string;
-  ingredient: RecipeIngredient;
 }
 
-const validator = type({
-  ingredientId: "number",
-  amount: "number",
-  measurementId: "number?"
+const validator = z.object({
+  ingredientId: z
+    .number()
+    .nullable()
+    .refine((value) => value !== null),
+  amount: z
+    .number()
+    .nullable()
+    .refine((value) => value !== null),
+  measurementId: z.number().nullable()
 });
 
-export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
-  isOpen,
-  onClose,
-  recipeId,
-  ingredient
-}) => {
+export const useUpdateRecipeIngredientDialog = createDialogState<RecipeIngredient>();
+
+export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({ recipeId }) => {
+  const { isOpen, onClose, data } = useUpdateRecipeIngredientDialog();
+
   const updateIngredient = useRecipeIngredientUpdate();
   const { data: ingredients = { data: [] as Ingredient[] } } = useIngredients({
     page: 1,
     amount: 100
   });
   const { data: measurements = [] as Measurement[] } = useMeasurements();
+  const ingredientsMap = useMemo(
+    () => new Map(ingredients.data.map((ingredient) => [ingredient.id, ingredient])),
+    [ingredients.data]
+  );
 
   const form = useAppForm({
     defaultValues: {
-      ingredientId: ingredient.ingredientId || null,
-      amount: ingredient.amount || null,
-      measurementId: ingredient.measurementId || null
+      ingredientId: data?.ingredientId ?? null,
+      amount: data?.amount ?? null,
+      measurementId: data?.measurementId ?? null
     },
     validators: {
       onChange: validator
@@ -72,7 +79,7 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
     onSubmit: async ({ value, formApi }) => {
       await updateIngredient.mutateAsync({
         recipeId,
-        ingredientId: ingredient.ingredientId,
+        ingredientId: value.ingredientId!,
         data: {
           amount: Number(value.amount),
           measurementId: value.measurementId
@@ -82,6 +89,16 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
       onClose();
     }
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    form.reset({
+      ingredientId: data.ingredientId,
+      amount: data.amount,
+      measurementId: data.measurementId ?? null
+    });
+  }, [data, form]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -98,15 +115,17 @@ export const UpdateRecipeIngredientDialog: FC<UpdateRecipeIngredientProps> = ({
                 <Label>Ingredient</Label>
                 <Combobox
                   items={ingredients.data}
-                  onValueChange={(value) => field.handleChange(value ? Number(value) : null)}
-                  value={field.state.value ? Number(field.state.value) : null}
+                  value={ingredientsMap.get(field.state.value!) ?? null}
+                  onValueChange={(ingredient) => field.handleChange(ingredient?.id ?? null)}
+                  itemToStringLabel={(ingredient) => ingredient.name}
+                  itemToStringValue={(ingredient) => ingredient.id.toString()}
                 >
-                  <ComboboxInput placeholder="Select a ingredient" />
+                  <ComboboxInput placeholder="Select an ingredient" />
                   <ComboboxContent>
                     <ComboboxEmpty>No ingredient found.</ComboboxEmpty>
                     <ComboboxList>
                       {(item) => (
-                        <ComboboxItem key={item.id} value={item.id}>
+                        <ComboboxItem key={item.id} value={item}>
                           {item.name}
                         </ComboboxItem>
                       )}

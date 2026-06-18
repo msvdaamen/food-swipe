@@ -11,9 +11,7 @@ import type { CreateRecipeIngredientDto } from "./dto/create-recipe-ingredient.d
 import type { UpdateRecipeIngredientDto } from "./dto/update-recipe-ingredient.dto";
 import type { UpdateRecipeNutritionDto } from "./dto/update-nutrition.dto";
 import type { AuthUser } from "../auth/auth-user.type";
-import { RecipeRepositoryImpl } from "./recipe-repository";
-import type { RecipeService } from "./types/interfaces/recipe.service";
-import { RecipeRepository } from "./types/interfaces/recipe.repository";
+import { RecipeRepository, RecipeRepositoryImpl } from "./recipe-repository";
 import {
   Recipe,
   RecipeIngredient,
@@ -22,7 +20,44 @@ import {
   Nutrition
 } from "@food-swipe/types";
 import { RecipeModel } from "./types/models";
-import { RecipeBookService } from "../recipe-book/types/interfaces/recipe-book.service";
+import { RecipeBookService } from "../recipe-book/recipe-book.service";
+
+export interface RecipeService {
+  getAll(user: AuthUser, filters: LoadRecipesDto): Promise<Recipe[]>;
+  getById(recipeId: string): Promise<Recipe>;
+  create(payload: CreateRecipeDto): Promise<Recipe>;
+  update(recipeId: string, payload: UpdateRecipeDto): Promise<Recipe>;
+  uploadImage(recipeId: string, file: File): Promise<Recipe>;
+  delete(recipeId: string): Promise<void>;
+  like(userId: string, recipeId: string, like: boolean): Promise<Recipe>;
+
+  getSteps(recipeId: string): Promise<RecipeStep[]>;
+  createStep(recipeId: string, payload: CreateRecipeStepDto): Promise<RecipeStep>;
+  updateStep(recipeId: string, stepId: number, payload: UpdateRecipeStepDto): Promise<RecipeStep>;
+  deleteStep(recipeId: string, stepId: number): Promise<void>;
+  reorderSteps(
+    recipeId: string,
+    stepId: number,
+    { orderTo, orderFrom }: ReorderRecipeStepDto
+  ): Promise<RecipeStep[]>;
+
+  getIngredients(recipeId: string): Promise<RecipeIngredient[]>;
+  getIngredient(recipeId: string, ingredientId: number): Promise<RecipeIngredient>;
+  createIngredient(recipeId: string, payload: CreateRecipeIngredientDto): Promise<RecipeIngredient>;
+  updateIngredient(
+    recipeId: string,
+    ingredientId: number,
+    payload: UpdateRecipeIngredientDto
+  ): Promise<RecipeIngredient>;
+  deleteIngredient(recipeId: string, ingredientId: number): Promise<void>;
+
+  getNutrition(recipeId: string): Promise<RecipeNutrition[]>;
+  updateNutrition(
+    recipeId: string,
+    name: Nutrition,
+    payload: UpdateRecipeNutritionDto
+  ): Promise<RecipeNutrition>;
+}
 
 class RecipeServiceImpl implements RecipeService {
   constructor(

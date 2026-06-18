@@ -10,9 +10,11 @@ import { KvStoreProvider } from "../../providers/kvstore.provider";
 import { StorageService } from "../../providers/storage/storage.service";
 import type { UserEntity } from "../../schema";
 import { format } from "date-fns";
+import { NotFoundError2 } from "../../common/errors/not-found.error";
+import { Result } from "better-result";
 
 export interface UserService {
-  findById(userId: string): Promise<UserModel>;
+  findById(userId: string): Promise<Result<UserModel, NotFoundError2>>;
   updateUser(userId: string, payload: Partial<UserModel>): Promise<void>;
   getUsers(payload: GetUsersDto): Promise<PaginatedData<UserModel>>;
   create(payload: NewUserEntity): Promise<UserModel>;
@@ -27,12 +29,12 @@ export class UserServiceImpl implements UserService {
     private readonly storage: StorageService
   ) {}
 
-  async findById(userId: string): Promise<UserModel> {
-    const user = await this.repository.findById(userId);
-    return {
+  async findById(userId: string): Promise<Result<UserModel, NotFoundError2>> {
+    const result = await this.repository.findById(userId);
+    return result.map((user) => ({
       ...user,
       imageUrl: user.image ? this.getProfileImageUrl(user.image) : null
-    };
+    }));
   }
 
   getProfileImageUrl(filename: string): string {

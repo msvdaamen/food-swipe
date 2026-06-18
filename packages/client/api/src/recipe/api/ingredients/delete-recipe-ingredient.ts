@@ -1,8 +1,5 @@
 import type { RecipeIngredient } from "@food-swipe/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AuthApiClient } from "../../../client";
-import { useApiClient } from "../../../context";
-import { getRecipeIngredientsQueryOptions } from "./get-recipe-ingredients";
+import type { HttpClient } from "../../../client";
 
 export type DeleteRecipeIngredientInput = {
   recipeId: string;
@@ -10,7 +7,7 @@ export type DeleteRecipeIngredientInput = {
 };
 
 export const deleteRecipeIngredient = async (
-  api: AuthApiClient,
+  api: HttpClient,
   payload: DeleteRecipeIngredientInput,
 ) => {
   const response = await api.fetch(
@@ -20,18 +17,4 @@ export const deleteRecipeIngredient = async (
     },
   );
   return response.json() as Promise<RecipeIngredient>;
-};
-
-export const useRecipeIngredientDelete = () => {
-  const api = useApiClient();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: DeleteRecipeIngredientInput) => deleteRecipeIngredient(api, payload),
-    onSuccess: (_, { recipeId, ingredientId }) => {
-      queryClient.setQueryData<RecipeIngredient[]>(
-        getRecipeIngredientsQueryOptions(api, recipeId).queryKey,
-        (old) => old?.filter((i) => i.ingredientId !== ingredientId),
-      );
-    },
-  });
 };

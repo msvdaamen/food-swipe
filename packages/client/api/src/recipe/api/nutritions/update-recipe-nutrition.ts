@@ -1,8 +1,5 @@
 import type { Nutrition, NutritionUnit, RecipeNutrition } from "@food-swipe/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AuthApiClient } from "../../../client";
-import { useApiClient } from "../../../context";
-import { getRecipeNutritionQueryOptions } from "./get-recipe-nutrition";
+import type { HttpClient } from "../../../client";
 
 export type UpdateRecipeNutritionInput = {
   recipeId: string;
@@ -14,7 +11,7 @@ export type UpdateRecipeNutritionInput = {
 };
 
 export const updateRecipeNutrition = async (
-  api: AuthApiClient,
+  api: HttpClient,
   payload: UpdateRecipeNutritionInput,
 ) => {
   const response = await api.fetch(
@@ -25,19 +22,4 @@ export const updateRecipeNutrition = async (
     },
   );
   return response.json() as Promise<RecipeNutrition>;
-};
-
-export const useRecipeNutritionUpdate = () => {
-  const api = useApiClient();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (payload: UpdateRecipeNutritionInput) => updateRecipeNutrition(api, payload),
-    onSuccess: (nutrition) => {
-      queryClient.setQueryData<RecipeNutrition[]>(
-        getRecipeNutritionQueryOptions(api, nutrition.recipeId).queryKey,
-        (old) => old?.map((n) => (n.name === nutrition.name ? nutrition : n)),
-      );
-    },
-  });
 };

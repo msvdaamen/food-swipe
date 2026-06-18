@@ -10,8 +10,7 @@ export async function createDatabase(connectionString: string) {
   });
   await client.connect();
   return drizzle({
-    client,
-    casing: "snake_case"
+    client
   });
 }
 

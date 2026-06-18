@@ -4,7 +4,7 @@ import { AppInput } from "@/components/ui/input";
 import { Colors } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 import { useForm } from "@tanstack/react-form";
-import { type } from "arktype";
+import { z } from "zod";
 import { Link, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -16,9 +16,9 @@ import {
 } from "react-native";
 import { useSignIn } from "@/features/auth/api/sign-in";
 
-const signInSchema = type({
-  email: "string.email",
-  password: "string >= 1",
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
 });
 
 export default function SignIn() {

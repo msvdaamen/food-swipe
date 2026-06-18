@@ -14,8 +14,8 @@ import {
   getRecipeNutritionQueryOptions,
   getRecipeStepsQueryOptions,
   useRecipe,
-} from "@food-swipe/client-api/recipe";
-import { useApiClient } from "@food-swipe/client-api";
+} from "@/features/recipe/api";
+import { useApiClient } from "@/lib/api-client-context";
 import { useLocalSearchParams } from "expo-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { NumberStepper } from "@/components/number-stepper";

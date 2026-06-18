@@ -1,9 +1,9 @@
-import { pgTable, index, unique, primaryKey } from "drizzle-orm/pg-core";
+import { camelCase, index, unique, primaryKey } from "drizzle-orm/pg-core";
 import { measurements } from "./measurement.schema";
 import { ingredients } from "./ingredient.schema";
 import { recipeBooks } from "./recipe-book.schema";
 
-export const recipes = pgTable("recipes", (t) => ({
+export const recipes = camelCase.table("recipes", (t) => ({
   id: t.uuid().primaryKey(),
   title: t.text().notNull(),
   description: t.text(),
@@ -18,7 +18,7 @@ export const recipes = pgTable("recipes", (t) => ({
 export type RecipeEntity = typeof recipes.$inferSelect;
 export type NewRecipeEntity = typeof recipes.$inferInsert;
 
-export const recipeSteps = pgTable(
+export const recipeSteps = camelCase.table(
   "recipe_steps",
   (t) => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
@@ -35,7 +35,7 @@ export const recipeSteps = pgTable(
 export type RecipeStepEntity = typeof recipeSteps.$inferSelect;
 export type NewRecipeStepEntity = typeof recipeSteps.$inferInsert;
 
-export const recipeIngredients = pgTable(
+export const recipeIngredients = camelCase.table(
   "recipe_ingredients",
   (t) => ({
     recipeId: t
@@ -62,7 +62,7 @@ export const recipeIngredients = pgTable(
 export type RecipeIngredientEntity = typeof recipeIngredients.$inferSelect;
 export type NewRecipeIngredientEntity = typeof recipeIngredients.$inferInsert;
 
-export const recipeNutritions = pgTable(
+export const recipeNutritions = camelCase.table(
   "recipe_nutritions",
   (t) => ({
     id: t.integer().primaryKey().generatedByDefaultAsIdentity(),
@@ -80,7 +80,7 @@ export const recipeNutritions = pgTable(
 export type RecipeNutritionEntity = typeof recipeNutritions.$inferSelect;
 export type NewRecipeNutritionEntity = typeof recipeNutritions.$inferInsert;
 
-export const recipesToRecipeBooks = pgTable(
+export const recipesToRecipeBooks = camelCase.table(
   "recipes_to_recipe_books",
   (t) => ({
     recipeBookId: t

@@ -8,6 +8,14 @@ import type { GetIngredientsDto } from "./dto/get-ingredients.dto";
 import type { CreateIngredientDto } from "./dto/create-ingredient.dto";
 import type { UpdateIngredientDto } from "./dto/update-ingredient.dto";
 
+export interface IngredientRepository {
+  all(payload: GetIngredientsDto): Promise<PaginatedData<IngredientEntity>>;
+  findByName(name: string): Promise<IngredientEntity | null>;
+  create(payload: CreateIngredientDto): Promise<IngredientEntity>;
+  update(id: number, payload: UpdateIngredientDto): Promise<IngredientEntity>;
+  delete(id: number): Promise<void>;
+}
+
 export class IngredientRepositoryImpl {
   constructor(private readonly db: DatabaseProvider) {}
 
@@ -73,8 +81,4 @@ export class IngredientRepositoryImpl {
   async delete(id: number): Promise<void> {
     await this.db.delete(ingredients).where(eq(ingredients.id, id));
   }
-}
-
-export function createIngredientRepository(db: DatabaseProvider): IngredientRepositoryImpl {
-  return new IngredientRepositoryImpl(db);
 }

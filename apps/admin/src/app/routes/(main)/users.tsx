@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { useUsers } from "@food-swipe/client-api/user";
+import { useUsers } from "@/features/user/api";
 import {
   ManagerUserDialog,
   useManageUserDialogState
@@ -38,7 +38,7 @@ function RouteComponent() {
   return (
     <>
       <div className="flex justify-end mb-2">
-        <Button onClick={() => manageUserDialog.open()}>Create user</Button>
+        <Button onClick={() => manageUserDialog.open(null)}>Create user</Button>
       </div>
       <div className="rounded-md border">
         <Table>

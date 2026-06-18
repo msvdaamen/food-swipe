@@ -1,10 +1,10 @@
 import { createFactory } from "hono/factory";
-import { NotFoundError } from "../../common/errors/not-found.error";
 import { authMiddleware, type AuthContext } from "./auth.middleware";
 import { uploadProfilePictureDto } from "./dto/upload-profile-picture";
 import { createAuthService } from "./auth.service";
 import { kvStorage } from "../../providers/kvstore.provider";
 import { setupMiddleware } from "../../middlewares/setup.middleware";
+import { httpErrorHandler } from "../../common/errors/errot-http-handler";
 
 export const authRouterFactory = createFactory<AuthContext>({
   initApp: (app) => {
@@ -17,15 +17,11 @@ const app = authRouterFactory.createApp();
 app.get("/", async (c) => {
   const authService = createAuthService(c.get("db"), kvStorage, c.get("storage"));
   const { id } = c.get("user");
-  try {
-    const user = await authService.getAuthUser(id);
-    return c.json(user);
-  } catch (e) {
-    if (e instanceof NotFoundError) {
-      return c.json({ message: e.message }, 404);
-    }
-    return c.status(500);
+  const result = await authService.getAuthUser(id);
+  if (result.isErr()) {
+    return httpErrorHandler(result.error, c);
   }
+  return c.json(result.value);
 });
 
 app.post("/profile-picture", async (c) => {
@@ -37,15 +33,11 @@ app.post("/profile-picture", async (c) => {
   }
   const user = c.get("user");
   const file = validated.data;
-  try {
-    const filename = await authService.uploadProfilePicture(user.id, file);
-    return c.json({ filename });
-  } catch (e) {
-    if (e instanceof NotFoundError) {
-      return c.json({ message: e.message }, 404);
-    }
-    return c.status(500);
+  const result = await authService.uploadProfilePicture(user.id, file);
+  if (result.isErr()) {
+    return httpErrorHandler(result.error, c);
   }
+  return c.json({ filename: result.value });
 });
 
 export const authRouter = app;

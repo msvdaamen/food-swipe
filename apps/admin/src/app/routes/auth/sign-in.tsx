@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
-import { type } from "arktype";
+import { z } from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,13 +13,14 @@ export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent
 });
 
-const validator = type({
-  email: "string.email",
-  password: "string > 0"
+const validator = z.object({
+  email: z.string().email(),
+  password: z.string().min(1)
 });
 
 function RouteComponent() {
   const { data: session } = authClient.useSession();
+  let error: string = "";
 
   const signIn = useSignIn();
   const form = useForm({
@@ -35,8 +36,11 @@ function RouteComponent() {
     }
   });
 
-  if (session) {
+  if (session && session.user.role === "admin") {
     return <Navigate to="/" />;
+  } else if (session) {
+    error = "Unauthorized";
+    authClient.signOut();
   }
 
   return (
@@ -50,6 +54,7 @@ function RouteComponent() {
               <CardDescription>Enter your email below to login to your account</CardDescription>
             </CardHeader>
             <CardContent>
+              {error && <div className="text-red-500">{error}</div>}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

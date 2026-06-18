@@ -1,13 +1,21 @@
 import { DatabaseProvider } from "../../providers/database.provider";
 import type { IngredientEntity } from "../../schema";
 import { PaginatedData } from "../../common/types/paginated-data";
-import { createIngredientRepository, IngredientRepositoryImpl } from "./repository";
+import { IngredientRepository, IngredientRepositoryImpl } from "./repository";
 import type { GetIngredientsDto } from "./dto/get-ingredients.dto";
 import type { CreateIngredientDto } from "./dto/create-ingredient.dto";
 import type { UpdateIngredientDto } from "./dto/update-ingredient.dto";
 
-export class IngredientService {
-  constructor(private readonly repo: IngredientRepositoryImpl) {}
+export interface IngredientService {
+  all(payload: GetIngredientsDto): Promise<PaginatedData<IngredientEntity>>;
+  findByName(name: string): Promise<IngredientEntity | null>;
+  create(payload: CreateIngredientDto): Promise<IngredientEntity>;
+  update(id: number, payload: UpdateIngredientDto): Promise<IngredientEntity>;
+  delete(id: number): Promise<void>;
+}
+
+export class IngredientServiceImpl implements IngredientService {
+  constructor(private readonly repo: IngredientRepository) {}
 
   all(payload: GetIngredientsDto): Promise<PaginatedData<IngredientEntity>> {
     return this.repo.all(payload);
@@ -31,5 +39,6 @@ export class IngredientService {
 }
 
 export function createIngredientService(db: DatabaseProvider): IngredientService {
-  return new IngredientService(createIngredientRepository(db));
+  const repository = new IngredientRepositoryImpl(db);
+  return new IngredientServiceImpl(repository);
 }

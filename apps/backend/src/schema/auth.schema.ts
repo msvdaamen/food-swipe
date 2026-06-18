@@ -1,7 +1,7 @@
-import { pgTable, text, timestamp, index, uuid } from "drizzle-orm/pg-core";
+import { camelCase, text, timestamp, index, uuid } from "drizzle-orm/pg-core";
 import { users } from "./user.schema";
 
-export const sessions = pgTable(
+export const sessions = camelCase.table(
   "sessions",
   {
     id: uuid("id").primaryKey(),
@@ -21,7 +21,7 @@ export const sessions = pgTable(
   (table) => [index("sessions_userId_idx").on(table.userId)]
 );
 
-export const accounts = pgTable(
+export const accounts = camelCase.table(
   "accounts",
   {
     id: uuid("id").primaryKey(),
@@ -45,7 +45,7 @@ export const accounts = pgTable(
   (table) => [index("accounts_userId_idx").on(table.userId)]
 );
 
-export const verifications = pgTable(
+export const verifications = camelCase.table(
   "verifications",
   {
     id: uuid("id").primaryKey(),

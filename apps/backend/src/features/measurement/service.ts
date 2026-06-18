@@ -1,11 +1,19 @@
 import { DatabaseProvider } from "../../providers/database.provider";
 import type { MeasurementEntity } from "../../schema";
-import { createMeasurementRepository, MeasurementRepositoryImpl } from "./repository";
+import { MeasurementRepository, MeasurementRepositoryImpl } from "./repository";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
 import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
 
-export class MeasurementService {
-  constructor(private readonly repo: MeasurementRepositoryImpl) {}
+export interface MeasurementService {
+  all(): Promise<MeasurementEntity[]>;
+  create(payload: CreateMeasurementDto): Promise<MeasurementEntity>;
+  update(id: number, payload: UpdateMeasurementDto): Promise<MeasurementEntity>;
+  delete(id: number): Promise<void>;
+  findByAbbreviation(abbreviation: string): Promise<MeasurementEntity | null>;
+}
+
+export class MeasurementServiceImpl {
+  constructor(private readonly repo: MeasurementRepository) {}
 
   all(): Promise<MeasurementEntity[]> {
     return this.repo.all();
@@ -29,5 +37,6 @@ export class MeasurementService {
 }
 
 export function createMeasurementService(db: DatabaseProvider): MeasurementService {
-  return new MeasurementService(createMeasurementRepository(db));
+  const repository = new MeasurementRepositoryImpl(db);
+  return new MeasurementServiceImpl(repository);
 }

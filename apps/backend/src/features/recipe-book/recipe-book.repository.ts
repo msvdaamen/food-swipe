@@ -3,8 +3,14 @@ import { recipeBooks } from "../../schema";
 import { NotFoundError } from "../../common/errors/not-found.error";
 import { and, eq } from "drizzle-orm";
 import type { CreateRecipeBookDto } from "./dto/create-recipe-book.dto";
-import { RecipeBookRepository } from "./types/interfaces/recipe-book.repository";
 import { RecipeBookModel } from "./types/models";
+
+export interface RecipeBookRepository {
+  getRecipeBooks(userId: string): Promise<RecipeBookModel[]>;
+  getRecipeBook(userId: string, recipeBookId: number): Promise<RecipeBookModel>;
+  getLikedRecipeBook(userId: string): Promise<RecipeBookModel>;
+  createRecipeBook(userId: string, payload: CreateRecipeBookDto): Promise<RecipeBookModel>;
+}
 
 class RecipeBookRepositoryImpl implements RecipeBookRepository {
   constructor(private readonly db: DatabaseProvider) {}
