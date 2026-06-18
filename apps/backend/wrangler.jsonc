@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "food-swipe-backend",
   "main": "src/index.ts",
-  "compatibility_date": "2026-03-10",
+  "compatibility_date": "2026-06-18",
   "observability": {
     "enabled": true
   },
