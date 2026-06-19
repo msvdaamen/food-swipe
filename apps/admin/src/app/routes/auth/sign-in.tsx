@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { LoaderCircle } from "lucide-react";
 import { useSignIn } from "@/features/auth/api/sign-in";
 import { authClient } from "@/lib/auth";
+import { useState } from "react";
 
 export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent
@@ -20,7 +21,7 @@ const validator = z.object({
 
 function RouteComponent() {
   const { data: session } = authClient.useSession();
-  let error: string = "";
+  const [error, setError] = useState<string>("");
 
   const signIn = useSignIn();
   const form = useForm({
@@ -32,16 +33,20 @@ function RouteComponent() {
       onChange: validator
     },
     onSubmit: async ({ value }) => {
-      await signIn.mutateAsync(value);
+      const { data, error: authError } = await signIn.mutateAsync(value);
+      if (authError) {
+        setError("Unauthorized");
+        return;
+      }
+      const { user } = data;
+      if (user.role === "admin") {
+        return <Navigate to="/" />;
+      } else if (session) {
+        setError("Unauthorized");
+        authClient.signOut();
+      }
     }
   });
-
-  if (session && session.user.role === "admin") {
-    return <Navigate to="/" />;
-  } else if (session) {
-    error = "Unauthorized";
-    authClient.signOut();
-  }
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

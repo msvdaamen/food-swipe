@@ -10,6 +10,7 @@ import { ingredientRouter } from "./features/ingredient/router";
 import { recipeBookRouter } from "./features/recipe-book/router";
 import { recipeRouter } from "./features/recipe/router";
 import { HTTPException } from "hono/http-exception";
+import { tracing } from "cloudflare:workers";
 
 export type { AppContext } from "./app-context";
 
@@ -28,7 +29,9 @@ app.use(
 app.get("/", (c) => c.text("Hello World!"));
 
 app.on(["POST", "GET"], "/v1/auth/*", setupMiddleware, async (c) => {
-  return c.get("auth").handler(c.req.raw);
+  return tracing.enterSpan("auth", async () => {
+    return await c.get("auth").handler(c.req.raw);
+  });
 });
 
 app.route("/v1/users", userRouter);
