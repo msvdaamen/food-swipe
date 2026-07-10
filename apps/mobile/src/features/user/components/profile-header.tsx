@@ -1,9 +1,9 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Camera } from "lucide-react-native";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
 
 type ProfileHeaderProps = {
   avatarUrl?: string | null;
@@ -68,9 +68,9 @@ export function ProfileHeader({
                 { backgroundColor: placeholderBg },
               ]}
             >
-              <FText style={styles.avatarPlaceholderText}>
+              <AppText style={styles.avatarPlaceholderText}>
                 {name.charAt(0).toUpperCase()}
-              </FText>
+              </AppText>
             </View>
           )}
           {isOwnProfile && (
@@ -87,12 +87,12 @@ export function ProfileHeader({
       </View>
 
       <View style={styles.infoContainer}>
-        <FText style={styles.name}>{name}</FText>
-        <FText style={[styles.username, { color: usernameColor }]}>
+        <AppText style={styles.name}>{name}</AppText>
+        <AppText style={[styles.username, { color: usernameColor }]}>
           @{username}
-        </FText>
+        </AppText>
         {bio ? (
-          <FText style={[styles.bio, { color: bioColor }]}>{bio}</FText>
+          <AppText style={[styles.bio, { color: bioColor }]}>{bio}</AppText>
         ) : null}
       </View>
     </View>

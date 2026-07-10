@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { AppButton } from "./ui/button";
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/constants/colors";
 
 const AnimatedHeardIcon = Animated.createAnimatedComponent(Heart);
 

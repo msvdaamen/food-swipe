@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/constants/colors";
 import { useMemo, useState } from "react";
 import {
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   View,
   useColorScheme,
 } from "react-native";
-import { FText } from "../f-text";
+import { AppText } from "./text";
 
 type Color = "transparent";
 
@@ -75,11 +75,7 @@ export const AppInput = ({ children, style, Icon, color, ...props }: Props) => {
 };
 
 export const AppLabel = ({ children, style }: Props) => {
-  return (
-    // <View style={styles.labelContainer}>
-    <FText style={[style]}>{children}</FText>
-    // </View>
-  );
+  return <AppText style={[style]}>{children}</AppText>;
 };
 
 const styles = StyleSheet.create({

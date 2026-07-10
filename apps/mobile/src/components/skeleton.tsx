@@ -8,8 +8,8 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Colors } from "@/constants/colors";
 
 type Props = {
   width: number | `${number}%`;

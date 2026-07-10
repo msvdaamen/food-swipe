@@ -1,13 +1,13 @@
 import { StyleSheet, Pressable } from "react-native";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import { Settings } from "lucide-react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 type EditProfileButtonProps = {
   onPress?: () => void;
@@ -48,7 +48,7 @@ export function EditProfileButton({ onPress }: EditProfileButtonProps) {
         style={[styles.container, animatedStyle, { backgroundColor }]}
       >
         <Settings size={16} color={textColor} />
-        <FText style={[styles.text, { color: textColor }]}>Edit Profile</FText>
+        <AppText style={[styles.text, { color: textColor }]}>Edit Profile</AppText>
       </Animated.View>
     </Pressable>
   );

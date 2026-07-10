@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/constants/colors";
 import Checkbox, { CheckboxProps } from "expo-checkbox";
 import { StyleSheet } from "react-native";
 

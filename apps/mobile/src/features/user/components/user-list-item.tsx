@@ -1,8 +1,8 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
 import { FollowButton } from "./follow-button";
 
 export type UserListItemData = {
@@ -76,22 +76,22 @@ export function UserListItem({
               { backgroundColor: placeholderBg },
             ]}
           >
-            <FText style={styles.avatarPlaceholderText}>
+            <AppText style={styles.avatarPlaceholderText}>
               {user.name.charAt(0).toUpperCase()}
-            </FText>
+            </AppText>
           </View>
         )}
 
         <View style={styles.userInfo}>
-          <FText style={styles.name} numberOfLines={1}>
+          <AppText style={styles.name} numberOfLines={1}>
             {user.name}
-          </FText>
-          <FText
+          </AppText>
+          <AppText
             style={[styles.username, { color: usernameColor }]}
             numberOfLines={1}
           >
             @{user.username}
-          </FText>
+          </AppText>
         </View>
       </View>
 

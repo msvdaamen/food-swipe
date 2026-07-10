@@ -1,7 +1,7 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
 
 type StatItemProps = {
   label: string;
@@ -17,8 +17,8 @@ function StatItem({ label, value, onPress }: StatItemProps) {
 
   return (
     <Pressable onPress={onPress} style={styles.statItem}>
-      <FText style={styles.statValue}>{value.toLocaleString()}</FText>
-      <FText style={[styles.statLabel, { color: textColor }]}>{label}</FText>
+      <AppText style={styles.statValue}>{value.toLocaleString()}</AppText>
+      <AppText style={[styles.statLabel, { color: textColor }]}>{label}</AppText>
     </Pressable>
   );
 }

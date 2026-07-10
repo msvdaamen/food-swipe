@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { StyleSheet, Pressable } from "react-native";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { UserPlus, UserCheck } from "lucide-react-native";
 import Animated, {
@@ -9,6 +7,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
 
 type FollowButtonProps = {
   isFollowing: boolean;
@@ -66,7 +66,7 @@ export function FollowButton({
         ) : (
           <UserPlus size={iconSize} color={Colors.white} />
         )}
-        <FText
+        <AppText
           style={[
             styles.text,
             isSmall && styles.textSmall,
@@ -74,7 +74,7 @@ export function FollowButton({
           ]}
         >
           {following ? "Following" : "Follow"}
-        </FText>
+        </AppText>
       </Animated.View>
     </Pressable>
   );

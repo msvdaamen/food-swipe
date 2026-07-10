@@ -8,9 +8,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { AppButton } from "./ui/button";
 import { Minus, Plus } from "lucide-react-native";
-import { FText } from "./f-text";
+import { AppText } from "./ui/text";
 
-const AnimatedFText = Animated.createAnimatedComponent(FText);
+const AnimatedFText = Animated.createAnimatedComponent(AppText);
 
 type Props = {
   initialValue: number;
