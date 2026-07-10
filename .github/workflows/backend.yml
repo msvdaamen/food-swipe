@@ -14,14 +14,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
 
       - name: Check formatting
-        run: bun run --filter @food-swipe/backend fmt:check
+        run: pnpm --filter @food-swipe/backend fmt:check
 
   lint:
     name: Lint
@@ -30,14 +38,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
 
       - name: Lint
-        run: bun run --filter @food-swipe/backend lint
+        run: pnpm --filter @food-swipe/backend lint
 
   test:
     name: Test
@@ -47,14 +63,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
 
       - name: Test
-        run: bun run --filter @food-swipe/backend test
+        run: pnpm --filter @food-swipe/backend test
 
   build:
     name: Build
@@ -64,11 +88,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
 
       - name: Build check
-        run: bun run --filter @food-swipe/backend build:check
+        run: pnpm --filter @food-swipe/backend build:check
