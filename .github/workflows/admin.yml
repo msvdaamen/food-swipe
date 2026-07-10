@@ -26,7 +26,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/admin
+        run: pnpm install --frozen-lockfile --filter @food-swipe/admin...
 
       - name: Check formatting
         run: pnpm --filter @food-swipe/admin fmt:check
@@ -50,7 +50,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/admin
+        run: pnpm install --frozen-lockfile --filter @food-swipe/admin...
 
       - name: Lint
         run: pnpm --filter @food-swipe/admin lint
@@ -75,7 +75,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/admin
+        run: pnpm install --frozen-lockfile --filter @food-swipe/admin...
 
       - name: Test
         run: pnpm --filter @food-swipe/admin test
@@ -100,7 +100,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/admin
+        run: pnpm install --frozen-lockfile --filter @food-swipe/admin...
 
       - name: Build
         run: pnpm --filter @food-swipe/admin build

@@ -41,7 +41,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend...
 
       - name: Run migrations
         run: pnpm --filter @food-swipe/backend migrate
@@ -69,7 +69,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/backend
+        run: pnpm install --frozen-lockfile --filter @food-swipe/backend...
 
       - name: Deploy backend
         run: pnpm --filter @food-swipe/backend deploy
@@ -97,7 +97,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @food-swipe/admin
+        run: pnpm install --frozen-lockfile --filter @food-swipe/admin...
 
       - name: Download build output
         uses: actions/download-artifact@v8
