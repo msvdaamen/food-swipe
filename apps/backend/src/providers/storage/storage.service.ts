@@ -57,12 +57,6 @@ export class StorageService {
     const obj = await bucket.put(key, body, {
       httpMetadata: { contentType }
     });
-    console.log({
-      isPublic,
-      key,
-      contentType
-    });
-    console.log(obj);
 
     return key;
   }

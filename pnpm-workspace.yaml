@@ -1,0 +1,12 @@
+packages:
+  - packages/**/*
+  - apps/*
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
+
+catalog:
+  "@tanstack/react-query": ^5.101.2

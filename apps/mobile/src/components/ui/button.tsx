@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/constants/colors";
 import { useEffect, useMemo, useState } from "react";
 import {
   Pressable,

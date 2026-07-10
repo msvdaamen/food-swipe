@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate, useRouter } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
@@ -20,6 +20,7 @@ const validator = z.object({
 });
 
 function RouteComponent() {
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const [error, setError] = useState<string>("");
 
@@ -40,7 +41,8 @@ function RouteComponent() {
       }
       const { user } = data;
       if (user.role === "admin") {
-        return <Navigate to="/" />;
+        console.log("Admin role detected, navigating to dashboard");
+        router.navigate({ to: "/" });
       } else if (session) {
         setError("Unauthorized");
         authClient.signOut();

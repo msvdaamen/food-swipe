@@ -1,8 +1,8 @@
 import { View, StyleSheet } from "react-native";
-import { FText } from "@/components/f-text";
-import { Colors } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Image as ImageIcon } from "lucide-react-native";
+import { Colors } from "@/constants/colors";
+import { AppText } from "@/components/ui/text";
 
 type FeedPlaceholderProps = {
   isOwnProfile: boolean;
@@ -37,21 +37,21 @@ export function FeedPlaceholder({ isOwnProfile }: FeedPlaceholderProps) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <FText style={styles.headerText}>Posts</FText>
+        <AppText style={styles.headerText}>Posts</AppText>
       </View>
 
       <View style={[styles.placeholderContainer, { borderColor }]}>
         <View style={[styles.iconContainer, { borderColor: iconColor }]}>
           <ImageIcon size={40} color={iconColor} />
         </View>
-        <FText style={[styles.title, { color: textColor }]}>
+        <AppText style={[styles.title, { color: textColor }]}>
           {isOwnProfile ? "Share Your First Post" : "No Posts Yet"}
-        </FText>
-        <FText style={[styles.subtitle, { color: subtextColor }]}>
+        </AppText>
+        <AppText style={[styles.subtitle, { color: subtextColor }]}>
           {isOwnProfile
             ? "When you share food photos and recipes, they will appear on your profile."
             : "When this user shares food photos and recipes, they will appear here."}
-        </FText>
+        </AppText>
       </View>
 
       {/* Grid placeholder for future feed items */}
